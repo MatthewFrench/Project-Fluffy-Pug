@@ -1,0 +1,436 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77AD1B14063B00052F3E /* AppDelegate.m */; };
+		C95A77B01B14063B00052F3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77AF1B14063B00052F3E /* main.m */; };
+		C95A77B21B14063B00052F3E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C95A77B11B14063B00052F3E /* Images.xcassets */; };
+		C95A77B51B14063B00052F3E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C95A77B31B14063B00052F3E /* MainMenu.xib */; };
+		C95A77C11B14063C00052F3E /* Fluffy_PugTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77C01B14063C00052F3E /* Fluffy_PugTests.m */; };
+		C95A77CD1B142AB200052F3E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77CC1B142AB200052F3E /* OpenGL.framework */; };
+		C95A77CF1B142AC500052F3E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77CE1B142AC500052F3E /* CoreFoundation.framework */; };
+		C95A77D11B142ACA00052F3E /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77D01B142ACA00052F3E /* ApplicationServices.framework */; };
+		C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77D41B1432A600052F3E /* LeagueGameState.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C95A77BB1B14063C00052F3E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C95A779F1B14063B00052F3E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C95A77A61B14063B00052F3E;
+			remoteInfo = "Fluffy Pug";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C95A77A71B14063B00052F3E /* Fluffy Pug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fluffy Pug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C95A77AB1B14063B00052F3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C95A77AC1B14063B00052F3E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C95A77AD1B14063B00052F3E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C95A77AF1B14063B00052F3E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C95A77B11B14063B00052F3E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C95A77B41B14063B00052F3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		C95A77BA1B14063C00052F3E /* Fluffy PugTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Fluffy PugTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C95A77BF1B14063C00052F3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C95A77C01B14063C00052F3E /* Fluffy_PugTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Fluffy_PugTests.m; sourceTree = "<group>"; };
+		C95A77CC1B142AB200052F3E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		C95A77CE1B142AC500052F3E /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		C95A77D01B142ACA00052F3E /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		C95A77D31B1432A600052F3E /* LeagueGameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeagueGameState.h; sourceTree = "<group>"; };
+		C95A77D41B1432A600052F3E /* LeagueGameState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeagueGameState.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C95A77A41B14063B00052F3E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C95A77D11B142ACA00052F3E /* ApplicationServices.framework in Frameworks */,
+				C95A77CF1B142AC500052F3E /* CoreFoundation.framework in Frameworks */,
+				C95A77CD1B142AB200052F3E /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C95A77B71B14063C00052F3E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C95A779E1B14063B00052F3E = {
+			isa = PBXGroup;
+			children = (
+				C95A77D01B142ACA00052F3E /* ApplicationServices.framework */,
+				C95A77CE1B142AC500052F3E /* CoreFoundation.framework */,
+				C95A77CC1B142AB200052F3E /* OpenGL.framework */,
+				C95A77A91B14063B00052F3E /* Fluffy Pug */,
+				C95A77BD1B14063C00052F3E /* Fluffy PugTests */,
+				C95A77A81B14063B00052F3E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C95A77A81B14063B00052F3E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C95A77A71B14063B00052F3E /* Fluffy Pug.app */,
+				C95A77BA1B14063C00052F3E /* Fluffy PugTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C95A77A91B14063B00052F3E /* Fluffy Pug */ = {
+			isa = PBXGroup;
+			children = (
+				C95A77AC1B14063B00052F3E /* AppDelegate.h */,
+				C95A77AD1B14063B00052F3E /* AppDelegate.m */,
+				C95A77B11B14063B00052F3E /* Images.xcassets */,
+				C95A77B31B14063B00052F3E /* MainMenu.xib */,
+				C95A77AA1B14063B00052F3E /* Supporting Files */,
+				C95A77D31B1432A600052F3E /* LeagueGameState.h */,
+				C95A77D41B1432A600052F3E /* LeagueGameState.m */,
+			);
+			path = "Fluffy Pug";
+			sourceTree = "<group>";
+		};
+		C95A77AA1B14063B00052F3E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C95A77AB1B14063B00052F3E /* Info.plist */,
+				C95A77AF1B14063B00052F3E /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C95A77BD1B14063C00052F3E /* Fluffy PugTests */ = {
+			isa = PBXGroup;
+			children = (
+				C95A77C01B14063C00052F3E /* Fluffy_PugTests.m */,
+				C95A77BE1B14063C00052F3E /* Supporting Files */,
+			);
+			path = "Fluffy PugTests";
+			sourceTree = "<group>";
+		};
+		C95A77BE1B14063C00052F3E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C95A77BF1B14063C00052F3E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C95A77A61B14063B00052F3E /* Fluffy Pug */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C95A77C41B14063C00052F3E /* Build configuration list for PBXNativeTarget "Fluffy Pug" */;
+			buildPhases = (
+				C95A77A31B14063B00052F3E /* Sources */,
+				C95A77A41B14063B00052F3E /* Frameworks */,
+				C95A77A51B14063B00052F3E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Fluffy Pug";
+			productName = "Fluffy Pug";
+			productReference = C95A77A71B14063B00052F3E /* Fluffy Pug.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C95A77B91B14063C00052F3E /* Fluffy PugTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C95A77C71B14063C00052F3E /* Build configuration list for PBXNativeTarget "Fluffy PugTests" */;
+			buildPhases = (
+				C95A77B61B14063C00052F3E /* Sources */,
+				C95A77B71B14063C00052F3E /* Frameworks */,
+				C95A77B81B14063C00052F3E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C95A77BC1B14063C00052F3E /* PBXTargetDependency */,
+			);
+			name = "Fluffy PugTests";
+			productName = "Fluffy PugTests";
+			productReference = C95A77BA1B14063C00052F3E /* Fluffy PugTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C95A779F1B14063B00052F3E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = "Matthew French";
+				TargetAttributes = {
+					C95A77A61B14063B00052F3E = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+					C95A77B91B14063C00052F3E = {
+						CreatedOnToolsVersion = 6.3.2;
+						TestTargetID = C95A77A61B14063B00052F3E;
+					};
+				};
+			};
+			buildConfigurationList = C95A77A21B14063B00052F3E /* Build configuration list for PBXProject "Fluffy Pug" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C95A779E1B14063B00052F3E;
+			productRefGroup = C95A77A81B14063B00052F3E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C95A77A61B14063B00052F3E /* Fluffy Pug */,
+				C95A77B91B14063C00052F3E /* Fluffy PugTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C95A77A51B14063B00052F3E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C95A77B21B14063B00052F3E /* Images.xcassets in Resources */,
+				C95A77B51B14063B00052F3E /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C95A77B81B14063C00052F3E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C95A77A31B14063B00052F3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C95A77B01B14063B00052F3E /* main.m in Sources */,
+				C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */,
+				C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C95A77B61B14063C00052F3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C95A77C11B14063C00052F3E /* Fluffy_PugTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C95A77BC1B14063C00052F3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C95A77A61B14063B00052F3E /* Fluffy Pug */;
+			targetProxy = C95A77BB1B14063C00052F3E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		C95A77B31B14063B00052F3E /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C95A77B41B14063B00052F3E /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C95A77C21B14063C00052F3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C95A77C31B14063C00052F3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C95A77C51B14063C00052F3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Fluffy Pug/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		C95A77C61B14063C00052F3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "Fluffy Pug/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		C95A77C81B14063C00052F3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Fluffy PugTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fluffy Pug.app/Contents/MacOS/Fluffy Pug";
+			};
+			name = Debug;
+		};
+		C95A77C91B14063C00052F3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Fluffy PugTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fluffy Pug.app/Contents/MacOS/Fluffy Pug";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C95A77A21B14063B00052F3E /* Build configuration list for PBXProject "Fluffy Pug" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C95A77C21B14063C00052F3E /* Debug */,
+				C95A77C31B14063C00052F3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C95A77C41B14063C00052F3E /* Build configuration list for PBXNativeTarget "Fluffy Pug" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C95A77C51B14063C00052F3E /* Debug */,
+				C95A77C61B14063C00052F3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C95A77C71B14063C00052F3E /* Build configuration list for PBXNativeTarget "Fluffy PugTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C95A77C81B14063C00052F3E /* Debug */,
+				C95A77C91B14063C00052F3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C95A779F1B14063B00052F3E /* Project object */;
+}

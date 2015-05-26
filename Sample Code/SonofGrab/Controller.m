@@ -60,7 +60,7 @@
 #pragma mark Basic Profiling Tools
 // Set to 1 to enable basic profiling. Profiling information is logged to console.
 #ifndef PROFILE_WINDOW_GRAB
-#define PROFILE_WINDOW_GRAB 0
+#define PROFILE_WINDOW_GRAB 1
 #endif
 
 #if PROFILE_WINDOW_GRAB
