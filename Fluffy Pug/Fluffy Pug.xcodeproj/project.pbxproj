@@ -16,6 +16,10 @@
 		C95A77CF1B142AC500052F3E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77CE1B142AC500052F3E /* CoreFoundation.framework */; };
 		C95A77D11B142ACA00052F3E /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77D01B142ACA00052F3E /* ApplicationServices.framework */; };
 		C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77D41B1432A600052F3E /* LeagueGameState.m */; };
+		C9C736041B15937F0021F10F /* AllyMinionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C736031B15937F0021F10F /* AllyMinionManager.m */; };
+		C9C7360D1B15A2370021F10F /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C7360B1B15A2370021F10F /* Utility.m */; };
+		C9C7360F1B15E6300021F10F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C7360E1B15E6300021F10F /* AVFoundation.framework */; };
+		C9C736111B15E90C0021F10F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C736101B15E90C0021F10F /* AppKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,12 @@
 		C95A77D01B142ACA00052F3E /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		C95A77D31B1432A600052F3E /* LeagueGameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeagueGameState.h; sourceTree = "<group>"; };
 		C95A77D41B1432A600052F3E /* LeagueGameState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeagueGameState.m; sourceTree = "<group>"; };
+		C9C736021B15937F0021F10F /* AllyMinionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllyMinionManager.h; sourceTree = "<group>"; };
+		C9C736031B15937F0021F10F /* AllyMinionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllyMinionManager.m; sourceTree = "<group>"; };
+		C9C7360B1B15A2370021F10F /* Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
+		C9C7360C1B15A2370021F10F /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
+		C9C7360E1B15E6300021F10F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		C9C736101B15E90C0021F10F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +61,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C9C736111B15E90C0021F10F /* AppKit.framework in Frameworks */,
+				C9C7360F1B15E6300021F10F /* AVFoundation.framework in Frameworks */,
 				C95A77D11B142ACA00052F3E /* ApplicationServices.framework in Frameworks */,
 				C95A77CF1B142AC500052F3E /* CoreFoundation.framework in Frameworks */,
 				C95A77CD1B142AB200052F3E /* OpenGL.framework in Frameworks */,
@@ -70,6 +82,8 @@
 		C95A779E1B14063B00052F3E = {
 			isa = PBXGroup;
 			children = (
+				C9C736101B15E90C0021F10F /* AppKit.framework */,
+				C9C7360E1B15E6300021F10F /* AVFoundation.framework */,
 				C95A77D01B142ACA00052F3E /* ApplicationServices.framework */,
 				C95A77CE1B142AC500052F3E /* CoreFoundation.framework */,
 				C95A77CC1B142AB200052F3E /* OpenGL.framework */,
@@ -98,6 +112,10 @@
 				C95A77AA1B14063B00052F3E /* Supporting Files */,
 				C95A77D31B1432A600052F3E /* LeagueGameState.h */,
 				C95A77D41B1432A600052F3E /* LeagueGameState.m */,
+				C9C736021B15937F0021F10F /* AllyMinionManager.h */,
+				C9C736031B15937F0021F10F /* AllyMinionManager.m */,
+				C9C7360B1B15A2370021F10F /* Utility.m */,
+				C9C7360C1B15A2370021F10F /* Utility.h */,
 			);
 			path = "Fluffy Pug";
 			sourceTree = "<group>";
@@ -228,7 +246,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C95A77B01B14063B00052F3E /* main.m in Sources */,
+				C9C736041B15937F0021F10F /* AllyMinionManager.m in Sources */,
 				C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */,
+				C9C7360D1B15A2370021F10F /* Utility.m in Sources */,
 				C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,6 +378,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				INFOPLIST_FILE = "Fluffy Pug/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

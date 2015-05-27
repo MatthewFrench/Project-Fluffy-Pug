@@ -7,9 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "LeagueGameState.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
-
+@interface AppDelegate : NSObject <NSApplicationDelegate> {
+    IBOutlet NSTextField* statusText, *fpsText, *allyMinionText;
+    NSTimer* timer;
+    LeagueGameState* leagueGameState;
+}
+@property (weak) IBOutlet NSWindow *window;
 
 @end
 

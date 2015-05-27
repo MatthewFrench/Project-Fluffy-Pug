@@ -7,12 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AllyMinionManager.h"
+#import "Utility.h"
 
-@interface LeagueGameState : NSObject
+@interface LeagueGameState : NSObject {
+    int leaguePID;
+    CGRect leagueSize;
+    struct ImageData imageData;
+    AllyMinionManager* allyMinionManager;
+}
+
+- (void) processImage:(CGImageRef)image;
+
 
 @property int leaguePID;
 @property CGRect leagueSize;
-
-- (void) processImage:(CGImageRef)image;
+@property AllyMinionManager* allyMinionManager;
 
 @end

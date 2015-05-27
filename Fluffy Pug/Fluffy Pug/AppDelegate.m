@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "LeagueGameState.h"
 
 @interface WindowListApplierData : NSObject
 {
@@ -30,18 +29,6 @@
     return self;
 }
 
-@end
-
-
-
-
-@interface AppDelegate () {
-    IBOutlet NSImageView *outputView;
-    NSTimer* timer;
-    LeagueGameState* leagueGameState;
-}
-
-@property (weak) IBOutlet NSWindow *window;
 @end
 
 @implementation AppDelegate
@@ -67,29 +54,24 @@
 }
 
 CFTimeInterval lastTime;
-int writeEvery = 100;
-int currentWrite = 0;
-double avg = 0;
+int loopsTaken = 0;
 
 - (void)timerLogic {
     //Profile code? See how fast it's running?
-    if (currentWrite >= writeEvery)
+    if (CACurrentMediaTime() - lastTime > 3) //10 seconds
     {
-        //CFTimeInterval elapsedTime2 = CACurrentMediaTime() - lastTime;
-        NSLog(@"Elapsed Time: %f ms, %f fps", avg *1000.0/writeEvery, (1000.0)/(avg *1000.0/writeEvery));
+        float time = CACurrentMediaTime() - lastTime;
+        [fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1000 / loopsTaken, (1000.0)/(time * 1000.0 / loopsTaken)]];
         lastTime = CACurrentMediaTime();
-        currentWrite = 0;
-        avg = 0;
+        loopsTaken = 0;
         [self updateWindowList];
         if (leagueGameState.leaguePID == -1) {
-            NSLog(@"No league instance");
+            [statusText setStringValue:@"No League Instance Found"];
         }
     }
     else
     {
-        currentWrite++;
-        avg += CACurrentMediaTime() - lastTime;
-        lastTime = CACurrentMediaTime();
+        loopsTaken++;
     }
     if (leagueGameState.leaguePID != -1) {
         CGImageRef image = [self createSingleWindowShot:leagueGameState.leaguePID andBounds:leagueGameState.leagueSize];
@@ -97,9 +79,13 @@ double avg = 0;
             leagueGameState.leaguePID = -1;
             return;
         }
-        [self setOutputImage:image];
+        //[self setOutputImage:image];
         [leagueGameState processImage:image];
         CGImageRelease(image);
+        
+        //Display minions
+        [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState.allyMinionManager.minionBars.count]];
+        
     }
 }
 
@@ -131,9 +117,12 @@ double avg = 0;
         leagueGameState.leagueSize = CGRectMake([xOrigin floatValue], [yOrigin floatValue], [width floatValue], [height floatValue]);
         //NSLog(@"Width: %f, height: %f", [width floatValue], [height floatValue]);
         //NSLog(@"Found league instance: %@", info);
+        [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", leagueGameState.leagueSize.size.width, leagueGameState.leagueSize.size.height]];
+    } else {
+        [statusText setStringValue:@"No League Instance Found"];
     }
 }
-
+/*
 -(void)setOutputImage:(CGImageRef)cgImage
 {
     if(cgImage != NULL)
@@ -146,12 +135,12 @@ double avg = 0;
         // Set the output view to the new NSImage.
         [outputView setImage:image];
     }
-}
+}*/
 
 -(void)createScreenShot
 {
     CGImageRef screenShot = CGWindowListCreateImage(CGRectInfinite, kCGWindowListOptionOnScreenOnly, kCGNullWindowID, kCGWindowImageDefault);
-    [self setOutputImage:screenShot];
+    //[self setOutputImage:screenShot];
     CGImageRelease(screenShot);
 }
 
