@@ -9,10 +9,14 @@
 #import <Cocoa/Cocoa.h>
 #import "LeagueGameState.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate> {
+@interface AppDelegate : NSObject <NSApplicationDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     IBOutlet NSTextField* statusText, *fpsText, *allyMinionText;
     NSTimer* timer;
     LeagueGameState* leagueGameState;
+    
+    AVCaptureSession *mSession;
+    
+    IBOutlet NSImageView* imageView;
 }
 @property (weak) IBOutlet NSWindow *window;
 

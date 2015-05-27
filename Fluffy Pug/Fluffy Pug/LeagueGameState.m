@@ -18,12 +18,13 @@
     return self;
 }
 
-- (void) processImage:(CGImageRef)image {
-    imageData = makeImageData(image, leagueSize);
+- (void) processImage:(struct ImageData)image {
+    imageData = image;
+    //imageData = makeImageData(image, leagueSize);
     
     [allyMinionManager detectAllyMinions:imageData];
     
-    CFRelease(imageData.rawData);
+    //CFRelease(imageData.rawData);
 }
 
 @end

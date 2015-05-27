@@ -14,7 +14,7 @@
 #import <AppKit/AppKit.h>
 
 struct ImageData {
-    CFDataRef rawData;
+    //CFDataRef rawData;
     UInt8 * imageData;
     unsigned long imageByteLength;
     CGRect rect;
@@ -40,6 +40,6 @@ struct MinionBar makeMinionBar(struct Position topLeft, struct Position bottomLe
 struct Pixel getPixel(struct ImageData imageData, int x, int y);
 BOOL isColor(struct Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
 BOOL isPreciseColor(struct Pixel pixel, unsigned char r, unsigned char g, unsigned char b);
-struct ImageData makeImageData(CGImageRef imageRef, CGRect imageSize);
+struct ImageData makeImageData(uint8_t * data, CGRect imageSize);
 
 #endif /* defined(__Fluffy_Pug__Utility__) */

@@ -26,13 +26,14 @@ struct MinionBar makeMinionBar(struct Position topLeft, struct Position bottomLe
     return mb;
 }
 
-struct ImageData makeImageData(CGImageRef imageRef, CGRect imageSize) {
+struct ImageData makeImageData(uint8_t * data, CGRect imageSize) {
     
     struct ImageData imageData;
     
-    CGDataProviderRef provider = CGImageGetDataProvider(imageRef);
-    imageData.rawData = CGDataProviderCopyData(provider);
-    imageData.imageData = (UInt8 *) CFDataGetBytePtr(imageData.rawData);
+    //CGDataProviderRef provider = CGImageGetDataProvider(imageRef);
+    //imageData.rawData = CGDataProviderCopyData(provider);
+    //imageData.imageData = (UInt8 *) CFDataGetBytePtr(imageData.rawData);
+    imageData.imageData = data;
     imageData.imageByteLength = imageSize.size.width*imageSize.size.height*4;//CFDataGetLength(rawData);
     imageData.rect = imageSize;
     

@@ -17,7 +17,7 @@
     AllyMinionManager* allyMinionManager;
 }
 
-- (void) processImage:(CGImageRef)image;
+- (void) processImage:(struct ImageData)image;
 
 
 @property int leaguePID;
