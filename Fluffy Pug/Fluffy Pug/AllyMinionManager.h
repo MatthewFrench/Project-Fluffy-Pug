@@ -8,13 +8,29 @@
 
 #import <Foundation/Foundation.h>
 #import "Utility.h"
+#include "concurrentqueue.h"
 
-@interface AllyMinionManager : NSObject {
+class AllyMinionManager {
+    //NSLock* blackBorderLock;
+    NSMutableArray* topLeftAllyMinionCorners;
+    NSMutableArray* bottomLeftAllyMinionCorners;
+    struct ImageData imageData;
+    
+    
+    moodycamel::ConcurrentQueue<Position> topLeftAllyMinionQueue, bottomLeftAllyMinionQueue;
+    
+public:
     NSMutableArray* minionBars;
-}
+    AllyMinionManager();
+    void processPixel(uint8_t *pixel, int x, int y);
+    void setImageData(ImageData data);
+    
+    void prepareForPixelProcessing();
+    void postPixelProcessing();
+    void debugDraw();
+};
 
-@property NSMutableArray* minionBars;
+//@property NSMutableArray* minionBars, *topLeftAllyMinionCorners, *bottomLeftAllyMinionCorners;
+//@property NSLock* blackBorderLock;
 
-- (void) detectAllyMinions:(struct ImageData)imageData;
-
-@end
+//@end

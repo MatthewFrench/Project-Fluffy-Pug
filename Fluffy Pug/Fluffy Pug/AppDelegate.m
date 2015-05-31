@@ -40,7 +40,7 @@
     //                                       selector:@selector(timerLogic)
     //                                       userInfo:nil
     //                                        repeats:YES];
-    leagueGameState = [LeagueGameState new];
+    leagueGameState = new LeagueGameState();
     
     [self updateWindowList];
     lastTime = CACurrentMediaTime();
@@ -66,7 +66,7 @@
     
     // Create a ScreenInput with the display and add it to the session
     AVCaptureScreenInput *input = [[AVCaptureScreenInput alloc] initWithDisplayID:displayId];
-    input.minFrameDuration = CMTimeMake(1, 60);
+    input.minFrameDuration = CMTimeMake(1, 120);
     
     //if (!input) {
     //    [mSession release];
@@ -87,7 +87,9 @@
     
     AVCaptureVideoDataOutput *videoOut = [[AVCaptureVideoDataOutput alloc] init];
     videoOut.videoSettings = @{ (id)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA) };
-    [videoOut setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
+    
+    dispatch_queue_t queue = dispatch_queue_create("myqueue", DISPATCH_QUEUE_SERIAL);
+    [videoOut setSampleBufferDelegate:self queue:queue];
     
     // RosyWriter records videos and we prefer not to have any dropped frames in the video recording.
     // By setting alwaysDiscardsLateVideoFrames to NO we ensure that minor fluctuations in system load or in our processing time for a given frame won't cause framedrops.
@@ -114,71 +116,59 @@
 {
     //NSLog(@"Captures output from sample buffer");
     //CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription( sampleBuffer );
-/*
-        if ( self.outputVideoFormatDescription == nil ) {
-            // Don't render the first sample buffer.
-            // This gives us one frame interval (33ms at 30fps) for setupVideoPipelineWithInputFormatDescription: to complete.
-            // Ideally this would be done asynchronously to ensure frames don't back up on slower devices.
-            [self setupVideoPipelineWithInputFormatDescription:formatDescription];
-        }
-        else {*/
-            [self renderVideoSampleBuffer:sampleBuffer];
-        //}
+    /*
+     if ( self.outputVideoFormatDescription == nil ) {
+     // Don't render the first sample buffer.
+     // This gives us one frame interval (33ms at 30fps) for setupVideoPipelineWithInputFormatDescription: to complete.
+     // Ideally this would be done asynchronously to ensure frames don't back up on slower devices.
+     [self setupVideoPipelineWithInputFormatDescription:formatDescription];
+     }
+     else {*/
+    [self renderVideoSampleBuffer:sampleBuffer];
+    //}
 }
 
 - (void)renderVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
-    //CVPixelBufferRef renderedPixelBuffer = NULL;
-    //CMTime timestamp = CMSampleBufferGetPresentationTimeStamp( sampleBuffer );
-    
-    //[self calculateFramerateAtTimestamp:timestamp];
-    
-    // We must not use the GPU while running in the background.
-    // setRenderingEnabled: takes the same lock so the caller can guarantee no GPU usage once the setter returns.
-    //@synchronized( _renderer )
-    //{
-    //    if ( _renderingEnabled ) {
     CVPixelBufferRef sourcePixelBuffer = CMSampleBufferGetImageBuffer( sampleBuffer );
     
-    const int kBytesPerPixel = 4;
+    //const int kBytesPerPixel = 4;
     
     CVPixelBufferLockBaseAddress( sourcePixelBuffer, 0 );
     
     int bufferWidth = (int)CVPixelBufferGetWidth( sourcePixelBuffer );
     int bufferHeight = (int)CVPixelBufferGetHeight( sourcePixelBuffer );
-    size_t bytesPerRow = CVPixelBufferGetBytesPerRow( sourcePixelBuffer );
-    uint8_t *baseAddress = CVPixelBufferGetBaseAddress( sourcePixelBuffer );
-    /*
-    int count = 0;
-    for ( int row = 0; row < bufferHeight; row++ )
-    {
-        uint8_t *pixel = baseAddress + row * bytesPerRow;
-        for ( int column = 0; column < bufferWidth; column++ )
-        {
-            count ++;
-            pixel[1] = 0; // De-green (second pixel in BGRA is green)
-            pixel += kBytesPerPixel;
-        }
-    }*/
-    [leagueGameState processImage:makeImageData(baseAddress, CGRectMake(0, 0, bufferWidth, bufferHeight))];
+    //size_t bytesPerRow = CVPixelBufferGetBytesPerRow( sourcePixelBuffer );
+    uint8_t *baseAddress = (uint8_t *)CVPixelBufferGetBaseAddress( sourcePixelBuffer );
+    
+    
+    
+    
+    struct ImageData imageData = makeImageData(baseAddress, bufferWidth, bufferHeight);
+    
+    
+    leagueGameState->processImage(imageData);
     
     //Display minions
-    [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState.allyMinionManager.minionBars.count]];
+    [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->allyMinionManager->minionBars.count]];
+    
+    
+    
+    
+    bool debug = false;
+    if (debug) {
+    leagueGameState->allyMinionManager->debugDraw();
+     CIImage *ciImage = [CIImage imageWithCVImageBuffer:sourcePixelBuffer];
+     // Create a bitmap rep from the image...
+     NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCIImage:ciImage];
+     // Create an NSImage and add the bitmap rep to it...
+     NSImage *image = [[NSImage alloc] init];
+     [image addRepresentation:bitmapRep];
+     // Set the output view to the new NSImage.
+     [imageView setImage:image];
+    }
     
     CVPixelBufferUnlockBaseAddress( sourcePixelBuffer, 0 );
-    
-     
-    //NSLog(@"Test Looped %d times", count);
-    /*
-    CIImage *ciImage = [CIImage imageWithCVImageBuffer:sourcePixelBuffer];
-    // Create a bitmap rep from the image...
-    NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCIImage:ciImage];
-    // Create an NSImage and add the bitmap rep to it...
-    NSImage *image = [[NSImage alloc] init];
-    [image addRepresentation:bitmapRep];
-    // Set the output view to the new NSImage.
-    [imageView setImage:image];
-     */
     
     
     //Profile code? See how fast it's running?
@@ -189,7 +179,7 @@
         lastTime = CACurrentMediaTime();
         loopsTaken = 0;
         [self updateWindowList];
-        if (leagueGameState.leaguePID == -1) {
+        if (leagueGameState->leaguePID == -1) {
             [statusText setStringValue:@"No League Instance Found"];
         }
     }
@@ -236,7 +226,7 @@ int loopsTaken = 0;
         lastTime = CACurrentMediaTime();
         loopsTaken = 0;
         [self updateWindowList];
-        if (leagueGameState.leaguePID == -1) {
+        if (leagueGameState->leaguePID == -1) {
             [statusText setStringValue:@"No League Instance Found"];
         }
     }
@@ -244,10 +234,10 @@ int loopsTaken = 0;
     {
         loopsTaken++;
     }
-    if (leagueGameState.leaguePID != -1) {
-        CGImageRef image = [self createSingleWindowShot:leagueGameState.leaguePID andBounds:leagueGameState.leagueSize];
+    if (leagueGameState->leaguePID != -1) {
+        CGImageRef image = [self createSingleWindowShot:leagueGameState->leaguePID andBounds:leagueGameState->leagueSize];
         if (image == NULL) {
-            leagueGameState.leaguePID = -1;
+            leagueGameState->leaguePID = -1;
             return;
         }
         //[self setOutputImage:image];
@@ -255,7 +245,7 @@ int loopsTaken = 0;
         CGImageRelease(image);
         
         //Display minions
-        [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState.allyMinionManager.minionBars.count]];
+        [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->allyMinionManager->minionBars.count]];
         
     }
 }
@@ -272,41 +262,41 @@ int loopsTaken = 0;
     
     CFArrayApplyFunction(windowList, CFRangeMake(0, CFArrayGetCount(windowList)), &WindowListApplierFunction, (__bridge void *)(windowListData));
     CFRelease(windowList);
-
+    
     //for (int i = 0; i < [prunedWindowList count]; i++) {
     //    NSLog(@"Data at %d is %@", i, [prunedWindowList objectAtIndex:i]);
     //}
-    leagueGameState.leaguePID = -1;
+    leagueGameState->leaguePID = -1;
     if ([prunedWindowList count] > 0) {
         NSDictionary* info = [prunedWindowList firstObject];
         NSNumber *pid = info[kAppPIDKey];
-        leagueGameState.leaguePID = [pid intValue];
+        leagueGameState->leaguePID = [pid intValue];
         NSNumber* xOrigin = info[kWindowOriginXKey];
         NSNumber* yOrigin = info[kWindowOriginYKey];
         NSNumber* width = info[kWindowWidthKey];
         NSNumber* height = info[kWindowHeightKey];
-        leagueGameState.leagueSize = CGRectMake([xOrigin floatValue], [yOrigin floatValue], [width floatValue], [height floatValue]);
+        leagueGameState->leagueSize = CGRectMake([xOrigin floatValue], [yOrigin floatValue], [width floatValue], [height floatValue]);
         //NSLog(@"Width: %f, height: %f", [width floatValue], [height floatValue]);
         //NSLog(@"Found league instance: %@", info);
-        [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", leagueGameState.leagueSize.size.width, leagueGameState.leagueSize.size.height]];
+        [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", leagueGameState->leagueSize.size.width, leagueGameState->leagueSize.size.height]];
     } else {
         [statusText setStringValue:@"No League Instance Found"];
     }
 }
 /*
--(void)setOutputImage:(CGImageRef)cgImage
-{
-    if(cgImage != NULL)
-    {
-        // Create a bitmap rep from the image...
-        NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
-        // Create an NSImage and add the bitmap rep to it...
-        NSImage *image = [[NSImage alloc] init];
-        [image addRepresentation:bitmapRep];
-        // Set the output view to the new NSImage.
-        [outputView setImage:image];
-    }
-}*/
+ -(void)setOutputImage:(CGImageRef)cgImage
+ {
+ if(cgImage != NULL)
+ {
+ // Create a bitmap rep from the image...
+ NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:cgImage];
+ // Create an NSImage and add the bitmap rep to it...
+ NSImage *image = [[NSImage alloc] init];
+ [image addRepresentation:bitmapRep];
+ // Set the output view to the new NSImage.
+ [outputView setImage:image];
+ }
+ }*/
 
 -(void)createScreenShot
 {
@@ -346,12 +336,12 @@ void WindowListApplierFunction(const void *inputDictionary, void *context)
     
     // The flags that we pass to CGWindowListCopyWindowInfo will automatically filter out most undesirable windows.
     // However, it is possible that we will get back a window that we cannot read from, so we'll filter those out manually.
-    int sharingState = [entry[(id)kCGWindowSharingState] intValue];
+    int sharingState = [entry[(__bridge id)kCGWindowSharingState] intValue];
     if(sharingState != kCGWindowSharingNone)
     {
         NSMutableDictionary *outputEntry = [NSMutableDictionary dictionary];
         // Grab the application name, but since it's optional we need to check before we can use it.
-        NSString *applicationName = entry[(id)kCGWindowOwnerName];
+        NSString *applicationName = entry[(__bridge id)kCGWindowOwnerName];
         if(applicationName != NULL && [applicationName isEqualToString:@"League Of Legends"])
         {
             // PID is required so we assume it's present.
@@ -370,15 +360,15 @@ void WindowListApplierFunction(const void *inputDictionary, void *context)
         
         // Grab the Window Bounds, it's a dictionary in the array, but we want to display it as a string
         CGRect bounds;
-        CGRectMakeWithDictionaryRepresentation((CFDictionaryRef)entry[(id)kCGWindowBounds], &bounds);
+        CGRectMakeWithDictionaryRepresentation((CFDictionaryRef)entry[(__bridge id)kCGWindowBounds], &bounds);
         //NSString *originString = [NSString stringWithFormat:@"%.0f/%.0f", bounds.origin.x, bounds.origin.y];
         outputEntry[kWindowOriginXKey] = [NSNumber numberWithInt:bounds.origin.x];
         outputEntry[kWindowOriginYKey] = [NSNumber numberWithInt:bounds.origin.y];
-        outputEntry[kAppPIDKey] = entry[(id)kCGWindowOwnerPID];
+        outputEntry[kAppPIDKey] = entry[(__bridge id)kCGWindowOwnerPID];
         
         //NSString *sizeString = [NSString stringWithFormat:@"%.0f*%.0f", bounds.size.width, bounds.size.height];
         //outputEntry[kWindowSizeKey] = sizeString;
-
+        
         outputEntry[kWindowWidthKey] = [NSNumber numberWithDouble:bounds.size.width];
         outputEntry[kWindowHeightKey] = [NSNumber numberWithDouble:bounds.size.height];
         if (bounds.size.width < 30 || bounds.size.height < 30) {
@@ -386,8 +376,8 @@ void WindowListApplierFunction(const void *inputDictionary, void *context)
         }
         
         // Grab the Window ID & Window Level. Both are required, so just copy from one to the other
-        outputEntry[kWindowIDKey] = entry[(id)kCGWindowNumber];
-        outputEntry[kWindowLevelKey] = entry[(id)kCGWindowLayer];
+        outputEntry[kWindowIDKey] = entry[(__bridge id)kCGWindowNumber];
+        outputEntry[kWindowLevelKey] = entry[(__bridge id)kCGWindowLayer];
         
         // Finally, we are passed the windows in order from front to back by the window server
         // Should the user sort the window list we want to retain that order so that screen shots

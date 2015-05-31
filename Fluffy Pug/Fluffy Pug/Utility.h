@@ -17,7 +17,7 @@ struct ImageData {
     //CFDataRef rawData;
     UInt8 * imageData;
     unsigned long imageByteLength;
-    CGRect rect;
+    int imageWidth; int imageHeight;
 };
 
 struct Pixel {
@@ -34,12 +34,14 @@ struct MinionBar {
     float health;
 };
 
-struct Position makePosition(int x, int y);
+ Position makePosition(int x, int y);
 int getRandomInteger(int minimum, int maximum);
-struct MinionBar makeMinionBar(struct Position topLeft, struct Position bottomLeft, struct Position topRight, struct Position bottomRight, float health);
-struct Pixel getPixel(struct ImageData imageData, int x, int y);
-BOOL isColor(struct Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
-BOOL isPreciseColor(struct Pixel pixel, unsigned char r, unsigned char g, unsigned char b);
-struct ImageData makeImageData(uint8_t * data, CGRect imageSize);
+ MinionBar makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health);
+ Pixel getPixel( ImageData imageData, int x, int y);
+void setPixel( ImageData imageData, int x, int y, int r, int g, int b);
+void drawRect( ImageData imageData, int x, int y, int width, int height, int r, int g, int b);
+BOOL isColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
+BOOL isPreciseColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b);
+ ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight);
 
 #endif /* defined(__Fluffy_Pug__Utility__) */

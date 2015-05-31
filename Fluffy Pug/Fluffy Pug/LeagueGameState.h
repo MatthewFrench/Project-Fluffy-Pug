@@ -10,18 +10,13 @@
 #import "AllyMinionManager.h"
 #import "Utility.h"
 
-@interface LeagueGameState : NSObject {
+class LeagueGameState {
+public:
     int leaguePID;
     CGRect leagueSize;
     struct ImageData imageData;
     AllyMinionManager* allyMinionManager;
-}
-
-- (void) processImage:(struct ImageData)image;
-
-
-@property int leaguePID;
-@property CGRect leagueSize;
-@property AllyMinionManager* allyMinionManager;
-
-@end
+    
+    LeagueGameState();
+    void processImage(struct ImageData image);
+};
