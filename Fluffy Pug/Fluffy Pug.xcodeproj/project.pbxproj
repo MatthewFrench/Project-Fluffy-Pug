@@ -24,6 +24,8 @@
 		C9C7360D1B15A2370021F10F /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C7360B1B15A2370021F10F /* Utility.m */; };
 		C9C7360F1B15E6300021F10F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C7360E1B15E6300021F10F /* AVFoundation.framework */; };
 		C9C736111B15E90C0021F10F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C736101B15E90C0021F10F /* AppKit.framework */; };
+		C9F5E6821B1C1AD10072BB9C /* EnemyMinionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9F5E6801B1C1AD10072BB9C /* EnemyMinionManager.m */; };
+		C9F5E6871B1C29210072BB9C /* EnemyChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9F5E6851B1C29210072BB9C /* EnemyChampionManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +65,10 @@
 		C9C7360C1B15A2370021F10F /* Utility.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Utility.h; sourceTree = "<group>"; };
 		C9C7360E1B15E6300021F10F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C9C736101B15E90C0021F10F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		C9F5E6801B1C1AD10072BB9C /* EnemyMinionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyMinionManager.m; sourceTree = "<group>"; };
+		C9F5E6811B1C1AD10072BB9C /* EnemyMinionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyMinionManager.h; sourceTree = "<group>"; };
+		C9F5E6851B1C29210072BB9C /* EnemyChampionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EnemyChampionManager.m; path = ../EnemyChampionManager.m; sourceTree = "<group>"; };
+		C9F5E6861B1C29210072BB9C /* EnemyChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnemyChampionManager.h; path = ../EnemyChampionManager.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,8 @@
 		C95A77A91B14063B00052F3E /* Fluffy Pug */ = {
 			isa = PBXGroup;
 			children = (
+				C9F5E6851B1C29210072BB9C /* EnemyChampionManager.m */,
+				C9F5E6861B1C29210072BB9C /* EnemyChampionManager.h */,
 				C95A77AC1B14063B00052F3E /* AppDelegate.h */,
 				C95A77AD1B14063B00052F3E /* AppDelegate.m */,
 				C95A77B11B14063B00052F3E /* Images.xcassets */,
@@ -134,6 +142,8 @@
 				C9C7360B1B15A2370021F10F /* Utility.m */,
 				C9C7360C1B15A2370021F10F /* Utility.h */,
 				C9192B741B1A6F96002D1E08 /* concurrentqueue.h */,
+				C9F5E6801B1C1AD10072BB9C /* EnemyMinionManager.m */,
+				C9F5E6811B1C1AD10072BB9C /* EnemyMinionManager.h */,
 			);
 			path = "Fluffy Pug";
 			sourceTree = "<group>";
@@ -265,8 +275,10 @@
 			files = (
 				C95A77B01B14063B00052F3E /* main.m in Sources */,
 				C9C736041B15937F0021F10F /* AllyMinionManager.m in Sources */,
+				C9F5E6871B1C29210072BB9C /* EnemyChampionManager.m in Sources */,
 				C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */,
 				C9C7360D1B15A2370021F10F /* Utility.m in Sources */,
+				C9F5E6821B1C1AD10072BB9C /* EnemyMinionManager.m in Sources */,
 				C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

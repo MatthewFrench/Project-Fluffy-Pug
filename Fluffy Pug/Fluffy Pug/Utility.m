@@ -42,14 +42,21 @@ int getRandomInteger(int minimum, int maximum) {
     return imageData;
 }
 
- BOOL isColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance) {
+BOOL isColor(uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance) {
+    if (abs(pixel[2] - r) <= tolerance && abs(pixel[1] - g) <= tolerance && abs(pixel[0] - b) <= tolerance) {
+        return true;
+    }
+    return false;
+}
+
+ BOOL isPixelColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance) {
     if (abs(pixel.r - r) <= tolerance && abs(pixel.g - g) <= tolerance && abs(pixel.b - b) <= tolerance) {
         return true;
     }
     return false;
 }
 
- BOOL isPreciseColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b) {
+ BOOL isPixelPreciseColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b) {
     if (pixel.r == r && pixel.g == g && pixel.b == b) {
         return true;
     }
@@ -87,9 +94,7 @@ Pixel getPixel(struct ImageData imageData, int x, int y) {
     }
 }
 
- void drawRect( ImageData imageData, int x, int y, int width, int height, int r, int g, int b) {
-    int top = y - height/2;
-    int left = x - width/2;
+ void drawRect( ImageData imageData, int left, int top, int width, int height, int r, int g, int b) {
     //Top and bottom
     for (int i = left; i < left+width; i++) {
         setPixel(imageData, i, top, r, g, b);

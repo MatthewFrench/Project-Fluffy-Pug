@@ -34,14 +34,20 @@ struct MinionBar {
     float health;
 };
 
+struct ChampionBar {
+    struct Position topLeft, topRight, bottomLeft, bottomRight;
+    float health;
+};
+
  Position makePosition(int x, int y);
 int getRandomInteger(int minimum, int maximum);
  MinionBar makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health);
  Pixel getPixel( ImageData imageData, int x, int y);
 void setPixel( ImageData imageData, int x, int y, int r, int g, int b);
-void drawRect( ImageData imageData, int x, int y, int width, int height, int r, int g, int b);
-BOOL isColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
-BOOL isPreciseColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b);
+void drawRect( ImageData imageData, int left, int top, int width, int height, int r, int g, int b);
+BOOL isPixelColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
+BOOL isPixelPreciseColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b);
+BOOL isColor(uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
  ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight);
 
 #endif /* defined(__Fluffy_Pug__Utility__) */

@@ -40,6 +40,9 @@
     //                                       selector:@selector(timerLogic)
     //                                       userInfo:nil
     //                                        repeats:YES];
+    
+    [fpsTextField setFocusRingType:NSFocusRingTypeNone];
+    
     leagueGameState = new LeagueGameState();
     
     [self updateWindowList];
@@ -65,8 +68,8 @@
     CGDirectDisplayID displayId = kCGDirectMainDisplay;
     
     // Create a ScreenInput with the display and add it to the session
-    AVCaptureScreenInput *input = [[AVCaptureScreenInput alloc] initWithDisplayID:displayId];
-    input.minFrameDuration = CMTimeMake(1, 120);
+    input = [[AVCaptureScreenInput alloc] initWithDisplayID:displayId];
+    input.minFrameDuration = CMTimeMake(1, 60);
     
     //if (!input) {
     //    [mSession release];
@@ -107,6 +110,8 @@
     [mSession startRunning];
     
     NSLog(@"Set up session");
+    
+    chosenFPS = 60;
 }
 
 
@@ -152,24 +157,35 @@
     //Display minions
     [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->allyMinionManager->minionBars.count]];
     
+    [enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->enemyMinionManager->minionBars.count]];
     
     
-    
-    bool debug = false;
-    if (debug) {
-    leagueGameState->allyMinionManager->debugDraw();
-     CIImage *ciImage = [CIImage imageWithCVImageBuffer:sourcePixelBuffer];
-     // Create a bitmap rep from the image...
-     NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCIImage:ciImage];
-     // Create an NSImage and add the bitmap rep to it...
-     NSImage *image = [[NSImage alloc] init];
-     [image addRepresentation:bitmapRep];
-     // Set the output view to the new NSImage.
-     [imageView setImage:image];
+    if ([debugCheckbox state] == NSOnState) {
+        leagueGameState->allyMinionManager->debugDraw();
+        leagueGameState->enemyMinionManager->debugDraw();
+        CIImage *ciImage = [CIImage imageWithCVImageBuffer:sourcePixelBuffer];
+        // Create a bitmap rep from the image...
+        NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCIImage:ciImage];
+        // Create an NSImage and add the bitmap rep to it...
+        NSImage *image = [[NSImage alloc] init];
+        [image addRepresentation:bitmapRep];
+        // Set the output view to the new NSImage.
+        [imageView setImage:image];
     }
     
     CVPixelBufferUnlockBaseAddress( sourcePixelBuffer, 0 );
     
+    //Read FPS
+    NSString* fps = [fpsTextField stringValue];
+    int newFps = [fps intValue];
+    if (newFps == 0) {
+        [fpsTextField setStringValue:[NSString stringWithFormat:@"%d",chosenFPS]];
+        newFps = chosenFPS;
+    }
+    if (chosenFPS != newFps) {
+        chosenFPS = newFps;
+        input.minFrameDuration = CMTimeMake(1, chosenFPS);
+    }
     
     //Profile code? See how fast it's running?
     if (CACurrentMediaTime() - lastTime > 3) //10 seconds

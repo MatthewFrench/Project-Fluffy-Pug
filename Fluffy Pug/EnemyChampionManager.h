@@ -10,17 +10,17 @@
 #import "Utility.h"
 #include "concurrentqueue.h"
 
-class AllyMinionManager {
-    NSMutableArray* topLeftAllyMinionCorners;
-    NSMutableArray* bottomLeftAllyMinionCorners;
+class EnemyChampionManager {
+    NSMutableArray* topLeftCorners;
+    NSMutableArray* bottomLeftCorners;
     struct ImageData imageData;
     
     
-    moodycamel::ConcurrentQueue<Position> topLeftAllyMinionQueue, bottomLeftAllyMinionQueue;
+    moodycamel::ConcurrentQueue<Position> topLeftQueue, bottomLeftQueue;
     
 public:
-    NSMutableArray* minionBars;
-    AllyMinionManager();
+    NSMutableArray* championBars;
+    EnemyChampionManager();
     void processPixel(uint8_t *pixel, int x, int y);
     void setImageData(ImageData data);
     

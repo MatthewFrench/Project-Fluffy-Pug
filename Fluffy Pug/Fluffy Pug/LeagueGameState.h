@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AllyMinionManager.h"
+#import "EnemyMinionManager.h"
 #import "Utility.h"
 
 class LeagueGameState {
@@ -16,6 +17,7 @@ public:
     CGRect leagueSize;
     struct ImageData imageData;
     AllyMinionManager* allyMinionManager;
+    EnemyMinionManager* enemyMinionManager;
     
     LeagueGameState();
     void processImage(struct ImageData image);

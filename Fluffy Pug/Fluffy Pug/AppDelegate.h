@@ -10,13 +10,17 @@
 #import "LeagueGameState.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
-    IBOutlet NSTextField* statusText, *fpsText, *allyMinionText;
+    IBOutlet NSTextField* statusText, *fpsText, *allyMinionText, *enemyMinionText;
     NSTimer* timer;
     LeagueGameState* leagueGameState;
+    AVCaptureScreenInput *input;
     
     AVCaptureSession *mSession;
     
     IBOutlet NSImageView* imageView;
+    IBOutlet NSButton* debugCheckbox;
+    IBOutlet NSTextField* fpsTextField;
+    int chosenFPS;
 }
 @property (weak) IBOutlet NSWindow *window;
 

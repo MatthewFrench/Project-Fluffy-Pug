@@ -1,58 +1,58 @@
 //
-//  AllyMinionManager.m
+//  EnemyMinionManager.m
 //  Fluffy Pug
 //
 //  Created by Matthew French on 5/27/15.
 //  Copyright (c) 2015 Matthew French. All rights reserved.
 //
 
-#import "AllyMinionManager.h"
+#import "EnemyMinionManager.h"
 
-static int Border_Color_Red = 0, Border_Color_Green = 0, Border_Color_Blue = 0;
-static int Bar_Color_1_Red = 81, Bar_Color_1_Green = 162, Bar_Color_1_Blue = 230;
-static int Bar_Color_2_Red = 68, Bar_Color_2_Green = 136, Bar_Color_2_Blue = 193;
-static int Bar_Color_3_Red = 53, Bar_Color_3_Green = 107, Bar_Color_3_Blue = 151;
-static int Bar_Color_4_Red = 40, Bar_Color_4_Green = 80, Bar_Color_4_Blue = 114;
-static int Debug_Draw_Red = 0, Debug_Draw_Green = 255, Debug_Draw_Blue = 0;
+static int Border_Color_Red = 3, Border_Color_Green = 3, Border_Color_Blue = 3;
+static int Bar_Color_1_Red = 230, Bar_Color_1_Green = 104, Bar_Color_1_Blue = 104;
+static int Bar_Color_2_Red = 193, Bar_Color_2_Green = 87, Bar_Color_2_Blue = 87;
+static int Bar_Color_3_Red = 151, Bar_Color_3_Green = 68, Bar_Color_3_Blue = 68;
+static int Bar_Color_4_Red = 114, Bar_Color_4_Green = 51, Bar_Color_4_Blue = 51;
+static int Debug_Draw_Red = 255, Debug_Draw_Green = 0, Debug_Draw_Blue = 0;
 
-void AllyMinionManager::debugDraw() {
+void EnemyMinionManager::debugDraw() {
     for (int i = 0; i < [minionBars count]; i++) {
         struct MinionBar mb;
         [[minionBars objectAtIndex:i] getValue:&mb];
         drawRect(imageData, mb.topLeft.x, mb.topLeft.y, 64, 6, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
     }
 }
-void AllyMinionManager::prepareForPixelProcessing() {
+void EnemyMinionManager::prepareForPixelProcessing() {
     [minionBars removeAllObjects];
-    [topLeftAllyMinionCorners removeAllObjects];
-    [bottomLeftAllyMinionCorners removeAllObjects];
+    [topLeftMinionCorners removeAllObjects];
+    [bottomLeftMinionCorners removeAllObjects];
 }
 
-void AllyMinionManager::postPixelProcessing() {
+void EnemyMinionManager::postPixelProcessing() {
     //Empty queue into corner array
     Position p;
-    while(topLeftAllyMinionQueue.try_dequeue(p)) {
-        [topLeftAllyMinionCorners addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
+    while(topLeftMinionQueue.try_dequeue(p)) {
+        [topLeftMinionCorners addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
     }
-    while(bottomLeftAllyMinionQueue.try_dequeue(p)) {
-        [bottomLeftAllyMinionCorners addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
+    while(bottomLeftMinionQueue.try_dequeue(p)) {
+        [bottomLeftMinionCorners addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
     }
     
-    for (int i = 0; i < [topLeftAllyMinionCorners count]; i++) {
+    for (int i = 0; i < [topLeftMinionCorners count]; i++) {
         struct Position p;
-        [[topLeftAllyMinionCorners objectAtIndex:i] getValue:&p];
-        //First check if there's an ally bottom corner, that will be sufficient enough to confirm
+        [[topLeftMinionCorners objectAtIndex:i] getValue:&p];
+        //First check if there's an  bottom corner, that will be sufficient enough to confirm
         int bottomCornerX = p.x;
         int bottomCornerY = p.y+5;
         bool foundBottomCorner = false;
-        for (int j = 0; j < [bottomLeftAllyMinionCorners count]; j++) {
+        for (int j = 0; j < [bottomLeftMinionCorners count]; j++) {
             struct Position p2;
-            [[bottomLeftAllyMinionCorners objectAtIndex:j] getValue:&p2];
+            [[bottomLeftMinionCorners objectAtIndex:j] getValue:&p2];
             if (p2.x == bottomCornerX && p2.y == bottomCornerY) {
                 //Found a match
                 struct MinionBar mb = makeMinionBar(p, p2, makePosition(p.x+63,p.y), makePosition(p.x+63,p.y+5), 100.0);
                 [minionBars addObject:[NSValue valueWithBytes:&mb objCType:@encode(struct MinionBar)]];
-                [bottomLeftAllyMinionCorners removeObjectAtIndex:j];
+                [bottomLeftMinionCorners removeObjectAtIndex:j];
                 foundBottomCorner = true;
                 break;
             }
@@ -94,9 +94,9 @@ void AllyMinionManager::postPixelProcessing() {
         }
     }
     //Now verify bottom left
-    for (int i = 0; i < [bottomLeftAllyMinionCorners count]; i++) {
+    for (int i = 0; i < [bottomLeftMinionCorners count]; i++) {
         struct Position p;
-        [[bottomLeftAllyMinionCorners objectAtIndex:i] getValue:&p];
+        [[bottomLeftMinionCorners objectAtIndex:i] getValue:&p];
         p.y -= 5;
         int borderCount = 0;
         //Top
@@ -132,11 +132,6 @@ void AllyMinionManager::postPixelProcessing() {
             [minionBars addObject:[NSValue valueWithBytes:&mb objCType:@encode(struct MinionBar)]];
         }
     }
-    
-    /***********RIGHT HERE ADD DETECTION FOR BAR OVERLAPS*************/
-    /*
-     If a bar is at the same level vertically, check if the further bar goes past the first, if it doesn't, it is a duplicate of the first.
-     */
     
     //Calculate health of minion
     for (int i = 0; i < [minionBars count]; i++) {
@@ -182,17 +177,17 @@ void AllyMinionManager::postPixelProcessing() {
     }
 }
 
-AllyMinionManager::AllyMinionManager () {
+EnemyMinionManager::EnemyMinionManager () {
     minionBars = [NSMutableArray new];
-    topLeftAllyMinionCorners = [NSMutableArray new];
-    bottomLeftAllyMinionCorners = [NSMutableArray new];
+    topLeftMinionCorners = [NSMutableArray new];
+    bottomLeftMinionCorners = [NSMutableArray new];
 }
 
-void AllyMinionManager::setImageData(ImageData data) {
+void EnemyMinionManager::setImageData(ImageData data) {
     imageData = data;
 }
 
-void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
+void EnemyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
     //Assume multithreaded
     
     if (isColor(pixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
@@ -206,12 +201,12 @@ void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
                     
                     //Check bottom right pixel
                     uint8_t *bottomRightPixel = pixel + (imageData.imageWidth + 1)*4;
-                    if (isColor(bottomRightPixel, Bar_Color_1_Red, Bar_Color_1_Green, Bar_Color_1_Blue, 5)) {
+                    if (isColor(bottomRightPixel, Bar_Color_1_Red, Bar_Color_1_Green, Bar_Color_1_Blue, 2)) {
                         uint8_t *bottomPixel = pixel + (imageData.imageWidth)*4;
                         if (isColor(bottomPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
                             
                             Position p;p.x=x;p.y=y;
-                            topLeftAllyMinionQueue.enqueue(p);
+                            topLeftMinionQueue.enqueue(p);
                             
                         }
                     }
@@ -224,12 +219,12 @@ void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
                 
                 //Check top right pixel
                 uint8_t *topRightPixel = pixel + (-imageData.imageWidth + 1)*4;
-                if (isColor(topRightPixel, Bar_Color_4_Red, Bar_Color_4_Green, Bar_Color_4_Blue, 5)) {
+                if (isColor(topRightPixel, Bar_Color_4_Red, Bar_Color_4_Green, Bar_Color_4_Blue, 2)) {
                     uint8_t *topPixel = pixel - (imageData.imageWidth)*4;
                     if (isColor(topPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
                         
                         Position p;p.x=x;p.y=y;
-                        bottomLeftAllyMinionQueue.enqueue(p);
+                        bottomLeftMinionQueue.enqueue(p);
                     }
                 }
             }

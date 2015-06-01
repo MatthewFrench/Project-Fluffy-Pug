@@ -8,18 +8,19 @@
 
 #import "LeagueGameState.h"
 
-//@implementation LeagueGameState
-//@synthesize leaguePID, leagueSize, allyMinionManager;
-
 LeagueGameState::LeagueGameState() {
     leaguePID = -1;
     allyMinionManager = new AllyMinionManager();
+    enemyMinionManager = new EnemyMinionManager();
 }
 
 void LeagueGameState::processImage(struct ImageData image) {
     imageData = image;
     allyMinionManager->setImageData(imageData);
     allyMinionManager->prepareForPixelProcessing();
+    
+    enemyMinionManager->setImageData(imageData);
+    enemyMinionManager->prepareForPixelProcessing();
     
     int cores = 4;
     int section = imageData.imageHeight/cores;
@@ -35,14 +36,14 @@ void LeagueGameState::processImage(struct ImageData image) {
         }
         uint8_t *pixel = imageData.imageData + (yStart * imageData.imageWidth)*4;
         for (int y = yStart; y < yEnd; y++) {
-            //for (int y = 0; y < imageData.imageHeight; y++) {
-            //uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth)*4;
             for (int x = 0; x < imageData.imageWidth; x++) {
                 allyMinionManager->processPixel(pixel, x, y);
+                enemyMinionManager->processPixel(pixel, x, y);
                 pixel += 4;
             }
         }
     });
     
     allyMinionManager->postPixelProcessing();
+    enemyMinionManager->postPixelProcessing();
 }
