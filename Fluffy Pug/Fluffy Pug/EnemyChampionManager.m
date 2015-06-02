@@ -8,71 +8,15 @@
 
 #import "EnemyChampionManager.h"
 
-/*
- 
- Border color 1 is 115, 113, 115
- Border color 2 is 77, 75, 77
- Border color 3 is 3, 3, 3
- 
- Bar color 1 is 204, 125, 113
- Bar color 2 is 204, 126, 114
- Bar color 3 is 186, 81, 65
- Bar color 4 is 186, 81, 65
- Bar color 5 is 173, 48, 28
- Bar color 6 is same
- Bar color 7 is same
- Bar color 8 is same
- Bar color 9 is 168, 36, 15
- 
- I just need to recognize the top of the bar, most likely will give a good match
- 
- Inner health bar is 104 x 9
- 
- */
-/*
- static int Border_Color_1_Red = 115, Border_Color_1_Green = 113, Border_Color_1_Blue = 115;
- static int Border_Color_2_Red = 77, Border_Color_2_Green = 75, Border_Color_2_Blue = 77;
- static int Border_Color_3_Red = 3, Border_Color_3_Green = 3, Border_Color_3_Blue = 3;
- 
- 
- static int Bar_Color_1_Red = 204, Bar_Color_1_Green = 125, Bar_Color_1_Blue = 113;
- static int Bar_Color_2_Red = 204, Bar_Color_2_Green = 126, Bar_Color_2_Blue = 114;
- static int Bar_Color_3_Red = 186, Bar_Color_3_Green = 81, Bar_Color_3_Blue = 65;
- static int Bar_Color_4_Red = 186, Bar_Color_4_Green = 81, Bar_Color_4_Blue = 65;
- static int Bar_Color_5_Red = 173, Bar_Color_5_Green = 48, Bar_Color_5_Blue = 28;
- static int Bar_Color_6_Red = 173, Bar_Color_6_Green = 48, Bar_Color_6_Blue = 28;
- static int Bar_Color_7_Red = 173, Bar_Color_7_Green = 48, Bar_Color_7_Blue = 28;
- static int Bar_Color_8_Red = 173, Bar_Color_8_Green = 48, Bar_Color_8_Blue = 28;
- static int Bar_Color_9_Red = 168, Bar_Color_9_Green = 36, Bar_Color_9_Blue = 15;
- 
- static int Bar_Inner_Width = 104, Bar_Inner_Height = 9;
- 
- const static int Top_Left_Corner_Height = 4, Top_Left_Corner_Width = 4;
- static int Top_Left_Corner_Image[Top_Left_Corner_Height][Top_Left_Corner_Width][3] =
- {
- {{115,113,115},{115,113,115},{115,113,115},{115,113,115}},
- {{115,113,115},{77,75,77},{77,75,77},{77,75,77}},
- {{115,113,115},{77,75,77},{3,3,3},{3,3,3}},
- {{115,113,115},{77,75,77},{3,3,3},{204,125,113}}
- };
- 
- const static int Bottom_Left_Corner_Height = 2, Bottom_Left_Corner_Width = 4;
- static int Bottom_Left_Corner_Image[Bottom_Left_Corner_Width][Bottom_Left_Corner_Height][3] =
- {
- {{115,113,115},{115,113,115},{115,113,115},{115,113,115}},
- {{115,113,115},{77,75,77},{77,75,77},{77,75,77}},
- {{115,113,115},{77,75,77},{3,3,3},{3,3,3}},
- {{115,113,115},{77,75,77},{3,3,3},{204,125,113}}
- };
- 
- */
-
 static int Debug_Draw_Red = 255, Debug_Draw_Green = 0, Debug_Draw_Blue = 255;
 
 EnemyChampionManager::EnemyChampionManager () {
     championBars = [NSMutableArray new];
-    //topLeftCorners = [NSMutableArray new];
-    //bottomLeftCorners = [NSMutableArray new];
+    topRightDetect = [NSMutableArray new];
+    topLeftDetect = [NSMutableArray new];
+    bottomRightDetect = [NSMutableArray new];
+    bottomLeftDetect = [NSMutableArray new];
+    
     topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Champion Health Bar/Top Left Corner" ofType:@"png"]);
     
     bottomLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Champion Health Bar/Bottom Left Corner" ofType:@"png"]);
@@ -82,100 +26,72 @@ EnemyChampionManager::EnemyChampionManager () {
 }
 
 void EnemyChampionManager::debugDraw() {
-    for (int i = 0; i < [championBars count]; i++) {
-        struct ChampionBar mb;
-        [[championBars objectAtIndex:i] getValue:&mb];
-        drawRect(imageData, mb.topLeft.x, mb.topLeft.y, 104, 9, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
+    for (int i = 0; i < [topLeftDetect count]; i++) {
+        struct Position p;
+        [[topLeftDetect objectAtIndex:i] getValue:&p];
+        drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
+    }
+    for (int i = 0; i < [topRightDetect count]; i++) {
+        struct Position p;
+        [[topRightDetect objectAtIndex:i] getValue:&p];
+        drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
+    }
+    for (int i = 0; i < [bottomLeftDetect count]; i++) {
+        struct Position p;
+        [[bottomLeftDetect objectAtIndex:i] getValue:&p];
+        drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
+    }
+    for (int i = 0; i < [bottomRightDetect count]; i++) {
+        struct Position p;
+        [[bottomRightDetect objectAtIndex:i] getValue:&p];
+        drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
     }
 }
 void EnemyChampionManager::prepareForPixelProcessing() {
     [championBars removeAllObjects];
-    //[topLeftCorners removeAllObjects];
-    //[bottomLeftCorners removeAllObjects];
+    [topRightDetect removeAllObjects];
+    [topLeftDetect removeAllObjects];
+    [bottomRightDetect removeAllObjects];
+    [bottomLeftDetect removeAllObjects];
 }
 
 void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
     
-    //We need to loop through each pixel and check if it's in range
-    //Check top left first
-    bool detectedTopLeftImage = true;
-    uint8_t* pixel1 = pixel;
-    //Check to make sure we can fit the entire image in the other image first
-    if (imageData.imageWidth - x < topLeftImageData.imageWidth ||
-        imageData.imageHeight - y < topLeftImageData.imageHeight) {
-        detectedTopLeftImage = false;
-    } else {
-        uint8_t *pixel2 = topLeftImageData.imageData;
-        
-        for (int y1 = 0; y1 < topLeftImageData.imageHeight && detectedTopLeftImage; y1++) {
-            pixel1 = pixel + (y1 * imageData.imageWidth)*4;
-            for (int x1 = 0; x1 < topLeftImageData.imageWidth; x1++) {
-                if (!isColor2(pixel1, pixel2, 5)) {
-                    detectedTopLeftImage = false;
-                    break;
-                }
-                pixel2 += 4;
-                pixel1 += 4;
-            }
-        }
-    }
-    
-    if (detectedTopLeftImage) {
+    //Detect top left bar
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 5)) {
         Position p;p.x=x;p.y=y;
         topLeftQueue.enqueue(p);
     }
-    
-    
-    //Assume multithreaded
-    /*
-     if (isColor(pixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
-     //Check if top left border
-     if (x < imageData.imageWidth-1) {
-     
-     uint8_t *rightPixel = pixel + 4;
-     if (isColor(rightPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
-     
-     if (y < imageData.imageHeight-1) { //Check for top left bar
-     
-     //Check bottom right pixel
-     uint8_t *bottomRightPixel = pixel + (imageData.imageWidth + 1)*4;
-     if (isColor(bottomRightPixel, Bar_Color_1_Red, Bar_Color_1_Green, Bar_Color_1_Blue, 2)) {
-     uint8_t *bottomPixel = pixel + (imageData.imageWidth)*4;
-     if (isColor(bottomPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
-     
-     Position p;p.x=x;p.y=y;
-     topLeftQueue.enqueue(p);
-     
-     }
-     }
-     }
-     }
-     
-     
-     if (y > 0) { //Check for bottom left bar
-     
-     
-     //Check top right pixel
-     uint8_t *topRightPixel = pixel + (-imageData.imageWidth + 1)*4;
-     if (isColor(topRightPixel, Bar_Color_4_Red, Bar_Color_4_Green, Bar_Color_4_Blue, 2)) {
-     uint8_t *topPixel = pixel - (imageData.imageWidth)*4;
-     if (isColor(topPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
-     
-     Position p;p.x=x;p.y=y;
-     bottomLeftQueue.enqueue(p);
-     }
-     }
-     }
-     }
-     }*/
+    //Detect bottom left bar
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 5)) {
+        Position p;p.x=x;p.y=y;
+        bottomLeftQueue.enqueue(p);
+    }
+    //Detect top right bar
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 5)) {
+        Position p;p.x=x;p.y=y;
+        topRightQueue.enqueue(p);
+    }
+    //Detect bottom right bar
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 5)) {
+        Position p;p.x=x;p.y=y;
+        bottomRightQueue.enqueue(p);
+    }
 }
 
 void EnemyChampionManager::postPixelProcessing() {
     Position p;
     while(topLeftQueue.try_dequeue(p)) {
-        ChampionBar cb;
-        cb.topLeft = p;
-        [championBars addObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
+        [topLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
+    }
+    while(bottomLeftQueue.try_dequeue(p)) {
+        [bottomLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
+    }
+    while(topRightQueue.try_dequeue(p)) {
+        [topRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
+    }
+    while(bottomRightQueue.try_dequeue(p)) {
+        [bottomRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
     }
     
     //Empty queue into corner array
