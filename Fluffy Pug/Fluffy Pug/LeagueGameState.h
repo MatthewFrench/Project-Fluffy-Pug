@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AllyMinionManager.h"
 #import "EnemyMinionManager.h"
+#import "EnemyChampionManager.h"
 #import "Utility.h"
 
 class LeagueGameState {
@@ -18,7 +19,9 @@ public:
     struct ImageData imageData;
     AllyMinionManager* allyMinionManager;
     EnemyMinionManager* enemyMinionManager;
+    EnemyChampionManager* enemyChampionManager;
     
     LeagueGameState();
     void processImage(struct ImageData image);
+    void debugDraw();
 };

@@ -34,6 +34,10 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    [_window2 orderFront: nil];
+    [_window orderFront: nil];
+    [NSApp activateIgnoringOtherApps:YES];
+    
     // Insert code here to initialize your application
     //timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 //2000.0
     //                                         target:self
@@ -77,7 +81,6 @@
     //    return;
     //}
     if ([mSession canAddInput:input]) {
-        NSLog(@"Added screen capture input");
         [mSession addInput:input];
     } else {
         NSLog(@"Couldn't add screen capture input");
@@ -101,15 +104,12 @@
     videoOut.alwaysDiscardsLateVideoFrames = YES;
     
     if ( [mSession canAddOutput:videoOut] ) {
-        NSLog(@"Added output video");
         [mSession addOutput:videoOut];
     } else {NSLog(@"Couldn't add output video");}
     
     
     // Start running the session
     [mSession startRunning];
-    
-    NSLog(@"Set up session");
     
     chosenFPS = 60;
 }
@@ -159,10 +159,17 @@
     
     [enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->enemyMinionManager->minionBars.count]];
     
+    [enemyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->enemyChampionManager->championBars.count]];
+    
     
     if ([debugCheckbox state] == NSOnState) {
-        leagueGameState->allyMinionManager->debugDraw();
-        leagueGameState->enemyMinionManager->debugDraw();
+        //White it out
+        for (int i = 0; i < bufferWidth*bufferHeight*4; i+=4) {
+            baseAddress[i] = 0;
+            baseAddress[i+1] = 0;
+            baseAddress[i+2] = 0;
+        }
+        leagueGameState->debugDraw();
         CIImage *ciImage = [CIImage imageWithCVImageBuffer:sourcePixelBuffer];
         // Create a bitmap rep from the image...
         NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCIImage:ciImage];

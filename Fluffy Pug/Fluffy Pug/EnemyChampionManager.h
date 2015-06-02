@@ -11,9 +11,10 @@
 #include "concurrentqueue.h"
 
 class EnemyChampionManager {
-    NSMutableArray* topLeftCorners;
-    NSMutableArray* bottomLeftCorners;
-    struct ImageData imageData;
+    //NSMutableArray* topLeftCorners;
+    //NSMutableArray* bottomLeftCorners;
+    ImageData imageData, topLeftImageData, bottomLeftImageData,
+    bottomRightImageData, topRightImageData, healthSegmentImageData;
     
     
     moodycamel::ConcurrentQueue<Position> topLeftQueue, bottomLeftQueue;

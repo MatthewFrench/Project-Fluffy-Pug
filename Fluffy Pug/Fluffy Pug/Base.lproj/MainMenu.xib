@@ -15,12 +15,14 @@
             <connections>
                 <outlet property="allyMinionText" destination="pw1-Sb-MwS" id="jgL-IS-HOI"/>
                 <outlet property="debugCheckbox" destination="hCP-l2-ffx" id="T47-5N-KAp"/>
+                <outlet property="enemyChampionText" destination="Jkg-Ns-ebB" id="EaG-AZ-wSf"/>
                 <outlet property="enemyMinionText" destination="wip-Tv-DnA" id="8na-cw-RiO"/>
                 <outlet property="fpsText" destination="l1p-00-dqi" id="bKz-1N-N0J"/>
                 <outlet property="fpsTextField" destination="aZP-sd-Njt" id="0m2-TA-WTl"/>
                 <outlet property="imageView" destination="HHv-Ka-ht7" id="pl5-KH-twK"/>
                 <outlet property="statusText" destination="2TM-fP-sB5" id="QWa-XV-dty"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
+                <outlet property="window2" destination="eyJ-xI-Wdc" id="QdK-ke-W74"/>
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
@@ -676,7 +678,7 @@
         <window title="Fluffy Pug" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="396" y="282" width="480" height="209"/>
+            <rect key="contentRect" x="270" y="299" width="480" height="209"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <view key="contentView" id="EiT-Mj-1SZ">
                 <rect key="frame" x="0.0" y="7" width="480" height="209"/>
@@ -815,7 +817,7 @@
         <window title="Fluffy Pug" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="eyJ-xI-Wdc">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="396" y="282" width="480" height="294"/>
+            <rect key="contentRect" x="744" y="76" width="480" height="294"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <view key="contentView" id="1Zb-nW-iOE">
                 <rect key="frame" x="0.0" y="-2" width="480" height="294"/>

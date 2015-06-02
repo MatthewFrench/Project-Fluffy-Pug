@@ -48,6 +48,8 @@ void drawRect( ImageData imageData, int left, int top, int width, int height, in
 BOOL isPixelColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
 BOOL isPixelPreciseColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b);
 BOOL isColor(uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
+BOOL isColor2(uint8_t *pixel, uint8_t *pixel2, int tolerance);
  ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight);
+ImageData makeImageDataFrom(NSString* path);
 
 #endif /* defined(__Fluffy_Pug__Utility__) */

@@ -12,6 +12,7 @@ LeagueGameState::LeagueGameState() {
     leaguePID = -1;
     allyMinionManager = new AllyMinionManager();
     enemyMinionManager = new EnemyMinionManager();
+    enemyChampionManager = new EnemyChampionManager();
 }
 
 void LeagueGameState::processImage(struct ImageData image) {
@@ -21,6 +22,9 @@ void LeagueGameState::processImage(struct ImageData image) {
     
     enemyMinionManager->setImageData(imageData);
     enemyMinionManager->prepareForPixelProcessing();
+    
+    enemyChampionManager->setImageData(imageData);
+    enemyChampionManager->prepareForPixelProcessing();
     
     int cores = 4;
     int section = imageData.imageHeight/cores;
@@ -39,6 +43,7 @@ void LeagueGameState::processImage(struct ImageData image) {
             for (int x = 0; x < imageData.imageWidth; x++) {
                 allyMinionManager->processPixel(pixel, x, y);
                 enemyMinionManager->processPixel(pixel, x, y);
+                enemyChampionManager->processPixel(pixel, x, y);
                 pixel += 4;
             }
         }
@@ -46,4 +51,10 @@ void LeagueGameState::processImage(struct ImageData image) {
     
     allyMinionManager->postPixelProcessing();
     enemyMinionManager->postPixelProcessing();
+    enemyChampionManager->postPixelProcessing();
+}
+void LeagueGameState::debugDraw() {
+    allyMinionManager->debugDraw();
+    enemyMinionManager->debugDraw();
+    enemyChampionManager->debugDraw();
 }

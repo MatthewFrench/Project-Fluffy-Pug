@@ -28,6 +28,51 @@ void AllyMinionManager::prepareForPixelProcessing() {
     [bottomLeftAllyMinionCorners removeAllObjects];
 }
 
+void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
+    //Assume multithreaded
+    
+    if (isColor(pixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
+        //Check if top left border
+        if (x < imageData.imageWidth-1) {
+            
+            uint8_t *rightPixel = pixel + 4;
+            if (isColor(rightPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
+                
+                if (y < imageData.imageHeight-1) { //Check for top left bar
+                    
+                    //Check bottom right pixel
+                    uint8_t *bottomRightPixel = pixel + (imageData.imageWidth + 1)*4;
+                    if (isColor(bottomRightPixel, Bar_Color_1_Red, Bar_Color_1_Green, Bar_Color_1_Blue, 5)) {
+                        uint8_t *bottomPixel = pixel + (imageData.imageWidth)*4;
+                        if (isColor(bottomPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
+                            
+                            Position p;p.x=x;p.y=y;
+                            topLeftAllyMinionQueue.enqueue(p);
+                            
+                        }
+                    }
+                }
+            }
+            
+            
+            if (y > 0) { //Check for bottom left bar
+                
+                
+                //Check top right pixel
+                uint8_t *topRightPixel = pixel + (-imageData.imageWidth + 1)*4;
+                if (isColor(topRightPixel, Bar_Color_4_Red, Bar_Color_4_Green, Bar_Color_4_Blue, 5)) {
+                    uint8_t *topPixel = pixel - (imageData.imageWidth)*4;
+                    if (isColor(topPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
+                        
+                        Position p;p.x=x;p.y=y;
+                        bottomLeftAllyMinionQueue.enqueue(p);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void AllyMinionManager::postPixelProcessing() {
     //Empty queue into corner array
     Position p;
@@ -190,49 +235,4 @@ AllyMinionManager::AllyMinionManager () {
 
 void AllyMinionManager::setImageData(ImageData data) {
     imageData = data;
-}
-
-void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
-    //Assume multithreaded
-    
-    if (isColor(pixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
-        //Check if top left border
-        if (x < imageData.imageWidth-1) {
-            
-            uint8_t *rightPixel = pixel + 4;
-            if (isColor(rightPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
-                
-                if (y < imageData.imageHeight-1) { //Check for top left bar
-                    
-                    //Check bottom right pixel
-                    uint8_t *bottomRightPixel = pixel + (imageData.imageWidth + 1)*4;
-                    if (isColor(bottomRightPixel, Bar_Color_1_Red, Bar_Color_1_Green, Bar_Color_1_Blue, 5)) {
-                        uint8_t *bottomPixel = pixel + (imageData.imageWidth)*4;
-                        if (isColor(bottomPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
-                            
-                            Position p;p.x=x;p.y=y;
-                            topLeftAllyMinionQueue.enqueue(p);
-                            
-                        }
-                    }
-                }
-            }
-            
-            
-            if (y > 0) { //Check for bottom left bar
-                
-                
-                //Check top right pixel
-                uint8_t *topRightPixel = pixel + (-imageData.imageWidth + 1)*4;
-                if (isColor(topRightPixel, Bar_Color_4_Red, Bar_Color_4_Green, Bar_Color_4_Blue, 5)) {
-                    uint8_t *topPixel = pixel - (imageData.imageWidth)*4;
-                    if (isColor(topPixel, Border_Color_Red, Border_Color_Green, Border_Color_Blue, 5)) {
-                        
-                        Position p;p.x=x;p.y=y;
-                        bottomLeftAllyMinionQueue.enqueue(p);
-                    }
-                }
-            }
-        }
-    }
 }

@@ -28,18 +28,41 @@ int getRandomInteger(int minimum, int maximum) {
 }
 
  ImageData makeImageData(uint8_t * data, int width, int height) {
-    
-     ImageData imageData;
-    
-    //CGDataProviderRef provider = CGImageGetDataProvider(imageRef);
-    //imageData.rawData = CGDataProviderCopyData(provider);
-    //imageData.imageData = (UInt8 *) CFDataGetBytePtr(imageData.rawData);
+    ImageData imageData;
     imageData.imageData = data;
-    imageData.imageByteLength = width*height*4;//CFDataGetLength(rawData);
+    imageData.imageByteLength = width*height*4;
     imageData.imageWidth = width;
     imageData.imageHeight = height;
-    //imageData.rect = imageSize;
     return imageData;
+}
+
+ImageData makeImageDataFrom(NSString* path) {
+    NSImage *image = [[NSImage alloc] initWithContentsOfFile:path];
+    NSBitmapImageRep* raw_img = [NSBitmapImageRep imageRepWithData:[image TIFFRepresentation]];
+    UInt8* data = (UInt8*) calloc (image.size.width* image.size.height*4,sizeof(UInt8));
+    UInt8* dataPointer = data;
+    UInt8* originalData = [raw_img bitmapData];
+    for (int i = 0; i < image.size.width * image.size.height; i++) {
+            dataPointer[0] = originalData[2];
+            dataPointer[1] = originalData[1];
+            dataPointer[2] = originalData[0];
+            dataPointer[3] = originalData[3];
+            dataPointer += 4;
+            originalData += 4;
+    }
+    ImageData imageData;
+    imageData.imageData = data;
+    imageData.imageByteLength = image.size.width* image.size.height*4;
+    imageData.imageWidth = image.size.width;
+    imageData.imageHeight = image.size.height;
+    return imageData;
+}
+
+BOOL isColor2(uint8_t *pixel, uint8_t *pixel2, int tolerance) {
+    if (abs(pixel[2] - pixel2[2]) <= tolerance && abs(pixel[1] - pixel2[1]) <= tolerance && abs(pixel[0] - pixel2[0]) <= tolerance) {
+        return true;
+    }
+    return false;
 }
 
 BOOL isColor(uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance) {
@@ -83,14 +106,10 @@ Pixel getPixel(struct ImageData imageData, int x, int y) {
 
  void setPixel( ImageData imageData, int x, int y, int r, int g, int b) {
     uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + x)*4;
-    //int position = (y * imageData.imageWidth + x) * 4;
     if ((y * imageData.imageWidth + x) * 4+3 < imageData.imageByteLength) {
         pixel[2] = r;
         pixel[1] = g;
         pixel[0] = b;
-        //imageData.imageData[position + 2] = r;
-        //imageData.imageData[position + 1] = g;
-        //imageData.imageData[position + 0] = b;
     }
 }
 
