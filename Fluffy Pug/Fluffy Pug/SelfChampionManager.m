@@ -120,7 +120,7 @@ void SelfChampionManager::processChampionsLocations() {
     for (int i = 0; i < [championBars count]; i++) {
         ChampionBar cb;
         [[championBars objectAtIndex:i] getValue:&cb];
-        cb.characterCenter = makePosition(cb.topLeft.x+66, cb.topLeft.y+64);
+        cb.characterCenter = makePosition(cb.topLeft.x+66, cb.topLeft.y+104);
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
     }
 }
@@ -155,7 +155,7 @@ void SelfChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 50)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
             [bottomLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];

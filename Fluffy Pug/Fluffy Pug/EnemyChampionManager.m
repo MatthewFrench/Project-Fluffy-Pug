@@ -99,7 +99,7 @@ void EnemyChampionManager::processChampionsLocations() {
     for (int i = 0; i < [championBars count]; i++) {
         ChampionBar cb;
         [[championBars objectAtIndex:i] getValue:&cb];
-        cb.characterCenter = makePosition(cb.topLeft.x+66, cb.topLeft.y+64);
+        cb.characterCenter = makePosition(cb.topLeft.x+66, cb.topLeft.y+104);
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
     }
 }
@@ -141,7 +141,7 @@ ChampionBar EnemyChampionManager::getNearestChampion(int x, int y) {
 
 void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 20)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(topLeftDetect, p)) {
@@ -150,7 +150,7 @@ void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
             //NSLog(@"Found bottom left");
@@ -158,7 +158,7 @@ void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect top right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(topRightDetect, p)) {
             //NSLog(@"Found top right");
@@ -166,7 +166,7 @@ void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomRightDetect, p)) {
             //NSLog(@"Found bottom right");

@@ -19,6 +19,8 @@ inline void pressMouseLeft(int x, int y);
 inline void releaseMouseLeft(int x, int y);
 inline void pressMouseRight(int x, int y);
 inline void releaseMouseRight(int x, int y);
+inline void pressA();
+inline void releaseA();
 inline void tapSpell1();
 inline void tapSpell2();
 inline void tapSpell3();
@@ -60,6 +62,7 @@ inline void releaseQ();
 inline void releaseW();
 inline void releaseE();
 inline void releaseR();
+inline void tapMouseRightAttackMove(int x, int y);
 
 
 
@@ -68,36 +71,64 @@ inline void releaseR();
 
 extern inline void moveMouse(int x, int y) {
     CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventMouseMoved, CGPointMake(x, y), kCGMouseButtonLeft);
+    CGEventSetType(theEvent, kCGEventMouseMoved);
     CGEventPost(kCGHIDEventTap, theEvent);
     CFRelease(theEvent);
 }
 extern inline void tapMouseLeft(int x, int y) {
     moveMouse(x, y);
     pressMouseLeft(x, y);
-    releaseMouseLeft(x, y);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 50), dispatch_get_main_queue(), ^{ // one fiftieth of a second
+        releaseMouseLeft(x, y);
+    });
 }
 extern inline void tapMouseRight(int x, int y) {
     moveMouse(x, y);
     pressMouseRight(x, y);
-    releaseMouseRight(x, y);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 50), dispatch_get_main_queue(), ^{ // one fiftieth of a second
+        releaseMouseRight(x, y);
+    });
+}
+extern inline void tapMouseRightAttackMove(int x, int y) {
+    moveMouse(x, y);
+    pressA();
+    pressMouseRight(x, y);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 50), dispatch_get_main_queue(), ^{ // one fiftieth of a second
+        releaseMouseRight(x, y);
+        releaseA();
+    });
+}
+extern inline void pressA() {
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 0, YES);
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+}
+extern inline void releaseA() {
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 0, NO);
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
 }
 extern inline void pressMouseLeft(int x, int y) {
     CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(x, y), kCGMouseButtonLeft);
+    CGEventSetType(theEvent, kCGEventLeftMouseDown);
     CGEventPost(kCGHIDEventTap, theEvent);
     CFRelease(theEvent);
 }
 extern inline void releaseMouseLeft(int x, int y) {
     CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseUp, CGPointMake(x, y), kCGMouseButtonLeft);
+    CGEventSetType(theEvent, kCGEventLeftMouseUp);
     CGEventPost(kCGHIDEventTap, theEvent);
     CFRelease(theEvent);
 }
 extern inline void pressMouseRight(int x, int y) {
-    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(x, y), kCGMouseButtonRight);
+    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventRightMouseDown, CGPointMake(x, y), kCGMouseButtonRight);
+    CGEventSetType(theEvent, kCGEventRightMouseDown);
     CGEventPost(kCGHIDEventTap, theEvent);
     CFRelease(theEvent);
 }
 extern inline void releaseMouseRight(int x, int y) {
-    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseUp, CGPointMake(x, y), kCGMouseButtonRight);
+    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventRightMouseUp, CGPointMake(x, y), kCGMouseButtonRight);
+    CGEventSetType(theEvent, kCGEventRightMouseUp);
     CGEventPost(kCGHIDEventTap, theEvent);
     CFRelease(theEvent);
 }

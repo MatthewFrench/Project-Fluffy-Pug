@@ -14,31 +14,36 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     lastMovementClick = clock();
 }
 void BasicAI::processAI() {
-    //Move randomly every 3 seconds
-    if (clock() - lastMovementClick >= 3.0) {
-        lastMovementClick = clock();
-        
-        if ([gameState->selfChampionManager->championBars count] > 0) {
-            ChampionBar selfChamp; [[gameState->selfChampionManager->championBars objectAtIndex:0] getValue:&selfChamp];
-            if (clock() - lastMovementClick >= 3.0) {
-                if ([gameState->enemyChampionManager->championBars count] > 0) { //Attack enemy champion
-                    ChampionBar enemyChamp = gameState->enemyChampionManager->getNearestChampion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
-                    tapMouseRight(enemyChamp.characterCenter.x, enemyChamp.characterCenter.y);
-                } else if ([gameState->enemyMinionManager->minionBars count] > 0) { //Attack enemy minion
-                    MinionBar enemyMinion = gameState->allyMinionManager->getNearestMinion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
-                    tapMouseRight(enemyMinion.characterCenter.x, enemyMinion.characterCenter.y);
-                } else if ([gameState->allyMinionManager->minionBars count] > 0) { //Follow ally minion
-                    MinionBar allyMinion = gameState->allyMinionManager->getNearestMinion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
-                    tapMouseRight(allyMinion.characterCenter.x, allyMinion.characterCenter.y);
-                } else if ([gameState->allyChampionManager->championBars count] > 0) { //Follow ally champion
-                    ChampionBar allyChamp = gameState->allyChampionManager->getNearestChampion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
-                    tapMouseRight(allyChamp.characterCenter.x, allyChamp.characterCenter.y);
-                } else {
-                    srand((unsigned int)time(NULL));
-                    int x = (rand() % (int)(gameState->leagueSize.size.width-100)) + 50;
-                    int y = (rand() % (int)(gameState->leagueSize.size.width-200)) + 100;
-                    tapMouseRight(x, y);
-                }
+    if ([gameState->selfChampionManager->championBars count] > 0) {
+        ChampionBar selfChamp; [[gameState->selfChampionManager->championBars objectAtIndex:0] getValue:&selfChamp];
+        if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= 3.0) {
+            lastMovementClick = clock(); //Move every 3 seconds, less if enemies near
+            
+            
+            if ([gameState->enemyChampionManager->championBars count] > 0) { //Attack enemy champion
+                ChampionBar enemyChamp = gameState->enemyChampionManager->getNearestChampion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
+                tapMouseRightAttackMove(enemyChamp.characterCenter.x, enemyChamp.characterCenter.y);
+                lastMovementClick -= CLOCKS_PER_SEC*2;
+            } else if ([gameState->enemyMinionManager->minionBars count] > 0) { //Attack enemy minion
+                MinionBar enemyMinion = gameState->enemyMinionManager->getNearestMinion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
+                tapMouseRightAttackMove(enemyMinion.characterCenter.x, enemyMinion.characterCenter.y);
+                lastMovementClick -= CLOCKS_PER_SEC*2;
+            } else if ([gameState->allyMinionManager->minionBars count] > 0) { //Follow ally minion
+                MinionBar allyMinion = gameState->allyMinionManager->getNearestMinion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
+                tapMouseRight(allyMinion.characterCenter.x, allyMinion.characterCenter.y);
+                lastMovementClick -= CLOCKS_PER_SEC*2;
+            } else if ([gameState->allyChampionManager->championBars count] > 0) { //Follow ally champion
+                ChampionBar allyChamp = gameState->allyChampionManager->getNearestChampion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
+                tapMouseRight(allyChamp.characterCenter.x, allyChamp.characterCenter.y);
+                lastMovementClick -= CLOCKS_PER_SEC*2;
+            } else {
+                //srand((unsigned int)time(NULL));
+                //int x = (rand() % (int)(gameState->leagueSize.size.width-100)) + 50;
+                //int y = (rand() % (int)(gameState->leagueSize.size.width-200)) + 100;
+                //Go to mid lane
+                int x = gameState->leagueSize.size.width - 116;
+                int y = gameState->leagueSize.size.height - 92;
+                tapMouseRight(x, y);
             }
         }
     }
