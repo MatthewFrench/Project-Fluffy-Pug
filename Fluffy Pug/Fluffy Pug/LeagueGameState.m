@@ -7,12 +7,16 @@
 //
 
 #import "LeagueGameState.h"
+#import "BasicAI.h"
 
 LeagueGameState::LeagueGameState() {
     leaguePID = -1;
     allyMinionManager = new AllyMinionManager();
     enemyMinionManager = new EnemyMinionManager();
     enemyChampionManager = new EnemyChampionManager();
+    selfChampionManager = new SelfChampionManager();
+    allyChampionManager = new AllyChampionManager();
+    basicAI = new BasicAI(this);
 }
 
 void LeagueGameState::processImage(struct ImageData image) {
@@ -26,6 +30,12 @@ void LeagueGameState::processImage(struct ImageData image) {
         allyMinionManager->processImage(image);
     });
     dispatch_group_async(dispatchGroup, queue, ^{
+        allyChampionManager->processImage(image);
+    });
+    dispatch_group_async(dispatchGroup, queue, ^{
+        selfChampionManager->processImage(image);
+    });
+    dispatch_group_async(dispatchGroup, queue, ^{
         enemyMinionManager->processImage(image);
     });
     dispatch_group_async(dispatchGroup, queue, ^{
@@ -34,6 +44,10 @@ void LeagueGameState::processImage(struct ImageData image) {
 
     // wait on the group to block the current thread.
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
+    
+    if (leaguePID != -1) {
+        basicAI->processAI();
+    }
     
     
     //allyMinionManager->setImageData(imageData);
@@ -80,4 +94,6 @@ void LeagueGameState::debugDraw() {
     allyMinionManager->debugDraw();
     enemyMinionManager->debugDraw();
     enemyChampionManager->debugDraw();
+    selfChampionManager->debugDraw();
+    allyChampionManager->debugDraw();
 }

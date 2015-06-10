@@ -30,12 +30,12 @@ struct Position {
 };
 
 struct MinionBar {
-    struct Position topLeft, topRight, bottomLeft, bottomRight;
+    struct Position topLeft, topRight, bottomLeft, bottomRight, characterCenter;
     float health;
 };
 
 struct ChampionBar {
-    struct Position topLeft, topRight, bottomLeft, bottomRight;
+    struct Position topLeft, topRight, bottomLeft, bottomRight, characterCenter;
     float health;
 };
 

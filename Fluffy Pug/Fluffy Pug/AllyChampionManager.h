@@ -11,7 +11,7 @@
 #include "concurrentqueue.h"
 #import <time.h>
 
-class EnemyChampionManager {
+class AllyChampionManager {
     ImageData imageData, topLeftImageData, bottomLeftImageData,
     bottomRightImageData, topRightImageData, healthSegmentImageData;
     
@@ -34,7 +34,7 @@ class EnemyChampionManager {
 public:
     NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     
-    EnemyChampionManager();
+    AllyChampionManager();
     void processImage(ImageData data);
     ChampionBar getNearestChampion(int x, int y);
     

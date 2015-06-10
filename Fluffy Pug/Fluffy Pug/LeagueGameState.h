@@ -10,7 +10,11 @@
 #import "AllyMinionManager.h"
 #import "EnemyMinionManager.h"
 #import "EnemyChampionManager.h"
+#import "SelfChampionManager.h"
+#import "AllyChampionManager.h"
 #import "Utility.h"
+
+class BasicAI;
 
 class LeagueGameState {
 public:
@@ -20,6 +24,9 @@ public:
     AllyMinionManager* allyMinionManager;
     EnemyMinionManager* enemyMinionManager;
     EnemyChampionManager* enemyChampionManager;
+    SelfChampionManager* selfChampionManager;
+    AllyChampionManager* allyChampionManager;
+    BasicAI* basicAI;
     
     LeagueGameState();
     void processImage(struct ImageData image);

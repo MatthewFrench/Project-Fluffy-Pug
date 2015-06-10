@@ -1,43 +1,64 @@
 //
-//  EnemyChampionManager.m
+//  AllyChampionManager.m
 //  Fluffy Pug
 //
 //  Created by Matthew French on 5/27/15.
 //  Copyright (c) 2015 Matthew French. All rights reserved.
 //
 
-#import "EnemyChampionManager.h"
+#import "AllyChampionManager.h"
 
-static int Debug_Draw_Red = 255, Debug_Draw_Green = 0, Debug_Draw_Blue = 255;
+static int Debug_Draw_Red = 50, Debug_Draw_Green = 150, Debug_Draw_Blue = 150;
 static int Health_Bar_Width = 104, Health_Bar_Height = 9;
 
-EnemyChampionManager::EnemyChampionManager () {
+AllyChampionManager::AllyChampionManager () {
     championBars = [NSMutableArray new];
     topRightDetect = [NSMutableArray new];
     topLeftDetect = [NSMutableArray new];
     bottomRightDetect = [NSMutableArray new];
     bottomLeftDetect = [NSMutableArray new];
     
-    topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Champion Health Bar/Top Left Corner" ofType:@"png"]);
+    topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Champion Health Bar/Top Left Corner" ofType:@"png"]);
     
-    bottomLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Champion Health Bar/Bottom Left Corner" ofType:@"png"]);
-    bottomRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Champion Health Bar/Bottom Right Corner" ofType:@"png"]);
-    topRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Champion Health Bar/Top Right Corner" ofType:@"png"]);
-    healthSegmentImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Champion Health Bar/Health Segment" ofType:@"png"]);
+    bottomLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Champion Health Bar/Bottom Left Corner" ofType:@"png"]);
+    bottomRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Champion Health Bar/Bottom Right Corner" ofType:@"png"]);
+    topRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Champion Health Bar/Top Right Corner" ofType:@"png"]);
+    healthSegmentImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Champion Health Bar/Health Segment" ofType:@"png"]);
     
     needsFullScreenUpdate = true;
     fullScreenUpdateTime = clock();
     lastUpdateTime = clock();
 }
 
-void EnemyChampionManager::debugDraw() {
+void AllyChampionManager::debugDraw() {
     for (int i = 0; i < [championBars count]; i++) {
         ChampionBar mb;
         [[championBars objectAtIndex:i] getValue:&mb];
-        drawRect(imageData, mb.topLeft.x, mb.topLeft.y, Health_Bar_Width, Health_Bar_Height, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
+        drawRect(imageData, mb.topLeft.x, mb.topLeft.y, 104, 9, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
     }
+    /*
+     for (int i = 0; i < [topLeftDetect count]; i++) {
+     struct Position p;
+     [[topLeftDetect objectAtIndex:i] getValue:&p];
+     drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
+     }
+     for (int i = 0; i < [topRightDetect count]; i++) {
+     struct Position p;
+     [[topRightDetect objectAtIndex:i] getValue:&p];
+     drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
+     }
+     for (int i = 0; i < [bottomLeftDetect count]; i++) {
+     struct Position p;
+     [[bottomLeftDetect objectAtIndex:i] getValue:&p];
+     drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
+     }
+     for (int i = 0; i < [bottomRightDetect count]; i++) {
+     struct Position p;
+     [[bottomRightDetect objectAtIndex:i] getValue:&p];
+     drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
+     }*/
 }
-void EnemyChampionManager::processImage(ImageData data) {
+void AllyChampionManager::processImage(ImageData data) {
     imageData = data;
     double delta = (clock() - lastUpdateTime)/CLOCKS_PER_SEC;
     lastUpdateTime = clock();
@@ -79,7 +100,7 @@ void EnemyChampionManager::processImage(ImageData data) {
     processChampionsLocations();
     processChampionsHealth();
 }
-void EnemyChampionManager::scanSection(int xStart, int yStart, int xEnd, int yEnd) {
+void AllyChampionManager::scanSection(int xStart, int yStart, int xEnd, int yEnd) {
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = getPixel2(imageData, xStart, y);
         
@@ -90,7 +111,7 @@ void EnemyChampionManager::scanSection(int xStart, int yStart, int xEnd, int yEn
         }
     }
 }
-void EnemyChampionManager::processChampionsLocations() {
+void AllyChampionManager::processChampionsLocations() {
     processTopLeftDetect();
     processTopRightDetect();
     processBottomLeftDetect();
@@ -103,7 +124,7 @@ void EnemyChampionManager::processChampionsLocations() {
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
     }
 }
-void EnemyChampionManager::processChampionsHealth() {
+void AllyChampionManager::processChampionsHealth() {
     for (int i = 0; i < [championBars count]; i++) {
         ChampionBar cb;
         [[championBars objectAtIndex:i] getValue:&cb];
@@ -111,7 +132,7 @@ void EnemyChampionManager::processChampionsHealth() {
         for (int x = 104; x > 0; x--) {
             if (cb.bottomLeft.y-1 < imageData.imageHeight && cb.bottomLeft.x+1 + x < imageData.imageWidth) {
                 uint8_t *pixel = getPixel2(imageData, cb.bottomLeft.x+1 + x, cb.bottomLeft.y-1);
-                if (isColor(pixel, 168, 48, 16, 20)) {
+                if (isColor(pixel, 45, 168, 216, 20)) {
                     cb.health = (float)x / 104.0;
                     break;
                 }
@@ -121,8 +142,7 @@ void EnemyChampionManager::processChampionsHealth() {
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
     }
 }
-
-ChampionBar EnemyChampionManager::getNearestChampion(int x, int y) {
+ChampionBar AllyChampionManager::getNearestChampion(int x, int y) {
     ChampionBar closest;
     for (int i = 0; i < [championBars count]; i++) {
         ChampionBar cb;
@@ -138,43 +158,38 @@ ChampionBar EnemyChampionManager::getNearestChampion(int x, int y) {
 }
 
 
-
-void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
+void AllyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 10)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(topLeftDetect, p)) {
-            //NSLog(@"Found top left");
             [topLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 10)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
-            //NSLog(@"Found bottom left");
             [bottomLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect top right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 10)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(topRightDetect, p)) {
-            //NSLog(@"Found top right");
             [topRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect bottom right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 10)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomRightDetect, p)) {
-            //NSLog(@"Found bottom right");
             [bottomRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
 }
-bool EnemyChampionManager::containsPosition(NSMutableArray* array, Position p) {
+bool AllyChampionManager::containsPosition(NSMutableArray* array, Position p) {
     for (int i = 0; i < [array count]; i++) {
         Position p2;
         [[array objectAtIndex:i] getValue:&p2];
@@ -184,7 +199,7 @@ bool EnemyChampionManager::containsPosition(NSMutableArray* array, Position p) {
     }
     return false;
 }
-void EnemyChampionManager::processTopLeftDetect() {
+void AllyChampionManager::processTopLeftDetect() {
     while ([topLeftDetect count] > 0) {
         int corners = 0;
         Position p;
@@ -233,7 +248,7 @@ void EnemyChampionManager::processTopLeftDetect() {
     }
 }
 
-void EnemyChampionManager::processBottomRightDetect() {
+void AllyChampionManager::processBottomRightDetect() {
     while ([bottomRightDetect count] > 0) {
         int corners = 0;
         Position p;
@@ -282,7 +297,7 @@ void EnemyChampionManager::processBottomRightDetect() {
     }
 }
 
-void EnemyChampionManager::processBottomLeftDetect() {
+void AllyChampionManager::processBottomLeftDetect() {
     while ([bottomLeftDetect count] > 0) {
         int corners = 0;
         Position p;
@@ -330,7 +345,7 @@ void EnemyChampionManager::processBottomLeftDetect() {
         }
     }
 }
-void EnemyChampionManager::processTopRightDetect() {
+void AllyChampionManager::processTopRightDetect() {
     while ([topRightDetect count] > 0) {
         int corners = 0;
         Position p;

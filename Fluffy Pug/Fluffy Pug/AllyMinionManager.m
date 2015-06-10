@@ -116,6 +116,13 @@ void AllyMinionManager::processMinionsLocations() {
     processTopRightDetect();
     processBottomLeftDetect();
     processBottomRightDetect();
+    //Do center location
+    for (int i = 0; i < [minionBars count]; i++) {
+        MinionBar cb;
+        [[minionBars objectAtIndex:i] getValue:&cb];
+        cb.characterCenter = makePosition(cb.topLeft.x+30, cb.topLeft.y+32);
+        [minionBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(MinionBar)]];
+    }
 }
 void AllyMinionManager::processMinionsHealth() {
     for (int i = 0; i < [minionBars count]; i++) {
@@ -135,7 +142,20 @@ void AllyMinionManager::processMinionsHealth() {
         [minionBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
     }
 }
-
+MinionBar AllyMinionManager::getNearestMinion(int x, int y) {
+    MinionBar closest;
+    for (int i = 0; i < [minionBars count]; i++) {
+        MinionBar cb;
+        [[minionBars objectAtIndex:i] getValue:&cb];
+        
+        if (i == 0) {
+            closest = cb;
+        } else if (hypot(closest.characterCenter.x - x, closest.characterCenter.y - y) > hypot(cb.characterCenter.x - x, cb.characterCenter.y - y)) {
+            closest = cb;
+        }
+    }
+    return closest;
+}
 
 
 void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
@@ -219,6 +239,7 @@ void AllyMinionManager::processTopLeftDetect() {
         }
         //Now add champion bar
         if (corners > 0) {
+            //NSLog(@"Found ally minion with corners: %d", corners);
             ChampionBar cb;
             cb.topLeft = makePosition(p.x + 2, p.y + 2);
             cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
@@ -267,6 +288,7 @@ void AllyMinionManager::processBottomRightDetect() {
         }
         //Now add champion bar
         if (corners > 0) {
+            //NSLog(@"Found ally minion with corners: %d", corners);
             ChampionBar cb;
             cb.bottomRight = makePosition(p.x+1, p.y+1);
             cb.topLeft = makePosition(cb.bottomRight.x - Health_Bar_Width, cb.bottomRight.y - Health_Bar_Height);
@@ -315,6 +337,7 @@ void AllyMinionManager::processBottomLeftDetect() {
         }
         //Now add champion bar
         if (corners > 0) {
+            //NSLog(@"Found ally minion with corners: %d", corners);
             ChampionBar cb;
             cb.bottomLeft = makePosition(p.x + 2, p.y);
             cb.topLeft = makePosition(cb.bottomLeft.x, cb.bottomLeft.y - Health_Bar_Height);
@@ -362,6 +385,7 @@ void AllyMinionManager::processTopRightDetect() {
         }
         //Now add champion bar
         if (corners > 0) {
+            //NSLog(@"Found ally minion with corners: %d", corners);
             ChampionBar cb;
             cb.topRight = makePosition(p.x, p.y + 2);
             cb.topLeft = makePosition(cb.topRight.x - Health_Bar_Width, cb.topRight.y);

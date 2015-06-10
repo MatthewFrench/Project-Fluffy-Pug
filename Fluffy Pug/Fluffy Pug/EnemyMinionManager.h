@@ -35,6 +35,7 @@ public:
     
     EnemyMinionManager();
     void processImage(ImageData data);
+    MinionBar getNearestMinion(int x, int y);
     
     void debugDraw();
 };

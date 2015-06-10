@@ -161,6 +161,10 @@
     
     [enemyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->enemyChampionManager->championBars.count]];
     
+    [allyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->allyChampionManager->championBars.count]];
+    
+    [selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->selfChampionManager->championBars.count]];
+    
     
     if ([debugCheckbox state] == NSOnState) {
         //White it out
