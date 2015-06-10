@@ -43,6 +43,7 @@ inline Position makePosition(int x, int y);
 inline int getRandomInteger(int minimum, int maximum);
 inline  MinionBar makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health);
 inline  Pixel getPixel( ImageData imageData, int x, int y);
+inline  uint8_t* getPixel2( ImageData imageData, int x, int y);
 inline void setPixel( ImageData imageData, int x, int y, int r, int g, int b);
 inline void drawRect( ImageData imageData, int left, int top, int width, int height, int r, int g, int b);
 inline BOOL isPixelColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
@@ -56,7 +57,7 @@ inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int heig
 
 
 extern inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance) {
-    if (isColor2(pixel, image.imageData, 5)) {
+    if (isColor2(pixel, image.imageData, tolerance)) {
         if (width - x > image.imageWidth &&
             height - y > image.imageHeight) {
             uint8_t *pixel2 = image.imageData;
@@ -169,6 +170,11 @@ extern Pixel getPixel(struct ImageData imageData, int x, int y) {
         p.exist = false;
     }
     return p;
+}
+
+extern uint8_t* getPixel2(struct ImageData imageData, int x, int y) {
+    uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + x)*4;
+    return pixel;
 }
 
 
