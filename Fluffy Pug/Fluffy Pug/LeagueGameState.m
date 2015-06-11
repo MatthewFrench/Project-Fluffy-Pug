@@ -16,6 +16,7 @@ LeagueGameState::LeagueGameState() {
     enemyChampionManager = new EnemyChampionManager();
     selfChampionManager = new SelfChampionManager();
     allyChampionManager = new AllyChampionManager();
+    abilityManager = new AbilityManager();
     basicAI = new BasicAI(this);
 }
 
@@ -23,23 +24,32 @@ void LeagueGameState::processImage(struct ImageData image) {
     imageData = image;
     
     dispatch_group_t dispatchGroup = dispatch_group_create();
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_queue_t queue;
     
     // Add a task to the group
+    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_group_async(dispatchGroup, queue, ^{
         allyMinionManager->processImage(image);
     });
+    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_group_async(dispatchGroup, queue, ^{
         allyChampionManager->processImage(image);
     });
+    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_group_async(dispatchGroup, queue, ^{
         selfChampionManager->processImage(image);
     });
+    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_group_async(dispatchGroup, queue, ^{
         enemyMinionManager->processImage(image);
     });
+    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_group_async(dispatchGroup, queue, ^{
         enemyChampionManager->processImage(image);
+    });
+    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_group_async(dispatchGroup, queue, ^{
+        abilityManager->processImage(image);
     });
 
     // wait on the group to block the current thread.

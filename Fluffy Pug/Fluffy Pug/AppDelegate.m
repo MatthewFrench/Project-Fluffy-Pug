@@ -169,11 +169,11 @@
     
     if ([debugCheckbox state] == NSOnState) {
         //White it out
-        //for (int i = 0; i < bufferWidth*bufferHeight*4; i+=4) {
-        //    baseAddress[i] = 0;
-        //    baseAddress[i+1] = 0;
-        //    baseAddress[i+2] = 0;
-        //}
+        for (int i = 0; i < bufferWidth*bufferHeight*4; i+=4) {
+            baseAddress[i] = 0;
+            baseAddress[i+1] = 0;
+            baseAddress[i+2] = 0;
+        }
         leagueGameState->debugDraw();
         CIImage *ciImage = [CIImage imageWithCVImageBuffer:sourcePixelBuffer];
         // Create a bitmap rep from the image...

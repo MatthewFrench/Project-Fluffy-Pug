@@ -130,13 +130,24 @@ void EnemyMinionManager::processMinionsHealth() {
         [[minionBars objectAtIndex:i] getValue:&cb];
         cb.health = 0;
         for (int x = Health_Bar_Width; x > 0; x--) {
-            if (cb.bottomLeft.y-1 < imageData.imageHeight && cb.bottomLeft.x+1 + x < imageData.imageWidth) {
-                uint8_t *pixel = getPixel2(imageData, cb.bottomLeft.x+1 + x, cb.bottomLeft.y-1);
-                if (isColor(pixel, 156, 73, 59, 20)) {
-                    cb.health = (float)x / Health_Bar_Width;
-                    break;
+            
+            //Use health segment image and go from up to down
+            for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+                uint8_t *healthPixel = getPixel2(healthSegmentImageData, 0, y);
+                
+                int pixelX =cb.topLeft.x + x - 1;
+                int pixelY =cb.topLeft.y + y;
+                if (pixelY < imageData.imageHeight && pixelX < imageData.imageWidth && pixelX >= 0 && pixelY >= 0) {
+                    uint8_t *pixel = getPixel2(imageData, pixelX, pixelY);
+                    if (isColor2(healthPixel, pixel, 20)) {
+                        cb.health = (float)x / Health_Bar_Width * 100;
+                        x = 0;
+                        break;
+                    }
                 }
             }
+            
+            
         }
         
         [minionBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
@@ -156,12 +167,27 @@ MinionBar EnemyMinionManager::getNearestMinion(int x, int y) {
     }
     return closest;
 }
-
+MinionBar EnemyMinionManager::getLowestHealthMinion(int x, int y) {
+    MinionBar closest;
+    for (int i = 0; i < [minionBars count]; i++) {
+        MinionBar cb;
+        [[minionBars objectAtIndex:i] getValue:&cb];
+        
+        if (i == 0) {
+            closest = cb;
+        } else if (cb.health < closest.health) {
+            closest = cb;
+        } else if (closest.health == cb.health && hypot(closest.characterCenter.x - x, closest.characterCenter.y - y) > hypot(cb.characterCenter.x - x, cb.characterCenter.y - y)) {
+            closest = cb;
+        }
+    }
+    return closest;
+}
 
 
 void EnemyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 20)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(topLeftDetect, p)) {
@@ -169,21 +195,21 @@ void EnemyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 2)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
             [bottomLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect top right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 5)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(topRightDetect, p)) {
             [topRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect bottom right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 2)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomRightDetect, p)) {
             [bottomRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
@@ -241,12 +267,12 @@ void EnemyMinionManager::processTopLeftDetect() {
         //Now add champion bar
         if (corners > 0) {
             //NSLog(@"Found enemy minion with corners: %d", corners);
-        ChampionBar cb;
-        cb.topLeft = makePosition(p.x + 2, p.y + 2);
-        cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
-        cb.bottomLeft = makePosition(cb.topLeft.x, cb.topLeft.y + Health_Bar_Height);
-        cb.bottomRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y + Health_Bar_Height);
-        [minionBars addObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
+            ChampionBar cb;
+            cb.topLeft = makePosition(p.x + 2, p.y + 2);
+            cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
+            cb.bottomLeft = makePosition(cb.topLeft.x, cb.topLeft.y + Health_Bar_Height);
+            cb.bottomRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y + Health_Bar_Height);
+            [minionBars addObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
         }
     }
 }
@@ -290,12 +316,12 @@ void EnemyMinionManager::processBottomRightDetect() {
         //Now add champion bar
         if (corners > 0) {
             //NSLog(@"Found enemy minion with corners: %d", corners);
-        ChampionBar cb;
-        cb.bottomRight = makePosition(p.x+1, p.y+1);
-        cb.topLeft = makePosition(cb.bottomRight.x - Health_Bar_Width, cb.bottomRight.y - Health_Bar_Height);
-        cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
-        cb.bottomLeft = makePosition(cb.topLeft.x, cb.topLeft.y + Health_Bar_Height);
-        [minionBars addObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
+            ChampionBar cb;
+            cb.bottomRight = makePosition(p.x+1, p.y+1);
+            cb.topLeft = makePosition(cb.bottomRight.x - Health_Bar_Width, cb.bottomRight.y - Health_Bar_Height);
+            cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
+            cb.bottomLeft = makePosition(cb.topLeft.x, cb.topLeft.y + Health_Bar_Height);
+            [minionBars addObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
         }
     }
 }
@@ -339,12 +365,12 @@ void EnemyMinionManager::processBottomLeftDetect() {
         //Now add champion bar
         if (corners > 0) {
             //NSLog(@"Found enemy minion with corners: %d", corners);
-        ChampionBar cb;
-        cb.bottomLeft = makePosition(p.x + 2, p.y);
-        cb.topLeft = makePosition(cb.bottomLeft.x, cb.bottomLeft.y - Health_Bar_Height);
-        cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
-        cb.bottomRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y + Health_Bar_Height);
-        [minionBars addObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
+            ChampionBar cb;
+            cb.bottomLeft = makePosition(p.x + 2, p.y);
+            cb.topLeft = makePosition(cb.bottomLeft.x, cb.bottomLeft.y - Health_Bar_Height);
+            cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
+            cb.bottomRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y + Health_Bar_Height);
+            [minionBars addObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
         }
     }
 }
@@ -387,12 +413,12 @@ void EnemyMinionManager::processTopRightDetect() {
         //Now add champion bar
         if (corners > 0) {
             //NSLog(@"Found enemy minion with corners: %d", corners);
-        ChampionBar cb;
-        cb.topRight = makePosition(p.x, p.y + 2);
-        cb.topLeft = makePosition(cb.topRight.x - Health_Bar_Width, cb.topRight.y);
-        cb.bottomLeft = makePosition(cb.topLeft.x, cb.topLeft.y + Health_Bar_Height);
-        cb.bottomRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y + Health_Bar_Height);
-        [minionBars addObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
+            ChampionBar cb;
+            cb.topRight = makePosition(p.x, p.y + 2);
+            cb.topLeft = makePosition(cb.topRight.x - Health_Bar_Width, cb.topRight.y);
+            cb.bottomLeft = makePosition(cb.topLeft.x, cb.topLeft.y + Health_Bar_Height);
+            cb.bottomRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y + Health_Bar_Height);
+            [minionBars addObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
         }
     }
 }

@@ -17,6 +17,7 @@ class BasicAI {
     LeagueGameState* gameState;
     
     double lastMovementClick;
+    int lastAction;
     
 public:
     BasicAI(LeagueGameState* leagueGameState);

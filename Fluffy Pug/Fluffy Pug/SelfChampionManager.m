@@ -129,14 +129,25 @@ void SelfChampionManager::processChampionsHealth() {
         ChampionBar cb;
         [[championBars objectAtIndex:i] getValue:&cb];
         cb.health = 0;
-        for (int x = 104; x > 0; x--) {
-            if (cb.bottomLeft.y-1 < imageData.imageHeight && cb.bottomLeft.x+1 + x < imageData.imageWidth) {
-                uint8_t *pixel = getPixel2(imageData, cb.bottomLeft.x+1 + x, cb.bottomLeft.y-1);
-                if (isColor(pixel, 65, 194, 0, 20)) {
-                    cb.health = (float)x / 104.0;
-                    break;
+        for (int x = Health_Bar_Width; x > 0; x--) {
+            
+            //Use health segment image and go from up to down
+            for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+                uint8_t *healthPixel = getPixel2(healthSegmentImageData, 0, y);
+                
+                int pixelX =cb.topLeft.x + x - 1;
+                int pixelY =cb.topLeft.y + y;
+                if (pixelY < imageData.imageHeight && pixelX < imageData.imageWidth && pixelX >= 0 && pixelY >= 0) {
+                    uint8_t *pixel = getPixel2(imageData, pixelX, pixelY);
+                    if (isColor2(healthPixel, pixel, 20)) {
+                        cb.health = (float)x / Health_Bar_Width * 100;
+                        x = 0;
+                        break;
+                    }
                 }
             }
+            
+            
         }
         
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
@@ -147,31 +158,35 @@ void SelfChampionManager::processChampionsHealth() {
 
 void SelfChampionManager::processPixel(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 20)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 40)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(topLeftDetect, p)) {
+            //NSLog(@"Top left: %d %d", p.x, p.y);
             [topLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 20)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 40)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
+            //NSLog(@"Bottom left: %d %d", p.x, p.y);
             [bottomLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect top right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 20)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 40)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(topRightDetect, p)) {
+            //NSLog(@"Top Right: %d %d", p.x, p.y);
             [topRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect bottom right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 20)) {
-        Position p;p.x=x;p.y=y;
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 40)) {
+        Position p;p.x=x;p.y=y+1;
         if (!containsPosition(bottomRightDetect, p)) {
+            //NSLog(@"Bottom Right: %d %d", p.x, p.y);
             [bottomRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }

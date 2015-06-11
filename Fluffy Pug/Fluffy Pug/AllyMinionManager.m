@@ -130,13 +130,24 @@ void AllyMinionManager::processMinionsHealth() {
         [[minionBars objectAtIndex:i] getValue:&cb];
         cb.health = 0;
         for (int x = Health_Bar_Width; x > 0; x--) {
-            if (cb.bottomLeft.y-1 < imageData.imageHeight && cb.bottomLeft.x+1 + x < imageData.imageWidth) {
-                uint8_t *pixel = getPixel2(imageData, cb.bottomLeft.x+1 + x, cb.bottomLeft.y-1);
-                if (isColor(pixel, 156, 73, 59, 20)) {
-                    cb.health = (float)x / Health_Bar_Width;
-                    break;
+            
+            //Use health segment image and go from up to down
+            for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+                uint8_t *healthPixel = getPixel2(healthSegmentImageData, 0, y);
+                
+                int pixelX =cb.topLeft.x + x - 1;
+                int pixelY =cb.topLeft.y + y;
+                if (pixelY < imageData.imageHeight && pixelX < imageData.imageWidth && pixelX >= 0 && pixelY >= 0) {
+                    uint8_t *pixel = getPixel2(imageData, pixelX, pixelY);
+                    if (isColor2(healthPixel, pixel, 20)) {
+                        cb.health = (float)x / Health_Bar_Width * 100;
+                        x = 0;
+                        break;
+                    }
                 }
             }
+            
+            
         }
         
         [minionBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
@@ -160,7 +171,7 @@ MinionBar AllyMinionManager::getNearestMinion(int x, int y) {
 
 void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 10)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 20)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(topLeftDetect, p)) {
@@ -168,21 +179,21 @@ void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 10)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
             [bottomLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect top right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 10)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(topRightDetect, p)) {
             [topRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect bottom right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 10)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 20)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomRightDetect, p)) {
             [bottomRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];

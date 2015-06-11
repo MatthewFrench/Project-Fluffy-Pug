@@ -13,6 +13,7 @@
 #import "SelfChampionManager.h"
 #import "AllyChampionManager.h"
 #import "Utility.h"
+#import "AbilityManager.h"
 
 class BasicAI;
 
@@ -26,6 +27,7 @@ public:
     EnemyChampionManager* enemyChampionManager;
     SelfChampionManager* selfChampionManager;
     AllyChampionManager* allyChampionManager;
+    AbilityManager* abilityManager;
     BasicAI* basicAI;
     
     LeagueGameState();

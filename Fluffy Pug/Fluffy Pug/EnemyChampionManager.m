@@ -42,7 +42,7 @@ void EnemyChampionManager::processImage(ImageData data) {
     double delta = (clock() - lastUpdateTime)/CLOCKS_PER_SEC;
     lastUpdateTime = clock();
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
-    if (lastFullScreenUpdate >= 1.0) { //It's been a whole second, scan the screen
+    if (lastFullScreenUpdate >= 0.5) { //It's been a whole half second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
     }
@@ -108,14 +108,25 @@ void EnemyChampionManager::processChampionsHealth() {
         ChampionBar cb;
         [[championBars objectAtIndex:i] getValue:&cb];
         cb.health = 0;
-        for (int x = 104; x > 0; x--) {
-            if (cb.bottomLeft.y-1 < imageData.imageHeight && cb.bottomLeft.x+1 + x < imageData.imageWidth) {
-                uint8_t *pixel = getPixel2(imageData, cb.bottomLeft.x+1 + x, cb.bottomLeft.y-1);
-                if (isColor(pixel, 168, 48, 16, 20)) {
-                    cb.health = (float)x / 104.0;
-                    break;
+        for (int x = Health_Bar_Width; x > 0; x--) {
+            
+            //Use health segment image and go from up to down
+            for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+                uint8_t *healthPixel = getPixel2(healthSegmentImageData, 0, y);
+                
+                int pixelX =cb.topLeft.x + x - 1;
+                int pixelY =cb.topLeft.y + y;
+                if (pixelY < imageData.imageHeight && pixelX < imageData.imageWidth && pixelX >= 0 && pixelY >= 0) {
+                    uint8_t *pixel = getPixel2(imageData, pixelX, pixelY);
+                    if (isColor2(healthPixel, pixel, 20)) {
+                        cb.health = (float)x / Health_Bar_Width * 100;
+                        x = 0;
+                        break;
+                    }
                 }
             }
+            
+            
         }
         
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
@@ -136,40 +147,56 @@ ChampionBar EnemyChampionManager::getNearestChampion(int x, int y) {
     }
     return closest;
 }
+ChampionBar EnemyChampionManager::getLowestHealthChampion(int x, int y) {
+    ChampionBar closest;
+    for (int i = 0; i < [championBars count]; i++) {
+        ChampionBar cb;
+        [[championBars objectAtIndex:i] getValue:&cb];
+        
+        if (i == 0) {
+            closest = cb;
+        } else if (closest.health > cb.health) {
+            closest = cb;
+        } else if (closest.health == cb.health && hypot(closest.characterCenter.x - x, closest.characterCenter.y - y) > hypot(cb.characterCenter.x - x, cb.characterCenter.y - y)) {
+            closest = cb;
+        }
+    }
+    return closest;
+}
 
 
 
 void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 20)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 40)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(topLeftDetect, p)) {
-            //NSLog(@"Found top left");
+            //NSLog(@"Found top left %d %d", p.x, p.y);
             [topLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 20)) {
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 40)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
-            //NSLog(@"Found bottom left");
+            //NSLog(@"Found bottom left %d %d", p.x, p.y);
             [bottomLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect top right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 20)) {
-        Position p;p.x=x;p.y=y;
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 40)) {
+        Position p;p.x=x+1;p.y=y;
         if (!containsPosition(topRightDetect, p)) {
-            //NSLog(@"Found top right");
+            //NSLog(@"Found top right %d %d", p.x, p.y);
             [topRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect bottom right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 20)) {
-        Position p;p.x=x;p.y=y;
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 40)) {
+        Position p;p.x=x-2;p.y=y;
         if (!containsPosition(bottomRightDetect, p)) {
-            //NSLog(@"Found bottom right");
+            //NSLog(@"Found bottom right %d %d", p.x, p.y);
             [bottomRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
@@ -222,6 +249,7 @@ void EnemyChampionManager::processTopLeftDetect() {
         }
         //Now add champion bar
         if (corners > 0) {
+            //NSLog(@"Discovered enemy championw ith corners: %d", corners);
             ChampionBar cb;
             cb.topLeft = makePosition(p.x + 3, p.y + 3);
             cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
@@ -271,6 +299,7 @@ void EnemyChampionManager::processBottomRightDetect() {
         }
         //Now add champion bar
         if (corners > 0) {
+            //NSLog(@"Discovered enemy championw ith corners: %d", corners);
             ChampionBar cb;
             cb.bottomRight = makePosition(p.x + 1, p.y + 1);
             cb.topLeft = makePosition(cb.bottomRight.x - Health_Bar_Width, cb.bottomRight.y - Health_Bar_Height);
@@ -293,6 +322,7 @@ void EnemyChampionManager::processBottomLeftDetect() {
             Position p2;
             [[topRightDetect objectAtIndex:i] getValue:&p2];
             if (p.y-p2.y > Health_Bar_Height-10 && p.y-p2.y < Health_Bar_Height+10 && p2.x-p.x > Health_Bar_Width-10 && p2.x-p.x < Health_Bar_Width+10) {//Approx
+                //NSLog(@"Top right");
                 [topRightDetect removeObjectAtIndex:i];
                 corners++;
                 break;
@@ -305,6 +335,7 @@ void EnemyChampionManager::processBottomLeftDetect() {
             if (p2.x == p.x && p.y-p2.y > Health_Bar_Height-10 && p.y-p2.y < Health_Bar_Height+10) {//Approx
                 [topLeftDetect removeObjectAtIndex:i];
                 corners++;
+                //NSLog(@"Top left");
                 break;
             }
         }
@@ -312,14 +343,17 @@ void EnemyChampionManager::processBottomLeftDetect() {
         for (int i = 0; i < [bottomRightDetect count]; i++) {
             Position p2;
             [[bottomRightDetect objectAtIndex:i] getValue:&p2];
+            //NSLog(@"%d", p2.y - p.y);
             if (p2.x-p.x > Health_Bar_Width - 10 && p2.x-p.x < Health_Bar_Width+10 && p2.y == p.y) {//Approx
                 [bottomRightDetect removeObjectAtIndex:i];
                 corners++;
+                //NSLog(@"Bottom right");
                 break;
             }
         }
         //Now add champion bar
         if (corners > 0) {
+            //NSLog(@"Discovered enemy championw ith corners: %d", corners);
             ChampionBar cb;
             cb.bottomLeft = makePosition(p.x + 3, p.y + 1);
             cb.topLeft = makePosition(cb.bottomLeft.x, cb.bottomLeft.y - Health_Bar_Height);
@@ -368,6 +402,7 @@ void EnemyChampionManager::processTopRightDetect() {
         }
         //Now add champion bar
         if (corners > 0) {
+            //NSLog(@"Discovered enemy championw ith corners: %d", corners);
             ChampionBar cb;
             cb.topRight = makePosition(p.x+1, p.y + 3);
             cb.topLeft = makePosition(cb.topRight.x - Health_Bar_Width, cb.topRight.y);

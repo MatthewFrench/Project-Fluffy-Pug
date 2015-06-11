@@ -28,7 +28,7 @@ class EnemyMinionManager {
     void processTopLeftDetect(); void processBottomLeftDetect(); void processTopRightDetect(); void processBottomRightDetect();
     bool containsPosition(NSMutableArray* array, Position p);
     
-    const double minionSpeed = 1000; //100 pixels per second
+    const double minionSpeed = 2000; //100 pixels per second
     
 public:
     NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
@@ -36,6 +36,7 @@ public:
     EnemyMinionManager();
     void processImage(ImageData data);
     MinionBar getNearestMinion(int x, int y);
+    MinionBar getLowestHealthMinion(int x, int y);
     
     void debugDraw();
 };

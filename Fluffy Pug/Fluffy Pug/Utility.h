@@ -53,8 +53,15 @@ inline BOOL isColor2(uint8_t *pixel, uint8_t *pixel2, int tolerance);
 inline  ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight);
 inline ImageData makeImageDataFrom(NSString* path);
 inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance);
+inline void normalizePoint(int &x, int &y, int length);
 
-
+extern inline void normalizePoint(int &x, int &y, int length) {
+    double h = hypot(x, y);
+    if(length != 0 && h != 0){
+        x = x * (length/h);
+        y = y * (length/h);
+    }
+}
 
 extern inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance) {
     if (isColor2(pixel, image.imageData, tolerance)) {
@@ -64,7 +71,7 @@ extern inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, i
             for (int y1 = 0; y1 < image.imageHeight; y1++) {
                 uint8_t *pixel1 = pixel + (y1 * width)*4;
                 for (int x1 = 0; x1 < image.imageWidth; x1++) {
-                    if (!isColor2(pixel1, pixel2, tolerance)) {
+                    if (!isColor2(pixel1, pixel2, tolerance) && pixel2[3] != 0) {
                         return false;
                     }
                     pixel2 += 4;
@@ -128,6 +135,7 @@ extern ImageData makeImageDataFrom(NSString* path) {
 }
 
 extern BOOL isColor2(uint8_t *pixel, uint8_t *pixel2, int tolerance) {
+    //if (pixel[3] == 255 || pixel2[3] == 255) return true;
     if (abs(pixel[0] - pixel2[0]) <= tolerance && abs(pixel[1] - pixel2[1]) <= tolerance && abs(pixel[2] - pixel2[2]) <= tolerance) {
         return true;
     }
@@ -135,6 +143,7 @@ extern BOOL isColor2(uint8_t *pixel, uint8_t *pixel2, int tolerance) {
 }
 
 extern BOOL isColor(uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance) {
+    //if (pixel[3] == 255) return true;
     if (abs(pixel[0] - b) <= tolerance && abs(pixel[1] - g) <= tolerance && abs(pixel[2] - r) <= tolerance) {
         return true;
     }
