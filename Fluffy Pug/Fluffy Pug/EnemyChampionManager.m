@@ -42,7 +42,7 @@ void EnemyChampionManager::processImage(ImageData data) {
     double delta = (clock() - lastUpdateTime)/CLOCKS_PER_SEC;
     lastUpdateTime = clock();
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
-    if (lastFullScreenUpdate >= 0.5) { //It's been a whole half second, scan the screen
+    if (lastFullScreenUpdate >= 0.25) { //It's been a whole half second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
     }

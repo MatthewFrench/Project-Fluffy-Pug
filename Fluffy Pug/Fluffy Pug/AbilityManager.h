@@ -10,11 +10,13 @@
 #import "Utility.h"
 
 class AbilityManager {
-    ImageData imageData, levelUpImageData, levelUpDisabledImageData, abilityEnabledImageData, abilityDisabledImageData;
+    ImageData imageData, levelUpImageData, levelDotImageData, levelUpDisabledImageData, abilityEnabledImageData, abilityDisabledImageData;
     
     void processPixelLevelUp(uint8_t *pixel, int x, int y);
     bool containsPosition(NSMutableArray* array, Position p);
     void detectLevelUp();
+    void detectLevelUpCount();
+    void processPixelLevelUpCount(uint8_t *pixel, int x, int y);
     void detectAbilities();
     void processPixelAbilities(uint8_t *pixel, int x, int y);
     
@@ -40,6 +42,7 @@ public:
     NSMutableArray* levelUpDetect, *levelUpDisabledDetect, *abilityEnabledDetect, *abilityDisabledDetect;
     bool ability1LevelUpAvailable, ability2LevelUpAvailable, ability3LevelUpAvailable, ability4LevelUpAvailable;
     bool ability1Ready, ability2Ready, ability3Ready, ability4Ready;
+    int levelUpCount;
     /*
     NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     

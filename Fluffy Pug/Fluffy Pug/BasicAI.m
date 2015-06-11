@@ -126,7 +126,10 @@ void BasicAI::processAI() {
                 //NSLog(@"Following ally");
                 if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
                     lastMovementClick = clock();
-                    tapAttackMove(nearestAllyChampion.characterCenter.x, nearestAllyChampion.characterCenter.y);
+                    int xMove = (nearestAllyChampion.characterCenter.x - selfChamp.characterCenter.x);
+                    int yMove = (nearestAllyChampion.characterCenter.y - selfChamp.characterCenter.y);
+                    normalizePoint(xMove, yMove, 300);
+                    tapAttackMove(xMove + selfChamp.characterCenter.x, yMove + selfChamp.characterCenter.y);
                 }
             }
                 break;
@@ -135,7 +138,10 @@ void BasicAI::processAI() {
                 //NSLog(@"Following minion");
                 if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed*2 || lastAction != action) {
                     lastMovementClick = clock();
-                    tapAttackMove(nearestAllyMinion.characterCenter.x, nearestAllyMinion.characterCenter.y);
+                    int xMove = (nearestAllyMinion.characterCenter.x - selfChamp.characterCenter.x);
+                    int yMove = (nearestAllyMinion.characterCenter.y - selfChamp.characterCenter.y);
+                    normalizePoint(xMove, yMove, 300);
+                    tapAttackMove(xMove + selfChamp.characterCenter.x, yMove + selfChamp.characterCenter.y);
                 }
             }
                 break;
@@ -168,17 +174,41 @@ void BasicAI::processAI() {
         
         
         //Level up stuff
-        if (gameState->abilityManager->ability4LevelUpAvailable) {
-            levelUpAbility4();
-        } else
-        if (gameState->abilityManager->ability1LevelUpAvailable) {
-            levelUpAbility1();
-        } else
-        if (gameState->abilityManager->ability2LevelUpAvailable) {
-            levelUpAbility2();
-        } else
-        if (gameState->abilityManager->ability3LevelUpAvailable) {
-            levelUpAbility3();
+        if (gameState->abilityManager->ability4LevelUpAvailable || gameState->abilityManager->ability3LevelUpAvailable || gameState->abilityManager->ability2LevelUpAvailable || gameState->abilityManager->ability1LevelUpAvailable) {
+            switch (gameState->abilityManager->levelUpCount+1) {
+                case 1:
+                case 4:
+                case 5:
+                case 7:
+                case 9:
+                    levelUpAbility1();
+                    break;
+                case 2:
+                case 8:
+                case 10:
+                case 12:
+                case 13:
+                    levelUpAbility3();
+                    break;
+                case 3:
+                case 14:
+                case 15:
+                case 17:
+                case 18:
+                    levelUpAbility2();
+                    break;
+                case 6:
+                case 11:
+                case 16:
+                    levelUpAbility4();
+                    break;
+                default:
+                    levelUpAbility1();
+                    levelUpAbility2();
+                    levelUpAbility3();
+                    levelUpAbility4();
+                    break;
+            }
         }
         
         /*

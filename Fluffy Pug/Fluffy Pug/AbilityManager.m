@@ -13,6 +13,8 @@ AbilityManager::AbilityManager() {
     levelUpDisabledDetect = [NSMutableArray new];
     abilityEnabledDetect = [NSMutableArray new];
     abilityDisabledDetect = [NSMutableArray new];
+    
+    levelDotImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Leveled Dot" ofType:@"png"]);
     levelUpImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Level Up" ofType:@"png"]);
     levelUpDisabledImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Level Up Disabled" ofType:@"png"]);
     abilityEnabledImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Enabled Ability" ofType:@"png"]);
@@ -29,6 +31,8 @@ AbilityManager::AbilityManager() {
     needsFullScreenUpdate = true;
     fullScreenUpdateTime = clock();
     lastUpdateTime = clock();
+    
+    levelUpCount = 0;
 }
 
 void AbilityManager::processImage(ImageData data) {
@@ -43,6 +47,7 @@ void AbilityManager::processImage(ImageData data) {
     
     if (needsFullScreenUpdate) { //Detect level up every second
         detectLevelUp();
+        detectLevelUpCount();
     }
     //Now detect ability availability every frame
     detectAbilities();
@@ -150,6 +155,38 @@ void AbilityManager::processPixelLevelUp(uint8_t *pixel, int x, int y) {
             [levelUpDisabledDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
+}
+
+void AbilityManager::processPixelLevelUpCount(uint8_t *pixel, int x, int y) {
+    //Detect top left bar
+    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelDotImageData, 30)) {
+        levelUpCount++;
+    }
+}
+
+void AbilityManager::detectLevelUpCount() {
+    levelUpCount = 0;
+    
+    //Detect level up icon
+    //160 pixels from bottom of screen to 100 pixels from bottom of screen
+    //middle of screen -300 and +300
+    int yStart = imageData.imageHeight - 50;
+    int yEnd = imageData.imageHeight;
+    int xStart = imageData.imageWidth/2 - 300;
+    int xEnd = imageData.imageWidth/2 + 300;
+    
+    //yStart = 0; xStart = 0; yEnd = imageData.imageHeight; xEnd = imageData.imageWidth;
+    
+    for (int y = yStart; y < yEnd; y++) {
+        uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
+        
+        for (int x = xStart; x < xEnd; x++) {
+            processPixelLevelUpCount(pixel, x, y);
+            pixel += 4;
+        }
+    }
+    
+    //if (levelUpCount > 0) NSLog(@"Level up count: %d", levelUpCount);
 }
 
 
