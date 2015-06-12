@@ -12,7 +12,7 @@
 
 class AllyMinionManager {
     ImageData imageData, topLeftImageData, bottomLeftImageData,
-    bottomRightImageData, topRightImageData, healthSegmentImageData;
+    bottomRightImageData, topRightImageData, healthSegmentImageData,  ward, pinkWard;
     
     
     //moodycamel::ConcurrentQueue<Position> topLeftQueue, bottomLeftQueue, topRightQueue, bottomRightQueue;
@@ -36,6 +36,7 @@ public:
     AllyMinionManager();
     void processImage(ImageData data);
     MinionBar getNearestMinion(int x, int y);
+    MinionBar getFurthestMinion(int x, int y);
     
     void debugDraw();
 };

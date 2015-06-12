@@ -12,6 +12,9 @@
 #import <Foundation/Foundation.h>
 #import <ApplicationServices/ApplicationServices.h>
 
+inline void doubleTapMouseLeft(int x, int y);
+inline void tapShop();
+inline void tapCameraLock();
 inline void levelUpAbility1();
 inline void levelUpAbility2();
 inline void levelUpAbility3();
@@ -26,6 +29,8 @@ inline void releaseMouseRight(int x, int y);
 inline void tapRecall();
 inline void pressA();
 inline void releaseA();
+inline void tapSummonerSpell1();
+inline void tapSummonerSpell2();
 inline void tapSpell1();
 inline void tapSpell2();
 inline void tapSpell3();
@@ -72,7 +77,22 @@ inline void tapAttackMove(int x, int y);
 
 
 
-
+extern inline void tapShop() {
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 35, YES); //y
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+    event = CGEventCreateKeyboardEvent(NULL, 35, NO); //y
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+}
+extern inline void tapCameraLock() {
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 16, YES); //y
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+    event = CGEventCreateKeyboardEvent(NULL, 16, NO); //y
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+}
 extern inline void levelUpAbility1() {
     CGEventRef event = CGEventCreateKeyboardEvent(NULL, 0x3B, YES); //Left control
     CGEventPost(kCGHIDEventTap, event);
@@ -135,26 +155,42 @@ extern inline void moveMouse(int x, int y) {
     CGEventPost(kCGHIDEventTap, theEvent);
     CFRelease(theEvent);
 }
+extern inline void doubleTapMouseLeft(int x, int y) {
+    CGEventRef theEvent = CGEventCreateMouseEvent(NULL, kCGEventLeftMouseDown, CGPointMake(x, y), kCGMouseButtonLeft);
+    CGEventPost(kCGHIDEventTap, theEvent);
+    CGEventSetType(theEvent, kCGEventLeftMouseUp);
+    CGEventPost(kCGHIDEventTap, theEvent);
+    
+    CGEventSetIntegerValueField(theEvent, kCGMouseEventClickState, 2);
+    
+    CGEventSetType(theEvent, kCGEventLeftMouseDown);
+    CGEventPost(kCGHIDEventTap, theEvent);
+    
+    CGEventSetType(theEvent, kCGEventLeftMouseUp);
+    CGEventPost(kCGHIDEventTap, theEvent);
+    
+    CFRelease(theEvent);
+}
 extern inline void tapMouseLeft(int x, int y) {
     moveMouse(x, y);
     pressMouseLeft(x, y);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 50), dispatch_get_main_queue(), ^{ // one fiftieth of a second
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 120), dispatch_get_main_queue(), ^{ // one fiftieth of a second
         releaseMouseLeft(x, y);
     });
 }
 extern inline void tapMouseRight(int x, int y) {
     moveMouse(x, y);
     pressMouseRight(x, y);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 50), dispatch_get_main_queue(), ^{ // one fiftieth of a second
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 120), dispatch_get_main_queue(), ^{ // one fiftieth of a second
         releaseMouseRight(x, y);
     });
 }
 extern inline void tapAttackMove(int x, int y) {
     moveMouse(x, y);
     pressA();
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 50), dispatch_get_main_queue(), ^{ // one fiftieth of a second
+    //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 120), dispatch_get_main_queue(), ^{ // one fiftieth of a second
         releaseA();
-    });
+    //});
 }
 inline void tapRecall() {
     CGEventRef event = CGEventCreateKeyboardEvent(NULL, 11, YES);
@@ -200,7 +236,26 @@ extern inline void releaseMouseRight(int x, int y) {
 }
 
 
-
+extern inline void tapSummonerSpell1() {
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 2, YES);
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+    //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 50), dispatch_get_main_queue(), ^{ // one fiftieth of a second
+        event = CGEventCreateKeyboardEvent(NULL, 2, NO);
+        CGEventPost(kCGHIDEventTap, event);
+        CFRelease(event);
+    //});
+}
+extern inline void tapSummonerSpell2() {
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 3, YES);
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+    //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 50), dispatch_get_main_queue(), ^{ // one fiftieth of a second
+        event = CGEventCreateKeyboardEvent(NULL, 3, NO);
+        CGEventPost(kCGHIDEventTap, event);
+        CFRelease(event);
+    //});
+}
 extern inline void tapSpell1() {
     pressSpell1();
     releaseSpell1();
@@ -330,32 +385,32 @@ extern inline void releaseWard() {
 
 
 extern inline void pressActive5() {
-    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 22, YES);
-    CGEventPost(kCGHIDEventTap, event);
-    CFRelease(event);
-}
-extern inline void releaseActive5() {
-    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 22, NO);
-    CGEventPost(kCGHIDEventTap, event);
-    CFRelease(event);
-}
-extern inline void pressActive6() {
     CGEventRef event = CGEventCreateKeyboardEvent(NULL, 23, YES);
     CGEventPost(kCGHIDEventTap, event);
     CFRelease(event);
 }
-extern inline void releaseActive6() {
+extern inline void releaseActive5() {
     CGEventRef event = CGEventCreateKeyboardEvent(NULL, 23, NO);
     CGEventPost(kCGHIDEventTap, event);
     CFRelease(event);
 }
+extern inline void pressActive6() {
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 22, YES);
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+}
+extern inline void releaseActive6() {
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 22, NO);
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+}
 extern inline void pressActive7() {
-    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 24, YES);
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 26, YES);
     CGEventPost(kCGHIDEventTap, event);
     CFRelease(event);
 }
 extern inline void releaseActive7() {
-    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 24, NO);
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 26, NO);
     CGEventPost(kCGHIDEventTap, event);
     CFRelease(event);
 }

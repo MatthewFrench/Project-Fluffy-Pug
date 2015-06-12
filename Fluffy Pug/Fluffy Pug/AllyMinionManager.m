@@ -18,6 +18,10 @@ AllyMinionManager::AllyMinionManager () {
     bottomRightDetect = [NSMutableArray new];
     bottomLeftDetect = [NSMutableArray new];
     
+    ward = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ward/Ward" ofType:@"png"]);
+    
+    pinkWard = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ward/Pink Ward" ofType:@"png"]);
+    
     topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Minion Health Bar/Top Left Corner" ofType:@"png"]);
     
     bottomLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Minion Health Bar/Bottom Left Corner" ofType:@"png"]);
@@ -123,6 +127,34 @@ void AllyMinionManager::processMinionsLocations() {
         cb.characterCenter = makePosition(cb.topLeft.x+30, cb.topLeft.y+32);
         [minionBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(MinionBar)]];
     }
+    //Cut out any minions that are wards
+    for (int j = 0; j < [minionBars count]; j++) {
+        MinionBar cb;
+        [[minionBars objectAtIndex:j] getValue:&cb];
+        
+        int yStart = cb.topLeft.y - 5;
+        int yEnd = cb.bottomRight.y + 5;
+        int xStart = cb.topLeft.x - 5;
+        int xEnd = cb.bottomRight.x + 5;
+        bool isWard = false;
+        for (int y = yStart; y < yEnd; y++) {
+            uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
+            for (int x = xStart; x < xEnd; x++) {
+                if (x > 0 && y > 0 && x < imageData.imageWidth && y < imageData.imageHeight) {
+                if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, ward, 2) ||
+                    detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, pinkWard, 2)) {
+                    isWard = true;
+                    x = xEnd; y = yEnd;
+                }
+                }
+                pixel += 4;
+            }
+        }
+        
+        if (isWard) {
+            [minionBars removeObjectAtIndex:j]; j--;
+        }
+    }
 }
 void AllyMinionManager::processMinionsHealth() {
     for (int i = 0; i < [minionBars count]; i++) {
@@ -166,6 +198,21 @@ MinionBar AllyMinionManager::getNearestMinion(int x, int y) {
         }
     }
     return closest;
+}
+
+MinionBar AllyMinionManager::getFurthestMinion(int x, int y) {
+    MinionBar furthest;
+    for (int i = 0; i < [minionBars count]; i++) {
+        MinionBar cb;
+        [[minionBars objectAtIndex:i] getValue:&cb];
+        
+        if (i == 0) {
+            furthest = cb;
+        } else if (hypot(furthest.characterCenter.x - x, furthest.characterCenter.y - y) < hypot(cb.characterCenter.x - x, cb.characterCenter.y - y)) {
+            furthest = cb;
+        }
+    }
+    return furthest;
 }
 
 

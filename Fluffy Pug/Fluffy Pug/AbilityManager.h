@@ -10,7 +10,7 @@
 #import "Utility.h"
 
 class AbilityManager {
-    ImageData imageData, levelUpImageData, levelDotImageData, levelUpDisabledImageData, abilityEnabledImageData, abilityDisabledImageData;
+    ImageData imageData, levelUpImageData, levelDotImageData, levelUpDisabledImageData, abilityEnabledImageData, abilityDisabledImageData, enabledSummonerSpellImageData;
     
     void processPixelLevelUp(uint8_t *pixel, int x, int y);
     bool containsPosition(NSMutableArray* array, Position p);
@@ -19,6 +19,7 @@ class AbilityManager {
     void processPixelLevelUpCount(uint8_t *pixel, int x, int y);
     void detectAbilities();
     void processPixelAbilities(uint8_t *pixel, int x, int y);
+    void detectSummonerSpells();
     
     bool needsFullScreenUpdate;
     
@@ -43,6 +44,7 @@ public:
     bool ability1LevelUpAvailable, ability2LevelUpAvailable, ability3LevelUpAvailable, ability4LevelUpAvailable;
     bool ability1Ready, ability2Ready, ability3Ready, ability4Ready;
     int levelUpCount;
+    bool summonerSpell1Ready, summonerSpell2Ready;
     /*
     NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     

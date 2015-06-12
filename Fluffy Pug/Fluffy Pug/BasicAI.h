@@ -18,6 +18,10 @@ class BasicAI {
     
     double lastMovementClick;
     int lastAction;
+    double passiveUseWardTimer;
+    double cameraLockTimer;
+    double lastShopBuy;
+    bool buyingItems;
     
 public:
     BasicAI(LeagueGameState* leagueGameState);

@@ -14,6 +14,7 @@ AbilityManager::AbilityManager() {
     abilityEnabledDetect = [NSMutableArray new];
     abilityDisabledDetect = [NSMutableArray new];
     
+    enabledSummonerSpellImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Enabled Summoner Spell" ofType:@"png"]);
     levelDotImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Leveled Dot" ofType:@"png"]);
     levelUpImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Level Up" ofType:@"png"]);
     levelUpDisabledImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Level Up Disabled" ofType:@"png"]);
@@ -27,6 +28,8 @@ AbilityManager::AbilityManager() {
     ability2Ready = false;
     ability3Ready = false;
     ability4Ready = false;
+    summonerSpell1Ready = false;
+    summonerSpell2Ready = false;
     
     needsFullScreenUpdate = true;
     fullScreenUpdateTime = clock();
@@ -51,6 +54,7 @@ void AbilityManager::processImage(ImageData data) {
     }
     //Now detect ability availability every frame
     detectAbilities();
+    detectSummonerSpells();
     
     //if (ability1Ready)  NSLog(@"Q is ready");
     //if (ability2Ready)  NSLog(@"W is ready");
@@ -170,10 +174,10 @@ void AbilityManager::detectLevelUpCount() {
     //Detect level up icon
     //160 pixels from bottom of screen to 100 pixels from bottom of screen
     //middle of screen -300 and +300
-    int yStart = imageData.imageHeight - 50;
-    int yEnd = imageData.imageHeight;
-    int xStart = imageData.imageWidth/2 - 300;
-    int xEnd = imageData.imageWidth/2 + 300;
+    int yStart = imageData.imageHeight - 52;
+    int yEnd = imageData.imageHeight - 40;
+    int xStart = imageData.imageWidth/2 - 170;
+    int xEnd = imageData.imageWidth/2 + 16;
     
     //yStart = 0; xStart = 0; yEnd = imageData.imageHeight; xEnd = imageData.imageWidth;
     
@@ -288,6 +292,51 @@ void AbilityManager::processPixelAbilities(uint8_t *pixel, int x, int y) {
         //Add if not detected
         if (!containsPosition(abilityDisabledDetect, p)) {
             [abilityDisabledDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
+        }
+    }
+}
+
+void AbilityManager::detectSummonerSpells() {
+    summonerSpell1Ready = false;
+    summonerSpell2Ready = false;
+
+    //First summoner spell is at half width + 32 to +68
+    //full height - 80 to -40
+    int yStart = imageData.imageHeight - 110;
+    int yEnd = imageData.imageHeight - 40;
+    int xStart = imageData.imageWidth/2 + 30;
+    int xEnd = imageData.imageWidth/2 + 68;
+    
+    //yStart = 0; xStart = 0; yEnd = imageData.imageHeight; xEnd = imageData.imageWidth;
+    
+    for (int y = yStart; y < yEnd; y++) {
+        uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
+        
+        for (int x = xStart; x < xEnd; x++) {
+            if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, enabledSummonerSpellImageData, 60)) {
+                summonerSpell1Ready = true;
+            }
+            pixel += 4;
+        }
+    }
+    
+    //Second summoner spells is at half width + 68 to +107
+    //full height -80 to -40
+     yStart = imageData.imageHeight - 110;
+     yEnd = imageData.imageHeight - 40;
+     xStart = imageData.imageWidth/2 + 68;
+     xEnd = imageData.imageWidth/2 + 110;
+    
+    //yStart = 0; xStart = 0; yEnd = imageData.imageHeight; xEnd = imageData.imageWidth;
+    
+    for (int y = yStart; y < yEnd; y++) {
+        uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
+        
+        for (int x = xStart; x < xEnd; x++) {
+            if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, enabledSummonerSpellImageData, 60)) {
+                summonerSpell2Ready = true;
+            }
+            pixel += 4;
         }
     }
 }

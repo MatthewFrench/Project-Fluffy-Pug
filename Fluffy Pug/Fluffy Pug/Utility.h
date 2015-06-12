@@ -64,14 +64,14 @@ extern inline void normalizePoint(int &x, int &y, int length) {
 }
 
 extern inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance) {
-    if (isColor2(pixel, image.imageData, tolerance)) {
+    if (isColor2(pixel, image.imageData, tolerance) || image.imageData[3] == 0) {
         if (width - x > image.imageWidth &&
             height - y > image.imageHeight) {
             uint8_t *pixel2 = image.imageData;
             for (int y1 = 0; y1 < image.imageHeight; y1++) {
                 uint8_t *pixel1 = pixel + (y1 * width)*4;
                 for (int x1 = 0; x1 < image.imageWidth; x1++) {
-                    if (!isColor2(pixel1, pixel2, tolerance) && pixel2[3] != 0) {
+                    if (!isColor2(pixel1, pixel2, tolerance) && pixel2[3] > 0) {
                         return false;
                     }
                     pixel2 += 4;

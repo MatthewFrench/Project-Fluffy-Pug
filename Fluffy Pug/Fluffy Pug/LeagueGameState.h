@@ -14,6 +14,8 @@
 #import "AllyChampionManager.h"
 #import "Utility.h"
 #import "AbilityManager.h"
+#import "ItemManager.h"
+#import "ShopManager.h"
 
 class BasicAI;
 
@@ -28,7 +30,9 @@ public:
     SelfChampionManager* selfChampionManager;
     AllyChampionManager* allyChampionManager;
     AbilityManager* abilityManager;
+    ItemManager* itemManager;
     BasicAI* basicAI;
+    ShopManager* shopManager;
     
     LeagueGameState();
     void processImage(struct ImageData image);

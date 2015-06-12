@@ -17,6 +17,8 @@ LeagueGameState::LeagueGameState() {
     selfChampionManager = new SelfChampionManager();
     allyChampionManager = new AllyChampionManager();
     abilityManager = new AbilityManager();
+    itemManager = new ItemManager();
+    shopManager = new ShopManager();
     basicAI = new BasicAI(this);
 }
 
@@ -50,6 +52,13 @@ void LeagueGameState::processImage(struct ImageData image) {
     queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_group_async(dispatchGroup, queue, ^{
         abilityManager->processImage(image);
+    });
+    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_group_async(dispatchGroup, queue, ^{
+        itemManager->processImage(image);
+    });
+    dispatch_group_async(dispatchGroup, queue, ^{
+        shopManager->processImage(image);
     });
 
     // wait on the group to block the current thread.
