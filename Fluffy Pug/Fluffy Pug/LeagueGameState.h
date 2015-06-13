@@ -16,6 +16,7 @@
 #import "AbilityManager.h"
 #import "ItemManager.h"
 #import "ShopManager.h"
+#import "EnemyTowerManager.h"
 
 class BasicAI;
 
@@ -33,6 +34,7 @@ public:
     ItemManager* itemManager;
     BasicAI* basicAI;
     ShopManager* shopManager;
+    EnemyTowerManager* enemyTowerManager;
     
     LeagueGameState();
     void processImage(struct ImageData image);

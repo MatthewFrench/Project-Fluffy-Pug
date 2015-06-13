@@ -39,6 +39,11 @@ struct ChampionBar {
     float health;
 };
 
+struct TowerBar {
+    struct Position topLeft, topRight, bottomLeft, bottomRight, towerCenter;
+    float health;
+};
+
 inline Position makePosition(int x, int y);
 inline int getRandomInteger(int minimum, int maximum);
 inline  MinionBar makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health);

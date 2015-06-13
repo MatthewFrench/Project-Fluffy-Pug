@@ -38,6 +38,13 @@
     [_window orderFront: nil];
     [NSApp activateIgnoringOtherApps:YES];
     
+    
+    [[NSProcessInfo processInfo] disableAutomaticTermination:@"Good Reason"];
+    
+    if ([[NSProcessInfo processInfo] respondsToSelector:@selector(beginActivityWithOptions:reason:)]) {
+        self->activity = [[NSProcessInfo processInfo] beginActivityWithOptions:0x00FFFFFF reason:@"receiving messages"];
+    }
+    
     // Insert code here to initialize your application
     //timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 //2000.0
     //                                         target:self

@@ -37,11 +37,17 @@ void ShopManager::openShop() {
         boughtItems = false;
         tapShop();
     }
+    if (!shopAvailable) {
+        boughtItems = true;
+    }
 }
 void ShopManager::closeShop() {
     if (shopOpen && ((clock() - lastShopCloseAttempt)/CLOCKS_PER_SEC >= 5.0)) {
         lastShopCloseAttempt = clock();
         tapShop();
+    }
+    if (!shopAvailable) {
+        boughtItems = true;
     }
 }
 

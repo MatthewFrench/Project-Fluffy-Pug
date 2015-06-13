@@ -21,6 +21,8 @@
     IBOutlet NSButton* debugCheckbox;
     IBOutlet NSTextField* fpsTextField;
     int chosenFPS;
+    
+    id activity;
 }
 @property (weak) IBOutlet NSWindow *window, *window2;
 
