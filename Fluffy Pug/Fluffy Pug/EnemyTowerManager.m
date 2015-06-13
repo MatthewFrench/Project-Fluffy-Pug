@@ -99,7 +99,7 @@ void EnemyTowerManager::processTowersLocations() {
     for (int i = 0; i < [towerBars count]; i++) {
         TowerBar cb;
         [[towerBars objectAtIndex:i] getValue:&cb];
-        cb.towerCenter = makePosition(cb.topLeft.x+66, cb.topLeft.y+104);
+        cb.towerCenter = makePosition(cb.topLeft.x+Health_Bar_Width/2, cb.topLeft.y+200);
         [towerBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(TowerBar)]];
     }
 }
@@ -114,7 +114,7 @@ void EnemyTowerManager::processTowersHealth() {
             for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
                 uint8_t *healthPixel = getPixel2(healthSegmentImageData, 0, y);
                 
-                int pixelX =cb.topLeft.x + x - 1;
+                int pixelX =cb.topLeft.x + x;
                 int pixelY =cb.topLeft.y + y;
                 if (pixelY < imageData.imageHeight && pixelX < imageData.imageWidth && pixelX >= 0 && pixelY >= 0) {
                     uint8_t *pixel = getPixel2(imageData, pixelX, pixelY);
@@ -169,7 +169,7 @@ TowerBar EnemyTowerManager::getLowestHealthTower(int x, int y) {
 void EnemyTowerManager::processPixel(uint8_t *pixel, int x, int y) {
     //Detect top left bar
     if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 40)) {
-        Position p;p.x=x;p.y=y;
+        Position p;p.x=x+3;p.y=y+3; //We offset it enough to have the position at the bar segment
         //Add if not detected
         if (!containsPosition(topLeftDetect, p)) {
             //NSLog(@"Found top left %d %d", p.x, p.y);
@@ -178,7 +178,7 @@ void EnemyTowerManager::processPixel(uint8_t *pixel, int x, int y) {
     }
     //Detect bottom left bar
     if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 40)) {
-        Position p;p.x=x;p.y=y;
+        Position p;p.x=x+3;p.y=y+2; //Offset it to the pixel right under the bar segment
         if (!containsPosition(bottomLeftDetect, p)) {
             //NSLog(@"Found bottom left %d %d", p.x, p.y);
             [bottomLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
@@ -186,7 +186,7 @@ void EnemyTowerManager::processPixel(uint8_t *pixel, int x, int y) {
     }
     //Detect top right bar
     if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 40)) {
-        Position p;p.x=x+1;p.y=y;
+        Position p;p.x=x+4;p.y=y+3; //One pixel to the right of the bar segment
         if (!containsPosition(topRightDetect, p)) {
             //NSLog(@"Found top right %d %d", p.x, p.y);
             [topRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
@@ -194,7 +194,7 @@ void EnemyTowerManager::processPixel(uint8_t *pixel, int x, int y) {
     }
     //Detect bottom right bar
     if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 40)) {
-        Position p;p.x=x-2;p.y=y;
+        Position p;p.x=x+4;p.y=y+2; //One pixel to the right of the thing
         if (!containsPosition(bottomRightDetect, p)) {
             //NSLog(@"Found bottom right %d %d", p.x, p.y);
             [bottomRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
@@ -251,7 +251,7 @@ void EnemyTowerManager::processTopLeftDetect() {
         if (corners > 0) {
             //NSLog(@"Discovered enemy Towerw ith corners: %d", corners);
             TowerBar cb;
-            cb.topLeft = makePosition(p.x + 3, p.y + 3);
+            cb.topLeft = makePosition(p.x, p.y);
             cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
             cb.bottomLeft = makePosition(cb.topLeft.x, cb.topLeft.y + Health_Bar_Height);
             cb.bottomRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y + Health_Bar_Height);
@@ -301,7 +301,7 @@ void EnemyTowerManager::processBottomRightDetect() {
         if (corners > 0) {
             //NSLog(@"Discovered enemy Towerw ith corners: %d", corners);
             TowerBar cb;
-            cb.bottomRight = makePosition(p.x + 1, p.y + 1);
+            cb.bottomRight = makePosition(p.x, p.y);
             cb.topLeft = makePosition(cb.bottomRight.x - Health_Bar_Width, cb.bottomRight.y - Health_Bar_Height);
             cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
             cb.bottomLeft = makePosition(cb.topLeft.x, cb.topLeft.y + Health_Bar_Height);
@@ -355,7 +355,7 @@ void EnemyTowerManager::processBottomLeftDetect() {
         if (corners > 0) {
             //NSLog(@"Discovered enemy Towerw ith corners: %d", corners);
             TowerBar cb;
-            cb.bottomLeft = makePosition(p.x + 3, p.y + 1);
+            cb.bottomLeft = makePosition(p.x, p.y);
             cb.topLeft = makePosition(cb.bottomLeft.x, cb.bottomLeft.y - Health_Bar_Height);
             cb.topRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y);
             cb.bottomRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y + Health_Bar_Height);
@@ -404,7 +404,7 @@ void EnemyTowerManager::processTopRightDetect() {
         if (corners > 0) {
             //NSLog(@"Discovered enemy Towerw ith corners: %d", corners);
             TowerBar cb;
-            cb.topRight = makePosition(p.x+1, p.y + 3);
+            cb.topRight = makePosition(p.x, p.y);
             cb.topLeft = makePosition(cb.topRight.x - Health_Bar_Width, cb.topRight.y);
             cb.bottomLeft = makePosition(cb.topLeft.x, cb.topLeft.y + Health_Bar_Height);
             cb.bottomRight = makePosition(cb.topLeft.x + Health_Bar_Width, cb.topLeft.y + Health_Bar_Height);

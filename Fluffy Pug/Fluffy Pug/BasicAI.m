@@ -9,7 +9,7 @@
 #import "BasicAI.h"
 #import "LeagueGameState.h"
 
-const int ACTION_Run_Away = 0, ACTION_Attack_Enemy_Champion = 1, ACTION_Attack_Enemy_Minion = 2, ACTION_Follow_Ally_Champion = 3, ACTION_Follow_Ally_Minion = 4, ACTION_Move_To_Mid = 5, ACTION_Recall = 6;
+const int ACTION_Run_Away = 0, ACTION_Attack_Enemy_Champion = 1, ACTION_Attack_Enemy_Minion = 2, ACTION_Follow_Ally_Champion = 3, ACTION_Follow_Ally_Minion = 4, ACTION_Move_To_Mid = 5, ACTION_Recall = 6, ACTION_Attack_Tower = 7, ACTION_Go_Ham = 8;
 
 BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     gameState = leagueGameState;
@@ -54,10 +54,17 @@ void BasicAI::processAI() {
         bool enemyMinionsNear = [gameState->enemyMinionManager->minionBars count] > 0;
         bool allyMinionsNear = [gameState->allyMinionManager->minionBars count] > 0;
         bool allyChampionsNear = [gameState->allyChampionManager->championBars count] > 0;
+        bool enemyTowerNear = [gameState->enemyTowerManager->towerBars count] > 0;
+        bool underEnemyTower = false;
         ChampionBar lowestHealthEnemyChampion = gameState->enemyChampionManager->getLowestHealthChampion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
         MinionBar lowestHealthEnemyMinion = gameState->enemyMinionManager->getLowestHealthMinion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
         MinionBar closestAllyMinion = gameState->allyMinionManager->getNearestMinion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
         ChampionBar nearestAllyChampion = gameState->allyChampionManager->getNearestChampion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
+        TowerBar nearestEnemyTower = gameState->enemyTowerManager->getNearestTower(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
+        
+        if (enemyTowerNear && hypot(selfChamp.characterCenter.x - nearestEnemyTower.towerCenter.x, selfChamp.characterCenter.y - nearestEnemyTower.towerCenter.y) < 420) {
+            underEnemyTower = true;
+        }
         
         int action = ACTION_Move_To_Mid;
         
@@ -70,7 +77,8 @@ void BasicAI::processAI() {
         if (enemyMinionsNear) {
             action = ACTION_Attack_Enemy_Minion;
         }
-        if (enemyChampionsNear && ([gameState->allyChampionManager->championBars count] > [gameState->enemyChampionManager->championBars count] || [gameState->allyChampionManager->championBars count] >= 4 || [gameState->enemyChampionManager->championBars count] == 1)) {
+        //Attack enemy if see enemy
+        if (enemyChampionsNear && ([gameState->allyChampionManager->championBars count]+2 >= [gameState->enemyChampionManager->championBars count] || [gameState->allyChampionManager->championBars count] >= 4 || [gameState->enemyChampionManager->championBars count] == 1)) {
             if (selfChamp.health + 10 > lowestHealthEnemyChampion.health) { //Greater health
                 action = ACTION_Attack_Enemy_Champion;
                 //NSLog(@"Target in sight and attacking");
@@ -81,9 +89,60 @@ void BasicAI::processAI() {
                 action = ACTION_Attack_Enemy_Champion;
                 //NSLog(@"Yolo");
             }
-        } else if ([gameState->allyChampionManager->championBars count] < [gameState->enemyChampionManager->championBars count]) {
+        } else if ([gameState->allyChampionManager->championBars count]+2 < [gameState->enemyChampionManager->championBars count]) {
             action = ACTION_Run_Away;
         }
+        //Now some more attack logic
+        if (action == ACTION_Attack_Enemy_Champion) {
+            //If enemy is under tower, ignore
+            if (hypot(lowestHealthEnemyChampion.characterCenter.x - nearestEnemyTower.towerCenter.x, lowestHealthEnemyChampion.characterCenter.y - nearestEnemyTower.towerCenter.y) < 420 && lowestHealthEnemyChampion.health > 15) {
+                action = ACTION_Move_To_Mid;
+                
+                if (allyMinionsNear) {
+                    action = ACTION_Follow_Ally_Minion;
+                }
+                if (allyChampionsNear) {
+                    action = ACTION_Follow_Ally_Champion;
+                }
+                if (enemyMinionsNear) {
+                    action = ACTION_Attack_Enemy_Minion;
+                }
+            }
+        }
+        
+        if (action == ACTION_Attack_Enemy_Minion) {
+            if (hypot(lowestHealthEnemyMinion.characterCenter.x - nearestEnemyTower.towerCenter.x, lowestHealthEnemyMinion.characterCenter.y - nearestEnemyTower.towerCenter.y) < 420) {
+                action = ACTION_Move_To_Mid;
+                
+                if (allyMinionsNear) {
+                    action = ACTION_Follow_Ally_Minion;
+                }
+                if (allyChampionsNear) {
+                    action = ACTION_Follow_Ally_Champion;
+                }
+            }
+        }
+        
+        //Attack tower if allied minions under tower
+        if (enemyTowerNear && (action == ACTION_Move_To_Mid || action == ACTION_Follow_Ally_Minion || action == ACTION_Follow_Ally_Champion || action == ACTION_Attack_Enemy_Minion)) {
+            int minionsUnderTower = 0;
+            for (int i = 0; i < [gameState->allyMinionManager->minionBars count]; i++) {
+                MinionBar mb;
+                [[gameState->allyMinionManager->minionBars objectAtIndex:i] getValue:&mb];
+                if (hypot(mb.characterCenter.x - nearestEnemyTower.towerCenter.x, mb.characterCenter.y - nearestEnemyTower.towerCenter.y) < 420) {
+                    minionsUnderTower++;
+                }
+            }
+            if (minionsUnderTower) {
+                action = ACTION_Attack_Tower;
+            } else {
+                action = ACTION_Run_Away;
+            }
+        }
+        
+        //if (enemyTowerNear && hypot(selfChamp.characterCenter.x - nearestEnemyTower.towerCenter.x, selfChamp.characterCenter.y - nearestEnemyTower.towerCenter.y) < 420) {
+        //    action = ACTION_Run_Away;
+        //}
         
         if (selfChamp.health < 20 && (enemyChampionsNear || enemyMinionsNear)) {
             //NSLog(@"RUN AWAY");
@@ -92,8 +151,13 @@ void BasicAI::processAI() {
             //NSLog(@"Recall");
             action = ACTION_Recall;
         }
-        if (enemyChampionsNear) {
+        //if (enemyChampionsNear) {
             //NSLog(@"Self health: %f vs Enemy Champ health: %f", selfChamp.health, lowestHealthEnemyChampion.health);
+        //}
+        
+        //Go ham
+        if (lowestHealthEnemyChampion.health < 15) {
+            action = ACTION_Go_Ham;
         }
         
         int actionSpeed = 0.25;
@@ -104,6 +168,8 @@ void BasicAI::processAI() {
                 //NSLog(@"Running away");
                 if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
                     lastMovementClick = clock();
+                    int enemyX = selfChamp.characterCenter.x;
+                    int enemyY = selfChamp.characterCenter.y;
                     if (enemyChampionsNear) {
                         int xMove = (lowestHealthEnemyChampion.characterCenter.x - selfChamp.characterCenter.x);
                         int yMove = (lowestHealthEnemyChampion.characterCenter.y - selfChamp.characterCenter.y);
@@ -111,6 +177,8 @@ void BasicAI::processAI() {
                     int x = selfChamp.characterCenter.x - xMove;
                     int y = selfChamp.characterCenter.y - yMove;
                         tapMouseRight(x, y);
+                        enemyX = lowestHealthEnemyChampion.characterCenter.x;
+                        enemyY = lowestHealthEnemyChampion.characterCenter.y;
                     } else
                     if (enemyMinionsNear) {
                         int xMove = (lowestHealthEnemyMinion.characterCenter.x - selfChamp.characterCenter.x);
@@ -119,45 +187,50 @@ void BasicAI::processAI() {
                         int x = selfChamp.characterCenter.x - xMove;
                         int y = selfChamp.characterCenter.y - yMove;
                         tapMouseRight(x, y);
+                        enemyX = lowestHealthEnemyMinion.characterCenter.x;
+                        enemyY = lowestHealthEnemyMinion.characterCenter.y;
                     }
                     if (selfChamp.health < 15) {
                         //Panic
-                        if (gameState->abilityManager->ability4Ready) tapSpell4();
-                        if (gameState->abilityManager->ability3Ready) tapSpell3();
-                        if (gameState->abilityManager->ability2Ready) tapSpell2();
-                        if (gameState->abilityManager->ability1Ready) tapSpell1();
-                        if (gameState->abilityManager->summonerSpell1Ready) tapSummonerSpell1();
-                        if (gameState->abilityManager->summonerSpell2Ready) tapSummonerSpell2();
-                        if (gameState->itemManager->item1Active) {gameState->itemManager->useItem1();}
-                        if (gameState->itemManager->item2Active) {gameState->itemManager->useItem2();}
-                        if (gameState->itemManager->item3Active) gameState->itemManager->useItem3();
-                        if (gameState->itemManager->item5Active) gameState->itemManager->useItem5();
-                        if (gameState->itemManager->item6Active) gameState->itemManager->useItem6();
-                        if (gameState->itemManager->item7Active) gameState->itemManager->useItem7();
-                        if (gameState->itemManager->trinketActive) gameState->itemManager->useTrinket(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
+                        if (gameState->abilityManager->ability4Ready) {moveMouse(enemyX, enemyY); tapSpell4();}
+                        if (gameState->abilityManager->ability3Ready) {moveMouse(enemyX, enemyY); tapSpell3();}
+                        if (gameState->abilityManager->ability2Ready) {moveMouse(enemyX, enemyY); tapSpell2();}
+                        if (gameState->abilityManager->ability1Ready) {moveMouse(enemyX, enemyY); tapSpell1();}
+                        if (gameState->abilityManager->summonerSpell1Ready) {moveMouse(enemyX, enemyY); tapSummonerSpell1();}
+                        if (gameState->abilityManager->summonerSpell2Ready) {moveMouse(enemyX, enemyY); tapSummonerSpell2();}
+                        if (gameState->itemManager->item1Active) {moveMouse(enemyX, enemyY); gameState->itemManager->useItem1();}
+                        if (gameState->itemManager->item2Active) {moveMouse(enemyX, enemyY); gameState->itemManager->useItem2();}
+                        if (gameState->itemManager->item3Active) {moveMouse(enemyX, enemyY); gameState->itemManager->useItem3();}
+                        if (gameState->itemManager->item5Active) {moveMouse(enemyX, enemyY); gameState->itemManager->useItem5();}
+                        if (gameState->itemManager->item6Active) {moveMouse(enemyX, enemyY); gameState->itemManager->useItem6();}
+                        if (gameState->itemManager->item7Active) {moveMouse(enemyX, enemyY); gameState->itemManager->useItem7();}
+                        if (gameState->itemManager->trinketActive) gameState->itemManager->useTrinket(enemyX, enemyY);
                     }
                 }
             }
                 break;
             case ACTION_Attack_Enemy_Champion:
+            case ACTION_Go_Ham:
             {
                 //NSLog(@"Attacking enemy champion");
                 if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
                     lastMovementClick = clock();
+                    int x = lowestHealthEnemyChampion.characterCenter.x;
+                    int y = lowestHealthEnemyChampion.characterCenter.y;
                     tapAttackMove(lowestHealthEnemyChampion.characterCenter.x, lowestHealthEnemyChampion.characterCenter.y);
-                    if (gameState->abilityManager->ability4Ready) tapSpell4();
-                    if (gameState->abilityManager->ability3Ready) tapSpell3();
-                    if (gameState->abilityManager->ability2Ready) tapSpell2();
-                    if (gameState->abilityManager->ability1Ready) {tapSpell1();}
-                    if (gameState->abilityManager->summonerSpell1Ready) tapSummonerSpell1();
-                    if (gameState->abilityManager->summonerSpell2Ready) tapSummonerSpell2();
-                    if (gameState->itemManager->item1Active) {gameState->itemManager->useItem1();}
-                    if (gameState->itemManager->item2Active) {gameState->itemManager->useItem2();}
-                    if (gameState->itemManager->item3Active) gameState->itemManager->useItem3();
-                    if (gameState->itemManager->item5Active) gameState->itemManager->useItem5();
-                    if (gameState->itemManager->item6Active) gameState->itemManager->useItem6();
-                    if (gameState->itemManager->item7Active) gameState->itemManager->useItem7();
-                    if (gameState->itemManager->trinketActive) gameState->itemManager->useTrinket(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
+                    if (gameState->abilityManager->ability4Ready) {moveMouse(x, y); tapSpell4();}
+                    if (gameState->abilityManager->ability3Ready) {moveMouse(x, y);  tapSpell3();}
+                    if (gameState->abilityManager->ability2Ready) {moveMouse(x, y);  tapSpell2();}
+                    if (gameState->abilityManager->ability1Ready) {moveMouse(x, y);  tapSpell1();}
+                    if (gameState->abilityManager->summonerSpell1Ready) {moveMouse(x, y); tapSummonerSpell1();}
+                    if (gameState->abilityManager->summonerSpell2Ready) {moveMouse(x, y); tapSummonerSpell2();}
+                    if (gameState->itemManager->item1Active) {moveMouse(x, y); gameState->itemManager->useItem1();}
+                    if (gameState->itemManager->item2Active) {moveMouse(x, y); gameState->itemManager->useItem2();}
+                    if (gameState->itemManager->item3Active) {moveMouse(x, y); gameState->itemManager->useItem3();}
+                    if (gameState->itemManager->item5Active) {moveMouse(x, y); gameState->itemManager->useItem5();}
+                    if (gameState->itemManager->item6Active) {moveMouse(x, y); gameState->itemManager->useItem6();}
+                    if (gameState->itemManager->item7Active) {moveMouse(x, y); gameState->itemManager->useItem7();}
+                    if (gameState->itemManager->trinketActive) gameState->itemManager->useTrinket(x, y);
                 }
             }
                 break;
@@ -167,6 +240,17 @@ void BasicAI::processAI() {
                 if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
                     lastMovementClick = clock();
                     tapAttackMove(lowestHealthEnemyMinion.characterCenter.x, lowestHealthEnemyMinion.characterCenter.y);
+                    if (gameState->abilityManager->ability1Ready) {tapSpell1();}
+                    if (gameState->abilityManager->ability3Ready) {tapSpell3();}
+                    if (gameState->abilityManager->ability2Ready && selfChamp.health < 50) {tapSpell2();}
+                }
+            }
+                break;
+            case ACTION_Attack_Tower:
+            {
+                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
+                    lastMovementClick = clock();
+                    tapAttackMove(nearestEnemyTower.towerCenter.x, nearestEnemyTower.towerCenter.y);
                     if (gameState->abilityManager->ability1Ready) {tapSpell1();}
                     if (gameState->abilityManager->ability3Ready) {tapSpell3();}
                     if (gameState->abilityManager->ability2Ready && selfChamp.health < 50) {tapSpell2();}
