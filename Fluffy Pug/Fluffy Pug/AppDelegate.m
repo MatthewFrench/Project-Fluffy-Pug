@@ -42,7 +42,7 @@
     [[NSProcessInfo processInfo] disableAutomaticTermination:@"Good Reason"];
     
     if ([[NSProcessInfo processInfo] respondsToSelector:@selector(beginActivityWithOptions:reason:)]) {
-        self->activity = [[NSProcessInfo processInfo] beginActivityWithOptions:0x00FFFFFF reason:@"receiving messages"];
+        self->_activity = [[NSProcessInfo processInfo] beginActivityWithOptions:0x00FFFFFF reason:@"receiving messages"];
     }
     
     // Insert code here to initialize your application

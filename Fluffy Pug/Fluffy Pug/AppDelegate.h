@@ -23,8 +23,8 @@
     IBOutlet NSTextField* fpsTextField;
     int chosenFPS;
     
-    id activity;
 }
+@property (strong) id activity;
 @property (weak) IBOutlet NSWindow *window, *window2;
 
 @end

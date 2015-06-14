@@ -167,7 +167,7 @@ void BasicAI::processAI() {
             action = ACTION_Go_Ham;
         }
         
-        int actionSpeed = 0.5;
+        int actionSpeed = 0.25;
         
         switch (action) {
             case ACTION_Run_Away:
@@ -175,7 +175,7 @@ void BasicAI::processAI() {
                 //NSLog(@"Running away");
                 int enemyX = selfChamp.characterCenter.x;
                 int enemyY = selfChamp.characterCenter.y;
-                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
+                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed) {/* || lastAction != action*/
                     lastMovementClick = clock();
                     
                     if (enemyChampionsNear) {
@@ -223,7 +223,7 @@ void BasicAI::processAI() {
                 //NSLog(@"Attacking enemy champion");
                 int x = lowestHealthEnemyChampion.characterCenter.x;
                 int y = lowestHealthEnemyChampion.characterCenter.y;
-                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
+                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed) { /* || lastAction != action*/
                     lastMovementClick = clock();
                     tapAttackMove(lowestHealthEnemyChampion.characterCenter.x, lowestHealthEnemyChampion.characterCenter.y);
                 }
@@ -245,7 +245,7 @@ void BasicAI::processAI() {
             case ACTION_Attack_Enemy_Minion:
             {
                 //NSLog(@"Attacking minion");
-                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
+                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed) { /* || lastAction != action*/
                     lastMovementClick = clock();
                     tapAttackMove(lowestHealthEnemyMinion.characterCenter.x, lowestHealthEnemyMinion.characterCenter.y);
                 }
@@ -257,7 +257,7 @@ void BasicAI::processAI() {
             case ACTION_Attack_Tower:
             {
                 //NSLog(@"Attacking tower");
-                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
+                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed) { /* || lastAction != action*/
                     lastMovementClick = clock();
                     tapAttackMove(nearestEnemyTower.towerCenter.x, nearestEnemyTower.towerCenter.y);
                 }
@@ -269,7 +269,7 @@ void BasicAI::processAI() {
             case ACTION_Follow_Ally_Champion:
             {
                // NSLog(@"Following ally");
-                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed || lastAction != action) {
+                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed) { /* || lastAction != action*/
                     lastMovementClick = clock();
                     int xMove = (nearestAllyChampion.characterCenter.x - selfChamp.characterCenter.x);
                     int yMove = (nearestAllyChampion.characterCenter.y - selfChamp.characterCenter.y);
@@ -281,7 +281,7 @@ void BasicAI::processAI() {
             case ACTION_Follow_Ally_Minion:
             {
                 //NSLog(@"Following minion");
-                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed*2 || lastAction != action) {
+                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed*2) { /* || lastAction != action*/
                     lastMovementClick = clock();
                     int xMove = (closestAllyMinion.characterCenter.x - selfChamp.characterCenter.x);
                     int yMove = (closestAllyMinion.characterCenter.y - selfChamp.characterCenter.y);
@@ -293,7 +293,7 @@ void BasicAI::processAI() {
             case ACTION_Move_To_Mid:
             {
                 //NSLog(@"Going to mid");
-                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= 3.0 || lastAction != action) {
+                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed) { /* || lastAction != action*/
                     lastMovementClick = clock();
                     int x = gameState->leagueSize.size.width - 116;
                     int y = gameState->leagueSize.size.height - 92;
@@ -304,7 +304,7 @@ void BasicAI::processAI() {
             case ACTION_Recall:
             {
                 //NSLog(@"Recalling");
-                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= 12.0 || lastAction != action) {
+                if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed) { /* || lastAction != action*/
                     lastMovementClick = clock();
                     tapRecall();
                 }
@@ -367,6 +367,10 @@ void BasicAI::processAI() {
             (hypot(selfChamp.characterCenter.x - gameState->leagueSize.size.width/2,selfChamp.characterCenter.y - gameState->leagueSize.size.height/2)) > 270) {
             cameraLockTimer = clock();
             tapCameraLock();
+            //Go to mid
+            int x = gameState->leagueSize.size.width - 116;
+            int y = gameState->leagueSize.size.height - 92;
+            tapMouseRight(x, y);
         }
         
         /*
@@ -406,6 +410,21 @@ void BasicAI::processAI() {
         if ((clock() - cameraLockTimer)/CLOCKS_PER_SEC >= 5.0) {
             cameraLockTimer = clock();
             tapCameraLock();
+            //Go to mid
+            int x = gameState->leagueSize.size.width - 116;
+            int y = gameState->leagueSize.size.height - 92;
+            tapMouseRight(x, y);
         }
+    }
+    //Try this
+    if ((clock() - cameraLockTimer)/CLOCKS_PER_SEC >= 60.0) { //Try a random camera tap to make sure the AI isn't stuck
+        cameraLockTimer = clock();
+        tapCameraLock();
+        gameState->shopManager->closeShop();
+        //Go to mid
+        int x = gameState->leagueSize.size.width - 116;
+        int y = gameState->leagueSize.size.height - 92;
+        tapMouseRight(x, y);
+        moveMouse(0, 0);
     }
 }
