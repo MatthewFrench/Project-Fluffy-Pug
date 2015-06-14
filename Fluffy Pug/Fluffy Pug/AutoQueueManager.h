@@ -17,7 +17,7 @@ class AutoQueueManager {
     ImageData imageData, step1_PlayButton, step2_PVPMode, step3_ClassicMode, step4_SummonersRiftMode, step5_BlindPickMode, step6_SoloButton, step7_AcceptButton, step8_RandomChampionButton, step9_LockInButton, step10_ChooseSkinButton, step11_EndGameContinueButton, step12_HomeButton, step13_ReconnectButton;
     
     double lastScreenScan, lastEndGameScan;
-    
+    Position playButtonLocation;
     
 
 public:

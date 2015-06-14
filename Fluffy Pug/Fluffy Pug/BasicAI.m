@@ -167,7 +167,7 @@ void BasicAI::processAI() {
             action = ACTION_Go_Ham;
         }
         
-        int actionSpeed = 1.0;
+        int actionSpeed = 0.5;
         
         switch (action) {
             case ACTION_Run_Away:

@@ -18,7 +18,7 @@ class EnemyTowerManager {
     bool needsFullScreenUpdate;
     
     double fullScreenUpdateTime, lastUpdateTime;
-    const double TowerSpeed = 400; //100 pixels per second
+    const double TowerSpeed = 600; //100 pixels per second
     
     //moodycamel::ConcurrentQueue<Position> topLeftQueue, bottomLeftQueue, topRightQueue, bottomRightQueue;
     

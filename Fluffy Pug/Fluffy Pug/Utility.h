@@ -59,19 +59,16 @@ inline  ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight)
 inline ImageData makeImageDataFrom(NSString* path);
 inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance);
 inline void normalizePoint(int &x, int &y, int length);
-inline BOOL detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, Position &location, double percentageMatch);
+inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd);
 inline double getColorPercentage(uint8_t *pixel, uint8_t *pixel2);
 inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image);
 
 
-extern inline BOOL detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, Position &location, double percentageMatch) {
-    int yStart = 0;
-    int yEnd = largeImage.imageHeight;
-    int xStart = 0;
-    int xEnd = largeImage.imageWidth;
-    
+extern inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd) {
     bool found = false;
     double highestPercent = 0.0;
+    Position location;
+    location.x = -1; location.y = -1;
     
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = getPixel2(largeImage, xStart, y);
@@ -83,7 +80,7 @@ extern inline BOOL detectRelativeImageInImage(ImageData smallImage, ImageData la
                 if (highestPercent > percentageMatch) {
                     found = true;
                 }
-            } else if (percent < percentageMatch) { //Skip ahead if not even a close match
+            } else if (percent < highestPercent) { //Skip ahead if not even a close match
                 int skip = floor(smallImage.imageWidth*(1.0-percent)/2);
                 x += skip;
                 pixel += skip*4;
@@ -91,9 +88,11 @@ extern inline BOOL detectRelativeImageInImage(ImageData smallImage, ImageData la
             pixel += 4;
         }
     }
-    //NSLog(@"Highest match: %f", highestPercent);
-    
-    return found;
+    NSLog(@"Highest match: %f at position %d %d", highestPercent, location.x, location.y);
+    if (found) {
+        return location;
+    }
+    return makePosition(-1,-1);
 }
 
 extern inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image) {
