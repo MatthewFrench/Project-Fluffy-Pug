@@ -124,12 +124,13 @@ void ShopManager::processImage(ImageData data) {
     imageData = data;
     
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
-    if (lastFullScreenUpdate >= 0.25) { //It's been a whole second, scan the screen
+    if (lastFullScreenUpdate >= 2.0 || (lastFullScreenUpdate >= 0.25 && buyingItems)) { //It's been a whole second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
     }
     
     if (needsFullScreenUpdate) {
+        needsFullScreenUpdate = false;
         shopAvailable = false;
         
         //Detect shop available
@@ -149,7 +150,7 @@ void ShopManager::processImage(ImageData data) {
             }
         }
         
-        
+        /*
         if (shopAvailable) {
             shopOpen = false;
             yStart = 0;
@@ -168,7 +169,25 @@ void ShopManager::processImage(ImageData data) {
                     pixel += 4;
                 }
             }
+        }*/
+        shopOpen = false;
+        yStart = 0;
+        yEnd = imageData.imageHeight/2;
+        xStart = 0;
+        xEnd = imageData.imageWidth/2;
+        for (int y = yStart; y < yEnd; y++) {
+            uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
+            
+            for (int x = xStart; x < xEnd; x++) {
+                if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopWindowImageData, 30)) {
+                    shopOpen = true;
+                    topLeftCornerPosition = makePosition(x, y);
+                    x = xEnd; y = yEnd;
+                }
+                pixel += 4;
+            }
         }
+        
         if (shopOpen && shopAvailable) {
             for (int y = yStart; y < yEnd; y++) {
                 uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
@@ -192,8 +211,10 @@ void ShopManager::processImage(ImageData data) {
                 uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
                 
                 for (int x = xStart; x < xEnd; x++) {
+                    if (x >= 0 && y >= 0 && x < imageData.imageWidth && y < imageData.imageHeight) {
                     if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopEmptyItemSlotImageData, 25)) {
                         emptyItemSlots++;
+                    }
                     }
                     pixel += 4;
                 }
@@ -208,9 +229,11 @@ void ShopManager::processImage(ImageData data) {
                 uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
                 
                 for (int x = xStart; x < xEnd; x++) {
+                    if (x >= 0 && y >= 0 && x < imageData.imageWidth && y < imageData.imageHeight) {
                     if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopItemImageData, 40)) {
                         Position p = makePosition(x, y);
                         [buyableItems addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
+                    }
                     }
                     pixel += 4;
                 }

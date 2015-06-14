@@ -89,9 +89,11 @@ extern inline void tapCameraLock() {
     CGEventRef event = CGEventCreateKeyboardEvent(NULL, 16, YES); //y
     CGEventPost(kCGHIDEventTap, event);
     CFRelease(event);
-    event = CGEventCreateKeyboardEvent(NULL, 16, NO); //y
-    CGEventPost(kCGHIDEventTap, event);
-    CFRelease(event);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60), dispatch_get_main_queue(), ^{ // one
+        CGEventRef event = CGEventCreateKeyboardEvent(NULL, 16, NO); //y
+        CGEventPost(kCGHIDEventTap, event);
+        CFRelease(event);
+    });
 }
 extern inline void levelUpAbility1() {
     CGEventRef event = CGEventCreateKeyboardEvent(NULL, 0x3B, YES); //Left control

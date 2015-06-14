@@ -29,7 +29,7 @@ class EnemyChampionManager {
     void processTopLeftDetect(); void processBottomLeftDetect(); void processTopRightDetect(); void processBottomRightDetect();
     bool containsPosition(NSMutableArray* array, Position p);
     
-    const double championSpeed = 2000; //100 pixels per second
+    const double championSpeed = 400; //100 pixels per second
     
 public:
     NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;

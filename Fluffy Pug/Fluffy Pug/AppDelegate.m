@@ -143,6 +143,8 @@
 
 - (void)renderVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
+    leagueGameState->autoQueueActive = [autoQueueCheckbox state] == NSOnState;
+    
     CVPixelBufferRef sourcePixelBuffer = CMSampleBufferGetImageBuffer( sampleBuffer );
     
     //const int kBytesPerPixel = 4;
@@ -207,7 +209,7 @@
     }
     
     //Profile code? See how fast it's running?
-    if (CACurrentMediaTime() - lastTime > 3) //10 seconds
+    if (CACurrentMediaTime() - lastTime > 0.5)
     {
         float time = CACurrentMediaTime() - lastTime;
         [fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1000 / loopsTaken, (1000.0)/(time * 1000.0 / loopsTaken)]];

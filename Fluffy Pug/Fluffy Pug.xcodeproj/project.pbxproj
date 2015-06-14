@@ -15,6 +15,7 @@
 		C91E65D01B1D309E00432FCA /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = C91E65CF1B1D309E00432FCA /* Resources */; };
 		C91E65D31B1D30D200432FCA /* EnemyChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C91E65D21B1D30D200432FCA /* EnemyChampionManager.m */; };
 		C93A4D311B2BE84400391CCE /* EnemyTowerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C93A4D301B2BE84400391CCE /* EnemyTowerManager.m */; };
+		C9416A931B2C560E007E0091 /* AutoQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9416A921B2C560E007E0091 /* AutoQueueManager.m */; };
 		C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77AD1B14063B00052F3E /* AppDelegate.m */; };
 		C95A77B01B14063B00052F3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77AF1B14063B00052F3E /* main.m */; };
 		C95A77B21B14063B00052F3E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C95A77B11B14063B00052F3E /* Images.xcassets */; };
@@ -60,6 +61,8 @@
 		C91E65D21B1D30D200432FCA /* EnemyChampionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyChampionManager.m; sourceTree = "<group>"; };
 		C93A4D2F1B2BE84400391CCE /* EnemyTowerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyTowerManager.h; sourceTree = "<group>"; };
 		C93A4D301B2BE84400391CCE /* EnemyTowerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyTowerManager.m; sourceTree = "<group>"; };
+		C9416A911B2C560E007E0091 /* AutoQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoQueueManager.h; sourceTree = "<group>"; };
+		C9416A921B2C560E007E0091 /* AutoQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoQueueManager.m; sourceTree = "<group>"; };
 		C95A77A71B14063B00052F3E /* Fluffy Pug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fluffy Pug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C95A77AB1B14063B00052F3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C95A77AC1B14063B00052F3E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -181,6 +184,8 @@
 				C96C94671B2A7A490003E688 /* ItemManager.m */,
 				C9A911181B2AC6F300DC33D1 /* ShopManager.h */,
 				C9A911191B2AC6F300DC33D1 /* ShopManager.m */,
+				C9416A911B2C560E007E0091 /* AutoQueueManager.h */,
+				C9416A921B2C560E007E0091 /* AutoQueueManager.m */,
 				C93A4D2F1B2BE84400391CCE /* EnemyTowerManager.h */,
 				C93A4D301B2BE84400391CCE /* EnemyTowerManager.m */,
 				C95A77B31B14063B00052F3E /* MainMenu.xib */,
@@ -323,6 +328,7 @@
 				C9C736041B15937F0021F10F /* AllyMinionManager.m in Sources */,
 				C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */,
 				C90676131B2958B40031AD7F /* AbilityManager.m in Sources */,
+				C9416A931B2C560E007E0091 /* AutoQueueManager.m in Sources */,
 				C9C7360D1B15A2370021F10F /* Utility.m in Sources */,
 				C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */,
 				C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */,

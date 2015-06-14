@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8121.17" systemVersion="15A178w" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8121.17"/>
     </dependencies>
     <objects>
@@ -15,6 +16,7 @@
             <connections>
                 <outlet property="allyChampionText" destination="8bZ-bC-uE3" id="UN7-Kk-acP"/>
                 <outlet property="allyMinionText" destination="pw1-Sb-MwS" id="jgL-IS-HOI"/>
+                <outlet property="autoQueueCheckbox" destination="s2D-5n-UuO" id="ASI-EE-eew"/>
                 <outlet property="debugCheckbox" destination="hCP-l2-ffx" id="T47-5N-KAp"/>
                 <outlet property="enemyChampionText" destination="Jkg-Ns-ebB" id="EaG-AZ-wSf"/>
                 <outlet property="enemyMinionText" destination="wip-Tv-DnA" id="8na-cw-RiO"/>
@@ -680,14 +682,14 @@
         <window title="Fluffy Pug" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="270" y="299" width="480" height="226"/>
+            <rect key="contentRect" x="270" y="299" width="480" height="257"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="226"/>
+                <rect key="frame" x="0.0" y="0.0" width="480" height="257"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="2TM-fP-sB5">
-                        <rect key="frame" x="74" y="189" width="388" height="17"/>
+                        <rect key="frame" x="74" y="220" width="388" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No League Instance Found" id="OZB-pM-vJ4">
@@ -697,7 +699,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Rsk-oM-PXf">
-                        <rect key="frame" x="18" y="164" width="87" height="17"/>
+                        <rect key="frame" x="18" y="195" width="87" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Performance:" id="Cwt-8g-YmA">
@@ -707,7 +709,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="eT4-WU-iMY">
-                        <rect key="frame" x="18" y="189" width="52" height="17"/>
+                        <rect key="frame" x="18" y="220" width="52" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Status: " id="RnX-CB-udu">
@@ -717,7 +719,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="l1p-00-dqi">
-                        <rect key="frame" x="109" y="164" width="353" height="17"/>
+                        <rect key="frame" x="109" y="195" width="353" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Calculating" id="bJb-6R-f1c">
@@ -727,7 +729,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="QH3-v7-0UU">
-                        <rect key="frame" x="18" y="139" width="197" height="17"/>
+                        <rect key="frame" x="18" y="170" width="197" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Maximum Frames per Second: " id="wpe-Fy-UKG">
@@ -737,7 +739,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" id="aZP-sd-Njt">
-                        <rect key="frame" x="220" y="137" width="105" height="22"/>
+                        <rect key="frame" x="220" y="168" width="105" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="60" drawsBackground="YES" id="Uaa-ub-dUf">
@@ -747,7 +749,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="lAb-AP-Xae">
-                        <rect key="frame" x="18" y="112" width="146" height="17"/>
+                        <rect key="frame" x="18" y="143" width="146" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ally Minions Detected: " id="nNR-Tq-O3A">
@@ -757,7 +759,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="pw1-Sb-MwS">
-                        <rect key="frame" x="168" y="112" width="294" height="17"/>
+                        <rect key="frame" x="168" y="143" width="294" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 minions" id="Rta-wE-juX">
@@ -767,7 +769,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="SIg-Iy-kWa">
-                        <rect key="frame" x="18" y="87" width="166" height="17"/>
+                        <rect key="frame" x="18" y="118" width="166" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enemy Minions Detected: " id="cTk-IU-JYK">
@@ -777,7 +779,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="wip-Tv-DnA">
-                        <rect key="frame" x="188" y="87" width="274" height="17"/>
+                        <rect key="frame" x="188" y="118" width="274" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 minions" id="7dh-vw-YJe">
@@ -787,7 +789,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="PfG-xx-WEk">
-                        <rect key="frame" x="18" y="62" width="168" height="17"/>
+                        <rect key="frame" x="18" y="93" width="168" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ally Champions Detected: " id="DMs-6P-qly">
@@ -797,7 +799,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="8bZ-bC-uE3">
-                        <rect key="frame" x="188" y="62" width="274" height="17"/>
+                        <rect key="frame" x="188" y="93" width="274" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 champions" id="hNv-2e-tnA">
@@ -807,7 +809,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="RkS-3O-8eF">
-                        <rect key="frame" x="18" y="37" width="188" height="17"/>
+                        <rect key="frame" x="18" y="68" width="188" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enemy Champions Detected: " id="cmt-FQ-ZJ7">
@@ -817,7 +819,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Jkg-Ns-ebB">
-                        <rect key="frame" x="210" y="37" width="252" height="17"/>
+                        <rect key="frame" x="210" y="68" width="252" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 champions" id="PoO-5K-mEk">
@@ -827,7 +829,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="1Ez-nW-gq6">
-                        <rect key="frame" x="18" y="12" width="188" height="17"/>
+                        <rect key="frame" x="18" y="43" width="188" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Self Champions Detected: " id="Cn1-pa-BdY">
@@ -837,7 +839,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="35w-er-u4R">
-                        <rect key="frame" x="210" y="12" width="252" height="17"/>
+                        <rect key="frame" x="210" y="43" width="252" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <animations/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 champions" id="zui-gl-pbv">
@@ -846,10 +848,19 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <button id="s2D-5n-UuO">
+                        <rect key="frame" x="18" y="18" width="380" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <animations/>
+                        <buttonCell key="cell" type="check" title="Auto Queue Active" bezelStyle="regularSquare" imagePosition="left" inset="2" id="chz-Pu-ZcO">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                    </button>
                 </subviews>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="-45" y="105"/>
+            <point key="canvasLocation" x="-45" y="120.5"/>
         </window>
         <window title="Fluffy Pug" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="eyJ-xI-Wdc">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>

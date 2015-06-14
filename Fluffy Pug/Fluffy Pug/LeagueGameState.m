@@ -10,6 +10,7 @@
 #import "BasicAI.h"
 
 LeagueGameState::LeagueGameState() {
+    autoQueueActive = false;
     leaguePID = -1;
     allyMinionManager = new AllyMinionManager();
     enemyMinionManager = new EnemyMinionManager();
@@ -21,57 +22,63 @@ LeagueGameState::LeagueGameState() {
     shopManager = new ShopManager();
     enemyTowerManager = new EnemyTowerManager();
     basicAI = new BasicAI(this);
+    autoQueueManager = new AutoQueueManager();
 }
 
 void LeagueGameState::processImage(struct ImageData image) {
     imageData = image;
     
-    dispatch_group_t dispatchGroup = dispatch_group_create();
-    dispatch_queue_t queue;
-    
-    // Add a task to the group
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-        allyMinionManager->processImage(image);
-    });
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-        allyChampionManager->processImage(image);
-    });
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-        selfChampionManager->processImage(image);
-    });
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-        enemyMinionManager->processImage(image);
-    });
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-        enemyChampionManager->processImage(image);
-    });
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-        abilityManager->processImage(image);
-    });
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-        itemManager->processImage(image);
-    });
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-        shopManager->processImage(image);
-    });
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-        enemyTowerManager->processImage(image);
-    });
-
-    // wait on the group to block the current thread.
-    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
-    
     if (leaguePID != -1) {
+        dispatch_group_t dispatchGroup = dispatch_group_create();
+        dispatch_queue_t queue;
+        
+        // Add a task to the group
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            allyMinionManager->processImage(image);
+        });
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            allyChampionManager->processImage(image);
+        });
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            selfChampionManager->processImage(image);
+        });
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            enemyMinionManager->processImage(image);
+        });
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            enemyChampionManager->processImage(image);
+        });
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            abilityManager->processImage(image);
+        });
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            itemManager->processImage(image);
+        });
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            shopManager->processImage(image);
+        });
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            enemyTowerManager->processImage(image);
+        });
+        
+        // wait on the group to block the current thread.
+        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
+        
         basicAI->processAI();
+    } else if (autoQueueActive) {
+        autoQueueManager->processImage(image);
+    }
+    if (leaguePID != -1 && [selfChampionManager->championBars count] == 0 && autoQueueActive) {
+        autoQueueManager->checkForEndGame(image);
     }
     
     
@@ -88,28 +95,28 @@ void LeagueGameState::processImage(struct ImageData image) {
     //enemyChampionManager->setImageData(imageData);
     //enemyChampionManager->prepareForPixelProcessing();
     /*
-    int cores = 4;
-    int section = imageData.imageHeight/cores;
-    if (section < 1) {
-        section = 1;
-    }
-    
-    dispatch_apply(cores, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(size_t i) {
-        int yStart = section * (int)i;
-        int yEnd = yStart + section;
-        if (i == cores - 1) {
-            yEnd = imageData.imageHeight;
-        }
-        uint8_t *pixel = imageData.imageData + (yStart * imageData.imageWidth)*4;
-        for (int y = yStart; y < yEnd; y++) {
-            for (int x = 0; x < imageData.imageWidth; x++) {
-                allyMinionManager->processPixel(pixel, x, y);
-                //enemyMinionManager->processPixel(pixel, x, y);
-                //enemyChampionManager->processPixel(pixel, x, y);
-                pixel += 4;
-            }
-        }
-    });*/
+     int cores = 4;
+     int section = imageData.imageHeight/cores;
+     if (section < 1) {
+     section = 1;
+     }
+     
+     dispatch_apply(cores, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(size_t i) {
+     int yStart = section * (int)i;
+     int yEnd = yStart + section;
+     if (i == cores - 1) {
+     yEnd = imageData.imageHeight;
+     }
+     uint8_t *pixel = imageData.imageData + (yStart * imageData.imageWidth)*4;
+     for (int y = yStart; y < yEnd; y++) {
+     for (int x = 0; x < imageData.imageWidth; x++) {
+     allyMinionManager->processPixel(pixel, x, y);
+     //enemyMinionManager->processPixel(pixel, x, y);
+     //enemyChampionManager->processPixel(pixel, x, y);
+     pixel += 4;
+     }
+     }
+     });*/
     
     //allyMinionManager->postPixelProcessing();
     //enemyMinionManager->postPixelProcessing();

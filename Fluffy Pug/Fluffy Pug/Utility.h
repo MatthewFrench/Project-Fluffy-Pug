@@ -59,6 +59,77 @@ inline  ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight)
 inline ImageData makeImageDataFrom(NSString* path);
 inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance);
 inline void normalizePoint(int &x, int &y, int length);
+inline BOOL detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, Position &location, double percentageMatch);
+inline double getColorPercentage(uint8_t *pixel, uint8_t *pixel2);
+inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image);
+
+
+extern inline BOOL detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, Position &location, double percentageMatch) {
+    int yStart = 0;
+    int yEnd = largeImage.imageHeight;
+    int xStart = 0;
+    int xEnd = largeImage.imageWidth;
+    
+    bool found = false;
+    double highestPercent = 0.0;
+    
+    for (int y = yStart; y < yEnd; y++) {
+        uint8_t *pixel = getPixel2(largeImage, xStart, y);
+        for (int x = xStart; x < xEnd; x++) {
+            double percent = getImageAtPixelPercentage(pixel, x, y, largeImage.imageWidth, largeImage.imageHeight, smallImage);
+            if (percent > highestPercent) {
+                location.x = x; location.y = y;
+                highestPercent = percent;
+                if (highestPercent > percentageMatch) {
+                    found = true;
+                }
+            } else if (percent < percentageMatch) { //Skip ahead if not even a close match
+                int skip = floor(smallImage.imageWidth*(1.0-percent)/2);
+                x += skip;
+                pixel += skip*4;
+            }
+            pixel += 4;
+        }
+    }
+    //NSLog(@"Highest match: %f", highestPercent);
+    
+    return found;
+}
+
+extern inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image) {
+        if (width - x > image.imageWidth &&
+            height - y > image.imageHeight) {
+            double percentage = 0.0;
+            uint8_t *pixel2 = image.imageData;
+            for (int y1 = 0; y1 < image.imageHeight; y1++) {
+                uint8_t *pixel1 = pixel + (y1 * width)*4;
+                for (int x1 = 0; x1 < image.imageWidth; x1++) {
+                    if (pixel2[3] != 0) {
+                        percentage += getColorPercentage(pixel1, pixel2);
+                    } else {
+                        percentage += 1.0;
+                    }
+                    pixel2 += 4;
+                    pixel1 += 4;
+                }
+            }
+            return percentage / (image.imageWidth*image.imageHeight);
+        }
+    return 0.0;
+}
+
+
+extern inline double getColorPercentage(uint8_t *pixel, uint8_t *pixel2) {
+    
+    double r = 1.0 - ((double)abs(pixel[2] - pixel2[2]) /255.0);
+    double g = 1.0 - ((double)abs(pixel[1] - pixel2[1]) /255.0);
+    double b = 1.0 - ((double)abs(pixel[0] - pixel2[0]) /255.0);
+    
+    //NSLog(@"%d %d %d vs %d %d %d, match = %f", pixel[0], pixel[1], pixel[2], pixel2[0], pixel2[1], pixel2[2], (r+g+b)/3.0);
+    return r*g*b;
+}
+
+
 
 extern inline void normalizePoint(int &x, int &y, int length) {
     double h = hypot(x, y);

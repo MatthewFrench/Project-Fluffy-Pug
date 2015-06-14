@@ -17,11 +17,13 @@
 #import "ItemManager.h"
 #import "ShopManager.h"
 #import "EnemyTowerManager.h"
+#import "AutoQueueManager.h"
 
 class BasicAI;
 
 class LeagueGameState {
 public:
+    bool autoQueueActive;
     int leaguePID;
     CGRect leagueSize;
     struct ImageData imageData;
@@ -35,6 +37,7 @@ public:
     BasicAI* basicAI;
     ShopManager* shopManager;
     EnemyTowerManager* enemyTowerManager;
+    AutoQueueManager* autoQueueManager;
     
     LeagueGameState();
     void processImage(struct ImageData image);

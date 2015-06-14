@@ -92,9 +92,9 @@ void EnemyTowerManager::scanSection(int xStart, int yStart, int xEnd, int yEnd) 
 }
 void EnemyTowerManager::processTowersLocations() {
     processTopLeftDetect();
-    processTopRightDetect();
+    //processTopRightDetect();
     processBottomLeftDetect();
-    processBottomRightDetect();
+    //processBottomRightDetect();
     //Do center location
     for (int i = 0; i < [towerBars count]; i++) {
         TowerBar cb;

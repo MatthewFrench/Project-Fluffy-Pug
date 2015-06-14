@@ -28,7 +28,7 @@ class ShopManager {
     //bool usedItemInFrame;
     //double item1Time, item2Time, item3Time, trinketTime, item5Time, item6Time, item7Time;
 public:
-    bool shopAvailable, boughtItems;
+    bool shopAvailable, boughtItems, buyingItems;
     bool shopOpen;
     ShopManager();
     void processImage(ImageData data);
