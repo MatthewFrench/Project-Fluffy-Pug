@@ -176,6 +176,39 @@
     [selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->selfChampionManager->championBars.count]];
     
     
+    if ((clock() - lastSaveImage)/CLOCKS_PER_SEC >= 1.0 && [recordScreenCheckbox state] == NSOnState) {
+        lastSaveImage = clock();
+        
+        dispatch_group_t dispatchGroup = dispatch_group_create();
+        dispatch_queue_t queue;
+        
+        
+        CIImage *ciImage = [CIImage imageWithCVImageBuffer:sourcePixelBuffer];
+        
+        // Create a bitmap rep from the image...
+        NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCIImage:ciImage];
+        
+        NSData *data = [bitmapRep representationUsingType: NSPNGFileType properties: nil];
+        
+        // Add a task to the group
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
+            [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+            
+            NSString* path = [NSString stringWithFormat:@"%@/AI Record",NSHomeDirectory()];
+            
+            [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+            
+            
+            bool wrote = [data writeToFile: [NSString stringWithFormat:@"%@/%@.png",path,[DateFormatter stringFromDate:[NSDate date]]] atomically: NO];
+            if (!wrote) {
+                NSLog(@"Couldn't save image");
+            }
+            
+        });
+    }
+    
     if ([debugCheckbox state] == NSOnState) {
         //White it out
         for (int i = 0; i < bufferWidth*bufferHeight*4; i+=4) {

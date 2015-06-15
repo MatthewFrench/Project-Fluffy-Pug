@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "LeagueGameState.h"
+#import <time.h>
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     IBOutlet NSTextField* statusText, *fpsText, *allyMinionText, *enemyMinionText, *enemyChampionText, *selfChampionText, *allyChampionText;
@@ -19,10 +20,11 @@
     
     IBOutlet NSImageView* imageView;
     IBOutlet NSButton* debugCheckbox;
-    IBOutlet NSButton* autoQueueCheckbox;
+    IBOutlet NSButton* autoQueueCheckbox, *recordScreenCheckbox;
     IBOutlet NSTextField* fpsTextField;
     int chosenFPS;
     
+    double lastSaveImage;
 }
 @property (strong) id activity;
 @property (weak) IBOutlet NSWindow *window, *window2;
