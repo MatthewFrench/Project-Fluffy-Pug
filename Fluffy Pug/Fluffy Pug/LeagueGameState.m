@@ -72,8 +72,6 @@ void LeagueGameState::processImage(struct ImageData image) {
         
         // wait on the group to block the current thread.
         dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
-        
-        basicAI->processAI();
     } else if (autoQueueActive) {
         autoQueueManager->processImage(image);
     }
@@ -121,6 +119,9 @@ void LeagueGameState::processImage(struct ImageData image) {
     //allyMinionManager->postPixelProcessing();
     //enemyMinionManager->postPixelProcessing();
     //enemyChampionManager->postPixelProcessing();
+}
+void LeagueGameState::processAI() {
+    basicAI->processAI();
 }
 void LeagueGameState::debugDraw() {
     allyMinionManager->debugDraw();

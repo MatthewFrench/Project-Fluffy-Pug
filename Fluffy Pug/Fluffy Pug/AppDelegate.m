@@ -164,6 +164,10 @@
     
     leagueGameState->processImage(imageData);
     
+    if ([aiActiveCheckbox state] == NSOnState && leagueGameState->leaguePID != -1) {
+        leagueGameState->processAI();
+    }
+    
     //Display minions
     [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->allyMinionManager->minionBars.count]];
     

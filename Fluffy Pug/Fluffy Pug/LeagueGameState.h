@@ -41,5 +41,6 @@ public:
     
     LeagueGameState();
     void processImage(struct ImageData image);
+    void processAI();
     void debugDraw();
 };

@@ -95,7 +95,7 @@ void AutoQueueManager::processImage(ImageData data) {
             }break;
             case STEP_5: {
                 clickLocation.x = playButtonLocation.x +300;
-                clickLocation.y = playButtonLocation.y +110;
+                clickLocation.y = playButtonLocation.y +150;
                 match = true;
                 //match = detectRelativeImageInImage(step5_BlindPickMode, data, location, 0.7);
                 //location.x += 675; location.y += 114;
