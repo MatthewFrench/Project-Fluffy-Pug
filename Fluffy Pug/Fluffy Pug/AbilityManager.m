@@ -83,7 +83,7 @@ void AbilityManager::processImage(ImageData data) {
     
     lastUpdateTime = clock();
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
-    if (lastFullScreenUpdate >= 2.0) { //It's been a whole second, scan the screen
+    if (lastFullScreenUpdate >= 1.6) { //It's been a whole second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
     }

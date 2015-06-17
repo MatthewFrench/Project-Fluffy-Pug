@@ -125,7 +125,7 @@ void ShopManager::processImage(ImageData data) {
     imageData = data;
     
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
-    if (lastFullScreenUpdate >= 2.0 || (lastFullScreenUpdate >= 0.25 && buyingItems)) { //It's been a whole second, scan the screen
+    if (lastFullScreenUpdate >= 1.8 || (lastFullScreenUpdate >= 0.5 && buyingItems)) { //It's been a whole second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
     }
