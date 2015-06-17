@@ -41,7 +41,7 @@ void AutoQueueManager::processImage(ImageData data) {
         int xEnd = imageData.imageWidth - 400;
         int yEnd = 250;
         
-        Position playLocation = detectRelativeImageInImage(step1_PlayButton, data, 0.85, xStart, yStart, xEnd, yEnd);
+        Position playLocation = detectRelativeImageInImage(step1_PlayButton, data, 0.83, xStart, yStart, xEnd, yEnd);
         if (playLocation.x != -1) {
             playButtonLocation = playLocation;
             clickLocation = playButtonLocation;
@@ -112,7 +112,7 @@ void AutoQueueManager::processImage(ImageData data) {
                 if (match) {NSLog(@"Clicked solo button");}
             }break;
             case STEP_7: {
-                Position location = detectRelativeImageInImage(step7_AcceptButton, data, 0.85, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450);
+                Position location = detectRelativeImageInImage(step7_AcceptButton, data, 0.83, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450);
                 if (location.x != -1) {
                     match = true;
                     clickLocation = location;
@@ -125,7 +125,7 @@ void AutoQueueManager::processImage(ImageData data) {
                 yStart = playButtonLocation.y;
                 xEnd = playButtonLocation.x+400;
                 yEnd = playButtonLocation.y+600;
-                Position location = detectRelativeImageInImage(step8_RandomChampionButton, data, 0.85, xStart, yStart, xEnd, yEnd);
+                Position location = detectRelativeImageInImage(step8_RandomChampionButton, data, 0.83, xStart, yStart, xEnd, yEnd);
                 if (location.x != -1) {
                     clickLocation = location;
                     match = true;
@@ -133,7 +133,7 @@ void AutoQueueManager::processImage(ImageData data) {
                 if (match) {
                     currentStep = STEP_9;
                     if (match) {NSLog(@"Clicked random champion");}
-                } else if ((location = detectRelativeImageInImage(step7_AcceptButton, data, 0.85, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450)).x != -1) {
+                } else if ((location = detectRelativeImageInImage(step7_AcceptButton, data, 0.83, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450)).x != -1) {
                      //Someone queue dodged
                         match = true;
                         clickLocation = location;
@@ -146,7 +146,7 @@ void AutoQueueManager::processImage(ImageData data) {
                 yStart = playButtonLocation.y;
                 xEnd = playButtonLocation.x+500;
                 yEnd = playButtonLocation.y+600;
-                Position location = detectRelativeImageInImage(step9_LockInButton, data, 0.85, xStart, yStart, xEnd, yEnd);
+                Position location = detectRelativeImageInImage(step9_LockInButton, data, 0.83, xStart, yStart, xEnd, yEnd);
                 if (location.x != -1) {
                     clickLocation = location;
                     match = true;
@@ -154,7 +154,7 @@ void AutoQueueManager::processImage(ImageData data) {
                 if (match) {
                     currentStep = STEP_10;
                     if (match) {NSLog(@"Clicked lock in button");}
-                } else if ((location = detectRelativeImageInImage(step7_AcceptButton, data, 0.85, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450)).x != -1) {
+                } else if ((location = detectRelativeImageInImage(step7_AcceptButton, data, 0.83, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450)).x != -1) {
                     //Someone queue dodged
                     match = true;
                     clickLocation = location;
@@ -175,13 +175,13 @@ void AutoQueueManager::processImage(ImageData data) {
                 }
                 if (match) {NSLog(@"Clicked skin change button");}
                 if (!match) currentStep = STEP_12;
-                if ((location = detectRelativeImageInImage(step7_AcceptButton, data, 0.85, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450)).x != -1) {
+                if ((location = detectRelativeImageInImage(step7_AcceptButton, data, 0.83, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450)).x != -1) {
                     match = true;
                     clickLocation = location;
                     //Someone queue dodged
                     currentStep = STEP_8;
                     if (match) {NSLog(@"Clicked accept button");}
-                } else if ((location = detectRelativeImageInImage(step13_ReconnectButton, data, 0.85, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+200, playButtonLocation.y+450)).x != -1) {
+                } else if ((location = detectRelativeImageInImage(step13_ReconnectButton, data, 0.83, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+200, playButtonLocation.y+450)).x != -1) {
                     match = true;
                     clickLocation = location;
                     //Reconnecting screen
@@ -199,7 +199,7 @@ void AutoQueueManager::processImage(ImageData data) {
                     xEnd = imageData.imageWidth;
                     yEnd = imageData.imageHeight;
                 }
-                Position location = detectRelativeImageInImage(step12_HomeButton, data, 0.85, xStart, yStart, xEnd, yEnd);
+                Position location = detectRelativeImageInImage(step12_HomeButton, data, 0.83, xStart, yStart, xEnd, yEnd);
                 if (location.x != -1) {
                     clickLocation = location;
                     match = true;
