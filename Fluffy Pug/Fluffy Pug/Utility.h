@@ -58,6 +58,7 @@ inline BOOL isColor2(uint8_t *pixel, uint8_t *pixel2, int tolerance);
 inline  ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight);
 inline ImageData makeImageDataFrom(NSString* path);
 inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance);
+inline BOOL detectImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image, double percentage);
 inline void normalizePoint(int &x, int &y, int length);
 inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd);
 inline Position detectRelativeImageInImagePercentage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage);
@@ -156,13 +157,13 @@ extern inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int
 
 
 extern inline double getColorPercentage(uint8_t *pixel, uint8_t *pixel2) {
+    //pixel 1 is 255, 255, 255
+    //pixel 2 is 0, 0, 0
+    //match is 0
     
-    double r = 1.0 - ((double)abs(pixel[2] - pixel2[2]) /255.0);
-    double g = 1.0 - ((double)abs(pixel[1] - pixel2[1]) /255.0);
-    double b = 1.0 - ((double)abs(pixel[0] - pixel2[0]) /255.0);
-    
-    //NSLog(@"%d %d %d vs %d %d %d, match = %f", pixel[0], pixel[1], pixel[2], pixel2[0], pixel2[1], pixel2[2], (r+g+b)/3.0);
-    return r*g*b;
+    //pixel 1 and 2 is 255, 255, 255
+    //match is 1.0
+    return (255-fabs(pixel[2] - pixel2[2])) * (255-fabs(pixel[1] - pixel2[1])) * (255-fabs(pixel[0] - pixel2[0])) /16581375.0;
 }
 
 
@@ -184,6 +185,27 @@ extern inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, i
                 uint8_t *pixel1 = pixel + (y1 * width)*4;
                 for (int x1 = 0; x1 < image.imageWidth; x1++) {
                     if (!isColor2(pixel1, pixel2, tolerance) && pixel2[3] > 0) {
+                        return false;
+                    }
+                    pixel2 += 4;
+                    pixel1 += 4;
+                }
+            }
+            return true;
+        }
+    }
+    return false;
+}
+
+extern inline BOOL detectImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image, double percentage) {
+    if (getColorPercentage(pixel, image.imageData) >= percentage || image.imageData[3] == 0) {
+        if (width - x > image.imageWidth &&
+            height - y > image.imageHeight) {
+            uint8_t *pixel2 = image.imageData;
+            for (int y1 = 0; y1 < image.imageHeight; y1++) {
+                uint8_t *pixel1 = pixel + (y1 * width)*4;
+                for (int x1 = 0; x1 < image.imageWidth; x1++) {
+                    if (getColorPercentage(pixel1, pixel2) < percentage && pixel2[3] > 0) {
                         return false;
                     }
                     pixel2 += 4;

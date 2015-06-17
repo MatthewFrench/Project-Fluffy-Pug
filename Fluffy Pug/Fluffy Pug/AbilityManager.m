@@ -134,6 +134,7 @@ void AbilityManager::detectLevelUp() {
     int xStart = imageData.imageWidth/2 - 120;
     int xEnd = imageData.imageWidth/2 + 60;
     
+    /*
     for (int x = xStart; x < xEnd; x+=levelUpImageData.imageWidth) {
         for (int y = yStart; y < yEnd; y++) {
             double percentage1=0, percentage2=0;
@@ -157,12 +158,9 @@ void AbilityManager::detectLevelUp() {
             }
         }
     }
-    if ([levelUpDetect count] > 0 || [levelUpDisabledDetect count] > 0) {
-        NSLog(@"Level up detect: %lu, level up disabled detect: %lu", (unsigned long)[levelUpDetect count], (unsigned long)[levelUpDisabledDetect count]);
-    }
-    
+    */
     //yStart = 0; xStart = 0; yEnd = imageData.imageHeight; xEnd = imageData.imageWidth;
-    /*
+    
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
         
@@ -170,7 +168,7 @@ void AbilityManager::detectLevelUp() {
             processPixelLevelUp(pixel, x, y);
             pixel += 4;
         }
-    }*/
+    }
      
     
     if ([levelUpDetect count] == 0) {
@@ -233,14 +231,14 @@ void AbilityManager::detectLevelUp() {
 
 void AbilityManager::processPixelLevelUp(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpImageData, 10)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpImageData, 0.9)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(levelUpDetect, p)) {
             [levelUpDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpDisabledImageData, 10)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpDisabledImageData, 0.9)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(levelUpDisabledDetect, p)) {

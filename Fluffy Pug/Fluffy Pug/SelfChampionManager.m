@@ -158,7 +158,7 @@ void SelfChampionManager::processChampionsHealth() {
 
 void SelfChampionManager::processPixel(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 40)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.7)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(topLeftDetect, p)) {
@@ -167,7 +167,7 @@ void SelfChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 40)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.7)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
             //NSLog(@"Bottom left: %d %d", p.x, p.y);
@@ -175,7 +175,7 @@ void SelfChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect top right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 40)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 0.7)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(topRightDetect, p)) {
             //NSLog(@"Top Right: %d %d", p.x, p.y);
@@ -183,7 +183,7 @@ void SelfChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 40)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 0.7)) {
         Position p;p.x=x;p.y=y+1;
         if (!containsPosition(bottomRightDetect, p)) {
             //NSLog(@"Bottom Right: %d %d", p.x, p.y);

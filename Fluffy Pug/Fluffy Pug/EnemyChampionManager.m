@@ -42,7 +42,7 @@ void EnemyChampionManager::processImage(ImageData data) {
     double delta = (clock() - lastUpdateTime)/CLOCKS_PER_SEC;
     lastUpdateTime = clock();
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
-    if (lastFullScreenUpdate >= 0.25) { //It's been a whole half second, scan the screen
+    if (lastFullScreenUpdate >= 1.0) { //It's been a whole half second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
     }
@@ -168,7 +168,7 @@ ChampionBar EnemyChampionManager::getLowestHealthChampion(int x, int y) {
 
 void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 40)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.7)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(topLeftDetect, p)) {
@@ -177,7 +177,7 @@ void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 40)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.7)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
             //NSLog(@"Found bottom left %d %d", p.x, p.y);
@@ -185,7 +185,7 @@ void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect top right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 40)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight,topRightImageData, 0.7)) {
         Position p;p.x=x+1;p.y=y;
         if (!containsPosition(topRightDetect, p)) {
             //NSLog(@"Found top right %d %d", p.x, p.y);
@@ -193,7 +193,7 @@ void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom right bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 40)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight,bottomRightImageData, 0.7)) {
         Position p;p.x=x-2;p.y=y;
         if (!containsPosition(bottomRightDetect, p)) {
             //NSLog(@"Found bottom right %d %d", p.x, p.y);

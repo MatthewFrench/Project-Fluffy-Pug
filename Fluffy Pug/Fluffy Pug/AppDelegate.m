@@ -57,7 +57,7 @@
     leagueGameState = new LeagueGameState();
     
     [self updateWindowList];
-    lastTime = CACurrentMediaTime();
+    lastTime = clock();
     
     
     
@@ -159,25 +159,14 @@
     
     
     
-    struct ImageData imageData = makeImageData(baseAddress, bufferWidth, bufferHeight);
-    
+    struct ImageData imageData = makeImageData(baseAddress, bufferWidth, leagueGameState->leagueSize.size.height);
+
     
     leagueGameState->processImage(imageData);
     
     if ([aiActiveCheckbox state] == NSOnState && leagueGameState->leaguePID != -1) {
         leagueGameState->processAI();
     }
-    
-    //Display minions
-    [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->allyMinionManager->minionBars.count]];
-    
-    [enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->enemyMinionManager->minionBars.count]];
-    
-    [enemyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->enemyChampionManager->championBars.count]];
-    
-    [allyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->allyChampionManager->championBars.count]];
-    
-    [selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->selfChampionManager->championBars.count]];
     
     
     if ((clock() - lastSaveImage)/CLOCKS_PER_SEC >= 1.0 && [recordScreenCheckbox state] == NSOnState) {
@@ -232,7 +221,18 @@
     }
     
     CVPixelBufferUnlockBaseAddress( sourcePixelBuffer, 0 );
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        //Display minions
+        [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->allyMinionManager->minionBars.count]];
+        
+        [enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->enemyMinionManager->minionBars.count]];
+        
+        [enemyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->enemyChampionManager->championBars.count]];
+        
+        [allyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->allyChampionManager->championBars.count]];
+        
+        [selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->selfChampionManager->championBars.count]];
+        
     //Read FPS
     NSString* fps = [fpsTextField stringValue];
     int newFps = [fps intValue];
@@ -246,22 +246,26 @@
     }
     
     //Profile code? See how fast it's running?
-    if (CACurrentMediaTime() - lastTime > 0.5)
+    if ((clock() - lastTime)/CLOCKS_PER_SEC > 0.5)
     {
-        float time = CACurrentMediaTime() - lastTime;
+        float time = (clock() - lastTime)/CLOCKS_PER_SEC;
         [fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1000 / loopsTaken, (1000.0)/(time * 1000.0 / loopsTaken)]];
-        lastTime = CACurrentMediaTime();
+        lastTime = clock();
         loopsTaken = 0;
         [self updateWindowList];
         if (leagueGameState->leaguePID == -1) {
             [statusText setStringValue:@"No League Instance Found"];
         }
+        
+            [_window update];
+            [_window setViewsNeedDisplay:TRUE];
+       
     }
     else
     {
         loopsTaken++;
     }
-    
+     });
 }
 
 
