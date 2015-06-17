@@ -172,7 +172,7 @@ void AllyMinionManager::processMinionsHealth() {
                 int pixelY =cb.topLeft.y + y;
                 if (pixelY < imageData.imageHeight && pixelX < imageData.imageWidth && pixelX >= 0 && pixelY >= 0) {
                     uint8_t *pixel = getPixel2(imageData, pixelX, pixelY);
-                    if (isColor2(healthPixel, pixel, 20)) {
+                    if (colorInPercentage(healthPixel, pixel, 0.85)) {
                         cb.health = (float)x / Health_Bar_Width * 100;
                         x = 0;
                         break;
@@ -221,7 +221,7 @@ void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
     //getImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData)
     //Detect top left bar
     //ydouble percentage;
-    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.75)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.8)) {
         //NSLog(@"Percentage for top left detected: %f", percentage);
         Position p;p.x=x;p.y=y;
         //Add if not detected
@@ -230,21 +230,21 @@ void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
         }
     }
     //Detect bottom left bar
-    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.75)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.8)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomLeftDetect, p)) {
             [bottomLeftDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect top right bar
-    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.75)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.8)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(topRightDetect, p)) {
             [topRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
     //Detect bottom right bar
-    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.75)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.8)) {
         Position p;p.x=x;p.y=y;
         if (!containsPosition(bottomRightDetect, p)) {
             [bottomRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];

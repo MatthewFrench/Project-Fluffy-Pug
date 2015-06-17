@@ -53,17 +53,18 @@ inline void setPixel( ImageData imageData, int x, int y, int r, int g, int b);
 inline void drawRect( ImageData imageData, int left, int top, int width, int height, int r, int g, int b);
 inline BOOL isPixelColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
 inline BOOL isPixelPreciseColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b);
-inline BOOL isColor(uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
-inline BOOL isColor2(uint8_t *pixel, uint8_t *pixel2, int tolerance);
+inline BOOL isColor(const uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
+inline BOOL isColor2(const uint8_t *pixel, const uint8_t *pixel2, int tolerance);
 inline  ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight);
 inline ImageData makeImageDataFrom(NSString* path);
-inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance);
-inline BOOL detectImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image, double percentage);
+inline BOOL detectImageAtPixel(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance);
+inline BOOL detectImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double percentage);
 inline void normalizePoint(int &x, int &y, int length);
 inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd);
 inline Position detectRelativeImageInImagePercentage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage);
-inline double getColorPercentage(uint8_t *pixel, uint8_t *pixel2);
-inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image);
+inline double getColorPercentage(const uint8_t *pixel, const uint8_t *pixel2);
+inline bool colorInPercentage(const uint8_t *pixel, const uint8_t *pixel2, double percentage);
+inline double getImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image);
 
 extern inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd) {
     bool found = false;
@@ -133,14 +134,14 @@ extern inline Position detectRelativeImageInImagePercentage(ImageData smallImage
     return makePosition(-1,-1);
 }
 
-extern inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image) {
+extern inline double getImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image) {
     int pixels = 0;
         if (width - x > image.imageWidth &&
             height - y > image.imageHeight) {
             double percentage = 0.0;
             uint8_t *pixel2 = image.imageData;
             for (int y1 = 0; y1 < image.imageHeight; y1++) {
-                uint8_t *pixel1 = pixel + (y1 * width)*4;
+                const uint8_t *pixel1 = pixel + (y1 * width)*4;
                 for (int x1 = 0; x1 < image.imageWidth; x1++) {
                     if (pixel2[3] != 0) {
                         pixels++;
@@ -156,14 +157,29 @@ extern inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int
 }
 
 
-extern inline double getColorPercentage(uint8_t *pixel, uint8_t *pixel2) {
+extern inline double getColorPercentage(const uint8_t *pixel,const uint8_t *pixel2) {
     //pixel 1 is 255, 255, 255
     //pixel 2 is 0, 0, 0
     //match is 0
     
     //pixel 1 and 2 is 255, 255, 255
     //match is 1.0
-    return (255-fabs(pixel[2] - pixel2[2])) * (255-fabs(pixel[1] - pixel2[1])) * (255-fabs(pixel[0] - pixel2[0])) /16581375.0;
+    const double scale = 1.0 / (255.0 * 255.0 * 255.0); // compile-time constant
+    int m0 = 255 - abs(pixel[0] - pixel2[0]); // NB: use std::abs rather than fabs
+    int m1 = 255 - abs(pixel[1] - pixel2[1]); // and keep all of this part
+    int m2 = 255 - abs(pixel[2] - pixel2[2]); // in the integer domain
+    int m = m0 * m1 * m2;
+    return (double)m * scale;
+}
+
+inline bool colorInPercentage(const uint8_t *pixel,const uint8_t *pixel2, double percentage) {
+    double r = (255-abs(pixel[2] - pixel2[2])) / 255.0;
+    if (r < percentage) return false;
+    double g = (255-abs(pixel[1] - pixel2[1])) / 255.0 * r;
+    if (g < percentage) return false;
+    double b = (255-abs(pixel[0] - pixel2[0])) / 255.0 * g;
+    if (b < percentage) return false;
+    return true;
 }
 
 
@@ -176,13 +192,13 @@ extern inline void normalizePoint(int &x, int &y, int length) {
     }
 }
 
-extern inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance) {
+extern inline BOOL detectImageAtPixel(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance) {
     if (isColor2(pixel, image.imageData, tolerance) || image.imageData[3] == 0) {
         if (width - x > image.imageWidth &&
             height - y > image.imageHeight) {
             uint8_t *pixel2 = image.imageData;
             for (int y1 = 0; y1 < image.imageHeight; y1++) {
-                uint8_t *pixel1 = pixel + (y1 * width)*4;
+                const uint8_t *pixel1 = pixel + (y1 * width)*4;
                 for (int x1 = 0; x1 < image.imageWidth; x1++) {
                     if (!isColor2(pixel1, pixel2, tolerance) && pixel2[3] > 0) {
                         return false;
@@ -197,13 +213,13 @@ extern inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, i
     return false;
 }
 
-extern inline BOOL detectImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image, double percentage) {
+extern inline BOOL detectImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double percentage) {
     if (getColorPercentage(pixel, image.imageData) >= percentage || image.imageData[3] == 0) {
         if (width - x > image.imageWidth &&
             height - y > image.imageHeight) {
             uint8_t *pixel2 = image.imageData;
             for (int y1 = 0; y1 < image.imageHeight; y1++) {
-                uint8_t *pixel1 = pixel + (y1 * width)*4;
+                const uint8_t *pixel1 = pixel + (y1 * width)*4;
                 for (int x1 = 0; x1 < image.imageWidth; x1++) {
                     if (getColorPercentage(pixel1, pixel2) < percentage && pixel2[3] > 0) {
                         return false;
@@ -268,34 +284,32 @@ extern ImageData makeImageDataFrom(NSString* path) {
     return imageData;
 }
 
-extern BOOL isColor2(uint8_t *pixel, uint8_t *pixel2, int tolerance) {
-    //if (pixel[3] == 255 || pixel2[3] == 255) return true;
-    if (abs(pixel[0] - pixel2[0]) <= tolerance && abs(pixel[1] - pixel2[1]) <= tolerance && abs(pixel[2] - pixel2[2]) <= tolerance) {
-        return true;
-    }
-    return false;
+extern BOOL isColor2(const uint8_t *pixel, const uint8_t *pixel2, int tolerance) {
+    if (abs(pixel[0] - pixel2[0]) > tolerance) return false;
+    if (abs(pixel[1] - pixel2[1]) > tolerance) return false;
+    if (abs(pixel[2] - pixel2[2]) > tolerance) return false;
+    return true;
 }
 
-extern BOOL isColor(uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance) {
-    //if (pixel[3] == 255) return true;
-    if (abs(pixel[0] - b) <= tolerance && abs(pixel[1] - g) <= tolerance && abs(pixel[2] - r) <= tolerance) {
-        return true;
-    }
-    return false;
+extern BOOL isColor(const uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance) {
+    if (abs(pixel[0] - b) > tolerance) return false;
+    if (abs(pixel[1] - g) > tolerance) return false;
+    if (abs(pixel[2] - r) > tolerance) return false;
+    return true;
 }
 
 extern BOOL isPixelColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance) {
-    if (abs(pixel.r - r) <= tolerance && abs(pixel.g - g) <= tolerance && abs(pixel.b - b) <= tolerance) {
-        return true;
-    }
-    return false;
+    if (abs(pixel.r - r) > tolerance) return false;
+    if (abs(pixel.g - g) > tolerance) return false;
+    if (abs(pixel.b - b) > tolerance) return false;
+    return true;
 }
 
 extern BOOL isPixelPreciseColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b) {
-    if (pixel.r == r && pixel.g == g && pixel.b == b) {
-        return true;
-    }
-    return false;
+    if (pixel.r != r) return false;
+    if (pixel.g != g) return false;
+    if (pixel.b != b) return false;
+    return true;
 }
 extern Pixel getPixel(struct ImageData imageData, int x, int y) {
     uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + x)*4;

@@ -118,7 +118,7 @@ void EnemyTowerManager::processTowersHealth() {
                 int pixelY =cb.topLeft.y + y;
                 if (pixelY < imageData.imageHeight && pixelX < imageData.imageWidth && pixelX >= 0 && pixelY >= 0) {
                     uint8_t *pixel = getPixel2(imageData, pixelX, pixelY);
-                    if (isColor2(healthPixel, pixel, 20)) {
+                    if (colorInPercentage(healthPixel, pixel, 0.85)) {
                         cb.health = (float)x / Health_Bar_Width * 100;
                         x = 0;
                         break;
