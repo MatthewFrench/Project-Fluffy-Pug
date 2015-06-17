@@ -26,10 +26,12 @@ void BasicAI::processAI() {
         gameState->shopManager->buyingItems = true;
         lastShopBuy = clock();
         gameState->shopManager->boughtItems = false;
+        stopMovement();
     }
     
     if (gameState->shopManager->buyingItems) {
         if (gameState->shopManager->shopOpen == false && gameState->shopManager->boughtItems == false) {
+            stopMovement();
             //If shop isn't open and we haven't bought items, wait for shop to open
             gameState->shopManager->openShop();
         } else if (gameState->shopManager->shopOpen == true) {
@@ -134,7 +136,7 @@ void BasicAI::processAI() {
                     minionsUnderTower++;
                 }
             }
-            if (minionsUnderTower) {
+            if (minionsUnderTower > 1) {
                 action = ACTION_Attack_Tower;
             } else {
                 action = ACTION_Run_Away;
@@ -201,12 +203,12 @@ void BasicAI::processAI() {
                 }
                 if (selfChamp.health < 15) {
                     //Panic
-                    if (gameState->abilityManager->ability4Ready) {moveMouse(enemyX, enemyY); tapSpell4();}
-                    if (gameState->abilityManager->ability3Ready) {moveMouse(enemyX, enemyY); tapSpell3();}
-                    if (gameState->abilityManager->ability2Ready) {moveMouse(enemyX, enemyY); tapSpell2();}
-                    if (gameState->abilityManager->ability1Ready) {moveMouse(enemyX, enemyY); tapSpell1();}
-                    if (gameState->abilityManager->summonerSpell1Ready) {moveMouse(enemyX, enemyY); tapSummonerSpell1();}
-                    if (gameState->abilityManager->summonerSpell2Ready) {moveMouse(enemyX, enemyY); tapSummonerSpell2();}
+                    if (gameState->abilityManager->ability4Ready) {moveMouse(enemyX, enemyY); gameState->abilityManager->useSpell4();}
+                    if (gameState->abilityManager->ability3Ready) {moveMouse(enemyX, enemyY); gameState->abilityManager->useSpell3();}
+                    if (gameState->abilityManager->ability2Ready) {moveMouse(enemyX, enemyY); gameState->abilityManager->useSpell2();}
+                    if (gameState->abilityManager->ability1Ready) {moveMouse(enemyX, enemyY); gameState->abilityManager->useSpell1();}
+                    if (gameState->abilityManager->summonerSpell1Ready) {moveMouse(enemyX, enemyY); gameState->abilityManager->useSummonerSpell1();}
+                    if (gameState->abilityManager->summonerSpell2Ready) {moveMouse(enemyX, enemyY); gameState->abilityManager->useSummonerSpell2();}
                     if (gameState->itemManager->item1Active) {moveMouse(enemyX, enemyY); gameState->itemManager->useItem1();}
                     if (gameState->itemManager->item2Active) {moveMouse(enemyX, enemyY); gameState->itemManager->useItem2();}
                     if (gameState->itemManager->item3Active) {moveMouse(enemyX, enemyY); gameState->itemManager->useItem3();}
@@ -227,12 +229,12 @@ void BasicAI::processAI() {
                     lastMovementClick = clock();
                     tapAttackMove(lowestHealthEnemyChampion.characterCenter.x, lowestHealthEnemyChampion.characterCenter.y);
                 }
-                if (gameState->abilityManager->ability4Ready) {moveMouse(x, y); tapSpell4();}
-                if (gameState->abilityManager->ability3Ready) {moveMouse(x, y);  tapSpell3();}
-                if (gameState->abilityManager->ability2Ready) {moveMouse(x, y);  tapSpell2();}
-                if (gameState->abilityManager->ability1Ready) {moveMouse(x, y);  tapSpell1();}
-                if (gameState->abilityManager->summonerSpell1Ready) {moveMouse(x, y); tapSummonerSpell1();}
-                if (gameState->abilityManager->summonerSpell2Ready) {moveMouse(x, y); tapSummonerSpell2();}
+                if (gameState->abilityManager->ability4Ready) {moveMouse(x, y); gameState->abilityManager->useSpell4();}
+                if (gameState->abilityManager->ability3Ready) {moveMouse(x, y);  gameState->abilityManager->useSpell3();}
+                if (gameState->abilityManager->ability2Ready) {moveMouse(x, y);  gameState->abilityManager->useSpell2();}
+                if (gameState->abilityManager->ability1Ready) {moveMouse(x, y);  gameState->abilityManager->useSpell1();}
+                if (gameState->abilityManager->summonerSpell1Ready) {moveMouse(x, y); gameState->abilityManager->useSummonerSpell1();}
+                if (gameState->abilityManager->summonerSpell2Ready) {moveMouse(x, y); gameState->abilityManager->useSummonerSpell2();}
                 if (gameState->itemManager->item1Active) {moveMouse(x, y); gameState->itemManager->useItem1();}
                 if (gameState->itemManager->item2Active) {moveMouse(x, y); gameState->itemManager->useItem2();}
                 if (gameState->itemManager->item3Active) {moveMouse(x, y); gameState->itemManager->useItem3();}
@@ -249,9 +251,9 @@ void BasicAI::processAI() {
                     lastMovementClick = clock();
                     tapAttackMove(lowestHealthEnemyMinion.characterCenter.x, lowestHealthEnemyMinion.characterCenter.y);
                 }
-                if (gameState->abilityManager->ability1Ready) {tapSpell1();}
-                if (gameState->abilityManager->ability3Ready) {tapSpell3();}
-                if (gameState->abilityManager->ability2Ready && selfChamp.health < 50) {tapSpell2();}
+                if (gameState->abilityManager->ability1Ready) {gameState->abilityManager->useSpell1();}
+                if (gameState->abilityManager->ability3Ready) {gameState->abilityManager->useSpell3();}
+                if (gameState->abilityManager->ability2Ready && selfChamp.health < 50) {gameState->abilityManager->useSpell2();}
             }
                 break;
             case ACTION_Attack_Tower:
@@ -261,9 +263,9 @@ void BasicAI::processAI() {
                     lastMovementClick = clock();
                     tapAttackMove(nearestEnemyTower.towerCenter.x, nearestEnemyTower.towerCenter.y);
                 }
-                if (gameState->abilityManager->ability1Ready) {tapSpell1();}
-                if (gameState->abilityManager->ability3Ready) {tapSpell3();}
-                if (gameState->abilityManager->ability2Ready && selfChamp.health < 50) {tapSpell2();}
+                if (gameState->abilityManager->ability1Ready) {gameState->abilityManager->useSpell1();}
+                if (gameState->abilityManager->ability3Ready) {gameState->abilityManager->useSpell3();}
+                if (gameState->abilityManager->ability2Ready && selfChamp.health < 50) {gameState->abilityManager->useSpell2();}
             }
                 break;
             case ACTION_Follow_Ally_Champion:
@@ -295,7 +297,7 @@ void BasicAI::processAI() {
                 //NSLog(@"Going to mid");
                 if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed) { /* || lastAction != action*/
                     lastMovementClick = clock();
-                    int x = gameState->leagueSize.size.width - 116;
+                    int x = gameState->leagueSize.size.width - 105;
                     int y = gameState->leagueSize.size.height - 92;
                     tapMouseRight(x, y);
                 }
@@ -318,6 +320,14 @@ void BasicAI::processAI() {
         lastAction = action;
         
         //Level up stuff
+        
+        if (gameState->abilityManager->ability3LevelUpAvailable || gameState->abilityManager->ability2LevelUpAvailable || gameState->abilityManager->ability1LevelUpAvailable  || gameState->abilityManager->ability4LevelUpAvailable) {
+            levelUpAbility4();
+            levelUpAbility1();
+            levelUpAbility2();
+            levelUpAbility3();
+        }
+        /*
         if (gameState->abilityManager->ability4LevelUpAvailable || gameState->abilityManager->ability3LevelUpAvailable || gameState->abilityManager->ability2LevelUpAvailable || gameState->abilityManager->ability1LevelUpAvailable) {
             //NSLog(@"Dots: %d", gameState->abilityManager->levelUpCount);
             switch (gameState->abilityManager->levelUpCount+1) {
@@ -354,7 +364,7 @@ void BasicAI::processAI() {
                     levelUpAbility4();
                     break;
             }
-        }
+        }*/
         
         //Randomly place wards
         if (gameState->itemManager->trinketActive && (clock()-passiveUseWardTimer)/CLOCKS_PER_SEC >= 20.0 && lastAction!=ACTION_Recall) {
@@ -368,9 +378,9 @@ void BasicAI::processAI() {
             cameraLockTimer = clock();
             tapCameraLock();
             //Go to mid
-            int x = gameState->leagueSize.size.width - 116;
-            int y = gameState->leagueSize.size.height - 92;
-            tapMouseRight(x, y);
+            //int x = gameState->leagueSize.size.width - 116;
+            //int y = gameState->leagueSize.size.height - 92;
+            //tapMouseRight(x, y);
         }
         
         /*
@@ -411,18 +421,18 @@ void BasicAI::processAI() {
             cameraLockTimer = clock();
             tapCameraLock();
             //Go to mid
-            int x = gameState->leagueSize.size.width - 116;
+            int x = gameState->leagueSize.size.width - 105;
             int y = gameState->leagueSize.size.height - 92;
             tapMouseRight(x, y);
         }
     }
     //Try this
-    if ((clock() - cameraLockTimer)/CLOCKS_PER_SEC >= 60.0) { //Try a random camera tap to make sure the AI isn't stuck
+    if ((clock() - cameraLockTimer)/CLOCKS_PER_SEC >= 60.0 && !gameState->shopManager->buyingItems) { //Try a random camera tap to make sure the AI isn't stuck
         cameraLockTimer = clock();
         tapCameraLock();
         gameState->shopManager->closeShop();
         //Go to mid
-        int x = gameState->leagueSize.size.width - 116;
+        int x = gameState->leagueSize.size.width - 105;
         int y = gameState->leagueSize.size.height - 92;
         tapMouseRight(x, y);
         moveMouse(0, 0);

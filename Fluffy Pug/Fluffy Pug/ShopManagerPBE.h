@@ -1,5 +1,5 @@
 //
-//  ShopManager.h
+//  ShopManagerPBE.h
 //  Fluffy Pug
 //
 //  Created by Matthew French on 6/12/15.
@@ -12,8 +12,8 @@
 #import <time.h>
 #import "InteractiveEvents.h"
 
-class ShopManager {
-    ImageData imageData, shopWindowImageData, shopEmptyItemSlotImageData, shopAvailableImageData, shopBottomLeftCornerImageData, shopBuyableItemImageData, shopUnbuyableItemImageData;
+class ShopManagerPBE {
+    ImageData imageData, shopWindowImageData, shopEmptyItemSlotImageData, shopAvailableImageData, shopBottomLeftCornerImageData, shopItemImageData;
     
     //void detectItems();
     
@@ -30,7 +30,7 @@ class ShopManager {
 public:
     bool shopAvailable, boughtItems, buyingItems;
     bool shopOpen;
-    ShopManager();
+    ShopManagerPBE();
     void processImage(ImageData data);
     void openShop();
     void buyItems();

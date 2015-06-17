@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <ApplicationServices/ApplicationServices.h>
 
+inline void stopMovement();
 inline void doubleTapMouseLeft(int x, int y);
 inline void tapShop();
 inline void tapCameraLock();
@@ -77,6 +78,14 @@ inline void tapAttackMove(int x, int y);
 
 
 
+extern inline void stopMovement() {
+    CGEventRef event = CGEventCreateKeyboardEvent(NULL, 1, YES); //s
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+    event = CGEventCreateKeyboardEvent(NULL, 1, NO); //s
+    CGEventPost(kCGHIDEventTap, event);
+    CFRelease(event);
+}
 extern inline void tapShop() {
     CGEventRef event = CGEventCreateKeyboardEvent(NULL, 35, YES); //y
     CGEventPost(kCGHIDEventTap, event);

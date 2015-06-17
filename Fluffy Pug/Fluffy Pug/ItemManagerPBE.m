@@ -1,14 +1,14 @@
 //
-//  ItemManager.m
+//  ItemManagerPBE.m
 //  Fluffy Pug
 //
 //  Created by Matthew French on 6/11/15.
 //  Copyright © 2015 Matthew French. All rights reserved.
 //
 
-#import "ItemManager.h"
+#import "ItemManagerPBE.h"
 
-ItemManager::ItemManager() {
+ItemManagerPBE::ItemManagerPBE() {
     
     trinketItemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Trinket Active" ofType:@"png"]);
     itemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Usable Item" ofType:@"png"]);
@@ -31,7 +31,7 @@ ItemManager::ItemManager() {
     usedItemInFrame = false;
 }
 
-void ItemManager::processImage(ImageData data) {
+void ItemManagerPBE::processImage(ImageData data) {
     imageData = data;
     
     lastUpdateTime = clock();
@@ -41,40 +41,40 @@ void ItemManager::processImage(ImageData data) {
         needsFullScreenUpdate = true;
     }
     usedItemInFrame = false;
-    item1Active = TRUE;
-    item2Active = TRUE;
-    item3Active = TRUE;
-    trinketActive = TRUE;
-    item5Active = TRUE;
-    item6Active = TRUE;
-    item7Active = TRUE;
-    //if (needsFullScreenUpdate) {
-    //    detectItems();
-    //}
+    item1Active = false;
+    item2Active = false;
+    item3Active = false;
+    trinketActive = false;
+    item5Active = false;
+    item6Active = false;
+    item7Active = false;
+    if (needsFullScreenUpdate) {
+        detectItems();
+    }
 }
 
-void ItemManager::useItem1() {
+void ItemManagerPBE::useItem1() {
     if ((clock() - item1Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item1Time = clock();
         usedItemInFrame = true;
         tapActive1();
     }
 }
-void ItemManager::useItem2() {
+void ItemManagerPBE::useItem2() {
     if ((clock() - item2Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item2Time = clock();
         usedItemInFrame = true;
         tapActive2();
     }
 }
-void ItemManager::useItem3() {
+void ItemManagerPBE::useItem3() {
     if ((clock() - item3Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item3Time = clock();
         usedItemInFrame = true;
         tapActive3();
     }
 }
-void ItemManager::useTrinket(int x, int y) {
+void ItemManagerPBE::useTrinket(int x, int y) {
     if ((clock() - trinketTime)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         trinketTime = clock();
         usedItemInFrame = true;
@@ -82,21 +82,21 @@ void ItemManager::useTrinket(int x, int y) {
         tapWard();
     }
 }
-void ItemManager::useItem5() {
+void ItemManagerPBE::useItem5() {
     if ((clock() - item5Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item5Time = clock();
         usedItemInFrame = true;
         tapActive5();
     }
 }
-void ItemManager::useItem6() {
+void ItemManagerPBE::useItem6() {
     if ((clock() - item6Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item6Time = clock();
         usedItemInFrame = true;
         tapActive6();
     }
 }
-void ItemManager::useItem7() {
+void ItemManagerPBE::useItem7() {
     if ((clock() - item7Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item7Time = clock();
         usedItemInFrame = true;
@@ -104,7 +104,7 @@ void ItemManager::useItem7() {
     }
 }
 
-void ItemManager::detectItems() {
+void ItemManagerPBE::detectItems() {
     
     //Item 1
     int yStart = imageData.imageHeight - 102;
@@ -125,8 +125,8 @@ void ItemManager::detectItems() {
     if (isActive) item1Active = true;
     
     //Item 2
-     xStart = imageData.imageWidth/2 + 160;
-     xEnd = imageData.imageWidth/2 + 194;
+    xStart = imageData.imageWidth/2 + 160;
+    xEnd = imageData.imageWidth/2 + 194;
     isActive = false;
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
@@ -176,10 +176,10 @@ void ItemManager::detectItems() {
     if (isActive) trinketActive = true;
     
     //Item 5
-     yStart = imageData.imageHeight - 67;
-     yEnd = imageData.imageHeight - 30;
-     xStart = imageData.imageWidth/2 + 124;
-     xEnd = imageData.imageWidth/2 + 160;
+    yStart = imageData.imageHeight - 67;
+    yEnd = imageData.imageHeight - 30;
+    xStart = imageData.imageWidth/2 + 124;
+    xEnd = imageData.imageWidth/2 + 160;
     isActive = false;
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;

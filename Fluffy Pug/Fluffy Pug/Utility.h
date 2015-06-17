@@ -60,9 +60,9 @@ inline ImageData makeImageDataFrom(NSString* path);
 inline BOOL detectImageAtPixel(uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance);
 inline void normalizePoint(int &x, int &y, int length);
 inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd);
+inline Position detectRelativeImageInImagePercentage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage);
 inline double getColorPercentage(uint8_t *pixel, uint8_t *pixel2);
 inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image);
-
 
 extern inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd) {
     bool found = false;
@@ -82,13 +82,50 @@ extern inline Position detectRelativeImageInImage(ImageData smallImage, ImageDat
                 }
             } else if (percent < highestPercent) { //Skip ahead if not even a close match
                 int skip = floor(smallImage.imageWidth*(1.0-percent)/2);
+                //NSLog(@"Skipping %d", skipyy);
                 x += skip;
                 pixel += skip*4;
             }
             pixel += 4;
         }
     }
-    NSLog(@"Highest match: %f at position %d %d", highestPercent, location.x, location.y);
+    //NSLog(@"Highest match: %f at position %d %d", highestPercent, location.x, location.y);
+    if (found) {
+        return location;
+    }
+    return makePosition(-1,-1);
+}
+
+extern inline Position detectRelativeImageInImagePercentage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage) {
+    bool found = false;
+    double highestPercent = 0.0;
+    Position location;
+    location.x = -1; location.y = -1;
+    
+    for (int y = yStart; y < yEnd; y++) {
+        uint8_t *pixel = getPixel2(largeImage, xStart, y);
+        for (int x = xStart; x < xEnd; x++) {
+            double percent = getImageAtPixelPercentage(pixel, x, y, largeImage.imageWidth, largeImage.imageHeight, smallImage);
+            if (percent > highestPercent) {
+                location.x = x; location.y = y;
+                highestPercent = percent;
+                if (highestPercent > percentageMatch) {
+                    found = true;
+                }
+            } else if (percent < highestPercent) { //Skip ahead if not even a close match
+                int skip = floor(smallImage.imageWidth*(1.0-percent)/2);
+                //NSLog(@"Skipping %d", skipyy);
+                x += skip;
+                pixel += skip*4;
+            }
+            pixel += 4;
+        }
+    }
+    //NSLog(@"Highest match: %f at position %d %d", highestPercent, location.x, location.y);
+    returnPercentage = 0;
+    if (found) {
+        returnPercentage = highestPercent;
+    }
     if (found) {
         return location;
     }
@@ -96,6 +133,7 @@ extern inline Position detectRelativeImageInImage(ImageData smallImage, ImageDat
 }
 
 extern inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int width, int height, ImageData image) {
+    int pixels = 0;
         if (width - x > image.imageWidth &&
             height - y > image.imageHeight) {
             double percentage = 0.0;
@@ -104,15 +142,14 @@ extern inline double getImageAtPixelPercentage(uint8_t *pixel, int x, int y, int
                 uint8_t *pixel1 = pixel + (y1 * width)*4;
                 for (int x1 = 0; x1 < image.imageWidth; x1++) {
                     if (pixel2[3] != 0) {
+                        pixels++;
                         percentage += getColorPercentage(pixel1, pixel2);
-                    } else {
-                        percentage += 1.0;
                     }
                     pixel2 += 4;
                     pixel1 += 4;
                 }
             }
-            return percentage / (image.imageWidth*image.imageHeight);
+            return percentage / pixels;
         }
     return 0.0;
 }

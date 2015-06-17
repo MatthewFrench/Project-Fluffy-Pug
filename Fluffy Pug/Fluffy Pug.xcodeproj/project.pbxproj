@@ -14,6 +14,9 @@
 		C9192B801B1A72EC002D1E08 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9192B7F1B1A72EC002D1E08 /* CoreMedia.framework */; };
 		C91E65D01B1D309E00432FCA /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = C91E65CF1B1D309E00432FCA /* Resources */; };
 		C91E65D31B1D30D200432FCA /* EnemyChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C91E65D21B1D30D200432FCA /* EnemyChampionManager.m */; };
+		C92B82561B303A3300278ED5 /* ShopManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B82551B303A3300278ED5 /* ShopManager.m */; };
+		C92B82591B303A7500278ED5 /* AbilityManagerPBE.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B82581B303A7500278ED5 /* AbilityManagerPBE.m */; };
+		C92B825C1B303A9E00278ED5 /* ItemManagerPBE.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B825B1B303A9E00278ED5 /* ItemManagerPBE.m */; };
 		C93A4D311B2BE84400391CCE /* EnemyTowerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C93A4D301B2BE84400391CCE /* EnemyTowerManager.m */; };
 		C9416A931B2C560E007E0091 /* AutoQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9416A921B2C560E007E0091 /* AutoQueueManager.m */; };
 		C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77AD1B14063B00052F3E /* AppDelegate.m */; };
@@ -29,7 +32,7 @@
 		C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F461B28720600A965E6 /* SelfChampionManager.m */; };
 		C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F491B2872DC00A965E6 /* AllyChampionManager.m */; };
 		C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F4C1B28931700A965E6 /* BasicAI.m */; };
-		C9A9111A1B2AC6F300DC33D1 /* ShopManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A911191B2AC6F300DC33D1 /* ShopManager.m */; };
+		C9A9111A1B2AC6F300DC33D1 /* ShopManagerPBE.m in Sources */ = {isa = PBXBuildFile; fileRef = C9A911191B2AC6F300DC33D1 /* ShopManagerPBE.m */; };
 		C9C736041B15937F0021F10F /* AllyMinionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9C736031B15937F0021F10F /* AllyMinionManager.m */; };
 		C9C7360F1B15E6300021F10F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C7360E1B15E6300021F10F /* AVFoundation.framework */; };
 		C9C736111B15E90C0021F10F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C736101B15E90C0021F10F /* AppKit.framework */; };
@@ -57,6 +60,12 @@
 		C91E65CF1B1D309E00432FCA /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		C91E65D11B1D30D200432FCA /* EnemyChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyChampionManager.h; sourceTree = "<group>"; };
 		C91E65D21B1D30D200432FCA /* EnemyChampionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyChampionManager.m; sourceTree = "<group>"; };
+		C92B82541B303A3300278ED5 /* ShopManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShopManager.h; sourceTree = "<group>"; };
+		C92B82551B303A3300278ED5 /* ShopManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShopManager.m; sourceTree = "<group>"; };
+		C92B82571B303A7500278ED5 /* AbilityManagerPBE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbilityManagerPBE.h; sourceTree = "<group>"; };
+		C92B82581B303A7500278ED5 /* AbilityManagerPBE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbilityManagerPBE.m; sourceTree = "<group>"; };
+		C92B825A1B303A9E00278ED5 /* ItemManagerPBE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemManagerPBE.h; sourceTree = "<group>"; };
+		C92B825B1B303A9E00278ED5 /* ItemManagerPBE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemManagerPBE.m; sourceTree = "<group>"; };
 		C93A4D2F1B2BE84400391CCE /* EnemyTowerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyTowerManager.h; sourceTree = "<group>"; };
 		C93A4D301B2BE84400391CCE /* EnemyTowerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyTowerManager.m; sourceTree = "<group>"; };
 		C9416A911B2C560E007E0091 /* AutoQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoQueueManager.h; sourceTree = "<group>"; };
@@ -85,8 +94,8 @@
 		C9928F4B1B28931700A965E6 /* BasicAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicAI.h; sourceTree = "<group>"; };
 		C9928F4C1B28931700A965E6 /* BasicAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicAI.m; sourceTree = "<group>"; };
 		C9928F4E1B28952E00A965E6 /* InteractiveEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractiveEvents.h; sourceTree = "<group>"; };
-		C9A911181B2AC6F300DC33D1 /* ShopManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShopManager.h; sourceTree = "<group>"; };
-		C9A911191B2AC6F300DC33D1 /* ShopManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShopManager.m; sourceTree = "<group>"; };
+		C9A911181B2AC6F300DC33D1 /* ShopManagerPBE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShopManagerPBE.h; sourceTree = "<group>"; };
+		C9A911191B2AC6F300DC33D1 /* ShopManagerPBE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShopManagerPBE.m; sourceTree = "<group>"; };
 		C9C736021B15937F0021F10F /* AllyMinionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllyMinionManager.h; sourceTree = "<group>"; };
 		C9C736031B15937F0021F10F /* AllyMinionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllyMinionManager.m; sourceTree = "<group>"; };
 		C9C7360C1B15A2370021F10F /* Utility.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Utility.h; sourceTree = "<group>"; };
@@ -168,6 +177,8 @@
 			children = (
 				C90676111B2958B40031AD7F /* AbilityManager.h */,
 				C90676121B2958B40031AD7F /* AbilityManager.m */,
+				C92B82571B303A7500278ED5 /* AbilityManagerPBE.h */,
+				C92B82581B303A7500278ED5 /* AbilityManagerPBE.m */,
 			);
 			name = "Ability Manager";
 			sourceTree = "<group>";
@@ -177,6 +188,8 @@
 			children = (
 				C96C94661B2A7A490003E688 /* ItemManager.h */,
 				C96C94671B2A7A490003E688 /* ItemManager.m */,
+				C92B825A1B303A9E00278ED5 /* ItemManagerPBE.h */,
+				C92B825B1B303A9E00278ED5 /* ItemManagerPBE.m */,
 			);
 			name = "Item Manager";
 			sourceTree = "<group>";
@@ -184,8 +197,10 @@
 		C92B82521B3037AA00278ED5 /* Shop Manager */ = {
 			isa = PBXGroup;
 			children = (
-				C9A911181B2AC6F300DC33D1 /* ShopManager.h */,
-				C9A911191B2AC6F300DC33D1 /* ShopManager.m */,
+				C9A911181B2AC6F300DC33D1 /* ShopManagerPBE.h */,
+				C9A911191B2AC6F300DC33D1 /* ShopManagerPBE.m */,
+				C92B82541B303A3300278ED5 /* ShopManager.h */,
+				C92B82551B303A3300278ED5 /* ShopManager.m */,
 			);
 			name = "Shop Manager";
 			sourceTree = "<group>";
@@ -375,6 +390,7 @@
 				C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */,
 				C95A77B01B14063B00052F3E /* main.m in Sources */,
 				C93A4D311B2BE84400391CCE /* EnemyTowerManager.m in Sources */,
+				C92B825C1B303A9E00278ED5 /* ItemManagerPBE.m in Sources */,
 				C9C736041B15937F0021F10F /* AllyMinionManager.m in Sources */,
 				C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */,
 				C90676131B2958B40031AD7F /* AbilityManager.m in Sources */,
@@ -382,9 +398,11 @@
 				C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */,
 				C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */,
 				C91E65D31B1D30D200432FCA /* EnemyChampionManager.m in Sources */,
-				C9A9111A1B2AC6F300DC33D1 /* ShopManager.m in Sources */,
+				C9A9111A1B2AC6F300DC33D1 /* ShopManagerPBE.m in Sources */,
 				C9F5E6821B1C1AD10072BB9C /* EnemyMinionManager.m in Sources */,
 				C96C94681B2A7A490003E688 /* ItemManager.m in Sources */,
+				C92B82561B303A3300278ED5 /* ShopManager.m in Sources */,
+				C92B82591B303A7500278ED5 /* AbilityManagerPBE.m in Sources */,
 				C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
