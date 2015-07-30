@@ -9,9 +9,12 @@
 #import <Cocoa/Cocoa.h>
 #import "LeagueGameState.h"
 #import <time.h>
+#import "TestController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     IBOutlet NSTextField* statusText, *fpsText, *allyMinionText, *enemyMinionText, *enemyChampionText, *selfChampionText, *allyChampionText;
+    IBOutlet NSImageView* unprocessedImage, *processedImage, *targetImage;
+    IBOutlet NSTextView* logText;
     NSTimer* timer;
     LeagueGameState* leagueGameState;
     AVCaptureScreenInput *input;
@@ -25,9 +28,16 @@
     int chosenFPS;
     
     double lastSaveImage;
+    
+    bool saveTestScreenshot;
+    TestController* testController;
 }
 @property (strong) id activity;
 @property (weak) IBOutlet NSWindow *window, *window2;
+
+- (IBAction) openViewWindow:(id)sender;
+- (IBAction) getScreenshot:(id)sender;
+- (IBAction) testPlayButton:(id)sender;
 
 @end
 

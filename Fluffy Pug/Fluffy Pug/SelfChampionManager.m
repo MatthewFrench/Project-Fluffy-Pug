@@ -149,7 +149,7 @@ void SelfChampionManager::processChampionsHealth() {
             
             
         }
-        NSLog(@"Champion health: %f", cb.health);
+        //NSLog(@"Champion health: %f", cb.health);
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
     }
 }

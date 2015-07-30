@@ -231,14 +231,14 @@ void AbilityManager::detectLevelUp() {
 
 void AbilityManager::processPixelLevelUp(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpImageData, 0.9)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpImageData, 0.75)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(levelUpDetect, p)) {
             [levelUpDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
-    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpDisabledImageData, 0.9)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpDisabledImageData, 0.75)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(levelUpDisabledDetect, p)) {

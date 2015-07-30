@@ -65,6 +65,47 @@ inline Position detectRelativeImageInImagePercentage(ImageData smallImage, Image
 inline double getColorPercentage(const uint8_t *pixel, const uint8_t *pixel2);
 inline bool colorInPercentage(const uint8_t *pixel, const uint8_t *pixel2, double percentage);
 inline double getImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image);
+inline uint8 * copyImageBuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
+inline uint8 * copyImageBufferFromBGRAtoRGBA(uint8 *baseAddress, int bufferWidth, int bufferHeight);
+inline NSImage* getImageFromBGRABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
+inline NSImage* getImageFromRGBABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
+
+
+extern inline NSImage* getImageFromRGBABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight) {
+    CGContextRef context = CGBitmapContextCreate(baseAddress, bufferWidth, bufferHeight, 8,  bufferWidth * 4, CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB), kCGImageAlphaPremultipliedLast);
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    
+    return [[NSImage alloc] initWithCGImage:imageRef size:NSMakeSize(bufferWidth, bufferHeight)];
+}
+extern inline NSImage* getImageFromBGRABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight) {
+    UInt8 *rgbaTestImage = copyImageBufferFromBGRAtoRGBA(baseAddress, bufferWidth, bufferHeight);
+    CGContextRef context = CGBitmapContextCreate(rgbaTestImage, bufferWidth, bufferHeight, 8,  bufferWidth * 4, CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB), kCGImageAlphaPremultipliedLast);
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    free(rgbaTestImage);
+    
+    return [[NSImage alloc] initWithCGImage:imageRef size:NSMakeSize(bufferWidth, bufferHeight)];
+}
+
+extern inline uint8 * copyImageBufferFromBGRAtoRGBA(uint8 *baseAddress, int bufferWidth, int bufferHeight) {
+    uint8 * testImage = (UInt8*) calloc (bufferWidth * bufferHeight * 4,sizeof(UInt8));
+    for (int i = 0; i < bufferWidth * bufferHeight * 4; i+=4) {
+        testImage[i] = baseAddress[i+2];
+        testImage[i+1] = baseAddress[i+1];
+        testImage[i+2] = baseAddress[i];
+        testImage[i+3] = baseAddress[i+3];
+    }
+    return testImage;
+}
+extern inline uint8 * copyImageBuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight) {
+    uint8 * testImage = (UInt8*) calloc (bufferWidth * bufferHeight * 4,sizeof(UInt8));
+    for (int i = 0; i < bufferWidth * bufferHeight * 4; i+=4) {
+        testImage[i] = baseAddress[i];
+        testImage[i+1] = baseAddress[i+1];
+        testImage[i+2] = baseAddress[i+2];
+        testImage[i+3] = baseAddress[i+3];
+    }
+    return testImage;
+}
 
 extern inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd) {
     bool found = false;

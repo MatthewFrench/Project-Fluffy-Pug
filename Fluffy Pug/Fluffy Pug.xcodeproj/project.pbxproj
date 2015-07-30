@@ -17,6 +17,7 @@
 		C92B82561B303A3300278ED5 /* ShopManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B82551B303A3300278ED5 /* ShopManager.m */; };
 		C92B82591B303A7500278ED5 /* AbilityManagerPBE.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B82581B303A7500278ED5 /* AbilityManagerPBE.m */; };
 		C92B825C1B303A9E00278ED5 /* ItemManagerPBE.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B825B1B303A9E00278ED5 /* ItemManagerPBE.m */; };
+		C939B4751B6A01C800B42054 /* TestController.m in Sources */ = {isa = PBXBuildFile; fileRef = C939B4731B6A01C800B42054 /* TestController.m */; };
 		C93A4D311B2BE84400391CCE /* EnemyTowerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C93A4D301B2BE84400391CCE /* EnemyTowerManager.m */; };
 		C9416A931B2C560E007E0091 /* AutoQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9416A921B2C560E007E0091 /* AutoQueueManager.m */; };
 		C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77AD1B14063B00052F3E /* AppDelegate.m */; };
@@ -66,6 +67,8 @@
 		C92B82581B303A7500278ED5 /* AbilityManagerPBE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbilityManagerPBE.m; sourceTree = "<group>"; };
 		C92B825A1B303A9E00278ED5 /* ItemManagerPBE.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemManagerPBE.h; sourceTree = "<group>"; };
 		C92B825B1B303A9E00278ED5 /* ItemManagerPBE.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemManagerPBE.m; sourceTree = "<group>"; };
+		C939B4731B6A01C800B42054 /* TestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestController.m; sourceTree = "<group>"; };
+		C939B4741B6A01C800B42054 /* TestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestController.h; sourceTree = "<group>"; };
 		C93A4D2F1B2BE84400391CCE /* EnemyTowerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyTowerManager.h; sourceTree = "<group>"; };
 		C93A4D301B2BE84400391CCE /* EnemyTowerManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyTowerManager.m; sourceTree = "<group>"; };
 		C9416A911B2C560E007E0091 /* AutoQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoQueueManager.h; sourceTree = "<group>"; };
@@ -214,6 +217,15 @@
 			name = "Basic AI";
 			sourceTree = "<group>";
 		};
+		C939B4721B6A008A00B42054 /* Test Algorithms */ = {
+			isa = PBXGroup;
+			children = (
+				C939B4731B6A01C800B42054 /* TestController.m */,
+				C939B4741B6A01C800B42054 /* TestController.h */,
+			);
+			name = "Test Algorithms";
+			sourceTree = "<group>";
+		};
 		C95A779E1B14063B00052F3E = {
 			isa = PBXGroup;
 			children = (
@@ -244,6 +256,7 @@
 		C95A77A91B14063B00052F3E /* Fluffy Pug */ = {
 			isa = PBXGroup;
 			children = (
+				C939B4721B6A008A00B42054 /* Test Algorithms */,
 				C92B82531B3037C100278ED5 /* Basic AI */,
 				C92B824D1B30372200278ED5 /* Detection */,
 				C95A77AC1B14063B00052F3E /* AppDelegate.h */,
@@ -398,6 +411,7 @@
 				C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */,
 				C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */,
 				C91E65D31B1D30D200432FCA /* EnemyChampionManager.m in Sources */,
+				C939B4751B6A01C800B42054 /* TestController.m in Sources */,
 				C9A9111A1B2AC6F300DC33D1 /* ShopManagerPBE.m in Sources */,
 				C9F5E6821B1C1AD10072BB9C /* EnemyMinionManager.m in Sources */,
 				C96C94681B2A7A490003E688 /* ItemManager.m in Sources */,
@@ -474,10 +488,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.10;
 			};
 			name = Debug;
 		};
@@ -511,9 +525,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = macosx;
+				SDKROOT = macosx10.10;
 			};
 			name = Release;
 		};
@@ -532,7 +546,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = "test.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx10.10;
 			};
 			name = Debug;
 		};
@@ -551,7 +565,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_BUNDLE_IDENTIFIER = "test.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx10.10;
 			};
 			name = Release;
 		};
@@ -573,7 +587,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "test.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx10.10;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fluffy Pug.app/Contents/MacOS/Fluffy Pug";
 			};
 			name = Debug;
@@ -592,7 +606,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				PRODUCT_BUNDLE_IDENTIFIER = "test.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx10.10;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Fluffy Pug.app/Contents/MacOS/Fluffy Pug";
 			};
 			name = Release;

@@ -33,8 +33,19 @@
 
 @implementation AppDelegate
 
+- (IBAction) openViewWindow:(id)sender {
+        [_window2 orderFront: nil];
+}
+- (IBAction) getScreenshot:(id)sender {
+    saveTestScreenshot = true;
+}
+- (IBAction) testPlayButton:(id)sender {
+    testController->testPlayButton();
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    [_window2 orderFront: nil];
+    saveTestScreenshot = false;
+    
     [_window orderFront: nil];
     [NSApp activateIgnoringOtherApps:YES];
     
@@ -55,6 +66,7 @@
     [fpsTextField setFocusRingType:NSFocusRingTypeNone];
     
     leagueGameState = new LeagueGameState();
+    testController = new TestController(processedImage, unprocessedImage, targetImage, logText);
     
     [self updateWindowList];
     lastTime = clock();
@@ -153,13 +165,20 @@
     
     int bufferWidth = (int)CVPixelBufferGetWidth( sourcePixelBuffer );
     int bufferHeight = (int)CVPixelBufferGetHeight( sourcePixelBuffer );
+    
+    leagueGameState->leagueSize.size.width = bufferWidth;
+    leagueGameState->leagueSize.size.height = bufferHeight;
+    
     //size_t bytesPerRow = CVPixelBufferGetBytesPerRow( sourcePixelBuffer );
     uint8_t *baseAddress = (uint8_t *)CVPixelBufferGetBaseAddress( sourcePixelBuffer );
     
     
+    if (saveTestScreenshot) {
+        saveTestScreenshot = false;
+        testController->copyScreenShot(baseAddress, bufferWidth, bufferHeight);
+    }
     
-    
-    struct ImageData imageData = makeImageData(baseAddress, bufferWidth, leagueGameState->leagueSize.size.height);
+    struct ImageData imageData = makeImageData(baseAddress, bufferWidth, bufferHeight);
 
     
     leagueGameState->processImage(imageData);
@@ -210,6 +229,8 @@
             baseAddress[i+2] = 0;
         }
         leagueGameState->debugDraw();
+        
+        CVPixelBufferUnlockBaseAddress( sourcePixelBuffer, 0 );
         CIImage *ciImage = [CIImage imageWithCVImageBuffer:sourcePixelBuffer];
         // Create a bitmap rep from the image...
         NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCIImage:ciImage];
@@ -218,9 +239,11 @@
         [image addRepresentation:bitmapRep];
         // Set the output view to the new NSImage.
         [imageView setImage:image];
+    } else {
+        CVPixelBufferUnlockBaseAddress( sourcePixelBuffer, 0 );
     }
     
-    CVPixelBufferUnlockBaseAddress( sourcePixelBuffer, 0 );
+    //CVPixelBufferUnlockBaseAddress( sourcePixelBuffer, 0 );
     dispatch_async(dispatch_get_main_queue(), ^{
         //Display minions
         [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->allyMinionManager->minionBars.count]];
@@ -294,39 +317,6 @@
 
 CFTimeInterval lastTime;
 int loopsTaken = 0;
-
-- (void)timerLogic {
-    //Profile code? See how fast it's running?
-    if (CACurrentMediaTime() - lastTime > 3) //10 seconds
-    {
-        float time = CACurrentMediaTime() - lastTime;
-        [fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1000 / loopsTaken, (1000.0)/(time * 1000.0 / loopsTaken)]];
-        lastTime = CACurrentMediaTime();
-        loopsTaken = 0;
-        [self updateWindowList];
-        if (leagueGameState->leaguePID == -1) {
-            [statusText setStringValue:@"No League Instance Found"];
-        }
-    }
-    else
-    {
-        loopsTaken++;
-    }
-    if (leagueGameState->leaguePID != -1) {
-        CGImageRef image = [self createSingleWindowShot:leagueGameState->leaguePID andBounds:leagueGameState->leagueSize];
-        if (image == NULL) {
-            leagueGameState->leaguePID = -1;
-            return;
-        }
-        //[self setOutputImage:image];
-        //[leagueGameState processImage:image];
-        CGImageRelease(image);
-        
-        //Display minions
-        [allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)leagueGameState->allyMinionManager->minionBars.count]];
-        
-    }
-}
 
 -(void)updateWindowList
 {

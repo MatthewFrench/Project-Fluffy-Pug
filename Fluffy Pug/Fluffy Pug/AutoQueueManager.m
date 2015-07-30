@@ -36,17 +36,21 @@ void AutoQueueManager::processImage(ImageData data) {
         bool match = false;
         Position clickLocation;
         //location.x = 0; location.y = 0;
-        int xStart = 400;
+        int xStart = 300;
         int yStart = 0;
         int xEnd = imageData.imageWidth - 400;
         int yEnd = 250;
-        
+        NSLog(@"%d %d", imageData.imageWidth, imageData.imageHeight);
+        //NSLog(@"%d,%d to %d, %d", xStart, yStart, xEnd, yEnd);
         Position playLocation = detectRelativeImageInImage(step1_PlayButton, data, 0.83, xStart, yStart, xEnd, yEnd);
         if (playLocation.x != -1) {
+            NSLog(@"Found play button");
             playButtonLocation = playLocation;
             clickLocation = playButtonLocation;
             match = true;
             currentStep = STEP_1;
+        } else {
+            NSLog(@"Did not find play button");
         }
         
          xStart = 0;
@@ -95,7 +99,7 @@ void AutoQueueManager::processImage(ImageData data) {
             }break;
             case STEP_5: {
                 clickLocation.x = playButtonLocation.x +300;
-                clickLocation.y = playButtonLocation.y +150;
+                clickLocation.y = playButtonLocation.y +180;
                 match = true;
                 //match = detectRelativeImageInImage(step5_BlindPickMode, data, location, 0.7);
                 //location.x += 675; location.y += 114;
@@ -211,7 +215,10 @@ void AutoQueueManager::processImage(ImageData data) {
         if (match) {
             NSLog(@"Clicked location %d %d", clickLocation.x + 10, clickLocation.y+10);
             doubleTapMouseLeft(clickLocation.x + 10, clickLocation.y+10);
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 10), dispatch_get_main_queue(), ^{ // one
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60.0), dispatch_get_main_queue(), ^{ // one
+                doubleTapMouseLeft(clickLocation.x + 10, clickLocation.y+10);
+            });
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 5.0), dispatch_get_main_queue(), ^{ // one
                 moveMouse(0, 0);
             });
             //tapMouseLeft(location.x + 10, location.y+10);
@@ -231,9 +238,12 @@ void AutoQueueManager::checkForEndGame(ImageData data) {
         int xEnd = imageData.imageWidth/2 + 150;
         int yEnd = imageData.imageHeight * 0.68125 + 100;
         
-        if ((location = detectRelativeImageInImage(step11_EndGameContinueButton, data, 0.7, xStart, yStart, xEnd, yEnd)).x != -1) {
+        if ((location = detectRelativeImageInImage(step11_EndGameContinueButton, data, 0.65, xStart, yStart, xEnd, yEnd)).x != -1) {
             doubleTapMouseLeft(location.x + 5, location.y+5);
             moveMouse(location.x + 5, location.y+5);
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60.0), dispatch_get_main_queue(), ^{ // one
+                doubleTapMouseLeft(location.x + 5, location.y+5);
+            });
             NSLog(@"Clicked end game button");
         }
         currentStep = STEP_12;
