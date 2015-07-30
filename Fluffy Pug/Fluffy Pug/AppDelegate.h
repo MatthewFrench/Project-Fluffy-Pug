@@ -13,7 +13,7 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     IBOutlet NSTextField* statusText, *fpsText, *allyMinionText, *enemyMinionText, *enemyChampionText, *selfChampionText, *allyChampionText;
-    IBOutlet NSImageView* unprocessedImage, *processedImage, *targetImage;
+    IBOutlet NSImageView* unprocessedImage, *processedImage, *targetImage, *foundImage;
     IBOutlet NSTextView* logText;
     NSTimer* timer;
     LeagueGameState* leagueGameState;

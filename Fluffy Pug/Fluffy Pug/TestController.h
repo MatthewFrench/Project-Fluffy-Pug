@@ -10,10 +10,10 @@ class TestController {
     ImageData testImage;
     ImageData playButton;
     
-    NSImageView* processedImageView, *unprocessedImageView, *targetImageView;
+    NSImageView* processedImageView, *unprocessedImageView, *targetImageView, *foundImageView;
     NSTextView* logText;
 public:
-    TestController(NSImageView* processedImageView, NSImageView *unprocessedImageView, NSImageView* targetImageView, NSTextView* logText);
+    TestController(NSImageView* processedImageView, NSImageView *unprocessedImageView, NSImageView* targetImageView, NSImageView* foundImage, NSTextView* logText);
     void copyScreenShot(uint8 *baseAddress, int bufferWidth, int bufferHeight);
     void displayPreprocessedScreenShot();
     void testPlayButton();

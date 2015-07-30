@@ -12,6 +12,9 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AppKit/AppKit.h>
+#include <mach/mach.h>
+#include <mach/mach_time.h>
+#include <unistd.h>
 
 struct ImageData {
     //CFDataRef rawData;
@@ -49,6 +52,7 @@ inline int getRandomInteger(int minimum, int maximum);
 inline  MinionBar makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health);
 inline  Pixel getPixel( ImageData imageData, int x, int y);
 inline  uint8_t* getPixel2( ImageData imageData, int x, int y);
+inline  uint8_t* getPixel3( uint8_t *baseAddress, int x, int y, int width);
 inline void setPixel( ImageData imageData, int x, int y, int r, int g, int b);
 inline void drawRect( ImageData imageData, int left, int top, int width, int height, int r, int g, int b);
 inline BOOL isPixelColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
@@ -66,9 +70,66 @@ inline double getColorPercentage(const uint8_t *pixel, const uint8_t *pixel2);
 inline bool colorInPercentage(const uint8_t *pixel, const uint8_t *pixel2, double percentage);
 inline double getImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image);
 inline uint8 * copyImageBuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
+inline uint8 * copyImageBufferSection(uint8 *baseAddress, int bufferWidth, int bufferHeight, int copyX, int copyY, int copyWidth, int copyHeight) ;
 inline uint8 * copyImageBufferFromBGRAtoRGBA(uint8 *baseAddress, int bufferWidth, int bufferHeight);
 inline NSImage* getImageFromBGRABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
 inline NSImage* getImageFromRGBABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
+inline void detectClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition);
+inline int getTimeInMilliseconds(int64_t absoluteTime);
+
+extern inline int getTimeInMilliseconds(int64_t absoluteTime)
+{
+    const int64_t kOneMillion = 1000 * 1000;
+    static mach_timebase_info_data_t s_timebase_info;
+    
+    if (s_timebase_info.denom == 0) {
+        (void) mach_timebase_info(&s_timebase_info);
+    }
+    
+    // mach_absolute_time() returns billionth of seconds,
+    // so divide by one million to get milliseconds
+    return (int)((absoluteTime * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
+}
+
+extern inline uint8 * copyImageBufferSection(uint8 *baseAddress, int bufferWidth, int bufferHeight, int copyX, int copyY, int copyWidth, int copyHeight) {
+    uint8 * testImage = (UInt8*) calloc (copyWidth * copyHeight * 4,sizeof(UInt8));
+    for (int x = copyX; x < copyX+copyWidth; x++) {
+        for (int y = copyY; y < copyY+copyHeight; y++) {
+            uint8 *largePixel = getPixel3(baseAddress, x, y, bufferWidth);
+            uint8 *newPixel = getPixel3(testImage, x - copyX, y - copyY, copyWidth);
+            newPixel[0] = largePixel[0];
+            newPixel[1] = largePixel[1];
+            newPixel[2] = largePixel[2];
+            newPixel[3] = largePixel[3];
+        }
+    }
+    return testImage;
+}
+extern inline void detectClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition) {
+    double highestPercent = 0.0;
+    Position location;
+    location.x = -1; location.y = -1;
+    
+    for (int y = yStart; y < yEnd; y++) {
+        uint8_t *pixel = getPixel2(largeImage, xStart, y);
+        for (int x = xStart; x < xEnd; x++) {
+            double percent = getImageAtPixelPercentage(pixel, x, y, largeImage.imageWidth, largeImage.imageHeight, smallImage);
+            if (percent > highestPercent) {
+                location.x = x; location.y = y;
+                highestPercent = percent;
+            }// else if (percent < highestPercent) { //Skip ahead if not even a close match
+            //    int skip = floor(smallImage.imageWidth*(1.0-percent)/2);
+                //NSLog(@"Skipping %d", skipyy);
+            //    x += skip;
+            //    pixel += skip*4;
+            //}
+            pixel += 4;
+        }
+    }
+    //NSLog(@"Highest match: %f at position %d %d", highestPercent, location.x, location.y);
+    returnPercentage = highestPercent;
+    returnPosition = location;
+}
 
 
 extern inline NSImage* getImageFromRGBABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight) {
@@ -373,6 +434,10 @@ extern Pixel getPixel(struct ImageData imageData, int x, int y) {
 extern uint8_t* getPixel2(struct ImageData imageData, int x, int y) {
     uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + x)*4;
     return pixel;
+}
+
+extern uint8_t* getPixel3(uint8_t *baseAddress, int x, int y, int width) {
+    return baseAddress + (y * width + x)*4;
 }
 
 

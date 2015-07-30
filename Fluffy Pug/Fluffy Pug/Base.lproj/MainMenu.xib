@@ -21,6 +21,7 @@
                 <outlet property="debugCheckbox" destination="hCP-l2-ffx" id="T47-5N-KAp"/>
                 <outlet property="enemyChampionText" destination="Jkg-Ns-ebB" id="EaG-AZ-wSf"/>
                 <outlet property="enemyMinionText" destination="wip-Tv-DnA" id="8na-cw-RiO"/>
+                <outlet property="foundImage" destination="uPF-fW-ond" id="tpX-cg-F09"/>
                 <outlet property="fpsText" destination="l1p-00-dqi" id="bKz-1N-N0J"/>
                 <outlet property="fpsTextField" destination="aZP-sd-Njt" id="0m2-TA-WTl"/>
                 <outlet property="imageView" destination="HHv-Ka-ht7" id="pl5-KH-twK"/>
@@ -1061,6 +1062,21 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                             <animations/>
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="Wfg-TQ-kcp"/>
+                                        </imageView>
+                                    </subviews>
+                                    <animations/>
+                                </view>
+                            </tabViewItem>
+                            <tabViewItem label="Found Image" identifier="" id="k6Z-2P-6fe">
+                                <view key="view" id="Byi-4b-5fq">
+                                    <rect key="frame" x="10" y="33" width="522" height="398"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="uPF-fW-ond">
+                                            <rect key="frame" x="14" y="14" width="494" height="384"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                            <animations/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="wwi-di-mXy"/>
                                         </imageView>
                                     </subviews>
                                     <animations/>

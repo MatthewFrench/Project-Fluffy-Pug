@@ -67,7 +67,7 @@
     [fpsTextField setFocusRingType:NSFocusRingTypeNone];
     
     leagueGameState = new LeagueGameState();
-    testController = new TestController(processedImage, unprocessedImage, targetImage, logText);
+    testController = new TestController(processedImage, unprocessedImage, targetImage, foundImage, logText);
     
     [self updateWindowList];
     lastTime = clock();

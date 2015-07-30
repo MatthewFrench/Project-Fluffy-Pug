@@ -8,10 +8,11 @@
 
 #import "TestController.h"
 
-TestController::TestController(NSImageView* processedImageView, NSImageView *unprocessedImageView, NSImageView* targetImageView, NSTextView* logText) {
+TestController::TestController(NSImageView* processedImageView, NSImageView *unprocessedImageView, NSImageView* targetImageView, NSImageView* foundImage, NSTextView* logText) {
     this->processedImageView = processedImageView;
     this->unprocessedImageView = unprocessedImageView;
     this->targetImageView = targetImageView;
+    this->foundImageView = foundImage;
     this->logText = logText;
     testImage.imageData = NULL;
     playButton = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(1) Play Button" ofType:@"png"]);
@@ -33,9 +34,12 @@ void TestController::displayPreprocessedScreenShot() {
 void TestController::testPlayButton() {
     [targetImageView setImage:getImageFromBGRABuffer(playButton.imageData, playButton.imageWidth, playButton.imageHeight)];
     log(@"Testing Play Button Detection...");
+    uint64 startTime = mach_absolute_time();
     double returnPercentage;
-    Position playLocation = detectRelativeImageInImagePercentage(playButton, testImage, 0.83, 0, 0, testImage.imageWidth, testImage.imageHeight, returnPercentage);
-    log([NSString stringWithFormat:@"Results -- Location: %d, %d with percentage %f", playLocation.x, playLocation.y, returnPercentage]);
+    Position playLocation;
+    detectClosestImageToImage(playButton, testImage, 0, 0, testImage.imageWidth, testImage.imageHeight, returnPercentage, playLocation);
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Location: %d, %d with percentage %f%% and took %f seconds", playLocation.x, playLocation.y, returnPercentage*100, getTimeInMilliseconds(endTime-startTime)/1000.0]);
     
     //Highlight the areas of the image that match
     uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
@@ -55,6 +59,8 @@ void TestController::testPlayButton() {
         }
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, playLocation.x, playLocation.y, playButton.imageWidth, playButton.imageHeight);
+    [foundImageView setImage: getImageFromBGRABuffer(image2, playButton.imageWidth, playButton.imageHeight)];
 }
 void TestController::log(NSString* string) {
     [[logText textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n", string]]];
