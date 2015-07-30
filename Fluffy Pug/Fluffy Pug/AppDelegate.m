@@ -47,6 +47,7 @@
     saveTestScreenshot = false;
     
     [_window orderFront: nil];
+    [_window2 setLevel: NSNormalWindowLevel];
     [NSApp activateIgnoringOtherApps:YES];
     
     
