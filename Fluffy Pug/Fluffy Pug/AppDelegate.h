@@ -17,25 +17,26 @@
 #import <IOSurface/IOSurface.h>
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
-    IBOutlet NSTextField* statusText, *allyMinionText, *enemyMinionText, *enemyChampionText, *selfChampionText, *allyChampionText;
-    IBOutlet NSImageView* unprocessedImage, *processedImage, *targetImage, *foundImage;
+    @public IBOutlet NSTextField* statusText, *allyMinionText, *enemyMinionText, *enemyChampionText, *selfChampionText, *allyChampionText;
+    @public IBOutlet NSImageView* unprocessedImage, *processedImage, *targetImage, *foundImage;
     IBOutlet NSTextView* logText;
+    @public IBOutlet NSTextField *fpsText, *screenAnalyzeText;
     NSTimer* timer;
-    LeagueGameState* leagueGameState;
+    @public LeagueGameState* leagueGameState;
     //AVCaptureScreenInput *input;
     
     //AVCaptureSession *mSession;
     
     IBOutlet NSImageView* imageView;
     IBOutlet NSButton* debugCheckbox;
-    IBOutlet NSButton* autoQueueCheckbox, *recordScreenCheckbox, *aiActiveCheckbox;
+    @public IBOutlet NSButton* autoQueueCheckbox, *recordScreenCheckbox, *aiActiveCheckbox;
     //IBOutlet NSTextField* fpsTextField;
     //int chosenFPS;
     
     double lastSaveImage;
     
-    bool saveTestScreenshot;
-    TestController* testController;
+    @public bool saveTestScreenshot;
+    @public TestController* testController;
     LeagueDetector* leagueDetector;
     
     dispatch_queue_t streamQueue;
@@ -44,8 +45,6 @@
 }
 @property (strong) id activity;
 @property (weak) IBOutlet NSWindow *window, *window2;
-@property (weak) IBOutlet NSTextField *fpsText, *screenAnalyzeText;
-@property(weak) IBOutlet NSImageView* unprocessedImage;
 
 - (IBAction) openViewWindow:(id)sender;
 - (IBAction) getScreenshot:(id)sender;

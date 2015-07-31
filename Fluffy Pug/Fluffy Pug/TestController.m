@@ -29,7 +29,10 @@ void TestController::copyScreenShot(uint8 *baseAddress, int bufferWidth, int buf
     displayPreprocessedScreenShot();
 }
 void TestController::displayPreprocessedScreenShot() {
-    [unprocessedImageView setImage: getImageFromBGRABuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight)];
+    NSImage* image = getImageFromBGRABuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: image];
+    });
 }
 void TestController::testPlayButton() {
     [targetImageView setImage:getImageFromBGRABuffer(playButton.imageData, playButton.imageWidth, playButton.imageHeight)];
@@ -37,7 +40,7 @@ void TestController::testPlayButton() {
     uint64 startTime = mach_absolute_time();
     double returnPercentage;
     Position playLocation;
-    detectClosestImageToImage(playButton, testImage, 0, 0, testImage.imageWidth, testImage.imageHeight, returnPercentage, playLocation);
+    detectClosestImageToImage(playButton, testImage, 0, 0, testImage.imageWidth, testImage.imageHeight, returnPercentage, playLocation, 0.8, true);
     uint64 endTime = mach_absolute_time();
     log([NSString stringWithFormat:@"Results -- Location: %d, %d with percentage %f%% and took %f seconds", playLocation.x, playLocation.y, returnPercentage*100, getTimeInMilliseconds(endTime-startTime)/1000.0]);
     

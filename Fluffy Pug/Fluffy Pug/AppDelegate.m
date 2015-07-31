@@ -54,7 +54,9 @@
     CGDisplayModeRelease(mode);
     
     //stream = CGDisplayStreamCreate(display_id, pixelWidth, pixelHeight, 'BGRA', NULL, handleStream);
-    stream = CGDisplayStreamCreateWithDispatchQueue(display_id, pixelWidth, pixelHeight, 'BGRA', NULL, streamQueue, handleStream);
+    stream = CGDisplayStreamCreateWithDispatchQueue(display_id, pixelWidth, pixelHeight, 'BGRA',
+                                                    (__bridge CFDictionaryRef)(@{(__bridge NSString *)kCGDisplayStreamQueueDepth : @1,  (__bridge NSString *)kCGDisplayStreamShowCursor: @NO})
+                                                    , streamQueue, handleStream);
     
     lastTime = mach_absolute_time();
     CGDisplayStreamStart(stream);
@@ -171,12 +173,24 @@ AppDelegate *GlobalSelf;
     if (getTimeInMilliseconds(mach_absolute_time() - lastTime) > 500)
     {
         int time = getTimeInMilliseconds(mach_absolute_time() - lastTime);
-        [GlobalSelf.fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / loops, (1000.0)/(time * 1.0 / loops)]];
-        [GlobalSelf.screenAnalyzeText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / screenLoops, (1000.0)/(time * 1.0 / screenLoops)]];
+        [GlobalSelf->fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / loops, (1000.0)/(time * 1.0 / loops)]];
+        [GlobalSelf->screenAnalyzeText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / screenLoops, (1000.0)/(time * 1.0 / screenLoops)]];
         lastTime = mach_absolute_time();
         loops = 0;
         screenLoops = 0;
         [GlobalSelf updateLeagueWindowStatus];
+        
+        /**** I DONT BELIEVE THIS IS THREAD SAFE ***/
+        //Display minions
+        [GlobalSelf->allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->allyMinionManager->minionBars.count]];
+        
+        [GlobalSelf->enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->enemyMinionManager->minionBars.count]];
+        
+        [GlobalSelf->enemyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->enemyChampionManager->championBars.count]];
+        
+        [GlobalSelf->allyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->allyChampionManager->championBars.count]];
+        
+        [GlobalSelf->selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->selfChampionManager->championBars.count]];
     }
     else
     {
@@ -202,7 +216,7 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     
     //uint8_t * newPtr = copyImageBufferFromBGRAtoRGBA(basePtr, width, height);
     
-    NSImage* image = getImageFromBGRABuffer(basePtr, width, height);
+    //NSImage* image = getImageFromBGRABuffer(basePtr, width, height);
     
     /*
     CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, basePtr, (width * height * 4), NULL);
@@ -214,10 +228,66 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     
     NSImage* image = [[NSImage alloc] initWithCGImage:cgImage size:NSMakeSize(width, height)];
      */
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [GlobalSelf.unprocessedImage setImage: image];
+    //dispatch_async(dispatch_get_main_queue(), ^{
+    //    [GlobalSelf.unprocessedImage setImage: image];
         //free(newPtr);
-    });
+    //});
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    GlobalSelf->leagueGameState->autoQueueActive = [GlobalSelf->autoQueueCheckbox state] == NSOnState;
+    
+    GlobalSelf->leagueGameState->leagueSize.size.width = width;
+    GlobalSelf->leagueGameState->leagueSize.size.height = height;
+    
+    
+    if (GlobalSelf->saveTestScreenshot) {
+        GlobalSelf->saveTestScreenshot = false;
+       GlobalSelf-> testController->copyScreenShot(basePtr, width, height);
+    }
+    
+    struct ImageData imageData = makeImageData(basePtr, width, height);
+    
+    
+    GlobalSelf->leagueGameState->processImage(imageData);
+    
+    if ([GlobalSelf->aiActiveCheckbox state] == NSOnState && GlobalSelf->leagueGameState->leaguePID != -1) {
+        GlobalSelf->leagueGameState->processAI();
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     IOSurfaceUnlock(frameSurface, kIOSurfaceLockReadOnly, &aseed);
     

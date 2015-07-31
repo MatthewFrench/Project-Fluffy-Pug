@@ -697,7 +697,7 @@
                 <subviews>
                     <tabView id="Jc9-cP-pXh">
                         <rect key="frame" x="13" y="10" width="492" height="375"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                         <animations/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
@@ -1005,7 +1005,7 @@
                 </subviews>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="-222" y="223.5"/>
+            <point key="canvasLocation" x="-247" y="216.5"/>
         </window>
         <window title="Screen Shot Viewer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="VMG-ED-3M6" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES" HUD="YES"/>
