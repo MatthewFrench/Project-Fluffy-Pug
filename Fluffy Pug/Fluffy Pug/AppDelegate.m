@@ -8,42 +8,10 @@
 
 #import "AppDelegate.h"
 
-@interface WindowListApplierData : NSObject
-{
-}
-
-@property (strong, nonatomic) NSMutableArray * outputArray;
-@property int order;
-
-@end
-
-@implementation WindowListApplierData
-
--(instancetype)initWindowListData:(NSMutableArray *)array
-{
-    self = [super init];
-    
-    self.outputArray = array;
-    self.order = 0;
-    
-    return self;
-}
-
-@end
-
 @implementation AppDelegate
 
-- (IBAction) openViewWindow:(id)sender {
-        [_window2 orderFront: nil];
-}
-- (IBAction) getScreenshot:(id)sender {
-    saveTestScreenshot = true;
-}
-- (IBAction) testPlayButton:(id)sender {
-    testController->testPlayButton();
-}
-
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    GlobalSelf = self;
     saveTestScreenshot = false;
     
     [_window orderFront: nil];
@@ -64,19 +32,49 @@
     //                                       userInfo:nil
     //                                        repeats:YES];
     
-    [fpsTextField setFocusRingType:NSFocusRingTypeNone];
+    //[fpsTextField setFocusRingType:NSFocusRingTypeNone];
     
     leagueGameState = new LeagueGameState();
     testController = new TestController(processedImage, unprocessedImage, targetImage, foundImage, logText);
+    leagueDetector = new LeagueDetector();
     
-    [self updateWindowList];
-    lastTime = clock();
+    [self updateLeagueWindowStatus];
+    //lastTime = clock();
+    
+    streamQueue = dispatch_queue_create("herp.derp.mcgerp", NULL);
+    
+    CGDirectDisplayID display_id;
+    display_id = CGMainDisplayID();
+    
+    CGDisplayModeRef mode = CGDisplayCopyDisplayMode(display_id);
+    
+    size_t pixelWidth = CGDisplayModeGetPixelWidth(mode);
+    size_t pixelHeight = CGDisplayModeGetPixelHeight(mode);
+    
+    CGDisplayModeRelease(mode);
+    
+    //stream = CGDisplayStreamCreate(display_id, pixelWidth, pixelHeight, 'BGRA', NULL, handleStream);
+    stream = CGDisplayStreamCreateWithDispatchQueue(display_id, pixelWidth, pixelHeight, 'BGRA', NULL, streamQueue, handleStream);
+    
+    lastTime = mach_absolute_time();
+    CGDisplayStreamStart(stream);
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:1.0/1000.0
+                                             target:self
+                                           selector:@selector(logic)
+                                           userInfo:nil
+                                            repeats:YES];
+    
+    //sleep(1);
+    
+    //CGDisplayStreamStop(stream);
+    
+    
+    //printf("Done!\n");
     
     
     
-    
-    
-    
+    /*
     // Create a capture session
     mSession = [[AVCaptureSession alloc] init];
     
@@ -107,7 +105,7 @@
         NSLog(@"Couldn't add screen capture input");
     }
     
-    //**********************Add output here
+    // **********************Add output here
     //dispatch_queue_t _videoDataOutputQueue;
     //_videoDataOutputQueue = dispatch_queue_create( "com.apple.sample.capturepipeline.video", DISPATCH_QUEUE_SERIAL );
     //dispatch_set_target_queue( _videoDataOutputQueue, dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0 ) );
@@ -133,27 +131,163 @@
     [mSession startRunning];
     
     chosenFPS = 60;
+     */
+}
+- (void)applicationWillTerminate:(NSNotification *)aNotification {
+    // Insert code here to tear down your application
+    CGDisplayStreamStop(stream);
+}
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication {
+    return YES;
+}
+- (IBAction) openViewWindow:(id)sender {
+    [_window2 orderFront: nil];
+}
+- (IBAction) getScreenshot:(id)sender {
+    saveTestScreenshot = true;
+}
+- (IBAction) testPlayButton:(id)sender {
+    testController->testPlayButton();
+}
+- (void) updateLeagueWindowStatus {
+    leagueDetector->detectLeagueWindow();
+    if (leagueDetector->leaguePID != -1) {
+        leagueGameState->leagueSize = CGRectMake(leagueDetector->xOrigin, leagueDetector->yOrigin, leagueDetector->width, leagueDetector->height);
+        //NSLog(@"Width: %f, height: %f", [width floatValue], [height floatValue]);
+        //NSLog(@"Found league instance: %@", info);
+        [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", leagueGameState->leagueSize.size.width, leagueGameState->leagueSize.size.height]];
+    } else {
+        [statusText setStringValue:@"No League Instance Found"];
+    }
 }
 
+uint64_t lastTime = 0;
+int loops = 0;
+int screenLoops = 0;
+AppDelegate *GlobalSelf;
+
+- (void) logic {
+    //Profile code
+    if (getTimeInMilliseconds(mach_absolute_time() - lastTime) > 500)
+    {
+        int time = getTimeInMilliseconds(mach_absolute_time() - lastTime);
+        [GlobalSelf.fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / loops, (1000.0)/(time * 1.0 / loops)]];
+        [GlobalSelf.screenAnalyzeText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / screenLoops, (1000.0)/(time * 1.0 / screenLoops)]];
+        lastTime = mach_absolute_time();
+        loops = 0;
+        screenLoops = 0;
+        [GlobalSelf updateLeagueWindowStatus];
+    }
+    else
+    {
+        loops++;
+    }
+}
+
+void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDisplayStreamUpdateRef) =  ^(CGDisplayStreamFrameStatus status,
+                                                                                                        uint64_t displayTime,
+                                                                                                        IOSurfaceRef frameSurface,
+                                                                                                        CGDisplayStreamUpdateRef updateRef)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        screenLoops++;
+    });
+    //uint32_t aseed;
+    //IOSurfaceLock(ref, kIOSurfaceLockReadOnly, &aseed);
+    uint32_t width = (uint32_t)IOSurfaceGetWidth(frameSurface);
+    uint32_t height = (uint32_t)IOSurfaceGetHeight(frameSurface);
+    uint32_t bytesPerRow = (uint32_t)IOSurfaceGetBytesPerRow(frameSurface);
+    uint8_t * basePtr = (uint8_t*)IOSurfaceGetBaseAddress(frameSurface);
+    
+    NSLog(@"Width: %d, Height: %d, bytesPerRow: %d", width, height, bytesPerRow);
+    
+    uint8_t * newPtr = copyImageBufferFromBGRAtoRGBA(basePtr, width, height);
+    
+    NSImage* image = getImageFromRGBABuffer(newPtr, width, height);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [GlobalSelf.unprocessedImage setImage: image];
+        free(newPtr);
+    });
+    
+    
+    //printf("handleStream called!\n");
+    /*
+    if(displayTime - last_time < 500000000)
+        return;
+    
+    last_time = displayTime;
+     */
+    /*
+     kCGDisplayStreamFrameStatusFrameComplete,
+     kCGDisplayStreamFrameStatusFrameIdle,
+     kCGDisplayStreamFrameStatusFrameBlank,
+     kCGDisplayStreamFrameStatusStopped,
+     */
+    /*
+    printf("\tstatus: ");
+    switch(status)
+    {
+        case kCGDisplayStreamFrameStatusFrameComplete:
+            printf("Complete\n");
+            break;
+            
+        case kCGDisplayStreamFrameStatusFrameIdle:
+            printf("Idle\n");
+            break;
+            
+        case kCGDisplayStreamFrameStatusFrameBlank:
+            printf("Blank\n");
+            break;
+            
+        case kCGDisplayStreamFrameStatusStopped:
+            printf("Stopped\n");
+            break;
+    }
+    
+    printf("\ttime: %lld\n", displayTime);
+    
+    const CGRect * rects;
+    
+    size_t num_rects;
+    
+    rects = CGDisplayStreamUpdateGetRects(updateRef, kCGDisplayStreamUpdateDirtyRects, &num_rects);
+    
+    printf("\trectangles: %zd\n", num_rects);
+    
+    CGRect uRect;
+    
+    uRect = *rects;
+    for (size_t i = 0; i < num_rects; i++)
+    {
+        printf("\t\t(%f,%f),(%f,%f)\n\n",
+               (rects+i)->origin.x,
+               (rects+i)->origin.y,
+               (rects+i)->origin.x + (rects+i)->size.width,
+               (rects+i)->origin.y + (rects+i)->size.height);
+        
+        uRect = CGRectUnion(uRect, *(rects+i));
+    }
+    
+    printf("\t\tUnion: (%f,%f),(%f,%f)\n\n",
+           uRect.origin.x,
+           uRect.origin.y,
+           uRect.origin.x + uRect.size.width,
+           uRect.origin.y + uRect.size.height);
+    */
+};
 
 
-
+/*
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
 {
     //NSLog(@"Captures output from sample buffer");
     //CMFormatDescriptionRef formatDescription = CMSampleBufferGetFormatDescription( sampleBuffer );
-    /*
-     if ( self.outputVideoFormatDescription == nil ) {
-     // Don't render the first sample buffer.
-     // This gives us one frame interval (33ms at 30fps) for setupVideoPipelineWithInputFormatDescription: to complete.
-     // Ideally this would be done asynchronously to ensure frames don't back up on slower devices.
-     [self setupVideoPipelineWithInputFormatDescription:formatDescription];
-     }
-     else {*/
+
     [self renderVideoSampleBuffer:sampleBuffer];
     //}
-}
-
+}*/
+/*
 - (void)renderVideoSampleBuffer:(CMSampleBufferRef)sampleBuffer
 {
     leagueGameState->autoQueueActive = [autoQueueCheckbox state] == NSOnState;
@@ -180,7 +314,7 @@
     }
     
     struct ImageData imageData = makeImageData(baseAddress, bufferWidth, bufferHeight);
-
+    
     
     leagueGameState->processImage(imageData);
     
@@ -257,41 +391,39 @@
         
         [selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)leagueGameState->selfChampionManager->championBars.count]];
         
-    //Read FPS
-    NSString* fps = [fpsTextField stringValue];
-    int newFps = [fps intValue];
-    if (newFps == 0) {
-        [fpsTextField setStringValue:[NSString stringWithFormat:@"%d",chosenFPS]];
-        newFps = chosenFPS;
-    }
-    if (chosenFPS != newFps) {
-        chosenFPS = newFps;
-        input.minFrameDuration = CMTimeMake(1, chosenFPS);
-    }
-    
-    //Profile code? See how fast it's running?
-    if ((clock() - lastTime)/CLOCKS_PER_SEC > 0.5)
-    {
-        float time = (clock() - lastTime)/CLOCKS_PER_SEC;
-        [fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1000 / loopsTaken, (1000.0)/(time * 1000.0 / loopsTaken)]];
-        lastTime = clock();
-        loopsTaken = 0;
-        [self updateWindowList];
-        if (leagueGameState->leaguePID == -1) {
-            [statusText setStringValue:@"No League Instance Found"];
+        //Read FPS
+        NSString* fps = [fpsTextField stringValue];
+        int newFps = [fps intValue];
+        if (newFps == 0) {
+            [fpsTextField setStringValue:[NSString stringWithFormat:@"%d",chosenFPS]];
+            newFps = chosenFPS;
+        }
+        if (chosenFPS != newFps) {
+            chosenFPS = newFps;
+            input.minFrameDuration = CMTimeMake(1, chosenFPS);
         }
         
+        //Profile code? See how fast it's running?
+        if ((clock() - lastTime)/CLOCKS_PER_SEC > 0.5)
+        {
+            float time = (clock() - lastTime)/CLOCKS_PER_SEC;
+            [fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1000 / loopsTaken, (1000.0)/(time * 1000.0 / loopsTaken)]];
+            lastTime = clock();
+            loopsTaken = 0;
+            [self updateLeagueWindowStatus];
+            
             [_window update];
             [_window setViewsNeedDisplay:TRUE];
-       
-    }
-    else
-    {
-        loopsTaken++;
-    }
-     });
+            
+        }
+        else
+        {
+            loopsTaken++;
+        }
+    });
 }
 
+*/
 
 
 
@@ -308,50 +440,11 @@
 
 
 
-
-- (void)applicationWillTerminate:(NSNotification *)aNotification {
-    // Insert code here to tear down your application
-}
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication {
-    return YES;
-}
-
+/*
 CFTimeInterval lastTime;
 int loopsTaken = 0;
+*/
 
--(void)updateWindowList
-{
-    // Ask the window server for the list of windows.
-    CFArrayRef windowList = CGWindowListCopyWindowInfo(kCGWindowListOptionAll, kCGNullWindowID);
-    
-    // Copy the returned list, further pruned, to another list. This also adds some bookkeeping
-    // information to the list as well as
-    NSMutableArray * prunedWindowList = [NSMutableArray array];
-    WindowListApplierData *windowListData = [[WindowListApplierData alloc] initWindowListData:prunedWindowList];
-    
-    CFArrayApplyFunction(windowList, CFRangeMake(0, CFArrayGetCount(windowList)), &WindowListApplierFunction, (__bridge void *)(windowListData));
-    CFRelease(windowList);
-    
-    //for (int i = 0; i < [prunedWindowList count]; i++) {
-    //    NSLog(@"Data at %d is %@", i, [prunedWindowList objectAtIndex:i]);
-    //}
-    leagueGameState->leaguePID = -1;
-    if ([prunedWindowList count] > 0) {
-        NSDictionary* info = [prunedWindowList firstObject];
-        NSNumber *pid = info[kAppPIDKey];
-        leagueGameState->leaguePID = [pid intValue];
-        NSNumber* xOrigin = info[kWindowOriginXKey];
-        NSNumber* yOrigin = info[kWindowOriginYKey];
-        NSNumber* width = info[kWindowWidthKey];
-        NSNumber* height = info[kWindowHeightKey];
-        leagueGameState->leagueSize = CGRectMake([xOrigin floatValue], [yOrigin floatValue], [width floatValue], [height floatValue]);
-        //NSLog(@"Width: %f, height: %f", [width floatValue], [height floatValue]);
-        //NSLog(@"Found league instance: %@", info);
-        [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", leagueGameState->leagueSize.size.width, leagueGameState->leagueSize.size.height]];
-    } else {
-        [statusText setStringValue:@"No League Instance Found"];
-    }
-}
 /*
  -(void)setOutputImage:(CGImageRef)cgImage
  {
@@ -366,98 +459,25 @@ int loopsTaken = 0;
  [outputView setImage:image];
  }
  }*/
+/*
+ -(void)createScreenShot
+ {
+ CGImageRef screenShot = CGWindowListCreateImage(CGRectInfinite, kCGWindowListOptionOnScreenOnly, kCGNullWindowID, kCGWindowImageDefault);
+ //[self setOutputImage:screenShot];
+ CGImageRelease(screenShot);
+ }
+ 
+ -(CGImageRef)createSingleWindowShot:(CGWindowID)windowID andBounds:(CGRect)imageBounds
+ {
+ //CGRect imageBounds = CGRectInfinite;
+ CGWindowListOption singleWindowListOptions = kCGWindowListOptionAll;
+ CGWindowImageOption imageOptions = kCGWindowImageDefault;
+ 
+ CGImageRef windowImage = CGWindowListCreateImage(imageBounds, singleWindowListOptions, windowID, imageOptions);
+ return windowImage;
+ }*/
 
--(void)createScreenShot
-{
-    CGImageRef screenShot = CGWindowListCreateImage(CGRectInfinite, kCGWindowListOptionOnScreenOnly, kCGNullWindowID, kCGWindowImageDefault);
-    //[self setOutputImage:screenShot];
-    CGImageRelease(screenShot);
-}
 
--(CGImageRef)createSingleWindowShot:(CGWindowID)windowID andBounds:(CGRect)imageBounds
-{
-    //CGRect imageBounds = CGRectInfinite;
-    CGWindowListOption singleWindowListOptions = kCGWindowListOptionAll;
-    CGWindowImageOption imageOptions = kCGWindowImageDefault;
-    
-    CGImageRef windowImage = CGWindowListCreateImage(imageBounds, singleWindowListOptions, windowID, imageOptions);
-    return windowImage;
-}
-
-
-#pragma mark Window List & Window Image Methods
-
-NSString *kAppNameKey = @"applicationName";	// Application Name
-NSString *kAppPIDKey = @"applicationPID";	// Application PID
-NSString *kWindowOriginXKey = @"windowOriginX";
-NSString *kWindowOriginYKey = @"windowOriginY";
-NSString *kWindowWidthKey = @"windowWidth";
-NSString *kWindowHeightKey = @"windowHeight";
-NSString *kWindowIDKey = @"windowID";			// Window ID
-NSString *kWindowLevelKey = @"windowLevel";	// Window Level
-NSString *kWindowOrderKey = @"windowOrder";	// The overall front-to-back ordering of the windows as returned by the window server
-
-void WindowListApplierFunction(const void *inputDictionary, void *context);
-void WindowListApplierFunction(const void *inputDictionary, void *context)
-{
-    NSDictionary *entry = (__bridge NSDictionary*)inputDictionary;
-    WindowListApplierData *data = (__bridge WindowListApplierData*)context;
-    
-    // The flags that we pass to CGWindowListCopyWindowInfo will automatically filter out most undesirable windows.
-    // However, it is possible that we will get back a window that we cannot read from, so we'll filter those out manually.
-    int sharingState = [entry[(__bridge id)kCGWindowSharingState] intValue];
-    if(sharingState != kCGWindowSharingNone)
-    {
-        NSMutableDictionary *outputEntry = [NSMutableDictionary dictionary];
-        // Grab the application name, but since it's optional we need to check before we can use it.
-        NSString *applicationName = entry[(__bridge id)kCGWindowOwnerName];
-        if(applicationName != NULL && [applicationName isEqualToString:@"League Of Legends"])
-        {
-            // PID is required so we assume it's present.
-            //NSString *nameAndPID = [NSString stringWithFormat:@"%@ (%@)", applicationName, entry[(id)kCGWindowOwnerPID]];
-            
-            outputEntry[kAppNameKey] = applicationName;
-        }
-        else
-        {
-            return;
-            // The application name was not provided, so we use a fake application name to designate this.
-            // PID is required so we assume it's present.
-            //NSString *nameAndPID = [NSString stringWithFormat:@"((unknown)) (%@)", entry[(id)kCGWindowOwnerPID]];
-            //outputEntry[kAppNameKey] = @"unknown";
-        }
-        
-        // Grab the Window Bounds, it's a dictionary in the array, but we want to display it as a string
-        CGRect bounds;
-        CGRectMakeWithDictionaryRepresentation((CFDictionaryRef)entry[(__bridge id)kCGWindowBounds], &bounds);
-        //NSString *originString = [NSString stringWithFormat:@"%.0f/%.0f", bounds.origin.x, bounds.origin.y];
-        outputEntry[kWindowOriginXKey] = [NSNumber numberWithInt:bounds.origin.x];
-        outputEntry[kWindowOriginYKey] = [NSNumber numberWithInt:bounds.origin.y];
-        outputEntry[kAppPIDKey] = entry[(__bridge id)kCGWindowOwnerPID];
-        
-        //NSString *sizeString = [NSString stringWithFormat:@"%.0f*%.0f", bounds.size.width, bounds.size.height];
-        //outputEntry[kWindowSizeKey] = sizeString;
-        
-        outputEntry[kWindowWidthKey] = [NSNumber numberWithDouble:bounds.size.width];
-        outputEntry[kWindowHeightKey] = [NSNumber numberWithDouble:bounds.size.height];
-        if (bounds.size.width < 30 || bounds.size.height < 30) {
-            return;
-        }
-        
-        // Grab the Window ID & Window Level. Both are required, so just copy from one to the other
-        outputEntry[kWindowIDKey] = entry[(__bridge id)kCGWindowNumber];
-        outputEntry[kWindowLevelKey] = entry[(__bridge id)kCGWindowLayer];
-        
-        // Finally, we are passed the windows in order from front to back by the window server
-        // Should the user sort the window list we want to retain that order so that screen shots
-        // look correct no matter what selection they make, or what order the items are in. We do this
-        // by maintaining a window order key that we'll apply later.
-        outputEntry[kWindowOrderKey] = @(data.order);
-        data.order++;
-        
-        [data.outputArray addObject:outputEntry];
-    }
-}
 
 
 @end

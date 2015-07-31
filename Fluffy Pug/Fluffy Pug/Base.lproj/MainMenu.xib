@@ -23,11 +23,11 @@
                 <outlet property="enemyMinionText" destination="wip-Tv-DnA" id="8na-cw-RiO"/>
                 <outlet property="foundImage" destination="uPF-fW-ond" id="tpX-cg-F09"/>
                 <outlet property="fpsText" destination="l1p-00-dqi" id="bKz-1N-N0J"/>
-                <outlet property="fpsTextField" destination="aZP-sd-Njt" id="0m2-TA-WTl"/>
                 <outlet property="imageView" destination="HHv-Ka-ht7" id="pl5-KH-twK"/>
                 <outlet property="logText" destination="KTn-4Y-VhW" id="GGp-Zp-adE"/>
                 <outlet property="processedImage" destination="tj8-74-u4n" id="AyV-Zg-3lW"/>
                 <outlet property="recordScreenCheckbox" destination="RWd-oc-9AZ" id="75d-p8-mVV"/>
+                <outlet property="screenAnalyzeText" destination="qVL-90-mc1" id="eMC-5o-ddN"/>
                 <outlet property="selfChampionText" destination="35w-er-u4R" id="wtt-iB-N86"/>
                 <outlet property="statusText" destination="2TM-fP-sB5" id="QWa-XV-dty"/>
                 <outlet property="targetImage" destination="j7e-PM-F4A" id="HOH-El-YvI"/>
@@ -717,10 +717,10 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Rsk-oM-PXf">
-                                            <rect key="frame" x="9" y="305" width="87" height="17"/>
+                                            <rect key="frame" x="9" y="305" width="123" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Performance:" id="Cwt-8g-YmA">
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Logic Performance:" id="Cwt-8g-YmA">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -737,7 +737,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="l1p-00-dqi">
-                                            <rect key="frame" x="100" y="305" width="353" height="17"/>
+                                            <rect key="frame" x="136" y="305" width="317" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Calculating" id="bJb-6R-f1c">
@@ -747,23 +747,13 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="QH3-v7-0UU">
-                                            <rect key="frame" x="9" y="280" width="197" height="17"/>
+                                            <rect key="frame" x="9" y="280" width="109" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Maximum Frames per Second: " id="wpe-Fy-UKG">
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Screen Analyze:" id="wpe-Fy-UKG">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" id="aZP-sd-Njt">
-                                            <rect key="frame" x="211" y="278" width="105" height="22"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="60" drawsBackground="YES" id="Uaa-ub-dUf">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="lAb-AP-Xae">
@@ -893,6 +883,16 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="qVL-90-mc1">
+                                            <rect key="frame" x="117" y="280" width="340" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Calculating" id="0Iy-iP-9MV">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                     <animations/>
                                 </view>
@@ -1005,7 +1005,7 @@
                 </subviews>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="-190" y="148.5"/>
+            <point key="canvasLocation" x="-222" y="223.5"/>
         </window>
         <window title="Screen Shot Viewer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="VMG-ED-3M6" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES" HUD="YES"/>
