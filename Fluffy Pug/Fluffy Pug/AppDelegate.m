@@ -192,23 +192,34 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     dispatch_async(dispatch_get_main_queue(), ^{
         screenLoops++;
     });
-    //uint32_t aseed;
-    //IOSurfaceLock(ref, kIOSurfaceLockReadOnly, &aseed);
+    uint32_t aseed;
+    IOSurfaceLock(frameSurface, kIOSurfaceLockReadOnly, &aseed);
     uint32_t width = (uint32_t)IOSurfaceGetWidth(frameSurface);
     uint32_t height = (uint32_t)IOSurfaceGetHeight(frameSurface);
-    uint32_t bytesPerRow = (uint32_t)IOSurfaceGetBytesPerRow(frameSurface);
     uint8_t * basePtr = (uint8_t*)IOSurfaceGetBaseAddress(frameSurface);
     
-    NSLog(@"Width: %d, Height: %d, bytesPerRow: %d", width, height, bytesPerRow);
+    //NSLog(@"Width: %d, Height: %d, bytesPerRow: %d, Plane Count: %zu", width, height, bytesPerRow, planeCount);
     
-    uint8_t * newPtr = copyImageBufferFromBGRAtoRGBA(basePtr, width, height);
+    //uint8_t * newPtr = copyImageBufferFromBGRAtoRGBA(basePtr, width, height);
     
-    NSImage* image = getImageFromRGBABuffer(newPtr, width, height);
+    NSImage* image = getImageFromBGRABuffer(basePtr, width, height);
     
+    /*
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, basePtr, (width * height * 4), NULL);
+    CGImageRef cgImage=CGImageCreate(width, height, 8,
+                                     8*4, bytesPerRow,
+                                     CGColorSpaceCreateDeviceRGB(), kCGImageAlphaNoneSkipFirst |kCGBitmapByteOrder32Little,
+                                     provider, NULL,
+                                     YES, kCGRenderingIntentDefault);
+    
+    NSImage* image = [[NSImage alloc] initWithCGImage:cgImage size:NSMakeSize(width, height)];
+     */
     dispatch_async(dispatch_get_main_queue(), ^{
         [GlobalSelf.unprocessedImage setImage: image];
-        free(newPtr);
+        //free(newPtr);
     });
+    
+    IOSurfaceUnlock(frameSurface, kIOSurfaceLockReadOnly, &aseed);
     
     
     //printf("handleStream called!\n");
