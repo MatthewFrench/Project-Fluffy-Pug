@@ -40,7 +40,7 @@ void TestController::testPlayButton() {
     uint64 startTime = mach_absolute_time();
     double returnPercentage;
     Position playLocation;
-    detectClosestImageToImage(playButton, testImage, 0, 0, testImage.imageWidth, testImage.imageHeight, returnPercentage, playLocation, 0.8, true);
+    detectExactClosestImageToImage(playButton, testImage, 0, 0, testImage.imageWidth, testImage.imageHeight, returnPercentage, playLocation, 0.5, true);
     uint64 endTime = mach_absolute_time();
     log([NSString stringWithFormat:@"Results -- Location: %d, %d with percentage %f%% and took %f seconds", playLocation.x, playLocation.y, returnPercentage*100, getTimeInMilliseconds(endTime-startTime)/1000.0]);
     

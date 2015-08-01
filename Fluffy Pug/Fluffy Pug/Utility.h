@@ -77,6 +77,8 @@ inline NSImage* getImageFromRGBABuffer(uint8 *baseAddress, int bufferWidth, int 
 inline void detectClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
 inline int getTimeInMilliseconds(int64_t absoluteTime);
 inline double getImageAtPixelPercentageOptimized(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double minimumPercentage);
+inline double getImageAtPixelPercentageOptimizedExact(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double minimumPercentage);
+inline void detectExactClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
 
 extern inline int getTimeInMilliseconds(int64_t absoluteTime)
 {
@@ -106,11 +108,64 @@ extern inline uint8 * copyImageBufferSection(uint8 *baseAddress, int bufferWidth
     }
     return testImage;
 }
+extern inline void detectExactClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
+    //Minimum percentage is so it matches faster
+    double highestPercent = 0.0;
+    Position location;
+    location.x = -1; location.y = -1;
+    //Stop image search from putting the width and height past the end
+    yEnd -= smallImage.imageHeight;
+    xEnd -= smallImage.imageWidth;
+    
+    for (int y = yStart; y < yEnd; y++) {
+        uint8_t *pixel = getPixel2(largeImage, xStart, y);
+        for (int x = xStart; x < xEnd; x++) {
+            double percent = getImageAtPixelPercentageOptimizedExact(pixel, x, y, largeImage.imageWidth, largeImage.imageHeight, smallImage, minimumPercentage);
+            if (percent > highestPercent) {
+                location.x = x; location.y = y;
+                highestPercent = percent;
+                if (percent >= minimumPercentage && getFirstMatching) {
+                    x = xEnd; y = yEnd;
+                }
+            }
+            pixel += 4;
+        }
+    }
+    returnPercentage = highestPercent;
+    returnPosition = location;
+}
+extern inline double getImageAtPixelPercentageOptimizedExact(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double minimumPercentage) {
+    int pixels = 0;
+    int maxPixelCount = image.imageWidth * image.imageHeight;
+    int skipPixels = 4 * (width - image.imageWidth);
+    double percentage = 0.0;
+    uint8_t *pixel2 = image.imageData;
+    for (int y1 = 0; y1 < image.imageHeight; y1++) {
+        //const uint8_t *pixel1 = pixel + y1 * width * 4;
+        for (int x1 = 0; x1 < image.imageWidth; x1++) {
+            if (pixel2[3] != 0) {
+                pixels++;
+                double p = getColorPercentage(pixel, pixel2);
+                percentage += p;
+                if (p < minimumPercentage) {
+                    return percentage / maxPixelCount;
+                }
+            } else {maxPixelCount--;}
+            pixel2 += 4;
+            pixel += 4;
+        }
+        pixel += skipPixels;
+    }
+    return percentage / pixels;
+}
 extern inline void detectClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
     //Minimum percentage is so it matches faster
     double highestPercent = 0.0;
     Position location;
     location.x = -1; location.y = -1;
+    //Stop image search from putting the width and height past the end
+    yEnd -= smallImage.imageHeight;
+    xEnd -= smallImage.imageWidth;
     
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = getPixel2(largeImage, xStart, y);
@@ -132,27 +187,25 @@ extern inline void detectClosestImageToImage(ImageData smallImage, ImageData lar
 extern inline double getImageAtPixelPercentageOptimized(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double minimumPercentage) {
     int pixels = 0;
     int maxPixelCount = image.imageWidth * image.imageHeight;
-    if (width - x > image.imageWidth &&
-        height - y > image.imageHeight) {
-        double percentage = 0.0;
-        uint8_t *pixel2 = image.imageData;
-        for (int y1 = 0; y1 < image.imageHeight; y1++) {
-            if ((percentage + (maxPixelCount - pixels)) / maxPixelCount < minimumPercentage) {
-                break;
-            }
-            const uint8_t *pixel1 = pixel + (y1 * width)*4;
-            for (int x1 = 0; x1 < image.imageWidth; x1++) {
-                if (pixel2[3] != 0) {
-                    pixels++;
-                    percentage += getColorPercentage(pixel1, pixel2);
-                }
-                pixel2 += 4;
-                pixel1 += 4;
-            }
+    int skipPixels = 4 * (width - image.imageWidth);
+    double percentage = 0.0;
+    uint8_t *pixel2 = image.imageData;
+    for (int y1 = 0; y1 < image.imageHeight; y1++) {
+        //const uint8_t *pixel1 = pixel + y1 * width * 4;
+        for (int x1 = 0; x1 < image.imageWidth; x1++) {
+            if (pixel2[3] != 0) {
+                pixels++;
+                percentage += getColorPercentage(pixel, pixel2);
+            } else {maxPixelCount--;}
+            pixel2 += 4;
+            pixel += 4;
         }
-        return percentage / pixels;
+        if ((percentage + (maxPixelCount - pixels)) / maxPixelCount < minimumPercentage) {
+            break;
+        }
+        pixel += skipPixels;
     }
-    return 0.0;
+    return percentage / pixels;
 }
 
 
@@ -456,8 +509,7 @@ extern Pixel getPixel(struct ImageData imageData, int x, int y) {
 }
 
 extern uint8_t* getPixel2(struct ImageData imageData, int x, int y) {
-    uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + x)*4;
-    return pixel;
+    return imageData.imageData + (y * imageData.imageWidth + x)*4;
 }
 
 extern uint8_t* getPixel3(uint8_t *baseAddress, int x, int y, int width) {
