@@ -140,10 +140,12 @@ void ShopManager::processImage(ImageData data) {
         int xStart = 128;
         int xEnd = 150;
         
-        double shopAvailablePercent = 0;
-        Position p = detectRelativeImageInImagePercentage(shopAvailableImageData, imageData, 0.85, xStart, yStart, xEnd, yEnd, shopAvailablePercent);
+        //double shopAvailablePercent = 0;
+        double returnPercentage;
+        Position returnPosition;
+        detectExactImageToImage(shopAvailableImageData, imageData, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.85, true);
         //NSLog(@"Shop available location: %d, %d", p.x, p.y);
-        if (p.x != -1) {
+        if (returnPercentage >= 0.85) {
             shopAvailable = true;
         }
         
@@ -153,7 +155,7 @@ void ShopManager::processImage(ImageData data) {
         xStart = 100;
         xEnd = 200;
         
-        topLeftCornerPosition = detectRelativeImageInImage(shopWindowImageData, imageData, 0.82, xStart, yStart, xEnd, yEnd);
+        detectExactImageToImage(shopWindowImageData, imageData, xStart, yStart, xEnd, yEnd, returnPercentage, topLeftCornerPosition, 0.82, true);
        // NSLog(@"Shop top left corner: %d, %d", topLeftCornerPosition.x, topLeftCornerPosition.y);
         if (topLeftCornerPosition.x != -1) {
             shopOpen = true;
@@ -168,7 +170,7 @@ void ShopManager::processImage(ImageData data) {
             xEnd = topLeftCornerPosition.x+30;
             if (xStart < 0) xStart = 0;
             
-            bottomLeftCornerPosition = detectRelativeImageInImage(shopBottomLeftCornerImageData, imageData, 0.5, xStart, yStart, xEnd, yEnd);
+            detectExactImageToImage(shopBottomLeftCornerImageData, imageData, xStart, yStart, xEnd, yEnd, returnPercentage, bottomLeftCornerPosition, 0.5, true);
             bottomLeftCornerPosition.y += shopBottomLeftCornerImageData.imageHeight;
             
             //Detect empty item slots
@@ -180,12 +182,12 @@ void ShopManager::processImage(ImageData data) {
             xEnd = bottomLeftCornerPosition.x + 65;
             
             for (int i = 0; i < 6; i++) {
-                p = detectRelativeImageInImage(shopEmptyItemSlotImageData, imageData, 0.7, xStart, yStart, xEnd, yEnd);
-                if (p.x != -1) {
+                detectExactImageToImage(shopEmptyItemSlotImageData, imageData, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.7, true);
+                if (returnPercentage >= 0.7) {
                     //NSLog(@"Found empty item slot");
                     emptyItemSlots++;
-                    xStart = p.x + 40;
-                    xEnd = p.x + xStart + 50;
+                    xStart = returnPosition.x + 40;
+                    xEnd = returnPosition.x + xStart + 50;
                 } else {
                     //NSLog(@"Didn't find empty item slot");
                     xStart += 42; xEnd += 42;
@@ -205,9 +207,12 @@ void ShopManager::processImage(ImageData data) {
             for (int x = xStart; x < xEnd; x+=shopBuyableItemImageData.imageWidth) {
                 for (int y = yStart; y < yEnd; y+=shopBuyableItemImageData.imageHeight) {
                     double p1Percent = 0;
-                    Position p1 = detectRelativeImageInImagePercentage(shopBuyableItemImageData, imageData, 0.6, x, y, x+50, y+68, p1Percent);
+                    Position p1;
+                    detectExactImageToImage(shopBuyableItemImageData, imageData, x, y, x+50, y+68, p1Percent, p1, 0.6, true);
                     double p2Percent = 0;
-                    Position p2 = detectRelativeImageInImagePercentage(shopUnbuyableItemImageData, imageData, 0.6, x, y, x+50, y+68, p2Percent);
+                    Position p2;
+                    detectExactImageToImage(shopUnbuyableItemImageData, imageData, x, y, x+50, y+68, p2Percent, p2, 0.6, true);
+                    Position p;
                     if (p1Percent > p2Percent) {
                         p = p1;
                     } else {

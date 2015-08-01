@@ -61,24 +61,24 @@ inline BOOL isColor(const uint8_t *pixel, unsigned char r, unsigned char g, unsi
 inline BOOL isColor2(const uint8_t *pixel, const uint8_t *pixel2, int tolerance);
 inline  ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight);
 inline ImageData makeImageDataFrom(NSString* path);
-inline BOOL detectImageAtPixel(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance);
-inline BOOL detectImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double percentage);
+//inline BOOL detectImageAtPixel(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, int tolerance);
+//inline BOOL detectImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double percentage);
 inline void normalizePoint(int &x, int &y, int length);
-inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd);
-inline Position detectRelativeImageInImagePercentage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage);
+//inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd);
+//inline Position detectRelativeImageInImagePercentage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage);
 inline double getColorPercentage(const uint8_t *pixel, const uint8_t *pixel2);
 inline bool colorInPercentage(const uint8_t *pixel, const uint8_t *pixel2, double percentage);
-inline double getImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image);
+//inline double getImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image);
 inline uint8 * copyImageBuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
 inline uint8 * copyImageBufferSection(uint8 *baseAddress, int bufferWidth, int bufferHeight, int copyX, int copyY, int copyWidth, int copyHeight) ;
 inline uint8 * copyImageBufferFromBGRAtoRGBA(uint8 *baseAddress, int bufferWidth, int bufferHeight);
 inline NSImage* getImageFromBGRABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
 inline NSImage* getImageFromRGBABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
-inline void detectClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
+inline void detectSimilarImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
 inline int getTimeInMilliseconds(int64_t absoluteTime);
 inline double getImageAtPixelPercentageOptimized(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double minimumPercentage);
 inline double getImageAtPixelPercentageOptimizedExact(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double minimumPercentage);
-inline void detectExactClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
+inline void detectExactImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
 
 extern inline int getTimeInMilliseconds(int64_t absoluteTime)
 {
@@ -108,7 +108,7 @@ extern inline uint8 * copyImageBufferSection(uint8 *baseAddress, int bufferWidth
     }
     return testImage;
 }
-extern inline void detectExactClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
+extern inline void detectExactImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
     //Minimum percentage is so it matches faster
     double highestPercent = 0.0;
     Position location;
@@ -158,7 +158,7 @@ extern inline double getImageAtPixelPercentageOptimizedExact(const uint8_t *pixe
     }
     return percentage / pixels;
 }
-extern inline void detectClosestImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
+extern inline void detectSimilarImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
     //Minimum percentage is so it matches faster
     double highestPercent = 0.0;
     Position location;
@@ -244,7 +244,7 @@ extern inline uint8 * copyImageBuffer(uint8 *baseAddress, int bufferWidth, int b
     }
     return testImage;
 }
-
+/*
 extern inline Position detectRelativeImageInImage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd) {
     bool found = false;
     double highestPercent = 0.0;
@@ -276,7 +276,8 @@ extern inline Position detectRelativeImageInImage(ImageData smallImage, ImageDat
     }
     return makePosition(-1,-1);
 }
-
+*/
+/*
 extern inline Position detectRelativeImageInImagePercentage(ImageData smallImage, ImageData largeImage, double percentageMatch, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage) {
     bool found = false;
     double highestPercent = 0.0;
@@ -311,8 +312,8 @@ extern inline Position detectRelativeImageInImagePercentage(ImageData smallImage
         return location;
     }
     return makePosition(-1,-1);
-}
-
+}*/
+/*
 extern inline double getImageAtPixelPercentage(const uint8_t *pixel, int x, int y, int width, int height, ImageData image) {
     int pixels = 0;
     if (width - x > image.imageWidth &&
@@ -333,7 +334,7 @@ extern inline double getImageAtPixelPercentage(const uint8_t *pixel, int x, int 
         return percentage / pixels;
     }
     return 0.0;
-}
+}*/
 
 
 extern inline double getColorPercentage(const uint8_t *pixel,const uint8_t *pixel2) {
