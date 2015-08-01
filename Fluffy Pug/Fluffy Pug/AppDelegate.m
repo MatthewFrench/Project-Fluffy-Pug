@@ -169,6 +169,11 @@ int screenLoops = 0;
 AppDelegate *GlobalSelf;
 
 - (void) logic {
+    //Run auto queue logic and AI logic
+    if ([GlobalSelf->aiActiveCheckbox state] == NSOnState && GlobalSelf->leagueGameState->leaguePID != -1) {
+        GlobalSelf->leagueGameState->processAI();
+    }
+    
     //Profile code
     if (getTimeInMilliseconds(mach_absolute_time() - lastTime) > 500)
     {
@@ -203,6 +208,8 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
                                                                                                         IOSurfaceRef frameSurface,
                                                                                                         CGDisplayStreamUpdateRef updateRef)
 {
+    if (status != kCGDisplayStreamFrameStatusFrameComplete) return;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         screenLoops++;
     });
@@ -265,18 +272,42 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     
     GlobalSelf->leagueGameState->processImage(imageData);
     
-    if ([GlobalSelf->aiActiveCheckbox state] == NSOnState && GlobalSelf->leagueGameState->leaguePID != -1) {
-        GlobalSelf->leagueGameState->processAI();
+    
+    
+    
+    
+    
+    
+    
+    if (getTimeInMilliseconds(mach_absolute_time() - GlobalSelf->lastSaveImage) >= 1000 && [GlobalSelf->recordScreenCheckbox state] == NSOnState) {
+        GlobalSelf->lastSaveImage = clock();
+        
+        dispatch_group_t dispatchGroup = dispatch_group_create();
+        dispatch_queue_t queue;
+        
+        NSImage* image = getImageFromBGRABuffer(basePtr, width, height);
+        
+        NSData *data = [image TIFFRepresentation];
+        
+        // Add a task to the group
+        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
+            [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
+            
+            NSString* path = [NSString stringWithFormat:@"%@/AI Record",NSHomeDirectory()];
+            
+            [[NSFileManager defaultManager] createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
+            
+            
+            bool wrote = [data writeToFile: [NSString stringWithFormat:@"%@/%@.png",path,[DateFormatter stringFromDate:[NSDate date]]] atomically: NO];
+            if (!wrote) {
+                NSLog(@"Couldn't save image");
+            }
+            
+        });
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     
     
@@ -305,12 +336,13 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
      kCGDisplayStreamFrameStatusFrameBlank,
      kCGDisplayStreamFrameStatusStopped,
      */
+    
+    //printf("\tstatus: ");
     /*
-    printf("\tstatus: ");
     switch(status)
     {
         case kCGDisplayStreamFrameStatusFrameComplete:
-            printf("Complete\n");
+            //printf("Complete\n");
             break;
             
         case kCGDisplayStreamFrameStatusFrameIdle:
@@ -325,7 +357,8 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
             printf("Stopped\n");
             break;
     }
-    
+    */
+    /*
     printf("\ttime: %lld\n", displayTime);
     
     const CGRect * rects;
