@@ -137,7 +137,7 @@ extern inline double getImageAtPixelPercentageOptimized(const uint8_t *pixel, in
         double percentage = 0.0;
         uint8_t *pixel2 = image.imageData;
         for (int y1 = 0; y1 < image.imageHeight; y1++) {
-            if ((percentage + (maxPixelCount - pixels)) / pixels < minimumPercentage) {
+            if ((percentage + (maxPixelCount - pixels)) / maxPixelCount < minimumPercentage) {
                 break;
             }
             const uint8_t *pixel1 = pixel + (y1 * width)*4;
