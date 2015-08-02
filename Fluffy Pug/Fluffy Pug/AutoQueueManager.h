@@ -41,7 +41,7 @@ class AutoQueueManager {
 public:
     
     AutoQueueManager(LeagueGameState* gameState);
-    void processDetection(ImageData data, const CGRect* rects, size_t num_rects);
+    bool processDetection(ImageData data, const CGRect* rects, size_t num_rects);
     void processLogic();
     void reset(bool keepPlayButton);
     void clickLocation(int x, int y);

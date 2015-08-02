@@ -56,7 +56,7 @@
     
     //stream = CGDisplayStreamCreate(display_id, pixelWidth, pixelHeight, 'BGRA', NULL, handleStream);
     stream = CGDisplayStreamCreateWithDispatchQueue(display_id, pixelWidth, pixelHeight, 'BGRA',
-                                                    (__bridge CFDictionaryRef)(@{(__bridge NSString *)kCGDisplayStreamQueueDepth : @1,  (__bridge NSString *)kCGDisplayStreamShowCursor: @NO})
+                                                    (__bridge CFDictionaryRef)(@{(__bridge NSString *)kCGDisplayStreamQueueDepth : @8,  (__bridge NSString *)kCGDisplayStreamShowCursor: @NO})
                                                     , streamQueue, handleStream);
     
     lastTime = mach_absolute_time();
@@ -292,7 +292,12 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
         size_t num_rects;
         
         rects = CGDisplayStreamUpdateGetRects(updateRef, kCGDisplayStreamUpdateDirtyRects, &num_rects);
-        GlobalSelf->autoQueueManager->processDetection(imageData, rects, num_rects);
+        bool fireLogic = GlobalSelf->autoQueueManager->processDetection(imageData, rects, num_rects);
+        if (fireLogic) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [GlobalSelf->timer fire];
+            });
+        }
     }
     
     
