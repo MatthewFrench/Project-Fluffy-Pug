@@ -150,10 +150,11 @@ void AutoQueueManager::processLogic() {
 }
 void AutoQueueManager::clickLocation(int x, int y) {
     doubleTapMouseLeft(x + 10, y+10);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
-        doubleTapMouseLeft(x + 10, y+10);
-    });
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
+    //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
+    //    doubleTapMouseLeft(x + 10, y+10);
+    //});
+    //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
+    dispatch_async(dispatch_get_main_queue(), ^{
         moveMouse(0, 0);
     });
 }
@@ -181,6 +182,8 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
             
             detectExactImageToImageToRectangles(step1_PlayButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+            
+            //NSLog(@"Play button percentage: %f", returnPercentage);
             
             if (returnPercentage >= 0.3) {
                 detectionPlayButtonReferenceLocation = returnPosition;
