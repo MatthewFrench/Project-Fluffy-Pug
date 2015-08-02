@@ -22,7 +22,6 @@ LeagueGameState::LeagueGameState() {
     shopManager = new ShopManager();
     enemyTowerManager = new EnemyTowerManager();
     basicAI = new BasicAI(this);
-    autoQueueManager = new AutoQueueManager();
 }
 
 void LeagueGameState::processImage(struct ImageData image) {
@@ -72,12 +71,12 @@ void LeagueGameState::processImage(struct ImageData image) {
         
         // wait on the group to block the current thread.
         dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
-    } else if (autoQueueActive) {
-        autoQueueManager->processImage(image);
-    }
-    if (leaguePID != -1 && [selfChampionManager->championBars count] == 0 && autoQueueActive) {
-        autoQueueManager->checkForEndGame(image);
-    }
+    }// else if (autoQueueActive) {
+    //    autoQueueManager->processImage(image);
+    //}
+    //if (leaguePID != -1 && [selfChampionManager->championBars count] == 0 && autoQueueActive) {
+    //    autoQueueManager->checkForEndGame(image);
+    //}
     
     
     //allyMinionManager->setImageData(imageData);

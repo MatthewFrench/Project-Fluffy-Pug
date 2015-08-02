@@ -37,6 +37,7 @@
     leagueGameState = new LeagueGameState();
     testController = new TestController(processedImage, unprocessedImage, targetImage, foundImage, logText);
     leagueDetector = new LeagueDetector();
+    autoQueueManager = new AutoQueueManager(leagueGameState);
     
     [self updateLeagueWindowStatus];
     //lastTime = clock();
@@ -151,6 +152,14 @@
 - (IBAction) testPlayButton:(id)sender {
     testController->testPlayButton();
 }
+- (IBAction) runAutoQueueButton:(id)sender {
+    if ([GlobalSelf->autoQueueCheckbox state] == NSOnState) {
+        autoQueueManager->reset(false);
+        runAutoQueue = true;
+    } else {
+        runAutoQueue = false;
+    }
+}
 - (void) updateLeagueWindowStatus {
     leagueDetector->detectLeagueWindow();
     if (leagueDetector->leaguePID != -1) {
@@ -169,9 +178,13 @@ int screenLoops = 0;
 AppDelegate *GlobalSelf;
 
 - (void) logic {
+    GlobalSelf->leagueGameState->autoQueueActive = [GlobalSelf->autoQueueCheckbox state] == NSOnState;
     //Run auto queue logic and AI logic
     if ([GlobalSelf->aiActiveCheckbox state] == NSOnState && GlobalSelf->leagueGameState->leaguePID != -1) {
-        GlobalSelf->leagueGameState->processAI();
+        leagueGameState->processAI();
+    }
+    if (runAutoQueue && leagueGameState->leaguePID == -1) {
+        autoQueueManager->processLogic();
     }
     
     //Profile code
@@ -256,7 +269,7 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     
     
     
-    GlobalSelf->leagueGameState->autoQueueActive = [GlobalSelf->autoQueueCheckbox state] == NSOnState;
+    
     
     GlobalSelf->leagueGameState->leagueSize.size.width = width;
     GlobalSelf->leagueGameState->leagueSize.size.height = height;
@@ -270,10 +283,17 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     struct ImageData imageData = makeImageData(basePtr, width, height);
     
     
-    GlobalSelf->leagueGameState->processImage(imageData);
+    //GlobalSelf->leagueGameState->processImage(imageData);
     
     
-    
+    if (GlobalSelf->runAutoQueue && GlobalSelf->leagueGameState->leaguePID == -1) {
+        const CGRect * rects;
+        
+        size_t num_rects;
+        
+        rects = CGDisplayStreamUpdateGetRects(updateRef, kCGDisplayStreamUpdateDirtyRects, &num_rects);
+        GlobalSelf->autoQueueManager->processDetection(imageData, rects, num_rects);
+    }
     
     
     

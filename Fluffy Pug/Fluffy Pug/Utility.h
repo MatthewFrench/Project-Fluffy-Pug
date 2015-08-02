@@ -79,7 +79,21 @@ inline int getTimeInMilliseconds(int64_t absoluteTime);
 inline double getImageAtPixelPercentageOptimized(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double minimumPercentage);
 inline double getImageAtPixelPercentageOptimizedExact(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double minimumPercentage);
 inline void detectExactImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
+inline void detectExactImageToImageToRectangles(ImageData smallImage, ImageData largeImage, CGRect* rects, size_t num_rects, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
+inline CGRect* getIntersectionRectangles(CGRect baseRect, const CGRect* rects, size_t num_rects, size_t &returnNumRects);
 
+extern inline CGRect* getIntersectionRectangles(CGRect baseRect, const CGRect* rects, size_t num_rects, size_t &returnNumRects) {
+    returnNumRects = 0;
+    CGRect* newRects = (CGRect*) calloc (num_rects,sizeof(CGRect));
+    for (int i = 0; i < num_rects; i++) {
+        CGRect r = CGRectIntersection(baseRect, rects[i]);
+        if (!CGRectIsNull(r)) {
+            newRects[returnNumRects] = r;
+            returnNumRects++;
+        }
+    }
+    return newRects;
+}
 extern inline int getTimeInMilliseconds(int64_t absoluteTime)
 {
     const int64_t kOneMillion = 1000 * 1000;
@@ -107,6 +121,22 @@ extern inline uint8 * copyImageBufferSection(uint8 *baseAddress, int bufferWidth
         }
     }
     return testImage;
+}
+extern inline void detectExactImageToImageToRectangles(ImageData smallImage, ImageData largeImage, CGRect* rects, size_t num_rects, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
+    Position position;
+    double highestPercentage;
+    returnPercentage = 0.0;
+    for (int i = 0; i < num_rects; i++) {
+        CGRect rect = rects[i];
+        detectExactImageToImage(smallImage, largeImage, rect.origin.x, rect.origin.y, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height, highestPercentage, position, minimumPercentage, getFirstMatching);
+        if (highestPercentage > returnPercentage) {
+            returnPercentage = highestPercentage;
+            returnPosition = position;
+            if (getFirstMatching && highestPercentage >= minimumPercentage) {
+                return;
+            }
+        }
+    }
 }
 extern inline void detectExactImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
     //Minimum percentage is so it matches faster

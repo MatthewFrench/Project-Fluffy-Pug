@@ -15,6 +15,7 @@
 #import <IOSurface/IOSurfaceBase.h>
 #import <IOKit/IOKitLib.h>
 #import <IOSurface/IOSurface.h>
+#import "AutoQueueManager.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     @public IBOutlet NSTextField* statusText, *allyMinionText, *enemyMinionText, *enemyChampionText, *selfChampionText, *allyChampionText;
@@ -23,6 +24,7 @@
     @public IBOutlet NSTextField *fpsText, *screenAnalyzeText;
     NSTimer* timer;
     @public LeagueGameState* leagueGameState;
+    @public AutoQueueManager* autoQueueManager;
     //AVCaptureScreenInput *input;
     
     //AVCaptureSession *mSession;
@@ -42,6 +44,8 @@
     dispatch_queue_t streamQueue;
     CGDisplayStreamRef stream;
     
+    volatile bool runAutoQueue;
+    
 }
 @property (strong) id activity;
 @property (weak) IBOutlet NSWindow *window, *window2;
@@ -49,6 +53,7 @@
 - (IBAction) openViewWindow:(id)sender;
 - (IBAction) getScreenshot:(id)sender;
 - (IBAction) testPlayButton:(id)sender;
+- (IBAction) runAutoQueueButton:(id)sender;
 
 @end
 

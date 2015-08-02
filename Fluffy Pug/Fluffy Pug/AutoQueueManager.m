@@ -8,7 +8,9 @@
 
 #import "AutoQueueManager.h"
 
-AutoQueueManager::AutoQueueManager() {
+AutoQueueManager::AutoQueueManager(LeagueGameState* gameState) {
+    leagueGameState = gameState;
+    
     step1_PlayButton = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(1) Play Button" ofType:@"png"]);
     step2_PVPMode = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(2) PVP Mode" ofType:@"png"]);
     step3_ClassicMode = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(3) Classic Mode" ofType:@"png"]);
@@ -23,14 +25,337 @@ AutoQueueManager::AutoQueueManager() {
     step12_HomeButton = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(12) Home Button" ofType:@"png"]);
     step13_ReconnectButton = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(13) Reconnect Button" ofType:@"png"]);
     
-    lastScreenScan = clock();
-    lastEndGameScan = clock();
+    //lastScreenScan = clock();
+    //lastEndGameScan = clock();
+    
+    reset(false);
+}
+void AutoQueueManager::reset(bool keepPlayButton) {
+    if (!keepPlayButton) {
+        foundPlayButton = false;
+        detectionPlayButtonReferenceLocation.x = -1;
+    }
+    foundAcceptButton = false, foundRandomChampionButton = false, foundLockInButton = false, foundChooseSkinButton = false, foundReconnectButton = false, foundHomeButton = false, foundEndGameButton = false;
+    scanForPlayButton = false, scanForAcceptButton = false, scanForRandomChampionButton = false, scanForLockInButton = false, scanForChooseSkinButton = false, scanForReconnectButton = false, scanForHomeButton = false, scanForEndGameButton = false;
     
     currentStep = STEP_1;
+    scanForPlayButton = true;
 }
-void AutoQueueManager::processImage(ImageData data) {
-    imageData = data;
+void AutoQueueManager::processLogic() {
     
+    if (foundPlayButton && currentStep != STEP_1 && currentStep != STEP_2) {
+        reset(true);
+    }
+    
+    switch (currentStep) {
+        case STEP_1: {
+            if (foundPlayButton)  {
+                currentStep = STEP_2;
+                clickLocation(playButtonLocation.x, playButtonLocation.y);
+            }
+        }break;
+        case STEP_2: {
+            //Click PVP mode
+            if (!foundPlayButton) { //Do next step cause no play button visible
+                currentStep = STEP_3;
+                clickLocation(playButtonLocation.x -230, playButtonLocation.y +75);
+            }
+        }break;
+        case STEP_3: {
+            //Click Classic mode
+            currentStep = STEP_4;
+            clickLocation(playButtonLocation.x -70, playButtonLocation.y +105);
+        }break;
+        case STEP_4: {
+            //Click Summoner's Rift mode
+            currentStep = STEP_5;
+            clickLocation(playButtonLocation.x +100, playButtonLocation.y +110);
+        }break;
+        case STEP_5: {
+            //Click Blind Pick mode
+            currentStep = STEP_6;
+            clickLocation(playButtonLocation.x +300, playButtonLocation.y +180);
+        }break;
+        case STEP_6: {
+            //Click Solo Button
+            currentStep = STEP_7;
+            clickLocation(playButtonLocation.x +100, playButtonLocation.y +550);
+            scanForAcceptButton = true;
+        }break;
+        case STEP_7: {
+            if (foundAcceptButton) {
+                //Click accept button
+                currentStep = STEP_8;
+                clickLocation(acceptButtonLocation.x, acceptButtonLocation.y);
+                scanForRandomChampionButton = true;
+            }
+        }break;
+        case STEP_8: {
+            if (foundAcceptButton) {
+                //Wait for accept button to disappear
+                clickLocation(acceptButtonLocation.x, acceptButtonLocation.y);
+                break;
+            }
+            if (foundRandomChampionButton) {
+                //Click random champion button
+                currentStep = STEP_9;
+                clickLocation(randomChampionButtonLocation.x, randomChampionButtonLocation.y);
+                scanForRandomChampionButton = false;
+                scanForLockInButton = true;
+            }
+        }break;
+        case STEP_9: {
+            if (foundAcceptButton) {
+                //Go back to step 7 because someone queue dodged
+                currentStep = STEP_7;
+                break;
+            }
+            if (foundLockInButton) {
+                //Click lock in button
+                clickLocation(lockInButtonLocation.x, lockInButtonLocation.y);
+                currentStep = STEP_10;
+                scanForReconnectButton = true;
+                scanForChooseSkinButton = true;
+                scanForLockInButton = false;
+            }
+        }break;
+        case STEP_10: {
+            if (foundAcceptButton) {
+                //Go back to step 7 because someone queue dodged
+                currentStep = STEP_7;
+                break;
+            }
+            if (foundReconnectButton) {
+                clickLocation(reconnectButtonLocation.x, reconnectButtonLocation.y);
+                break;
+            }
+            if (foundChooseSkinButton) {
+                clickLocation(chooseSkinButtonLocation.x, chooseSkinButtonLocation.y);
+            } else {
+                //Entering Game
+                currentStep = STEP_12;
+                scanForChooseSkinButton = false;
+                scanForLockInButton = false;
+                scanForAcceptButton = false;
+                scanForHomeButton = true;
+            }
+        }break;
+        case STEP_12: {
+            if (foundHomeButton) {
+                clickLocation(homeButtonLocation.x, homeButtonLocation.y);
+                reset(false);
+            }
+        }break;
+    }
+}
+void AutoQueueManager::clickLocation(int x, int y) {
+    doubleTapMouseLeft(x + 10, y+10);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
+        doubleTapMouseLeft(x + 10, y+10);
+    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
+        moveMouse(0, 0);
+    });
+}
+void AutoQueueManager::processDetection(ImageData data, const CGRect* rects, size_t num_rects) {
+    //To speed up the search we will use the CGRectIntersection function, cut down on the search area
+    
+    double returnPercentage = 0.0;
+    Position returnPosition;
+    if (scanForPlayButton) {
+        int xStart = 300;
+        int yStart = 0;
+        int xEnd = data.imageWidth - 400;
+        int yEnd = 250;
+        CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
+        size_t intersectRectsNum;
+        CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
+        
+        detectExactImageToImageToRectangles(step1_PlayButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+        
+        if (returnPercentage >= 0.3) {
+            detectionPlayButtonReferenceLocation = returnPosition;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundPlayButton = true;
+                playButtonLocation = returnPosition;
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundPlayButton = false;
+            });
+        }
+    }
+    if (scanForAcceptButton) {
+        int xStart = detectionPlayButtonReferenceLocation.x-100;
+        int yStart = detectionPlayButtonReferenceLocation.y+100;
+        int xEnd = detectionPlayButtonReferenceLocation.x+100;
+        int yEnd = detectionPlayButtonReferenceLocation.y+450;
+        
+        
+        CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
+        size_t intersectRectsNum;
+        CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
+        
+        detectExactImageToImageToRectangles(step7_AcceptButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+        
+        if (returnPercentage >= 0.3) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundAcceptButton = true;
+                acceptButtonLocation = returnPosition;
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundAcceptButton = false;
+            });
+        }
+    }
+    if (scanForRandomChampionButton) {
+        int xStart = detectionPlayButtonReferenceLocation.x-400;
+        int yStart = detectionPlayButtonReferenceLocation.y;
+        int xEnd = detectionPlayButtonReferenceLocation.x+400;
+        int yEnd = detectionPlayButtonReferenceLocation.y+600;
+        
+        
+        CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
+        size_t intersectRectsNum;
+        CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
+        
+        detectExactImageToImageToRectangles(step8_RandomChampionButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+        
+        if (returnPercentage >= 0.3) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundRandomChampionButton = true;
+                randomChampionButtonLocation = returnPosition;
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundRandomChampionButton = false;
+            });
+        }
+    }
+    if (scanForLockInButton) {
+        int xStart = detectionPlayButtonReferenceLocation.x-400;
+        int yStart = detectionPlayButtonReferenceLocation.y;
+        int xEnd = detectionPlayButtonReferenceLocation.x+500;
+        int yEnd = detectionPlayButtonReferenceLocation.y+600;
+        
+        
+        CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
+        size_t intersectRectsNum;
+        CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
+        
+        detectExactImageToImageToRectangles(step9_LockInButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+        
+        if (returnPercentage >= 0.3) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundLockInButton = true;
+                lockInButtonLocation = returnPosition;
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundLockInButton = false;
+            });
+        }
+    }
+    if (scanForChooseSkinButton) {
+        int xStart = detectionPlayButtonReferenceLocation.x-400;
+        int yStart = detectionPlayButtonReferenceLocation.y;
+        int xEnd = detectionPlayButtonReferenceLocation.x+500;
+        int yEnd = detectionPlayButtonReferenceLocation.y+600;
+        
+        
+        CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
+        size_t intersectRectsNum;
+        CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
+        
+        detectExactImageToImageToRectangles(step10_ChooseSkinButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+
+        if (returnPercentage >= 0.3) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundChooseSkinButton = true;
+                chooseSkinButtonLocation = returnPosition;
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundChooseSkinButton = false;
+            });
+        }
+    }
+    if (scanForReconnectButton) {
+        int xStart = detectionPlayButtonReferenceLocation.x-100;
+        int yStart = detectionPlayButtonReferenceLocation.y+100;
+        int xEnd = detectionPlayButtonReferenceLocation.x+200;
+        int yEnd = detectionPlayButtonReferenceLocation.y+450;
+        
+        
+        CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
+        size_t intersectRectsNum;
+        CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
+        
+        detectExactImageToImageToRectangles(step13_ReconnectButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+        
+
+        if (returnPercentage >= 0.3) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundReconnectButton = true;
+                reconnectButtonLocation = returnPosition;
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundReconnectButton = false;
+            });
+        }
+    }
+    if (scanForHomeButton) {
+        
+        int xStart = detectionPlayButtonReferenceLocation.x;
+        int yStart = detectionPlayButtonReferenceLocation.y+450;
+        int xEnd = detectionPlayButtonReferenceLocation.x+500;
+        int yEnd = detectionPlayButtonReferenceLocation.y+625;
+        if (detectionPlayButtonReferenceLocation.x == -1) {
+            xStart = 0;
+            yStart = 0;
+            xEnd = data.imageWidth;
+            yEnd = data.imageHeight;
+        }
+        
+        
+        CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
+        size_t intersectRectsNum;
+        CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
+        
+        detectExactImageToImageToRectangles(step12_HomeButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+        
+        if (returnPercentage >= 0.3) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundHomeButton = true;
+                homeButtonLocation = returnPosition;
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundHomeButton = false;
+            });
+        }
+    }
+    if (scanForEndGameButton) {
+        int xStart = data.imageWidth/2 - 150;
+        int yStart = data.imageHeight * 0.68125 - 100;
+        int xEnd = data.imageWidth/2 + 150;
+        int yEnd = data.imageHeight * 0.68125 + 100;
+        detectExactImageToImage(step11_EndGameContinueButton, data, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.65, true);
+        if (returnPercentage >= 0.65) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundEndGameButton = true;
+                endGameButtonLocation = returnPosition;
+            });
+        } else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                foundEndGameButton = false;
+            });
+        }
+    }
+    /*
+     ImageData imageData = data;
     if ((clock() - lastScreenScan)/CLOCKS_PER_SEC >= 0.5) {
         lastScreenScan = clock();
         bool match = false;
@@ -78,10 +403,10 @@ void AutoQueueManager::processImage(ImageData data) {
                 if (match) {
                     NSLog(@"Clicked PVP mode");
                 } else {NSLog(@"PVP not detected, switching to next");}
-                /*
-                 match = detectRelativeImageInImage(step2_PVPMode, data, location, 0.65);
-                 location.x += 191; location.y += 76;
-                 */
+     
+                // match = detectRelativeImageInImage(step2_PVPMode, data, location, 0.65);
+                // location.x += 191; location.y += 76;
+     
             }break;
             case STEP_3: {
                 clickLocation.x = playButtonLocation.x -70;
@@ -240,7 +565,9 @@ void AutoQueueManager::processImage(ImageData data) {
             //tapMouseLeft(location.x + 10, location.y+10);
         }
     }
+     */
 }
+/*
 void AutoQueueManager::checkForEndGame(ImageData data) {
     imageData = data;
     
@@ -265,4 +592,4 @@ void AutoQueueManager::checkForEndGame(ImageData data) {
         }
         currentStep = STEP_12;
     }
-}
+}*/
