@@ -11,7 +11,7 @@
 #include "concurrentqueue.h"
 
 class AllyMinionManager {
-    ImageData imageData, topLeftImageData, bottomLeftImageData,
+    ImageData topLeftImageData, bottomLeftImageData,
     bottomRightImageData, topRightImageData, healthSegmentImageData,  ward, pinkWard;
     
     
@@ -21,10 +21,10 @@ class AllyMinionManager {
     
     double fullScreenUpdateTime, lastUpdateTime;
     
-    void scanSection(int xStart, int yStart, int xEnd, int yEnd);
-    void processMinionsLocations();
-    void processMinionsHealth();
-    void processPixel(uint8_t *pixel, int x, int y);
+    void scanSection(ImageData imageData, int xStart, int yStart, int xEnd, int yEnd);
+    void processMinionsLocations(ImageData imageData);
+    void processMinionsHealth(ImageData imageData);
+    void processPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     void processTopLeftDetect(); void processBottomLeftDetect(); void processTopRightDetect(); void processBottomRightDetect();
     bool containsPosition(NSMutableArray* array, Position p);
     
@@ -38,5 +38,5 @@ public:
     MinionBar getNearestMinion(int x, int y);
     MinionBar getFurthestMinion(int x, int y);
     
-    void debugDraw();
+    void debugDraw(ImageData imageData);
 };

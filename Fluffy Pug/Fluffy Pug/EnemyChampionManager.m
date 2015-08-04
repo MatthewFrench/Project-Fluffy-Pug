@@ -30,15 +30,14 @@ EnemyChampionManager::EnemyChampionManager () {
     lastUpdateTime = clock();
 }
 
-void EnemyChampionManager::debugDraw() {
+void EnemyChampionManager::debugDraw(ImageData imageData) {
     for (int i = 0; i < [championBars count]; i++) {
         ChampionBar mb;
         [[championBars objectAtIndex:i] getValue:&mb];
         drawRect(imageData, mb.topLeft.x, mb.topLeft.y, Health_Bar_Width, Health_Bar_Height, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
     }
 }
-void EnemyChampionManager::processImage(ImageData data) {
-    imageData = data;
+void EnemyChampionManager::processImage(ImageData imageData) {
     double delta = (clock() - lastUpdateTime)/CLOCKS_PER_SEC;
     lastUpdateTime = clock();
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
@@ -55,7 +54,7 @@ void EnemyChampionManager::processImage(ImageData data) {
     
     if (needsFullScreenUpdate) { //Scan full screen
         needsFullScreenUpdate = false;
-        scanSection(0, 0, imageData.imageWidth, imageData.imageHeight);
+        scanSection(imageData, 0, 0, imageData.imageWidth, imageData.imageHeight);
     } else {
         //Scan only where we last saw enemy champions
         for (int i = 0; i < [championBars count]; i++) {
@@ -71,20 +70,20 @@ void EnemyChampionManager::processImage(ImageData data) {
             if (yStart < 0) yStart = 0;
             if (xEnd > imageData.imageWidth) xEnd = imageData.imageWidth;
             if (yEnd > imageData.imageHeight) yEnd = imageData.imageHeight;
-            scanSection(xStart, yStart, xEnd, yEnd);
+            scanSection(imageData, xStart, yStart, xEnd, yEnd);
         }
     }
     [championBars removeAllObjects];
     //Take the scanned corners and get champion data
     processChampionsLocations();
-    processChampionsHealth();
+    processChampionsHealth(imageData);
 }
-void EnemyChampionManager::scanSection(int xStart, int yStart, int xEnd, int yEnd) {
+void EnemyChampionManager::scanSection(ImageData imageData, int xStart, int yStart, int xEnd, int yEnd) {
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = getPixel2(imageData, xStart, y);
         
         for (int x = xStart; x < xEnd; x++) {
-            processPixel(pixel, x, y);
+            processPixel(imageData, pixel, x, y);
             
             pixel += 4;
         }
@@ -103,7 +102,7 @@ void EnemyChampionManager::processChampionsLocations() {
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
     }
 }
-void EnemyChampionManager::processChampionsHealth() {
+void EnemyChampionManager::processChampionsHealth(ImageData imageData) {
     for (int i = 0; i < [championBars count]; i++) {
         ChampionBar cb;
         [[championBars objectAtIndex:i] getValue:&cb];
@@ -166,7 +165,7 @@ ChampionBar EnemyChampionManager::getLowestHealthChampion(int x, int y) {
 
 
 
-void EnemyChampionManager::processPixel(uint8_t *pixel, int x, int y) {
+void EnemyChampionManager::processPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     //Detect top left bar
     if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.7)) {
         Position p;p.x=x;p.y=y;

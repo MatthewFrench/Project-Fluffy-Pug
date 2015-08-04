@@ -18,14 +18,13 @@
 #import "ShopManager.h"
 #import "EnemyTowerManager.h"
 
-class BasicAI;
-
 class LeagueGameState {
 public:
-    bool autoQueueActive;
+    volatile bool autoQueueActive;
     volatile int leaguePID;
-    CGRect leagueSize;
-    struct ImageData imageData;
+    /*volatile*/ CGRect leagueSize;
+    
+    //struct ImageData imageData;
     AllyMinionManager* allyMinionManager;
     EnemyMinionManager* enemyMinionManager;
     EnemyChampionManager* enemyChampionManager;
@@ -33,12 +32,11 @@ public:
     AllyChampionManager* allyChampionManager;
     AbilityManager* abilityManager;
     ItemManager* itemManager;
-    BasicAI* basicAI;
     ShopManager* shopManager;
     EnemyTowerManager* enemyTowerManager;
     
     LeagueGameState();
-    void processImage(struct ImageData image);
-    void processAI();
-    void debugDraw();
+    void processDetection(struct ImageData image);
+    void processLogic();
+    void debugDraw(ImageData imageData);
 };

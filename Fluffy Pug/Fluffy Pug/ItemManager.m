@@ -32,25 +32,24 @@ ItemManager::ItemManager() {
 }
 
 void ItemManager::processImage(ImageData data) {
-    imageData = data;
     
     lastUpdateTime = clock();
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
-    if (lastFullScreenUpdate >= 1.7) { //It's been a whole second, scan the screen
+    if (lastFullScreenUpdate >= 0.25) { //It's been a whole second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
     }
     usedItemInFrame = false;
-    item1Active = TRUE;
-    item2Active = TRUE;
-    item3Active = TRUE;
-    trinketActive = TRUE;
-    item5Active = TRUE;
-    item6Active = TRUE;
-    item7Active = TRUE;
-    //if (needsFullScreenUpdate) {
-    //    detectItems();
-    //}
+    item1Active = false;
+    item2Active = false;
+    item3Active = false;
+    trinketActive = false;
+    item5Active = false;
+    item6Active = false;
+    item7Active = false;
+    if (needsFullScreenUpdate) {
+        detectItems(data);
+    }
 }
 
 void ItemManager::useItem1() {
@@ -104,7 +103,7 @@ void ItemManager::useItem7() {
     }
 }
 
-void ItemManager::detectItems() {
+void ItemManager::detectItems(ImageData imageData) {
     
     //Item 1
     int yStart = imageData.imageHeight - 102;
@@ -125,8 +124,8 @@ void ItemManager::detectItems() {
     if (isActive) item1Active = true;
     
     //Item 2
-     xStart = imageData.imageWidth/2 + 160;
-     xEnd = imageData.imageWidth/2 + 194;
+    xStart = imageData.imageWidth/2 + 160;
+    xEnd = imageData.imageWidth/2 + 194;
     isActive = false;
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
@@ -176,10 +175,10 @@ void ItemManager::detectItems() {
     if (isActive) trinketActive = true;
     
     //Item 5
-     yStart = imageData.imageHeight - 67;
-     yEnd = imageData.imageHeight - 30;
-     xStart = imageData.imageWidth/2 + 124;
-     xEnd = imageData.imageWidth/2 + 160;
+    yStart = imageData.imageHeight - 67;
+    yEnd = imageData.imageHeight - 30;
+    xStart = imageData.imageWidth/2 + 124;
+    xEnd = imageData.imageWidth/2 + 160;
     isActive = false;
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;

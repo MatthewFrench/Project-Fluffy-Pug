@@ -1,25 +1,25 @@
 //
-//  AbilityManagerPBE.m
+//  AbilityManagerOLD.m
 //  Fluffy Pug
 //
 //  Created by Matthew French on 6/11/15.
 //  Copyright © 2015 Matthew French. All rights reserved.
 //
 
-#import "AbilityManagerPBE.h"
+#import "AbilityManagerOLD.h"
 
-AbilityManagerPBE::AbilityManagerPBE() {
+AbilityManagerOLD::AbilityManagerOLD() {
     levelUpDetect = [NSMutableArray new];
     levelUpDisabledDetect = [NSMutableArray new];
     abilityEnabledDetect = [NSMutableArray new];
     abilityDisabledDetect = [NSMutableArray new];
     
-    enabledSummonerSpellImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Enabled Summoner Spell" ofType:@"png"]);
+    //enabledSummonerSpellImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Enabled Summoner Spell" ofType:@"png"]);
     levelDotImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Leveled Dot" ofType:@"png"]);
     levelUpImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Level Up" ofType:@"png"]);
     levelUpDisabledImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Level Up Disabled" ofType:@"png"]);
-    abilityEnabledImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Enabled Ability" ofType:@"png"]);
-    abilityDisabledImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Disabled Ability" ofType:@"png"]);
+    //abilityEnabledImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Enabled Ability" ofType:@"png"]);
+    //abilityDisabledImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Skill Bar/Disabled Ability" ofType:@"png"]);
     ability1LevelUpAvailable = false;
     ability2LevelUpAvailable = false;
     ability3LevelUpAvailable = false;
@@ -35,15 +35,55 @@ AbilityManagerPBE::AbilityManagerPBE() {
     fullScreenUpdateTime = clock();
     lastUpdateTime = clock();
     
+    ability1LastUse = clock();
+    ability2LastUse = clock();
+    ability3LastUse = clock();
+    ability4LastUse = clock();
+    summoner1LastUse = clock();
+    summoner2LastUse = clock();
+    
     levelUpCount = 0;
 }
 
-void AbilityManagerPBE::processImage(ImageData data) {
+void AbilityManagerOLD::useSpell1() {
+    tapSpell1();
+    ability1Ready = false;
+    ability1LastUse = clock();
+}
+void AbilityManagerOLD::useSpell2() {
+    tapSpell2();
+    ability2Ready = false;
+    ability2LastUse = clock();
+}
+void AbilityManagerOLD::useSpell3() {
+    tapSpell3();
+    ability3Ready = false;
+    ability3LastUse = clock();
+}
+void AbilityManagerOLD::useSpell4()  {
+    tapSpell4();
+    ability4Ready = false;
+    ability4LastUse = clock();
+}
+
+void AbilityManagerOLD::useSummonerSpell1() {
+    tapSummonerSpell1();
+    summonerSpell1Ready = false;
+    summoner1LastUse = clock();
+    
+}
+void AbilityManagerOLD::useSummonerSpell2() {
+    tapSummonerSpell2();
+    summonerSpell2Ready = false;
+    summoner2LastUse = clock();
+}
+
+void AbilityManagerOLD::processImage(ImageData data) {
     imageData = data;
     
     lastUpdateTime = clock();
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
-    if (lastFullScreenUpdate >= 2.0) { //It's been a whole second, scan the screen
+    if (lastFullScreenUpdate >= 1.6) { //It's been a whole second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
     }
@@ -53,8 +93,28 @@ void AbilityManagerPBE::processImage(ImageData data) {
         detectLevelUpCount();
     }
     //Now detect ability availability every frame
-    detectAbilities();
-    detectSummonerSpells();
+    //detectAbilities();
+    //detectSummonerSpells();
+    
+    if ((clock() - ability1LastUse)/CLOCKS_PER_SEC > 2.0) {
+        ability1Ready = true;
+    }
+    if ((clock() - ability2LastUse)/CLOCKS_PER_SEC > 2.0) {
+        ability2Ready = true;
+    }
+    if ((clock() - ability3LastUse)/CLOCKS_PER_SEC > 2.0) {
+        ability3Ready = true;
+    }
+    if ((clock() - ability4LastUse)/CLOCKS_PER_SEC > 2.0) {
+        ability4Ready = true;
+    }
+    
+    if ((clock() - summoner1LastUse)/CLOCKS_PER_SEC > 2.0) {
+        summonerSpell1Ready = true;
+    }
+    if ((clock() - summoner2LastUse)/CLOCKS_PER_SEC > 2.0) {
+        summonerSpell2Ready = true;
+    }
     
     //if (ability1Ready)  NSLog(@"Q is ready");
     //if (ability2Ready)  NSLog(@"W is ready");
@@ -62,18 +122,43 @@ void AbilityManagerPBE::processImage(ImageData data) {
     //if (ability4Ready)  NSLog(@"R is ready");
 }
 
-void AbilityManagerPBE::detectLevelUp() {
+void AbilityManagerOLD::detectLevelUp() {
     [levelUpDetect removeAllObjects];
     [levelUpDisabledDetect removeAllObjects];
     
     //Detect level up icon
     //160 pixels from bottom of screen to 100 pixels from bottom of screen
     //middle of screen -300 and +300
-    int yStart = imageData.imageHeight - 160;
-    int yEnd = imageData.imageHeight - 100;
-    int xStart = imageData.imageWidth/2 - 300;
-    int xEnd = imageData.imageWidth/2 + 300;
+    int yStart = imageData.imageHeight - 142;
+    int yEnd = imageData.imageHeight - 105;
+    int xStart = imageData.imageWidth/2 - 120;
+    int xEnd = imageData.imageWidth/2 + 60;
     
+    /*
+    for (int x = xStart; x < xEnd; x+=levelUpImageData.imageWidth) {
+        for (int y = yStart; y < yEnd; y++) {
+            double percentage1=0, percentage2=0;
+            Position p = makePosition(-1, -1);
+            Position p1 = detectRelativeImageInImagePercentage(levelUpImageData, imageData, 0.5, x, y, x+10, y+10, percentage1);
+            Position p2 = detectRelativeImageInImagePercentage(levelUpDisabledImageData, imageData, 0.9, x, y, x+10, y+10, percentage2);
+            //NSLog(@"Percentage 1: %f vs Percentage 2: %f", percentage1, percentage2);
+            if (percentage1 > percentage2) {
+                p = p1;
+            } else {
+                p = p2;
+            }
+            if (p.x != -1 && percentage1 > percentage2) {
+                //NSLog(@"Detected level up");
+                [levelUpDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
+                break;
+            } else if (p.x != -1 && percentage2 > percentage1) {
+                //NSLog(@"Detected level up disabled");
+                [levelUpDisabledDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
+                break;
+            }
+        }
+    }
+    */
     //yStart = 0; xStart = 0; yEnd = imageData.imageHeight; xEnd = imageData.imageWidth;
     
     for (int y = yStart; y < yEnd; y++) {
@@ -84,6 +169,7 @@ void AbilityManagerPBE::detectLevelUp() {
             pixel += 4;
         }
     }
+     
     
     if ([levelUpDetect count] == 0) {
         ability1LevelUpAvailable = false;
@@ -143,16 +229,16 @@ void AbilityManagerPBE::detectLevelUp() {
 
 
 
-void AbilityManagerPBE::processPixelLevelUp(uint8_t *pixel, int x, int y) {
+void AbilityManagerOLD::processPixelLevelUp(uint8_t *pixel, int x, int y) {
     //Detect top left bar
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpImageData, 10)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpImageData, 0.75)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(levelUpDetect, p)) {
             [levelUpDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
-    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpDisabledImageData, 10)) {
+    if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpDisabledImageData, 0.75)) {
         Position p;p.x=x;p.y=y;
         //Add if not detected
         if (!containsPosition(levelUpDisabledDetect, p)) {
@@ -161,14 +247,14 @@ void AbilityManagerPBE::processPixelLevelUp(uint8_t *pixel, int x, int y) {
     }
 }
 
-void AbilityManagerPBE::processPixelLevelUpCount(uint8_t *pixel, int x, int y) {
+void AbilityManagerOLD::processPixelLevelUpCount(uint8_t *pixel, int x, int y) {
     //Detect top left bar
     if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelDotImageData, 30)) {
         levelUpCount++;
     }
 }
 
-void AbilityManagerPBE::detectLevelUpCount() {
+void AbilityManagerOLD::detectLevelUpCount() {
     levelUpCount = 0;
     
     //Detect level up icon
@@ -194,7 +280,7 @@ void AbilityManagerPBE::detectLevelUpCount() {
 }
 
 
-void AbilityManagerPBE::detectAbilities() {
+void AbilityManagerOLD::detectAbilities() {
     [abilityEnabledDetect removeAllObjects];
     [abilityDisabledDetect removeAllObjects];
     
@@ -278,7 +364,8 @@ void AbilityManagerPBE::detectAbilities() {
 }
 
 
-void AbilityManagerPBE::processPixelAbilities(uint8_t *pixel, int x, int y) {
+void AbilityManagerOLD::processPixelAbilities(uint8_t *pixel, int x, int y) {
+    /*
     //Detect top left bar
     if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, abilityEnabledImageData, 40)) {
         Position p;p.x=x;p.y=y;
@@ -293,13 +380,15 @@ void AbilityManagerPBE::processPixelAbilities(uint8_t *pixel, int x, int y) {
         if (!containsPosition(abilityDisabledDetect, p)) {
             [abilityDisabledDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
-    }
+    }*/
 }
 
-void AbilityManagerPBE::detectSummonerSpells() {
+void AbilityManagerOLD::detectSummonerSpells() {
     summonerSpell1Ready = false;
     summonerSpell2Ready = false;
     
+    /*
+
     //First summoner spell is at half width + 32 to +68
     //full height - 80 to -40
     int yStart = imageData.imageHeight - 110;
@@ -322,10 +411,10 @@ void AbilityManagerPBE::detectSummonerSpells() {
     
     //Second summoner spells is at half width + 68 to +107
     //full height -80 to -40
-    yStart = imageData.imageHeight - 110;
-    yEnd = imageData.imageHeight - 40;
-    xStart = imageData.imageWidth/2 + 68;
-    xEnd = imageData.imageWidth/2 + 110;
+     yStart = imageData.imageHeight - 110;
+     yEnd = imageData.imageHeight - 40;
+     xStart = imageData.imageWidth/2 + 68;
+     xEnd = imageData.imageWidth/2 + 110;
     
     //yStart = 0; xStart = 0; yEnd = imageData.imageHeight; xEnd = imageData.imageWidth;
     
@@ -338,10 +427,10 @@ void AbilityManagerPBE::detectSummonerSpells() {
             }
             pixel += 4;
         }
-    }
+    }*/
 }
 
-bool AbilityManagerPBE::containsPosition(NSMutableArray* array, Position p) {
+bool AbilityManagerOLD::containsPosition(NSMutableArray* array, Position p) {
     for (int i = 0; i < [array count]; i++) {
         Position p2;
         [[array objectAtIndex:i] getValue:&p2];

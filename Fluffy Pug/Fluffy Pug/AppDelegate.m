@@ -39,6 +39,8 @@
     leagueDetector = new LeagueDetector();
     autoQueueManager = new AutoQueueManager(leagueGameState);
     
+    basicAI = new BasicAI(leagueGameState);
+    
     [self updateLeagueWindowStatus];
     //lastTime = clock();
     
@@ -164,6 +166,7 @@
     leagueDetector->detectLeagueWindow();
     if (leagueDetector->leaguePID != -1) {
         leagueGameState->leagueSize = CGRectMake(leagueDetector->xOrigin, leagueDetector->yOrigin, leagueDetector->width, leagueDetector->height);
+        leagueGameState->leaguePID = leagueDetector->leaguePID;
         //NSLog(@"Width: %f, height: %f", [width floatValue], [height floatValue]);
         //NSLog(@"Found league instance: %@", info);
         [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", leagueGameState->leagueSize.size.width, leagueGameState->leagueSize.size.height]];
@@ -181,7 +184,7 @@ AppDelegate *GlobalSelf;
     GlobalSelf->leagueGameState->autoQueueActive = [GlobalSelf->autoQueueCheckbox state] == NSOnState;
     //Run auto queue logic and AI logic
     if ([GlobalSelf->aiActiveCheckbox state] == NSOnState && GlobalSelf->leagueGameState->leaguePID != -1) {
-        leagueGameState->processAI();
+        basicAI->processAI();
     }
     if (runAutoQueue && leagueGameState->leaguePID == -1) {
         autoQueueManager->processLogic();
@@ -285,6 +288,9 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     
     //GlobalSelf->leagueGameState->processImage(imageData);
     
+    if (GlobalSelf->leagueGameState->leaguePID != -1) {
+        GlobalSelf->leagueGameState->processDetection(imageData);
+    }
     
     if (GlobalSelf->runAutoQueue && GlobalSelf->leagueGameState->leaguePID == -1) {
         const CGRect * rects;

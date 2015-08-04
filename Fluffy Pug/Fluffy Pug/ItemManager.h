@@ -13,9 +13,9 @@
 #import "InteractiveEvents.h"
 
 class ItemManager {
-    ImageData imageData, trinketItemImageData, itemImageData;
+    ImageData trinketItemImageData, itemImageData;
     
-    void detectItems();
+    void detectItems(ImageData imageData);
     
     bool needsFullScreenUpdate;
     

@@ -34,7 +34,7 @@ AllyMinionManager::AllyMinionManager () {
     lastUpdateTime = clock();
 }
 
-void AllyMinionManager::debugDraw() {
+void AllyMinionManager::debugDraw(ImageData imageData) {
     for (int i = 0; i < [minionBars count]; i++) {
         MinionBar mb;
         [[minionBars objectAtIndex:i] getValue:&mb];
@@ -62,8 +62,8 @@ void AllyMinionManager::debugDraw() {
      drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
      }*/
 }
-void AllyMinionManager::processImage(ImageData data) {
-    imageData = data;
+void AllyMinionManager::processImage(ImageData imageData) {
+
     double delta = (clock() - lastUpdateTime)/CLOCKS_PER_SEC;
     lastUpdateTime = clock();
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
@@ -80,7 +80,7 @@ void AllyMinionManager::processImage(ImageData data) {
     
     if (needsFullScreenUpdate) { //Scan full screen
         needsFullScreenUpdate = false;
-        scanSection(0, 0, imageData.imageWidth, imageData.imageHeight);
+        scanSection( imageData, 0, 0, imageData.imageWidth, imageData.imageHeight);
     } else {
         //Scan only where we last saw enemy Minions
         for (int i = 0; i < [minionBars count]; i++) {
@@ -96,26 +96,26 @@ void AllyMinionManager::processImage(ImageData data) {
             if (yStart < 0) yStart = 0;
             if (xEnd > imageData.imageWidth) xEnd = imageData.imageWidth;
             if (yEnd > imageData.imageHeight) yEnd = imageData.imageHeight;
-            scanSection(xStart, yStart, xEnd, yEnd);
+            scanSection( imageData, xStart, yStart, xEnd, yEnd);
         }
     }
     [minionBars removeAllObjects];
     //Take the scanned corners and get champion data
-    processMinionsLocations();
-    processMinionsHealth();
+    processMinionsLocations( imageData);
+    processMinionsHealth( imageData);
 }
-void AllyMinionManager::scanSection(int xStart, int yStart, int xEnd, int yEnd) {
+void AllyMinionManager::scanSection(ImageData imageData, int xStart, int yStart, int xEnd, int yEnd) {
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
         
         for (int x = xStart; x < xEnd; x++) {
-            processPixel(pixel, x, y);
+            processPixel( imageData, pixel, x, y);
             
             pixel += 4;
         }
     }
 }
-void AllyMinionManager::processMinionsLocations() {
+void AllyMinionManager::processMinionsLocations(ImageData imageData) {
     processTopLeftDetect();
     processTopRightDetect();
     processBottomLeftDetect();
@@ -157,7 +157,7 @@ void AllyMinionManager::processMinionsLocations() {
     }
         //NSLog(@"Top left: %lu, top right: %lu, bottom left: %lu, bottom right: %lu", (unsigned long)[topLeftDetect count], (unsigned long)[topRightDetect count], (unsigned long)[bottomLeftDetect count], (unsigned long)[bottomRightDetect count]);
 }
-void AllyMinionManager::processMinionsHealth() {
+void AllyMinionManager::processMinionsHealth(ImageData imageData) {
     for (int i = 0; i < [minionBars count]; i++) {
         MinionBar cb;
         [[minionBars objectAtIndex:i] getValue:&cb];
@@ -217,7 +217,7 @@ MinionBar AllyMinionManager::getFurthestMinion(int x, int y) {
 }
 
 
-void AllyMinionManager::processPixel(uint8_t *pixel, int x, int y) {
+void AllyMinionManager::processPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     //getImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData)
     //Detect top left bar
     //ydouble percentage;

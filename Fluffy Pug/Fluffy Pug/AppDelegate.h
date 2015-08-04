@@ -16,6 +16,7 @@
 #import <IOKit/IOKitLib.h>
 #import <IOSurface/IOSurface.h>
 #import "AutoQueueManager.h"
+#import "BasicAI.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     @public IBOutlet NSTextField* statusText, *allyMinionText, *enemyMinionText, *enemyChampionText, *selfChampionText, *allyChampionText;
@@ -45,6 +46,8 @@
     CGDisplayStreamRef stream;
     
     volatile bool runAutoQueue;
+    
+    @public BasicAI* basicAI;
     
 }
 @property (strong) id activity;

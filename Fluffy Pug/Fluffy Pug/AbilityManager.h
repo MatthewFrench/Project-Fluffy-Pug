@@ -11,36 +11,36 @@
 #import "InteractiveEvents.h"
 
 class AbilityManager {
-    ImageData imageData, levelUpImageData, levelDotImageData, levelUpDisabledImageData;//, abilityEnabledImageData, abilityDisabledImageData, enabledSummonerSpellImageData;
+    ImageData levelUpImageData, levelDotImageData, levelUpDisabledImageData, abilityEnabledImageData, abilityDisabledImageData, enabledSummonerSpellImageData;
     
-    void processPixelLevelUp(uint8_t *pixel, int x, int y);
+    void processPixelLevelUp(ImageData imageData, uint8_t *pixel, int x, int y);
     bool containsPosition(NSMutableArray* array, Position p);
-    void detectLevelUp();
-    void detectLevelUpCount();
-    void processPixelLevelUpCount(uint8_t *pixel, int x, int y);
-    void detectAbilities();
-    void processPixelAbilities(uint8_t *pixel, int x, int y);
-    void detectSummonerSpells();
+    void detectLevelUp(ImageData imageData);
+    void detectLevelUpCount(ImageData imageData);
+    void processPixelLevelUpCount(ImageData imageData, uint8_t *pixel, int x, int y);
+    void detectAbilities(ImageData imageData);
+    void processPixelAbilities(ImageData imageData, uint8_t *pixel, int x, int y);
+    void detectSummonerSpells(ImageData imageData);
     
     bool needsFullScreenUpdate;
     
-    double fullScreenUpdateTime, lastUpdateTime, ability1LastUse, ability2LastUse, ability3LastUse, ability4LastUse, summoner1LastUse, summoner2LastUse;;
+    double fullScreenUpdateTime, lastUpdateTime;
     /*
-    , topLeftImageData, bottomLeftImageData,
-    bottomRightImageData, topRightImageData, healthSegmentImageData;
-    
-    void scanSection(int xStart, int yStart, int xEnd, int yEnd);
-    void processMinionsLocations();
-    void processMinionsHealth();
-    void processPixel(uint8_t *pixel, int x, int y);
-    void processTopLeftDetect(); void processBottomLeftDetect(); void processTopRightDetect(); void processBottomRightDetect();
-    bool containsPosition(NSMutableArray* array, Position p);
-    
-    const double minionSpeed = 2000; //100 pixels per second
-    */
+     , topLeftImageData, bottomLeftImageData,
+     bottomRightImageData, topRightImageData, healthSegmentImageData;
+     
+     void scanSection(int xStart, int yStart, int xEnd, int yEnd);
+     void processMinionsLocations();
+     void processMinionsHealth();
+     void processPixel(uint8_t *pixel, int x, int y);
+     void processTopLeftDetect(); void processBottomLeftDetect(); void processTopRightDetect(); void processBottomRightDetect();
+     bool containsPosition(NSMutableArray* array, Position p);
+     
+     const double minionSpeed = 2000; //100 pixels per second
+     */
 public:
     AbilityManager();
-    void processImage(ImageData data);
+    void processImage(ImageData imageData);
     NSMutableArray* levelUpDetect, *levelUpDisabledDetect, *abilityEnabledDetect, *abilityDisabledDetect;
     bool ability1LevelUpAvailable, ability2LevelUpAvailable, ability3LevelUpAvailable, ability4LevelUpAvailable;
     bool ability1Ready, ability2Ready, ability3Ready, ability4Ready;
@@ -55,11 +55,11 @@ public:
     void useSummonerSpell1();
     void useSummonerSpell2();
     /*
-    NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
-    
-    MinionBar getNearestMinion(int x, int y);
-    MinionBar getLowestHealthMinion(int x, int y);
-    
-    void debugDraw();
+     NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
+     
+     MinionBar getNearestMinion(int x, int y);
+     MinionBar getLowestHealthMinion(int x, int y);
+     
+     void debugDraw();
      */
 };

@@ -130,6 +130,7 @@ void LeagueDetector::detectLeagueWindow()
         NSDictionary* info = [prunedWindowList firstObject];
         NSNumber *pid = info[kAppPIDKey];
         leaguePID = [pid intValue];
+        
         NSNumber* xOrigin2 = info[kWindowOriginXKey];
         NSNumber* yOrigin2 = info[kWindowOriginYKey];
         NSNumber* width2 = info[kWindowWidthKey];

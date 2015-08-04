@@ -7,7 +7,6 @@
 //
 
 #import "LeagueGameState.h"
-#import "BasicAI.h"
 
 LeagueGameState::LeagueGameState() {
     autoQueueActive = false;
@@ -21,11 +20,12 @@ LeagueGameState::LeagueGameState() {
     itemManager = new ItemManager();
     shopManager = new ShopManager();
     enemyTowerManager = new EnemyTowerManager();
-    basicAI = new BasicAI(this);
+}
+void LeagueGameState::processLogic() {
+    
 }
 
-void LeagueGameState::processImage(struct ImageData image) {
-    imageData = image;
+void LeagueGameState::processDetection(ImageData image) {
     
     if (leaguePID != -1) {
         dispatch_group_t dispatchGroup = dispatch_group_create();
@@ -54,19 +54,19 @@ void LeagueGameState::processImage(struct ImageData image) {
         });
         queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
-            abilityManager->processImage(image);
+            //abilityManager->processImage(image);
         });
         queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
-            itemManager->processImage(image);
+            //itemManager->processImage(image);
         });
         queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
-            shopManager->processImage(image);
+            //shopManager->processImage(image);
         });
         queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
-            enemyTowerManager->processImage(image);
+            //enemyTowerManager->processImage(image);
         });
         
         // wait on the group to block the current thread.
@@ -119,13 +119,10 @@ void LeagueGameState::processImage(struct ImageData image) {
     //enemyMinionManager->postPixelProcessing();
     //enemyChampionManager->postPixelProcessing();
 }
-void LeagueGameState::processAI() {
-    basicAI->processAI();
-}
-void LeagueGameState::debugDraw() {
-    allyMinionManager->debugDraw();
-    enemyMinionManager->debugDraw();
-    enemyChampionManager->debugDraw();
-    selfChampionManager->debugDraw();
-    allyChampionManager->debugDraw();
+void LeagueGameState::debugDraw(ImageData imageData) {
+    allyMinionManager->debugDraw(imageData);
+    enemyMinionManager->debugDraw(imageData);
+    enemyChampionManager->debugDraw(imageData);
+    selfChampionManager->debugDraw(imageData);
+    allyChampionManager->debugDraw(imageData);
 }

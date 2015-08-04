@@ -1,14 +1,14 @@
 //
-//  ItemManagerPBE.m
+//  ItemManagerOLD.m
 //  Fluffy Pug
 //
 //  Created by Matthew French on 6/11/15.
 //  Copyright © 2015 Matthew French. All rights reserved.
 //
 
-#import "ItemManagerPBE.h"
+#import "ItemManagerOLD.h"
 
-ItemManagerPBE::ItemManagerPBE() {
+ItemManagerOLD::ItemManagerOLD() {
     
     trinketItemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Trinket Active" ofType:@"png"]);
     itemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Usable Item" ofType:@"png"]);
@@ -31,50 +31,50 @@ ItemManagerPBE::ItemManagerPBE() {
     usedItemInFrame = false;
 }
 
-void ItemManagerPBE::processImage(ImageData data) {
+void ItemManagerOLD::processImage(ImageData data) {
     imageData = data;
     
     lastUpdateTime = clock();
     double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
-    if (lastFullScreenUpdate >= 0.25) { //It's been a whole second, scan the screen
+    if (lastFullScreenUpdate >= 1.7) { //It's been a whole second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
     }
     usedItemInFrame = false;
-    item1Active = false;
-    item2Active = false;
-    item3Active = false;
-    trinketActive = false;
-    item5Active = false;
-    item6Active = false;
-    item7Active = false;
-    if (needsFullScreenUpdate) {
-        detectItems();
-    }
+    item1Active = TRUE;
+    item2Active = TRUE;
+    item3Active = TRUE;
+    trinketActive = TRUE;
+    item5Active = TRUE;
+    item6Active = TRUE;
+    item7Active = TRUE;
+    //if (needsFullScreenUpdate) {
+    //    detectItems();
+    //}
 }
 
-void ItemManagerPBE::useItem1() {
+void ItemManagerOLD::useItem1() {
     if ((clock() - item1Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item1Time = clock();
         usedItemInFrame = true;
         tapActive1();
     }
 }
-void ItemManagerPBE::useItem2() {
+void ItemManagerOLD::useItem2() {
     if ((clock() - item2Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item2Time = clock();
         usedItemInFrame = true;
         tapActive2();
     }
 }
-void ItemManagerPBE::useItem3() {
+void ItemManagerOLD::useItem3() {
     if ((clock() - item3Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item3Time = clock();
         usedItemInFrame = true;
         tapActive3();
     }
 }
-void ItemManagerPBE::useTrinket(int x, int y) {
+void ItemManagerOLD::useTrinket(int x, int y) {
     if ((clock() - trinketTime)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         trinketTime = clock();
         usedItemInFrame = true;
@@ -82,21 +82,21 @@ void ItemManagerPBE::useTrinket(int x, int y) {
         tapWard();
     }
 }
-void ItemManagerPBE::useItem5() {
+void ItemManagerOLD::useItem5() {
     if ((clock() - item5Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item5Time = clock();
         usedItemInFrame = true;
         tapActive5();
     }
 }
-void ItemManagerPBE::useItem6() {
+void ItemManagerOLD::useItem6() {
     if ((clock() - item6Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item6Time = clock();
         usedItemInFrame = true;
         tapActive6();
     }
 }
-void ItemManagerPBE::useItem7() {
+void ItemManagerOLD::useItem7() {
     if ((clock() - item7Time)/CLOCKS_PER_SEC >= 3.0 && !usedItemInFrame) {
         item7Time = clock();
         usedItemInFrame = true;
@@ -104,7 +104,7 @@ void ItemManagerPBE::useItem7() {
     }
 }
 
-void ItemManagerPBE::detectItems() {
+void ItemManagerOLD::detectItems() {
     
     //Item 1
     int yStart = imageData.imageHeight - 102;
@@ -125,8 +125,8 @@ void ItemManagerPBE::detectItems() {
     if (isActive) item1Active = true;
     
     //Item 2
-    xStart = imageData.imageWidth/2 + 160;
-    xEnd = imageData.imageWidth/2 + 194;
+     xStart = imageData.imageWidth/2 + 160;
+     xEnd = imageData.imageWidth/2 + 194;
     isActive = false;
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
@@ -176,10 +176,10 @@ void ItemManagerPBE::detectItems() {
     if (isActive) trinketActive = true;
     
     //Item 5
-    yStart = imageData.imageHeight - 67;
-    yEnd = imageData.imageHeight - 30;
-    xStart = imageData.imageWidth/2 + 124;
-    xEnd = imageData.imageWidth/2 + 160;
+     yStart = imageData.imageHeight - 67;
+     yEnd = imageData.imageHeight - 30;
+     xStart = imageData.imageWidth/2 + 124;
+     xEnd = imageData.imageWidth/2 + 160;
     isActive = false;
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;

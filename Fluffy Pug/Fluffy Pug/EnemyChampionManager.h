@@ -12,7 +12,7 @@
 #import <time.h>
 
 class EnemyChampionManager {
-    ImageData imageData, topLeftImageData, bottomLeftImageData,
+    ImageData topLeftImageData, bottomLeftImageData,
     bottomRightImageData, topRightImageData, healthSegmentImageData;
     
     
@@ -22,10 +22,10 @@ class EnemyChampionManager {
     
     double fullScreenUpdateTime, lastUpdateTime;
     
-    void scanSection(int xStart, int yStart, int xEnd, int yEnd);
+    void scanSection(ImageData imageData, int xStart, int yStart, int xEnd, int yEnd);
     void processChampionsLocations();
-    void processChampionsHealth();
-    void processPixel(uint8_t *pixel, int x, int y);
+    void processChampionsHealth(ImageData imageData);
+    void processPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     void processTopLeftDetect(); void processBottomLeftDetect(); void processTopRightDetect(); void processBottomRightDetect();
     bool containsPosition(NSMutableArray* array, Position p);
     
@@ -35,9 +35,9 @@ public:
     NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     
     EnemyChampionManager();
-    void processImage(ImageData data);
+    void processImage(ImageData imageData);
     ChampionBar getNearestChampion(int x, int y);
     ChampionBar getLowestHealthChampion(int x, int y);
     
-    void debugDraw();
+    void debugDraw(ImageData imageData);
 };

@@ -12,7 +12,7 @@
 #import <time.h>
 
 class EnemyTowerManager {
-    ImageData imageData, topLeftImageData, bottomLeftImageData,
+    ImageData topLeftImageData, bottomLeftImageData,
     bottomRightImageData, topRightImageData, healthSegmentImageData;
     
     bool needsFullScreenUpdate;
@@ -22,18 +22,18 @@ class EnemyTowerManager {
     
     //moodycamel::ConcurrentQueue<Position> topLeftQueue, bottomLeftQueue, topRightQueue, bottomRightQueue;
     
-    void scanSection(int xStart, int yStart, int xEnd, int yEnd);
+    void scanSection(ImageData imageData, int xStart, int yStart, int xEnd, int yEnd);
     void processTowersLocations();
-    void processTowersHealth();
-    void processPixel(uint8_t *pixel, int x, int y);
+    void processTowersHealth(ImageData imageData);
+    void processPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     void processTopLeftDetect(); void processBottomLeftDetect(); void processTopRightDetect(); void processBottomRightDetect();
     bool containsPosition(NSMutableArray* array, Position p);
 public:
     EnemyTowerManager();
-    void debugDraw();
+    void debugDraw(ImageData imageData);
     
     NSMutableArray* towerBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
-    void processImage(ImageData data);
+    void processImage(ImageData imageData);
     TowerBar getNearestTower(int x, int y);
     TowerBar getLowestHealthTower(int x, int y);
 };

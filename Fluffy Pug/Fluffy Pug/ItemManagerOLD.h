@@ -1,5 +1,5 @@
 //
-//  AbilityManagerPBE.h
+//  ItemManagerOLD.h
 //  Fluffy Pug
 //
 //  Created by Matthew French on 6/11/15.
@@ -7,23 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Utility.h"
 
-class AbilityManagerPBE {
-    ImageData imageData, levelUpImageData, levelDotImageData, levelUpDisabledImageData, abilityEnabledImageData, abilityDisabledImageData, enabledSummonerSpellImageData;
+#import "Utility.h"
+#import <time.h>
+#import "InteractiveEvents.h"
+
+class ItemManagerOLD {
+    ImageData imageData, trinketItemImageData, itemImageData;
     
-    void processPixelLevelUp(uint8_t *pixel, int x, int y);
-    bool containsPosition(NSMutableArray* array, Position p);
-    void detectLevelUp();
-    void detectLevelUpCount();
-    void processPixelLevelUpCount(uint8_t *pixel, int x, int y);
-    void detectAbilities();
-    void processPixelAbilities(uint8_t *pixel, int x, int y);
-    void detectSummonerSpells();
+    void detectItems();
     
     bool needsFullScreenUpdate;
     
     double fullScreenUpdateTime, lastUpdateTime;
+    bool usedItemInFrame;
+    double item1Time, item2Time, item3Time, trinketTime, item5Time, item6Time, item7Time;
     /*
      , topLeftImageData, bottomLeftImageData,
      bottomRightImageData, topRightImageData, healthSegmentImageData;
@@ -38,13 +36,18 @@ class AbilityManagerPBE {
      const double minionSpeed = 2000; //100 pixels per second
      */
 public:
-    AbilityManagerPBE();
+    ItemManagerOLD();
     void processImage(ImageData data);
-    NSMutableArray* levelUpDetect, *levelUpDisabledDetect, *abilityEnabledDetect, *abilityDisabledDetect;
-    bool ability1LevelUpAvailable, ability2LevelUpAvailable, ability3LevelUpAvailable, ability4LevelUpAvailable;
-    bool ability1Ready, ability2Ready, ability3Ready, ability4Ready;
-    int levelUpCount;
-    bool summonerSpell1Ready, summonerSpell2Ready;
+    //NSMutableArray* levelUpDetect, *levelUpDisabledDetect, *abilityEnabledDetect, *abilityDisabledDetect;
+    bool item1Active, item2Active, item3Active, trinketActive;
+    bool item5Active, item6Active, item7Active;
+    void useItem1();
+    void useItem2();
+    void useItem3();
+    void useTrinket(int x, int y);
+    void useItem5();
+    void useItem6();
+    void useItem7();
     /*
      NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
      

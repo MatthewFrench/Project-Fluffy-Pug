@@ -13,7 +13,7 @@
 #import "InteractiveEvents.h"
 
 class ShopManager {
-    ImageData imageData, shopWindowImageData, shopEmptyItemSlotImageData, shopAvailableImageData, shopBottomLeftCornerImageData, shopBuyableItemImageData, shopUnbuyableItemImageData;
+    ImageData shopWindowImageData, shopEmptyItemSlotImageData, shopAvailableImageData, shopBottomLeftCornerImageData, shopItemImageData;
     
     //void detectItems();
     
@@ -31,7 +31,7 @@ public:
     bool shopAvailable, boughtItems, buyingItems;
     bool shopOpen;
     ShopManager();
-    void processImage(ImageData data);
+    void processImage(ImageData imageData);
     void openShop();
     void buyItems();
     void closeShop();
