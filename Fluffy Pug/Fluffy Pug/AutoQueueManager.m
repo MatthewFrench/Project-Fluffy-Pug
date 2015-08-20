@@ -25,6 +25,9 @@ AutoQueueManager::AutoQueueManager(LeagueGameState* gameState) {
     step12_HomeButton = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(12) Home Button" ofType:@"png"]);
     step13_ReconnectButton = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(13) Reconnect Button" ofType:@"png"]);
     
+    testImage1 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/TestGame1" ofType:@"png"]);
+    testImage2 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/TestGame2" ofType:@"png"]);
+    
     //lastScreenScan = clock();
     //lastEndGameScan = clock();
     
@@ -158,9 +161,54 @@ void AutoQueueManager::clickLocation(int x, int y) {
         moveMouse(0, 0);
     });
 }
+
 bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, size_t num_rects) {
+    
+    dispatch_group_t dispatchGroup = dispatch_group_create();
+    
+    
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_group_async(dispatchGroup, queue, ^{
+    double returnPercentage3 = 0.0;
+    Position returnPosition3;
+    int xStart2 = 0;
+    int yStart2 = 0;
+    int xEnd2 = data.imageWidth;
+    int yEnd2 = data.imageHeight;
+    CGRect search2 = CGRectMake(xStart2, yStart2, xEnd2 - xStart2, yEnd2-yStart2);
+    size_t intersectRectsNum2;
+    CGRect* intersectSearch2 = getIntersectionRectangles(search2, rects, num_rects, intersectRectsNum2);
+
+    detectExactImageToImageToRectangles(testImage1, data, intersectSearch2, intersectRectsNum2, returnPercentage3, returnPosition3, 0.9, true);
+    
+    if (returnPercentage3 > 0.9) {
+        clickLocation(returnPosition3.x, returnPosition3.y);
+    }
+    });
+    
+    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_group_async(dispatchGroup, queue, ^{
+     double returnPercentage3 = 0.0;
+        Position returnPosition3;
+     int xStart2 = 0;
+     int yStart2 = 0;
+     int xEnd2 = data.imageWidth;
+     int yEnd2 = data.imageHeight;
+     CGRect search2 = CGRectMake(xStart2, yStart2, xEnd2 - xStart2, yEnd2-yStart2);
+size_t intersectRectsNum2;
+    CGRect* intersectSearch2 = getIntersectionRectangles(search2, rects, num_rects, intersectRectsNum2);
+    
+    detectExactImageToImageToRectangles(testImage2, data, intersectSearch2, intersectRectsNum2, returnPercentage3, returnPosition3, 0.9, true);
+    //NSLog(@"Test image 1: %f", returnPercentage3);
+    if (returnPercentage3 > 0.9) {
+        clickLocation(returnPosition3.x, returnPosition3.y);
+    }
+     });
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
     //To speed up the search we will use the CGRectIntersection function, cut down on the search area
     //We will also make each detection run on a separate thread for extra speeds
+    
+    /*
     
     __block volatile bool fireLogic = false;
     
@@ -428,6 +476,9 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
     
     return fireLogic;
+     */
+    return false;
+     
     /*
      ImageData imageData = data;
      if ((clock() - lastScreenScan)/CLOCKS_PER_SEC >= 0.5) {

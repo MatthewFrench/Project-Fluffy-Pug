@@ -56,6 +56,7 @@
 - (IBAction) openViewWindow:(id)sender;
 - (IBAction) getScreenshot:(id)sender;
 - (IBAction) testPlayButton:(id)sender;
+- (IBAction) testGameImage1:(id)sender;
 - (IBAction) runAutoQueueButton:(id)sender;
 
 @end

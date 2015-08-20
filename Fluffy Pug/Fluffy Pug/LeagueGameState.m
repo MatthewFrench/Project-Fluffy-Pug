@@ -32,6 +32,7 @@ void LeagueGameState::processDetection(ImageData image) {
         dispatch_queue_t queue;
         
         // Add a task to the group
+        /*
         queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             allyMinionManager->processImage(image);
@@ -68,6 +69,7 @@ void LeagueGameState::processDetection(ImageData image) {
         dispatch_group_async(dispatchGroup, queue, ^{
             //enemyTowerManager->processImage(image);
         });
+         */
         
         // wait on the group to block the current thread.
         dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);

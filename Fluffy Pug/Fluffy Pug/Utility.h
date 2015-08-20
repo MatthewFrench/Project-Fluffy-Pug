@@ -82,6 +82,8 @@ inline void detectExactImageToImage(ImageData smallImage, ImageData largeImage, 
 inline void detectExactImageToImageToRectangles(ImageData smallImage, ImageData largeImage, CGRect* rects, size_t num_rects, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
 inline CGRect* getIntersectionRectangles(CGRect baseRect, const CGRect* rects, size_t num_rects, size_t &returnNumRects);
 
+inline void detectExactImageToImageToRectangle(ImageData smallImage, ImageData largeImage, CGRect rect, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
+
 extern inline CGRect* getIntersectionRectangles(CGRect baseRect, const CGRect* rects, size_t num_rects, size_t &returnNumRects) {
     returnNumRects = 0;
     CGRect* newRects = (CGRect*) calloc (num_rects,sizeof(CGRect));
@@ -121,6 +123,19 @@ extern inline uint8 * copyImageBufferSection(uint8 *baseAddress, int bufferWidth
         }
     }
     return testImage;
+}
+extern inline void detectExactImageToImageToRectangle(ImageData smallImage, ImageData largeImage, CGRect rect, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
+    Position position;
+    double highestPercentage;
+    returnPercentage = 0.0;
+        detectExactImageToImage(smallImage, largeImage, rect.origin.x, rect.origin.y, rect.origin.x+rect.size.width, rect.origin.y+rect.size.height, highestPercentage, position, minimumPercentage, getFirstMatching);
+        if (highestPercentage > returnPercentage) {
+            returnPercentage = highestPercentage;
+            returnPosition = position;
+            if (getFirstMatching && highestPercentage >= minimumPercentage) {
+                return;
+            }
+        }
 }
 extern inline void detectExactImageToImageToRectangles(ImageData smallImage, ImageData largeImage, CGRect* rects, size_t num_rects, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching) {
     Position position;

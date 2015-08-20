@@ -154,6 +154,9 @@
 - (IBAction) testPlayButton:(id)sender {
     testController->testPlayButton();
 }
+- (IBAction) testGameImage1:(id)sender {
+    testController->testGameImage1();
+}
 - (IBAction) runAutoQueueButton:(id)sender {
     if ([GlobalSelf->autoQueueCheckbox state] == NSOnState) {
         autoQueueManager->reset(false);
@@ -305,6 +308,8 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
             });
         }
     }
+    
+    
     
     
     

@@ -87,6 +87,8 @@
 		C95A77D41B1432A600052F3E /* LeagueGameState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeagueGameState.m; sourceTree = "<group>"; };
 		C96C94661B2A7A490003E688 /* ItemManagerOLD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemManagerOLD.h; sourceTree = "<group>"; };
 		C96C94671B2A7A490003E688 /* ItemManagerOLD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemManagerOLD.m; sourceTree = "<group>"; };
+		C974F2601B7CEE83009886ED /* TestGame1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestGame1.png; sourceTree = "<group>"; };
+		C974F2611B7CEE83009886ED /* TestGame2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestGame2.png; sourceTree = "<group>"; };
 		C9928F451B28720600A965E6 /* SelfChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfChampionManager.h; sourceTree = "<group>"; };
 		C9928F461B28720600A965E6 /* SelfChampionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelfChampionManager.m; sourceTree = "<group>"; };
 		C9928F481B2872DC00A965E6 /* AllyChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllyChampionManager.h; sourceTree = "<group>"; };
@@ -274,6 +276,8 @@
 		C95A77AA1B14063B00052F3E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C974F2601B7CEE83009886ED /* TestGame1.png */,
+				C974F2611B7CEE83009886ED /* TestGame2.png */,
 				C95A77AB1B14063B00052F3E /* Info.plist */,
 				C95A77AF1B14063B00052F3E /* main.m */,
 			);
