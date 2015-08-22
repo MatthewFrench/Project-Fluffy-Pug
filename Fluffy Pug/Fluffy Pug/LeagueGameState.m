@@ -69,10 +69,11 @@ void LeagueGameState::processDetection(ImageData image) {
         dispatch_group_async(dispatchGroup, queue, ^{
             //enemyTowerManager->processImage(image);
         });
-         */
+         
         
         // wait on the group to block the current thread.
         dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
+         */
     }// else if (autoQueueActive) {
     //    autoQueueManager->processImage(image);
     //}

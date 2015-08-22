@@ -21,14 +21,15 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     gameState->shopManager->buyingItems = false;
 }
 void BasicAI::processAI() {
+    /*
     if ((clock() - lastShopBuy)/CLOCKS_PER_SEC >= 120 && gameState->shopManager->shopAvailable) {
         //If shop is availabe and haven't bought in 2 minutes, buy items
         gameState->shopManager->buyingItems = true;
         lastShopBuy = clock();
         gameState->shopManager->boughtItems = false;
         stopMovement();
-    }
-    
+    }*/
+    /*
     if (gameState->shopManager->buyingItems) {
         if (gameState->shopManager->shopOpen == false && gameState->shopManager->boughtItems == false) {
             stopMovement();
@@ -49,7 +50,7 @@ void BasicAI::processAI() {
     } else if ([gameState->selfChampionManager->championBars count] == 0 && gameState->shopManager->shopOpen) {
         gameState->shopManager->closeShop();
     }
-    
+    */
     if ([gameState->selfChampionManager->championBars count] > 0 && !gameState->shopManager->buyingItems) {
         ChampionBar selfChamp; [[gameState->selfChampionManager->championBars objectAtIndex:0] getValue:&selfChamp];
         
@@ -297,8 +298,8 @@ void BasicAI::processAI() {
                 //NSLog(@"Going to mid");
                 if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= actionSpeed) { /* || lastAction != action*/
                     lastMovementClick = clock();
-                    int x = gameState->leagueSize.size.width - 105;
-                    int y = gameState->leagueSize.size.height - 92;
+                    int x = gameState->leagueSize.size.width - 150;
+                    int y = gameState->leagueSize.size.height - 140;
                     tapMouseRight(x, y);
                 }
             }
@@ -373,14 +374,15 @@ void BasicAI::processAI() {
         }
         
         //Detect unlocked camera
-        if ((clock() - cameraLockTimer)/CLOCKS_PER_SEC >= 1.0 &&
-            (hypot(selfChamp.characterCenter.x - gameState->leagueSize.size.width/2,selfChamp.characterCenter.y - gameState->leagueSize.size.height/2)) > 270) {
-            cameraLockTimer = clock();
+        //getTimeInMilliseconds(mach_absolute_time() - cameraLockTimer)
+        if (getTimeInMilliseconds(mach_absolute_time() - cameraLockTimer) >= 1000.0 /*&&
+            (hypot(selfChamp.characterCenter.x - gameState->leagueSize.size.width/2,selfChamp.characterCenter.y - gameState->leagueSize.size.height/2)) > 270*/) {
+            cameraLockTimer = mach_absolute_time();
             tapCameraLock();
             //Go to mid
-            //int x = gameState->leagueSize.size.width - 116;
-            //int y = gameState->leagueSize.size.height - 92;
-            //tapMouseRight(x, y);
+            int x = gameState->leagueSize.size.width - 150;
+            int y = gameState->leagueSize.size.height - 140;
+            tapMouseRight(x, y);
         }
         
         /*
@@ -421,8 +423,8 @@ void BasicAI::processAI() {
             cameraLockTimer = clock();
             tapCameraLock();
             //Go to mid
-            int x = gameState->leagueSize.size.width - 105;
-            int y = gameState->leagueSize.size.height - 92;
+            int x = gameState->leagueSize.size.width - 150;
+            int y = gameState->leagueSize.size.height - 140;
             tapMouseRight(x, y);
         }
     }
@@ -432,8 +434,8 @@ void BasicAI::processAI() {
         tapCameraLock();
         gameState->shopManager->closeShop();
         //Go to mid
-        int x = gameState->leagueSize.size.width - 105;
-        int y = gameState->leagueSize.size.height - 92;
+        int x = gameState->leagueSize.size.width - 150;
+        int y = gameState->leagueSize.size.height - 140;
         tapMouseRight(x, y);
         moveMouse(0, 0);
     }

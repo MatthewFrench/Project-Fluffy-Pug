@@ -25,8 +25,8 @@ AutoQueueManager::AutoQueueManager(LeagueGameState* gameState) {
     step12_HomeButton = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(12) Home Button" ofType:@"png"]);
     step13_ReconnectButton = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Auto Queue Images/(13) Reconnect Button" ofType:@"png"]);
     
-    testImage1 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/TestGame1" ofType:@"png"]);
-    testImage2 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/TestGame2" ofType:@"png"]);
+    //testImage1 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/TestGame1" ofType:@"png"]);
+    //testImage2 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/TestGame2" ofType:@"png"]);
     
     //lastScreenScan = clock();
     //lastEndGameScan = clock();
@@ -163,7 +163,7 @@ void AutoQueueManager::clickLocation(int x, int y) {
 }
 
 bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, size_t num_rects) {
-    
+    /*
     dispatch_group_t dispatchGroup = dispatch_group_create();
     
     
@@ -207,8 +207,8 @@ size_t intersectRectsNum2;
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
     //To speed up the search we will use the CGRectIntersection function, cut down on the search area
     //We will also make each detection run on a separate thread for extra speeds
+    */
     
-    /*
     
     __block volatile bool fireLogic = false;
     
@@ -476,8 +476,7 @@ size_t intersectRectsNum2;
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
     
     return fireLogic;
-     */
-    return false;
+    
      
     /*
      ImageData imageData = data;

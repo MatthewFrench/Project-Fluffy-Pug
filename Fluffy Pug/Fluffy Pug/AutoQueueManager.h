@@ -18,7 +18,7 @@ class AutoQueueManager {
     LeagueGameState* leagueGameState;
     
     //Image data to scan for
-    ImageData step1_PlayButton, step2_PVPMode, step3_ClassicMode, step4_SummonersRiftMode, step5_BlindPickMode, step6_SoloButton, step7_AcceptButton, step8_RandomChampionButton, step9_LockInButton, step10_ChooseSkinButton, step11_EndGameContinueButton, step12_HomeButton, step13_ReconnectButton, testImage1, testImage2;
+    ImageData step1_PlayButton, step2_PVPMode, step3_ClassicMode, step4_SummonersRiftMode, step5_BlindPickMode, step6_SoloButton, step7_AcceptButton, step8_RandomChampionButton, step9_LockInButton, step10_ChooseSkinButton, step11_EndGameContinueButton, step12_HomeButton, step13_ReconnectButton;//, testImage1, testImage2;
     
     //Variables shared between logic and detection theads
     //Tells detection what to look for when the screen changes
