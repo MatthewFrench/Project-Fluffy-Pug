@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8121.17" systemVersion="15A244d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8121.17" systemVersion="15A263e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8121.17"/>
@@ -952,12 +952,12 @@
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </clipView>
                                             <animations/>
-                                            <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="goK-9q-Isf">
+                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="goK-9q-Isf">
                                                 <rect key="frame" x="-100" y="-100" width="87" height="18"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <animations/>
                                             </scroller>
-                                            <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="otB-Gf-LZt">
+                                            <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="otB-Gf-LZt">
                                                 <rect key="frame" x="421" y="1" width="16" height="99"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <animations/>
@@ -999,16 +999,100 @@
                                                 <action selector="testPlayButton:" target="Voe-Tx-rLC" id="6cT-PR-Zr5"/>
                                             </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" id="8wR-aV-eWN">
-                                            <rect key="frame" x="7" y="232" width="155" height="32"/>
+                                        <button verticalHuggingPriority="750" id="FFM-DT-VjS">
+                                            <rect key="frame" x="6" y="199" width="158" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
-                                            <buttonCell key="cell" type="push" title="Test Game Image 1" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dK3-1s-uHj">
+                                            <buttonCell key="cell" type="push" title="Test Shop Available" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tiz-fc-8X5">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="testGameImage1:" target="Voe-Tx-rLC" id="7Rb-CB-bFv"/>
+                                                <action selector="testShopAvailable:" target="Voe-Tx-rLC" id="ac1-8Q-bQ9"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="2CH-Pi-Z4W">
+                                            <rect key="frame" x="6" y="166" width="137" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Shop Open" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xAF-EE-Lhx">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testShopOpen:" target="Voe-Tx-rLC" id="AdY-8W-Rej"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="2rN-v9-lcg">
+                                            <rect key="frame" x="7" y="133" width="138" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Shop Items" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JRX-Q6-bNv">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testShopItems:" target="Voe-Tx-rLC" id="bdp-ol-zl9"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="1O4-ju-dFL">
+                                            <rect key="frame" x="339" y="199" width="122" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Level Up" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VcX-tG-8FS">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testLevelUp:" target="Voe-Tx-rLC" id="C9x-Ku-q6m"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="ydh-t2-b3I">
+                                            <rect key="frame" x="302" y="166" width="159" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Abilities Active" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YPr-Ah-Md9">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testAbilitiesActive:" target="Voe-Tx-rLC" id="9b4-2e-FaJ"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="GT0-0u-GhF">
+                                            <rect key="frame" x="276" y="232" width="185" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test In-Game Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KVJ-vK-1Vy">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testInGameDetection:" target="Voe-Tx-rLC" id="zpk-tT-u9Z"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="JBu-0D-IcB">
+                                            <rect key="frame" x="317" y="133" width="144" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Item Actives" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="28x-g3-jkg">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testItemActives:" target="Voe-Tx-rLC" id="cgV-gG-uOQ"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="9Mt-nN-AmR">
+                                            <rect key="frame" x="8" y="232" width="156" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Self Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bWJ-xo-a7l">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testSelfDetection:" target="Voe-Tx-rLC" id="H4g-1p-wMN"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -1076,7 +1160,7 @@
                                             <rect key="frame" x="14" y="14" width="494" height="384"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                             <animations/>
-                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="Wfg-TQ-kcp"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" imageFrameStyle="grayBezel" id="Wfg-TQ-kcp"/>
                                         </imageView>
                                     </subviews>
                                     <animations/>
@@ -1091,7 +1175,7 @@
                                             <rect key="frame" x="14" y="14" width="494" height="384"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                             <animations/>
-                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="wwi-di-mXy"/>
+                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" imageFrameStyle="grayBezel" id="wwi-di-mXy"/>
                                         </imageView>
                                     </subviews>
                                     <animations/>
@@ -1102,7 +1186,7 @@
                 </subviews>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="-134" y="332"/>
+            <point key="canvasLocation" x="-321" y="277"/>
         </window>
     </objects>
 </document>

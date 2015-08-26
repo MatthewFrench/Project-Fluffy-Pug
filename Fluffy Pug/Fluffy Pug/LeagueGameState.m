@@ -126,6 +126,6 @@ void LeagueGameState::debugDraw(ImageData imageData) {
     allyMinionManager->debugDraw(imageData);
     enemyMinionManager->debugDraw(imageData);
     enemyChampionManager->debugDraw(imageData);
-    selfChampionManager->debugDraw(imageData);
+    //selfChampionManager->debugDraw(imageData);
     allyChampionManager->debugDraw(imageData);
 }

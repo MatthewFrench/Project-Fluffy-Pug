@@ -56,8 +56,16 @@
 - (IBAction) openViewWindow:(id)sender;
 - (IBAction) getScreenshot:(id)sender;
 - (IBAction) testPlayButton:(id)sender;
-- (IBAction) testGameImage1:(id)sender;
 - (IBAction) runAutoQueueButton:(id)sender;
+
+- (IBAction) testShopAvailable:(id)sender;
+- (IBAction) testShopOpen:(id)sender;
+- (IBAction) testShopItems:(id)sender;
+- (IBAction) testInGameDetection:(id)sender;
+- (IBAction) testLevelUp:(id)sender;
+- (IBAction) testAbilitiesActive:(id)sender;
+- (IBAction) testItemActives:(id)sender;
+- (IBAction) testSelfDetection:(id)sender;
 
 @end
 

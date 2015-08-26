@@ -12,30 +12,45 @@
 #import <time.h>
 
 class SelfChampionManager {
-    ImageData topLeftImageData, bottomLeftImageData,
-    bottomRightImageData, topRightImageData, healthSegmentImageData;
     
     
     //moodycamel::ConcurrentQueue<Position> topLeftQueue, bottomLeftQueue, topRightQueue, bottomRightQueue;
     
-    bool needsFullScreenUpdate;
+    //bool needsFullScreenUpdate;
     
-    double fullScreenUpdateTime, lastUpdateTime;
+    //double fullScreenUpdateTime, lastUpdateTime;
     
-    void scanSection(ImageData imageData, int xStart, int yStart, int xEnd, int yEnd);
-    void processChampionsLocations();
-    void processChampionsHealth(ImageData imageData);
-    void processPixel(ImageData imageData, uint8_t *pixel, int x, int y);
-    void processTopLeftDetect(); void processBottomLeftDetect(); void processTopRightDetect(); void processBottomRightDetect();
-    bool containsPosition(NSMutableArray* array, Position p);
+    //void scanSection(ImageData imageData, int xStart, int yStart, int xEnd, int yEnd);
+    //void processChampionsLocations();
+    //static float detectChampionHealth(ImageData imageData, ChampionBar* championBar);
     
-    const double championSpeed = 1000; //100 pixels per second
+    //static NSMutableArray* detectTopLeftCorners();
+    //static NSMutableArray* detectBottomLeftCorners();
+    //static NSMutableArray* detectTopRightCorners();
+    //static NSMutableArray* detectBottomRightCorners();
+    //bool containsPosition(NSMutableArray* array, Position p);
+    
+    /*
+     I bet I can make the entire champion health bar detection self contained.
+     Scan 1 pixel, in that pixel if will search for each corner for a health bar match.
+     Depending on the corner found, it will search for the other corners at the correct width and height.
+     If it matches 2 corners, it will find the health bar there. 
+     Once health bar is found it will search for health bar health.
+     Then it returns for that pixel.
+     */
+    
+    
+    //const double championSpeed = 1000; //100 pixels per second
     
 public:
-    NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
+    
+    static ImageData topLeftImageData, bottomLeftImageData,
+    bottomRightImageData, topRightImageData, healthSegmentImageData;
+    //NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     
     SelfChampionManager();
-    void processImage(ImageData imageData);
-    
-    void debugDraw(ImageData imageData);
+    static ChampionBar* detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static NSMutableArray* validateChampionBars(ImageData imageData, NSMutableArray* detectedChampionBars);
+    //void processImage(ImageData imageData);
+    //void debugDraw(ImageData imageData);
 };

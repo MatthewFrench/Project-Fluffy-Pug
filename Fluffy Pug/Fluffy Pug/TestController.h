@@ -5,11 +5,12 @@
 #import "Utility.h"
 #include <time.h>
 #include <stdlib.h>
+#import "SelfChampionManager.h"
 
 class TestController {
     ImageData testImage;
     ImageData playButton;
-    ImageData testGame1, testGame2;
+    ImageData testAbilitiesActive1280x800Image, testInGameDetection1280x800Image, testItemActives1280x800Image, testLevelUp1280x800Image, testShopAvailable1280x800Image, testShopItems1280x800Image, testShopOpen1280x800Image;
     
     NSImageView* processedImageView, *unprocessedImageView, *targetImageView, *foundImageView;
     NSTextView* logText;
@@ -18,6 +19,13 @@ public:
     void copyScreenShot(uint8 *baseAddress, int bufferWidth, int bufferHeight);
     void displayPreprocessedScreenShot();
     void testPlayButton();
-    void testGameImage1();
+    void testShopAvailable();
+    void testShopOpen();
+    void testShopItems();
+    void testInGameDetection();
+    void testLevelUp();
+    void testAbilitiesActive();
+    void testItemActives();
+    void testSelfDetection();
     void log(NSString* string);
 };

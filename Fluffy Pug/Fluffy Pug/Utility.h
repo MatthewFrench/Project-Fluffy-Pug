@@ -39,6 +39,7 @@ struct MinionBar {
 
 struct ChampionBar {
     struct Position topLeft, topRight, bottomLeft, bottomRight, characterCenter;
+    bool detectedTopLeft = false, detectedBottomLeft = false, detectedTopRight = false, detectedBottomRight = false;
     float health;
 };
 
@@ -74,6 +75,8 @@ inline uint8 * copyImageBufferSection(uint8 *baseAddress, int bufferWidth, int b
 inline uint8 * copyImageBufferFromBGRAtoRGBA(uint8 *baseAddress, int bufferWidth, int bufferHeight);
 inline NSImage* getImageFromBGRABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
 inline NSImage* getImageFromRGBABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight);
+inline NSImage* getImageFromBGRABufferImageData(ImageData* imageData);
+inline NSImage* getImageFromRGBABufferImageData(ImageData* imageData);
 inline void detectSimilarImageToImage(ImageData smallImage, ImageData largeImage, int xStart, int yStart, int xEnd, int yEnd, double &returnPercentage, Position &returnPosition, double minimumPercentage, bool getFirstMatching);
 inline int getTimeInMilliseconds(int64_t absoluteTime);
 inline double getImageAtPixelPercentageOptimized(const uint8_t *pixel, int x, int y, int width, int height, ImageData image, double minimumPercentage);
@@ -188,9 +191,11 @@ extern inline double getImageAtPixelPercentageOptimizedExact(const uint8_t *pixe
     for (int y1 = 0; y1 < image.imageHeight; y1++) {
         //const uint8_t *pixel1 = pixel + y1 * width * 4;
         for (int x1 = 0; x1 < image.imageWidth; x1++) {
+            //NSLog(@"x: %d, y: %d, r1: %d, r2: %d, g1: %d, g2: %d, b1: %d, b2: %d, a1: %d, a2: %d", x1, y1, pixel[2], pixel2[2], pixel[1], pixel2[1], pixel[0], pixel2[0], pixel[3], pixel2[3]);
             if (pixel2[3] != 0) {
                 pixels++;
                 double p = getColorPercentage(pixel, pixel2);
+                
                 percentage += p;
                 if (p < minimumPercentage) {
                     return percentage / maxPixelCount;
@@ -260,7 +265,26 @@ extern inline NSImage* getImageFromRGBABuffer(uint8 *baseAddress, int bufferWidt
     
     return [[NSImage alloc] initWithCGImage:imageRef size:NSMakeSize(bufferWidth, bufferHeight)];
 }
+
+extern inline NSImage* getImageFromRGBABufferImageData(ImageData* imageData) {
+    uint8 *baseAddress = imageData->imageData; int bufferWidth = imageData->imageWidth; int bufferHeight = imageData->imageHeight;
+    CGContextRef context = CGBitmapContextCreate(baseAddress, bufferWidth, bufferHeight, 8,  bufferWidth * 4, CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB), kCGImageAlphaPremultipliedLast);
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    
+    return [[NSImage alloc] initWithCGImage:imageRef size:NSMakeSize(bufferWidth, bufferHeight)];
+}
+
 extern inline NSImage* getImageFromBGRABuffer(uint8 *baseAddress, int bufferWidth, int bufferHeight) {
+    UInt8 *rgbaTestImage = copyImageBufferFromBGRAtoRGBA(baseAddress, bufferWidth, bufferHeight);
+    CGContextRef context = CGBitmapContextCreate(rgbaTestImage, bufferWidth, bufferHeight, 8,  bufferWidth * 4, CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB), kCGImageAlphaPremultipliedLast);
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    free(rgbaTestImage);
+    
+    return [[NSImage alloc] initWithCGImage:imageRef size:NSMakeSize(bufferWidth, bufferHeight)];
+}
+
+extern inline NSImage* getImageFromBGRABufferImageData(ImageData* imageData) {
+    uint8 *baseAddress = imageData->imageData; int bufferWidth = imageData->imageWidth; int bufferHeight = imageData->imageHeight;
     UInt8 *rgbaTestImage = copyImageBufferFromBGRAtoRGBA(baseAddress, bufferWidth, bufferHeight);
     CGContextRef context = CGBitmapContextCreate(rgbaTestImage, bufferWidth, bufferHeight, 8,  bufferWidth * 4, CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB), kCGImageAlphaPremultipliedLast);
     CGImageRef imageRef = CGBitmapContextCreateImage(context);

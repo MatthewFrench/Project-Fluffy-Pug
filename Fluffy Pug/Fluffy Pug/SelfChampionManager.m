@@ -8,34 +8,172 @@
 
 #import "SelfChampionManager.h"
 
-static int Debug_Draw_Red = 0, Debug_Draw_Green = 255, Debug_Draw_Blue = 255;
-static int Health_Bar_Width = 104, Health_Bar_Height = 9;
+//static int Debug_Draw_Red = 0, Debug_Draw_Green = 255, Debug_Draw_Blue = 255;
+//static int Health_Bar_Width = 104, Health_Bar_Height = 9;
+
+ImageData SelfChampionManager::topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Top Left Corner" ofType:@"png"]);
+
+ImageData SelfChampionManager::bottomLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Bottom Left Corner" ofType:@"png"]);
+ImageData SelfChampionManager::bottomRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Bottom Right Corner" ofType:@"png"]);
+ImageData SelfChampionManager::topRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Top Right Corner" ofType:@"png"]);
+ImageData SelfChampionManager::healthSegmentImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Health Segment" ofType:@"png"]);
 
 SelfChampionManager::SelfChampionManager () {
-    championBars = [NSMutableArray new];
-    topRightDetect = [NSMutableArray new];
-    topLeftDetect = [NSMutableArray new];
-    bottomRightDetect = [NSMutableArray new];
-    bottomLeftDetect = [NSMutableArray new];
+    //championBars = [NSMutableArray new];
+    //topRightDetect = [NSMutableArray new];
+    //topLeftDetect = [NSMutableArray new];
+    //bottomRightDetect = [NSMutableArray new];
+    //bottomLeftDetect = [NSMutableArray new];
     
-    topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Top Left Corner" ofType:@"png"]);
+    //needsFullScreenUpdate = true;
+    //fullScreenUpdateTime = clock();
+    //lastUpdateTime = clock();
+}
+/*
+ Image locations relative to top left:
+ Top Left: 0, 0
+ Bottom left: 0, 11
+ Top Right: 106, 0
+ Bottom Right: 106, 11
+ 
+ Health Bar Exact Location Relative to Images:
+ Top Left: 3, 3
+ Bottom left: 3, 12
+ Top Right: 107, 3
+ Bottom Right: 107, 12
+ 
+ */
+ChampionBar* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    ChampionBar* champ = nil;
+    //Look top left corner
     
-    bottomLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Bottom Left Corner" ofType:@"png"]);
-    bottomRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Bottom Right Corner" ofType:@"png"]);
-    topRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Top Right Corner" ofType:@"png"]);
-    healthSegmentImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Health Segment" ofType:@"png"]);
-    
-    needsFullScreenUpdate = true;
-    fullScreenUpdateTime = clock();
-    lastUpdateTime = clock();
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.95) >=  0.95) {
+        int barTopLeftX = x + 3;
+        int barTopLeftY = y + 3;
+        champ = new ChampionBar();
+        champ->topLeft.x = barTopLeftX;
+        champ->topLeft.y = barTopLeftY;
+        champ->bottomLeft.x = barTopLeftX;
+        champ->bottomLeft.y = barTopLeftY + 9;
+        champ->topRight.x = barTopLeftX + 104;
+        champ->topRight.y = barTopLeftY;
+        champ->bottomRight.x = barTopLeftX + 104;
+        champ->bottomRight.y = barTopLeftY + 9;
+        champ->detectedTopLeft = true;
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.95) >=  0.95) { // Look for bottom left corner
+        champ = new ChampionBar();
+        int barTopLeftX = x + 3;
+        int barTopLeftY = y - 8;
+        champ = new ChampionBar();
+        champ->topLeft.x = barTopLeftX;
+        champ->topLeft.y = barTopLeftY;
+        champ->bottomLeft.x = barTopLeftX;
+        champ->bottomLeft.y = barTopLeftY + 9;
+        champ->topRight.x = barTopLeftX + 104;
+        champ->topRight.y = barTopLeftY;
+        champ->bottomRight.x = barTopLeftX + 104;
+        champ->bottomRight.y = barTopLeftY + 9;
+        champ->detectedBottomLeft = true;
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.95) >=  0.95) { // Look for top right corner
+        champ = new ChampionBar();
+        int barTopLeftX = x - 101 - 2;
+        int barTopLeftY = y + 3;
+        champ = new ChampionBar();
+        champ->topLeft.x = barTopLeftX;
+        champ->topLeft.y = barTopLeftY;
+        champ->bottomLeft.x = barTopLeftX;
+        champ->bottomLeft.y = barTopLeftY + 9;
+        champ->topRight.x = barTopLeftX + 104;
+        champ->topRight.y = barTopLeftY;
+        champ->bottomRight.x = barTopLeftX + 104;
+        champ->bottomRight.y = barTopLeftY + 9;
+        champ->detectedTopRight = true;
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.95) >=  0.95) { // Look for bottom right corner
+        champ = new ChampionBar();
+        int barTopLeftX = x - 101 - 2;
+        int barTopLeftY = y - 8;
+        champ = new ChampionBar();
+        champ->topLeft.x = barTopLeftX;
+        champ->topLeft.y = barTopLeftY;
+        champ->bottomLeft.x = barTopLeftX;
+        champ->bottomLeft.y = barTopLeftY + 9;
+        champ->topRight.x = barTopLeftX + 104;
+        champ->topRight.y = barTopLeftY;
+        champ->bottomRight.x = barTopLeftX + 104;
+        champ->bottomRight.y = barTopLeftY + 9;
+        champ->detectedBottomRight = true;
+    }
+    //if (x == 364 + 101 + 2 && y == 310 - 3) {
+    //    NSLog(@"Top Right corner test: %f", getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.5));
+    //}
+    return champ;
 }
 
+//To Validate, at least 2 corners need detected then we detect the health percentage
+NSMutableArray* SelfChampionManager::validateChampionBars(ImageData imageData, NSMutableArray* detectedChampionBars) {
+    NSMutableArray* championBars = [NSMutableArray new];
+    
+    while ([detectedChampionBars count] > 0) {
+        ChampionBar* champ = (ChampionBar*)[[detectedChampionBars lastObject] pointerValue];
+        [detectedChampionBars removeLastObject];
+        int detectedCorners = 1;
+        for (int i = 0; i < [detectedChampionBars count]; i++) {
+            ChampionBar * champ2 = (ChampionBar*)[[detectedChampionBars objectAtIndex:i] pointerValue];
+            if (champ2->topLeft.x == champ->topLeft.x && champ->topLeft.y == champ2-> topLeft.y) {
+                [detectedChampionBars removeObjectAtIndex:i];
+                i--;
+                if (champ2->detectedBottomLeft) champ->detectedBottomLeft = true;
+                if (champ2->detectedBottomRight) champ->detectedBottomRight = true;
+                if (champ2->detectedTopLeft) champ->detectedTopLeft = true;
+                if (champ2->detectedTopRight) champ->detectedTopRight = true;
+                detectedCorners++;
+            }
+        }
+        if (detectedCorners > 1) {
+            [championBars addObject: [NSValue valueWithPointer:champ]];
+        }
+    }
+    
+    //Detect health
+    for (int i = 0; i < [championBars count]; i++) {
+        ChampionBar* champ = (ChampionBar*)[[championBars objectAtIndex:i] pointerValue];
+        champ->health = 0;
+        for (int x = 103; x >= 0; x--) {
+            if ( getImageAtPixelPercentageOptimizedExact(getPixel2(imageData, champ->topLeft.x + x, champ->topLeft.y), champ->topLeft.x + x, champ->topLeft.y, imageData.imageWidth, imageData.imageHeight, healthSegmentImageData, 0.9) >=  0.9) {
+                champ->health = (float)x / 103.0 * 100;
+                break;
+            }
+            /*
+            //Use health segment image and go from up to down
+            for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+                uint8_t *healthPixel = getPixel2(healthSegmentImageData, 0, y);
+                
+                int pixelX =champ->topLeft.x + x - 1;
+                int pixelY =champ->topLeft.y + y;
+                if (pixelY < imageData.imageHeight && pixelX < imageData.imageWidth && pixelX >= 0 && pixelY >= 0) {
+                    uint8_t *pixel = getPixel2(imageData, pixelX, pixelY);
+                    if (colorInPercentage(healthPixel, pixel, 0.85)) {
+                        champ->health = (float)x / 103 * 100;
+                        x = 0;
+                        break;
+                    }
+                }
+            }*/
+            
+            
+        }
+    }
+    
+    return championBars;
+}
+
+/*
 void SelfChampionManager::debugDraw(ImageData imageData) {
     for (int i = 0; i < [championBars count]; i++) {
         ChampionBar mb;
         [[championBars objectAtIndex:i] getValue:&mb];
         drawRect(imageData, mb.topLeft.x, mb.topLeft.y, 104, 9, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
-    }
+    }*/
     /*
      for (int i = 0; i < [topLeftDetect count]; i++) {
      struct Position p;
@@ -57,7 +195,8 @@ void SelfChampionManager::debugDraw(ImageData imageData) {
      [[bottomRightDetect objectAtIndex:i] getValue:&p];
      drawRect(imageData, p.x, p.y, 4, 4, Debug_Draw_Red, Debug_Draw_Green, Debug_Draw_Blue);
      }*/
-}
+//}
+/*
 void SelfChampionManager::processImage(ImageData imageData) {
     double delta = (clock() - lastUpdateTime)/CLOCKS_PER_SEC;
     lastUpdateTime = clock();
@@ -98,7 +237,8 @@ void SelfChampionManager::processImage(ImageData imageData) {
     //Take the scanned corners and get champion data
     processChampionsLocations();
     processChampionsHealth( imageData);
-}
+}*/
+/*
 void SelfChampionManager::scanSection(ImageData imageData, int xStart, int yStart, int xEnd, int yEnd) {
     for (int y = yStart; y < yEnd; y++) {
         uint8_t *pixel = getPixel2(imageData, xStart, y);
@@ -109,7 +249,8 @@ void SelfChampionManager::scanSection(ImageData imageData, int xStart, int yStar
             pixel += 4;
         }
     }
-}
+}*/
+/*
 void SelfChampionManager::processChampionsLocations() {
     processTopLeftDetect();
     processTopRightDetect();
@@ -122,7 +263,8 @@ void SelfChampionManager::processChampionsLocations() {
         cb.characterCenter = makePosition(cb.topLeft.x+66, cb.topLeft.y+104);
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
     }
-}
+}*/
+/*
 void SelfChampionManager::processChampionsHealth(ImageData imageData) {
     for (int i = 0; i < [championBars count]; i++) {
         ChampionBar cb;
@@ -151,10 +293,10 @@ void SelfChampionManager::processChampionsHealth(ImageData imageData) {
         //NSLog(@"Champion health: %f", cb.health);
         [championBars replaceObjectAtIndex:i withObject:[NSValue valueWithBytes:&cb objCType:@encode(ChampionBar)]];
     }
-}
+}*/
 
 
-
+/*
 void SelfChampionManager::processPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     //Detect top left bar
     if (detectImageAtPixelPercentage(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.7)) {
@@ -189,7 +331,8 @@ void SelfChampionManager::processPixel(ImageData imageData, uint8_t *pixel, int 
             [bottomRightDetect addObject:[NSValue valueWithBytes:&p objCType:@encode(Position)]];
         }
     }
-}
+}*/
+/*
 bool SelfChampionManager::containsPosition(NSMutableArray* array, Position p) {
     for (int i = 0; i < [array count]; i++) {
         Position p2;
@@ -199,7 +342,8 @@ bool SelfChampionManager::containsPosition(NSMutableArray* array, Position p) {
         }
     }
     return false;
-}
+}*/
+/*
 void SelfChampionManager::processTopLeftDetect() {
     while ([topLeftDetect count] > 0) {
         int corners = 0;
@@ -393,4 +537,4 @@ void SelfChampionManager::processTopRightDetect() {
             //NSLog(@"Found enemy champion with corners: %d at position: %d, %d", corners, cb.topLeft.x, cb.topLeft.y);
         }
     }
-}
+}*/

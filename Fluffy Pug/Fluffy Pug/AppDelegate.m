@@ -154,8 +154,29 @@
 - (IBAction) testPlayButton:(id)sender {
     testController->testPlayButton();
 }
-- (IBAction) testGameImage1:(id)sender {
-    testController->testGameImage1();
+- (IBAction) testShopAvailable:(id)sender {
+    testController->testShopAvailable();
+}
+- (IBAction) testShopOpen:(id)sender {
+    testController->testShopOpen();
+}
+- (IBAction) testShopItems:(id)sender {
+    testController->testShopItems();
+}
+- (IBAction) testInGameDetection:(id)sender {
+    testController->testInGameDetection();
+}
+- (IBAction) testLevelUp:(id)sender {
+    testController->testLevelUp();
+}
+- (IBAction) testAbilitiesActive:(id)sender {
+    testController->testAbilitiesActive();
+}
+- (IBAction) testItemActives:(id)sender {
+    testController->testItemActives();
+}
+- (IBAction) testSelfDetection:(id)sender {
+    testController->testSelfDetection();
 }
 - (IBAction) runAutoQueueButton:(id)sender {
     if ([GlobalSelf->autoQueueCheckbox state] == NSOnState) {
@@ -214,7 +235,7 @@ AppDelegate *GlobalSelf;
         
         [GlobalSelf->allyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->allyChampionManager->championBars.count]];
         
-        [GlobalSelf->selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->selfChampionManager->championBars.count]];
+        //[GlobalSelf->selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->selfChampionManager->championBars.count]];
     }
     else
     {
