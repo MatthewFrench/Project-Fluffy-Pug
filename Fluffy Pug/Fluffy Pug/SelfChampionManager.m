@@ -17,6 +17,9 @@ ImageData SelfChampionManager::bottomLeftImageData = makeImageDataFrom([[NSBundl
 ImageData SelfChampionManager::bottomRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Bottom Right Corner" ofType:@"png"]);
 ImageData SelfChampionManager::topRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Top Right Corner" ofType:@"png"]);
 ImageData SelfChampionManager::healthSegmentImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Health Segment" ofType:@"png"]);
+ImageData SelfChampionManager::bottomBarLeftSideImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Bottom Bar Left Side" ofType:@"png"]);
+ImageData SelfChampionManager::bottomBarRightSideImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Bottom Bar Right Side" ofType:@"png"]);
+ImageData SelfChampionManager::bottomBarAverageHealthColorImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Self Health Bar/Bottom Bar Average Health Color" ofType:@"png"]);
 
 SelfChampionManager::SelfChampionManager () {
     //championBars = [NSMutableArray new];
@@ -43,6 +46,41 @@ SelfChampionManager::SelfChampionManager () {
  Bottom Right: 107, 12
  
  */
+SelfHealthBar* SelfChampionManager::detectSelfHealthBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    SelfHealthBar* healthBar = nil;
+    
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomBarLeftSideImageData, 0.95) >=  0.95) {
+        int barTopLeftX = x + 15;
+        int barTopLeftY = y + 2;
+        healthBar = new SelfHealthBar();
+        healthBar->topLeft.x = barTopLeftX;
+        healthBar->topLeft.y = barTopLeftY;
+        healthBar->bottomLeft.x = barTopLeftX;
+        healthBar->bottomLeft.y = barTopLeftY + 12;
+        healthBar->topRight.x = barTopLeftX + 306;
+        healthBar->topRight.y = barTopLeftY;
+        healthBar->bottomRight.x = barTopLeftX + 306;
+        healthBar->bottomRight.y = barTopLeftY + 12;
+        healthBar->detectedLeftSide = true;
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomBarRightSideImageData, 0.95) >=  0.95) {
+        int barTopLeftX = x - 306;
+        int barTopLeftY = y + 2;
+        healthBar = new SelfHealthBar();
+        healthBar->topLeft.x = barTopLeftX;
+        healthBar->topLeft.y = barTopLeftY;
+        healthBar->bottomLeft.x = barTopLeftX;
+        healthBar->bottomLeft.y = barTopLeftY + 12;
+        healthBar->topRight.x = barTopLeftX + 306;
+        healthBar->topRight.y = barTopLeftY;
+        healthBar->bottomRight.x = barTopLeftX + 306;
+        healthBar->bottomRight.y = barTopLeftY + 12;
+        healthBar->detectedRightSide = true;
+    }
+    
+    return healthBar;
+}
+
+
 ChampionBar* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     ChampionBar* champ = nil;
     //Look top left corner
@@ -143,28 +181,52 @@ NSMutableArray* SelfChampionManager::validateChampionBars(ImageData imageData, N
                 champ->health = (float)x / 103.0 * 100;
                 break;
             }
-            /*
-            //Use health segment image and go from up to down
-            for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
-                uint8_t *healthPixel = getPixel2(healthSegmentImageData, 0, y);
-                
-                int pixelX =champ->topLeft.x + x - 1;
-                int pixelY =champ->topLeft.y + y;
-                if (pixelY < imageData.imageHeight && pixelX < imageData.imageWidth && pixelX >= 0 && pixelY >= 0) {
-                    uint8_t *pixel = getPixel2(imageData, pixelX, pixelY);
-                    if (colorInPercentage(healthPixel, pixel, 0.85)) {
-                        champ->health = (float)x / 103 * 100;
-                        x = 0;
-                        break;
-                    }
-                }
-            }*/
-            
-            
         }
     }
     
     return championBars;
+}
+
+//To Validate, at least 2 sides need detected then we detect the health percentage
+NSMutableArray* SelfChampionManager::validateSelfHealthBars(ImageData imageData, NSMutableArray* detectedHealthBars) {
+    NSMutableArray* healthBars = [NSMutableArray new];
+    
+    while ([detectedHealthBars count] > 0) {
+        SelfHealthBar* healthBar = (SelfHealthBar*)[[detectedHealthBars lastObject] pointerValue];
+        [detectedHealthBars removeLastObject];
+        int detectedSides = 1;
+        for (int i = 0; i < [detectedHealthBars count]; i++) {
+            SelfHealthBar * healthBar2 = (SelfHealthBar*)[[detectedHealthBars objectAtIndex:i] pointerValue];
+            if (healthBar2->topLeft.x == healthBar->topLeft.x && healthBar->topLeft.y == healthBar2-> topLeft.y) {
+                [detectedHealthBars removeObjectAtIndex:i];
+                i--;
+                if (healthBar2->detectedLeftSide) healthBar->detectedLeftSide = true;
+                if (healthBar2->detectedRightSide) healthBar->detectedRightSide = true;
+                detectedSides++;
+            }
+        }
+        if (detectedSides > 1) {
+            [healthBars addObject: [NSValue valueWithPointer:healthBar]];
+        }
+    }
+    
+    //Detect health
+    for (int i = 0; i < [healthBars count]; i++) {
+        SelfHealthBar* healthBar = (SelfHealthBar*)[[healthBars objectAtIndex:i] pointerValue];
+        healthBar->health = 0;
+        uint8_t* healthColorPixel = getPixel2(bottomBarAverageHealthColorImageData, 0, 0);
+        for (int x = healthBar->topLeft.x + 305; x >= healthBar->topLeft.x; x--) {
+            for (int y = healthBar->topRight.y; y <= healthBar->bottomRight.y; y++) {
+                if (getColorPercentage(healthColorPixel, getPixel2(imageData, x, y)) >= 0.55) {
+                    healthBar->health = (float)(x - healthBar->topLeft.x) / 305.0 * 100;
+                    y = healthBar->bottomRight.y+1;
+                    x = healthBar->topLeft.x - 1;
+                }
+            }
+        }
+    }
+    
+    return healthBars;
 }
 
 /*

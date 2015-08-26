@@ -42,6 +42,11 @@ struct ChampionBar {
     bool detectedTopLeft = false, detectedBottomLeft = false, detectedTopRight = false, detectedBottomRight = false;
     float health;
 };
+struct SelfHealthBar {
+    struct Position topLeft, topRight, bottomLeft, bottomRight;
+    bool detectedLeftSide = false, detectedRightSide = false;
+    float health;
+};
 
 struct TowerBar {
     struct Position topLeft, topRight, bottomLeft, bottomRight, towerCenter;

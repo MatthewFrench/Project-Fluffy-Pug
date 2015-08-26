@@ -170,6 +170,7 @@ void TestController::testSelfDetection() {
     //[targetImageView setImage:getImageFromBGRABuffer(SelfChampionManager::topRightImageData.imageData, SelfChampionManager::topRightImageData.imageWidth, SelfChampionManager::topRightImageData.imageHeight)];
     log(@"Testing Self Detection...");
     NSMutableArray* championBars = [NSMutableArray new];
+    NSMutableArray* selfHealthBars = [NSMutableArray new];
     uint64 startTime = mach_absolute_time();
     
     for (int x = 0; x < testImage.imageWidth; x++) {
@@ -179,11 +180,16 @@ void TestController::testSelfDetection() {
             if (championBar != nil) {
                 [championBars addObject: [NSValue valueWithPointer:championBar]];
             }
+            SelfHealthBar* selfHealthBar = SelfChampionManager::detectSelfHealthBarAtPixel(testImage, pixel, x, y);
+            if (selfHealthBar != nil) {
+                [selfHealthBars addObject: [NSValue valueWithPointer:selfHealthBar]];
+            }
         }
     }
     championBars = SelfChampionManager::validateChampionBars(testImage, championBars);
+    selfHealthBars = SelfChampionManager::validateSelfHealthBars(testImage, selfHealthBars);
     uint64 endTime = mach_absolute_time();
-    log([NSString stringWithFormat:@"Results -- Detected self champions: %lu in milliseconds: %d", [championBars count], getTimeInMilliseconds(endTime-startTime)]);
+    log([NSString stringWithFormat:@"Results -- Detected self champions: %lu and self health bars: %lu in milliseconds: %d", [championBars count], [selfHealthBars count], getTimeInMilliseconds(endTime-startTime)]);
     
     //Highlight the areas of the image that match
     uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
@@ -201,6 +207,12 @@ void TestController::testSelfDetection() {
                     inChamp = true;
                 }
             }
+            for (NSValue* val in selfHealthBars) {
+                SelfHealthBar* champ = (SelfHealthBar*)[val pointerValue];
+                if (x >= champ->topLeft.x && x <= champ->bottomRight.x && y >= champ->topLeft.y && y <= champ->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
             if (inChamp == false) {
                 pixel[0] /= 4;
                 pixel[1] /= 4;
@@ -211,7 +223,11 @@ void TestController::testSelfDetection() {
     }
     for (NSValue* val in championBars) {
         ChampionBar* champ = (ChampionBar*)[val pointerValue];
-        NSLog(@"Champion: %d, %d with health: %f", champ->topLeft.x, champ->topLeft.y, champ->health);
+        log([NSString stringWithFormat:@"Champion: %d, %d with health: %f", champ->topLeft.x, champ->topLeft.y, champ->health ]);
+    }
+    for (NSValue* val in selfHealthBars) {
+        SelfHealthBar* champ = (SelfHealthBar*)[val pointerValue];
+        log([NSString stringWithFormat:@"Self Health Bar: %d, %d with health: %f", champ->topLeft.x, champ->topLeft.y, champ->health ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     

@@ -45,12 +45,15 @@ class SelfChampionManager {
 public:
     
     static ImageData topLeftImageData, bottomLeftImageData,
-    bottomRightImageData, topRightImageData, healthSegmentImageData;
+    bottomRightImageData, topRightImageData, healthSegmentImageData, bottomBarLeftSideImageData, bottomBarRightSideImageData,
+    bottomBarAverageHealthColorImageData;
     //NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     
     SelfChampionManager();
     static ChampionBar* detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     static NSMutableArray* validateChampionBars(ImageData imageData, NSMutableArray* detectedChampionBars);
+    static SelfHealthBar* detectSelfHealthBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static NSMutableArray* validateSelfHealthBars(ImageData imageData, NSMutableArray* detectedHealthBars);
     //void processImage(ImageData imageData);
     //void debugDraw(ImageData imageData);
 };
