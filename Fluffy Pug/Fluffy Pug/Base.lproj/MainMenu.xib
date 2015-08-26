@@ -1035,18 +1035,6 @@
                                                 <action selector="testShopItems:" target="Voe-Tx-rLC" id="bdp-ol-zl9"/>
                                             </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" id="1O4-ju-dFL">
-                                            <rect key="frame" x="339" y="199" width="122" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <buttonCell key="cell" type="push" title="Test Level Up" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VcX-tG-8FS">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="testLevelUp:" target="Voe-Tx-rLC" id="C9x-Ku-q6m"/>
-                                            </connections>
-                                        </button>
                                         <button verticalHuggingPriority="750" id="ydh-t2-b3I">
                                             <rect key="frame" x="302" y="166" width="159" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1060,7 +1048,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="GT0-0u-GhF">
-                                            <rect key="frame" x="276" y="232" width="185" height="32"/>
+                                            <rect key="frame" x="276" y="199" width="185" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test In-Game Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KVJ-vK-1Vy">
@@ -1095,6 +1083,42 @@
                                                 <action selector="testSelfDetection:" target="Voe-Tx-rLC" id="H4g-1p-wMN"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" id="dUX-vW-g6d">
+                                            <rect key="frame" x="164" y="265" width="201" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Ally Champ Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jar-Tc-dgY">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testAllyChampDetection:" target="Voe-Tx-rLC" id="j3n-Dy-lpy"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="nkv-H2-vmH">
+                                            <rect key="frame" x="164" y="232" width="219" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Enemy Champ Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DQc-vd-ZUa">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testEnemyChampDetection:" target="Voe-Tx-rLC" id="rt5-mp-rkY"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="1O4-ju-dFL">
+                                            <rect key="frame" x="143" y="166" width="122" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Level Up" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VcX-tG-8FS">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testLevelUp:" target="Voe-Tx-rLC" id="C9x-Ku-q6m"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <animations/>
                                 </view>
@@ -1104,7 +1128,7 @@
                 </subviews>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="-247" y="216.5"/>
+            <point key="canvasLocation" x="-470" y="268.5"/>
         </window>
         <window title="Screen Shot Viewer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="VMG-ED-3M6" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES" HUD="YES"/>

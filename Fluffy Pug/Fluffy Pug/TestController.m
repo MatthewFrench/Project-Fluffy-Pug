@@ -238,6 +238,144 @@ void TestController::testSelfDetection() {
     }
 }
 
+
+void TestController::testAllyChampionDetection() {
+    testImage = testShopAvailable1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    
+    
+    
+    
+    //[targetImageView setImage:getImageFromBGRABuffer(SelfChampionManager::topRightImageData.imageData, SelfChampionManager::topRightImageData.imageWidth, SelfChampionManager::topRightImageData.imageHeight)];
+    log(@"Testing Ally Detection...");
+    NSMutableArray* championBars = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            ChampionBar* championBar = AllyChampionManager::detectChampionBarAtPixel(testImage, pixel, x, y);
+            if (championBar != nil) {
+                [championBars addObject: [NSValue valueWithPointer:championBar]];
+            }
+        }
+    }
+    championBars = AllyChampionManager::validateChampionBars(testImage, championBars);
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected ally champions: %lu in milliseconds: %d", [championBars count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in championBars) {
+                ChampionBar* champ = (ChampionBar*)[val pointerValue];
+                if (x >= champ->topLeft.x && x <= champ->bottomRight.x && y >= champ->topLeft.y && y <= champ->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in championBars) {
+        ChampionBar* champ = (ChampionBar*)[val pointerValue];
+        log([NSString stringWithFormat:@"Ally Champion: %d, %d with health: %f", champ->topLeft.x, champ->topLeft.y, champ->health ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([championBars count] > 0) {
+        ChampionBar * champ = (ChampionBar*)[[championBars objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, champ->topLeft.x, champ->topLeft.y, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y)];
+    }
+}
+
+void TestController::testEnemyChampionDetection() {
+    testImage = testItemActives1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    
+    
+    
+    
+    //[targetImageView setImage:getImageFromBGRABuffer(SelfChampionManager::topRightImageData.imageData, SelfChampionManager::topRightImageData.imageWidth, SelfChampionManager::topRightImageData.imageHeight)];
+    log(@"Testing Enemy Detection...");
+    NSMutableArray* championBars = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            ChampionBar* championBar = EnemyChampionManager::detectChampionBarAtPixel(testImage, pixel, x, y);
+            if (championBar != nil) {
+                [championBars addObject: [NSValue valueWithPointer:championBar]];
+            }
+        }
+    }
+    championBars = EnemyChampionManager::validateChampionBars(testImage, championBars);
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected enemy champions: %lu in milliseconds: %d", [championBars count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in championBars) {
+                ChampionBar* champ = (ChampionBar*)[val pointerValue];
+                if (x >= champ->topLeft.x && x <= champ->bottomRight.x && y >= champ->topLeft.y && y <= champ->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in championBars) {
+        ChampionBar* champ = (ChampionBar*)[val pointerValue];
+        log([NSString stringWithFormat:@"Enemy Champion: %d, %d with health: %f", champ->topLeft.x, champ->topLeft.y, champ->health ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([championBars count] > 0) {
+        ChampionBar * champ = (ChampionBar*)[[championBars objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, champ->topLeft.x, champ->topLeft.y, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(EnemyChampionManager::healthSegmentImageData.imageData, EnemyChampionManager::healthSegmentImageData.imageWidth, EnemyChampionManager::healthSegmentImageData.imageHeight)];
+}
+
+
 void TestController::log(NSString* string) {
     [[logText textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n", string]]];
     [logText scrollRangeToVisible: NSMakeRange(logText.string.length, 0)];

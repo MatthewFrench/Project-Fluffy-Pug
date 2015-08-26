@@ -6,6 +6,8 @@
 #include <time.h>
 #include <stdlib.h>
 #import "SelfChampionManager.h"
+#import "AllyChampionManager.h"
+#import "EnemyChampionManager.h"
 
 class TestController {
     ImageData testImage;
@@ -27,5 +29,7 @@ public:
     void testAbilitiesActive();
     void testItemActives();
     void testSelfDetection();
+    void testAllyChampionDetection();
+    void testEnemyChampionDetection();
     void log(NSString* string);
 };

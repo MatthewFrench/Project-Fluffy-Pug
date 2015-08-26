@@ -12,6 +12,7 @@
 #import <time.h>
 
 class AllyChampionManager {
+    /*
     ImageData topLeftImageData, bottomLeftImageData,
     bottomRightImageData, topRightImageData, healthSegmentImageData;
     
@@ -30,13 +31,17 @@ class AllyChampionManager {
     bool containsPosition(NSMutableArray* array, Position p);
     
     const double championSpeed = 1000; //100 pixels per second
-    
+    */
 public:
-    NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
+    static ImageData topLeftImageData, bottomLeftImageData,
+    bottomRightImageData, topRightImageData, healthSegmentImageData;
+    //NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     
     AllyChampionManager();
-    void processImage(ImageData data);
-    ChampionBar getNearestChampion(int x, int y);
+    static ChampionBar* detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static NSMutableArray* validateChampionBars(ImageData imageData, NSMutableArray* detectedChampionBars);
+    //void processImage(ImageData data);
+    //ChampionBar getNearestChampion(int x, int y);
     
-    void debugDraw(ImageData imageData);
+    //void debugDraw(ImageData imageData);
 };

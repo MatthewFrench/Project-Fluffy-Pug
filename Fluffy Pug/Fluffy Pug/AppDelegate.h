@@ -66,6 +66,8 @@
 - (IBAction) testAbilitiesActive:(id)sender;
 - (IBAction) testItemActives:(id)sender;
 - (IBAction) testSelfDetection:(id)sender;
+- (IBAction) testAllyChampDetection:(id)sender;
+- (IBAction) testEnemyChampDetection:(id)sender;
 
 @end
 

@@ -216,7 +216,7 @@ NSMutableArray* SelfChampionManager::validateSelfHealthBars(ImageData imageData,
         healthBar->health = 0;
         uint8_t* healthColorPixel = getPixel2(bottomBarAverageHealthColorImageData, 0, 0);
         for (int x = healthBar->topLeft.x + 305; x >= healthBar->topLeft.x; x--) {
-            for (int y = healthBar->topRight.y; y <= healthBar->bottomRight.y; y++) {
+            for (int y = healthBar->topRight.y; y < healthBar->bottomRight.y; y++) {
                 if (getColorPercentage(healthColorPixel, getPixel2(imageData, x, y)) >= 0.55) {
                     healthBar->health = (float)(x - healthBar->topLeft.x) / 305.0 * 100;
                     y = healthBar->bottomRight.y+1;
