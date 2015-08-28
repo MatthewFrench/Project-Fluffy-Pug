@@ -155,6 +155,7 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
             }
         }
         if (detectedCorners > 1) {
+            minion->characterCenter.x = minion->topLeft.x+30; minion->characterCenter.y = minion->topLeft.y+32;
             [minionBars addObject: [NSValue valueWithPointer:minion]];
         }
     }

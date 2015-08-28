@@ -168,6 +168,7 @@ NSMutableArray* SelfChampionManager::validateChampionBars(ImageData imageData, N
             }
         }
         if (detectedCorners > 1) {
+            champ->characterCenter.x = champ->topLeft.x+66; champ->characterCenter.y = champ->topLeft.y+104;
             [championBars addObject: [NSValue valueWithPointer:champ]];
         }
     }
