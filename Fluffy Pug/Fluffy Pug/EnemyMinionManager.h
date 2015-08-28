@@ -31,7 +31,7 @@ class EnemyMinionManager {
 public:
     
     static ImageData topLeftImageData, bottomLeftImageData,
-    bottomRightImageData, topRightImageData, healthSegmentImageData, rightSideImageData, topSideImageData, bottomSideImageData;
+    bottomRightImageData, topRightImageData, healthSegmentImageData;
     
     //NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     

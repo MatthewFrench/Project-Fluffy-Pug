@@ -188,6 +188,11 @@
 - (IBAction) testEnemyMinionDetection:(id)sender {
     testController->testEnemyMinionDetection();
 }
+
+- (IBAction) testAllyMinionDetection:(id)sender {
+    testController->testAllyMinionDetection();
+}
+
 - (IBAction) runAutoQueueButton:(id)sender {
     if ([GlobalSelf->autoQueueCheckbox state] == NSOnState) {
         autoQueueManager->reset(false);
@@ -237,7 +242,7 @@ AppDelegate *GlobalSelf;
         
         /**** I DONT BELIEVE THIS IS THREAD SAFE ***/
         //Display minions
-        [GlobalSelf->allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->allyMinionManager->minionBars.count]];
+        //[GlobalSelf->allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->allyMinionManager->minionBars.count]];
         
         //[GlobalSelf->enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->enemyMinionManager->minionBars.count]];
         

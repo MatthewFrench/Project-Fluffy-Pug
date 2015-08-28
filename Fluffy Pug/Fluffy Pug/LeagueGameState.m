@@ -123,7 +123,7 @@ void LeagueGameState::processDetection(ImageData image) {
     //enemyChampionManager->postPixelProcessing();
 }
 void LeagueGameState::debugDraw(ImageData imageData) {
-    allyMinionManager->debugDraw(imageData);
+    //allyMinionManager->debugDraw(imageData);
     //enemyMinionManager->debugDraw(imageData);
     //enemyChampionManager->debugDraw(imageData);
     //selfChampionManager->debugDraw(imageData);

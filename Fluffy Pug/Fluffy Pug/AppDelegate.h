@@ -69,6 +69,7 @@
 - (IBAction) testAllyChampDetection:(id)sender;
 - (IBAction) testEnemyChampDetection:(id)sender;
 - (IBAction) testEnemyMinionDetection:(id)sender;
+- (IBAction) testAllyMinionDetection:(id)sender;
 
 @end
 

@@ -9,6 +9,7 @@
 #import "AllyChampionManager.h"
 #import "EnemyChampionManager.h"
 #import "EnemyMinionManager.h"
+#import "AllyMinionManager.h"
 
 class TestController {
     ImageData testImage;
@@ -33,5 +34,6 @@ public:
     void testAllyChampionDetection();
     void testEnemyChampionDetection();
     void testEnemyMinionDetection();
+    void testAllyMinionDetection();
     void log(NSString* string);
 };

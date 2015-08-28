@@ -1131,6 +1131,18 @@
                                                 <action selector="testEnemyMinionDetection:" target="Voe-Tx-rLC" id="2Io-cE-ojI"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" id="dvZ-Ny-fw1">
+                                            <rect key="frame" x="265" y="230" width="198" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Ally Minion Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WhS-tV-8mT">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testAllyMinionDetection:" target="Voe-Tx-rLC" id="TUy-MH-76i"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <animations/>
                                 </view>
