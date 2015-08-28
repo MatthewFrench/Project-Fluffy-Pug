@@ -184,6 +184,10 @@
 - (IBAction) testAllyChampDetection:(id)sender {
     testController->testAllyChampionDetection();
 }
+
+- (IBAction) testEnemyMinionDetection:(id)sender {
+    testController->testEnemyMinionDetection();
+}
 - (IBAction) runAutoQueueButton:(id)sender {
     if ([GlobalSelf->autoQueueCheckbox state] == NSOnState) {
         autoQueueManager->reset(false);
@@ -235,7 +239,7 @@ AppDelegate *GlobalSelf;
         //Display minions
         [GlobalSelf->allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->allyMinionManager->minionBars.count]];
         
-        [GlobalSelf->enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->enemyMinionManager->minionBars.count]];
+        //[GlobalSelf->enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->enemyMinionManager->minionBars.count]];
         
         //[GlobalSelf->enemyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->enemyChampionManager->championBars.count]];
         

@@ -51,7 +51,7 @@ void TestController::testPlayButton() {
     [targetImageView setImage:getImageFromBGRABuffer(playButton.imageData, playButton.imageWidth, playButton.imageHeight)];
     log(@"Testing Play Button Detection...");
     uint64 startTime = mach_absolute_time();
-    double returnPercentage;
+    float returnPercentage;
     Position playLocation;
     detectExactImageToImage(playButton, testImage, 0, 0, testImage.imageWidth, testImage.imageHeight, returnPercentage, playLocation, 0.5, true);
     uint64 endTime = mach_absolute_time();
@@ -84,7 +84,7 @@ void TestController::testGameImage1() {
     [targetImageView setImage:getImageFromBGRABuffer(testGame1.imageData, testGame1.imageWidth, testGame1.imageHeight)];
     log(@"Testing Game Image 1 Detection...");
     uint64 startTime = mach_absolute_time();
-    double returnPercentage;
+    float returnPercentage;
     Position playLocation;
     detectExactImageToImage(testGame1, testImage, 0, 0, testImage.imageWidth, testImage.imageHeight, returnPercentage, playLocation, 0.5, true);
     uint64 endTime = mach_absolute_time();
@@ -373,6 +373,75 @@ void TestController::testEnemyChampionDetection() {
     }
     
     [targetImageView setImage:getImageFromBGRABuffer(EnemyChampionManager::healthSegmentImageData.imageData, EnemyChampionManager::healthSegmentImageData.imageWidth, EnemyChampionManager::healthSegmentImageData.imageHeight)];
+}
+
+void TestController::testEnemyMinionDetection() {
+    testImage = testInGameDetection1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    
+    
+    
+    
+    //[targetImageView setImage:getImageFromBGRABuffer(SelfChampionManager::topRightImageData.imageData, SelfChampionManager::topRightImageData.imageWidth, SelfChampionManager::topRightImageData.imageHeight)];
+    log(@"Testing Enemy Minion Detection...");
+    NSMutableArray* minionBars = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            MinionBar* minionBar = EnemyMinionManager::detectMinionBarAtPixel(testImage, pixel, x, y);
+            if (minionBar != nil) {
+                [minionBars addObject: [NSValue valueWithPointer:minionBar]];
+            }
+        }
+    }
+    minionBars = EnemyMinionManager::validateMinionBars(testImage, minionBars);
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected enemy minions: %lu in milliseconds: %d", [minionBars count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in minionBars) {
+                MinionBar* minion = (MinionBar*)[val pointerValue];
+                if (x >= minion->topLeft.x && x <= minion->bottomRight.x && y >= minion->topLeft.y && y <= minion->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in minionBars) {
+        MinionBar* minion = (MinionBar*)[val pointerValue];
+        log([NSString stringWithFormat:@"Enemy Minion: %d, %d with health: %f", minion->topLeft.x, minion->topLeft.y, minion->health ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([minionBars count] > 0) {
+        MinionBar * minion = (MinionBar*)[[minionBars objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, minion->topLeft.x, minion->topLeft.y, minion->bottomRight.x - minion->topLeft.x, minion->bottomRight.y - minion->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, minion->bottomRight.x - minion->topLeft.x, minion->bottomRight.y - minion->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(EnemyMinionManager::healthSegmentImageData.imageData, EnemyMinionManager::healthSegmentImageData.imageWidth, EnemyMinionManager::healthSegmentImageData.imageHeight)];
 }
 
 

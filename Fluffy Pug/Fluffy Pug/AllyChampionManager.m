@@ -48,7 +48,6 @@ ChampionBar* AllyChampionManager::detectChampionBarAtPixel(ImageData imageData, 
         champ->bottomRight.x = barTopLeftX + 104;
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedTopLeft = true;
-        NSLog(@"Detected top left corner");
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.95) >=  0.95) { // Look for bottom left corner
         champ = new ChampionBar();
         int barTopLeftX = x + 3;
@@ -63,7 +62,6 @@ ChampionBar* AllyChampionManager::detectChampionBarAtPixel(ImageData imageData, 
         champ->bottomRight.x = barTopLeftX + 104;
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedBottomLeft = true;
-        NSLog(@"Detected bottom left corner");
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.95) >=  0.95) { // Look for top right corner
         champ = new ChampionBar();
         int barTopLeftX = x - 101 - 2;
@@ -78,7 +76,6 @@ ChampionBar* AllyChampionManager::detectChampionBarAtPixel(ImageData imageData, 
         champ->bottomRight.x = barTopLeftX + 104;
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedTopRight = true;
-        NSLog(@"Detected top right corner");
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.95) >=  0.95) { // Look for bottom right corner
         champ = new ChampionBar();
         int barTopLeftX = x - 101 - 2;
@@ -93,7 +90,6 @@ ChampionBar* AllyChampionManager::detectChampionBarAtPixel(ImageData imageData, 
         champ->bottomRight.x = barTopLeftX + 104;
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedBottomRight = true;
-        NSLog(@"Detected bottom right corner");
     }
     //if (x == 364 + 101 + 2 && y == 310 - 3) {
     //    NSLog(@"Top Right corner test: %f", getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.5));

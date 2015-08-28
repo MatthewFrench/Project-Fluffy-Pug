@@ -226,18 +226,7 @@
 		C95A779E1B14063B00052F3E = {
 			isa = PBXGroup;
 			children = (
-				C91DD9141B6BB97A00B4BB07 /* IOSurface.framework */,
-				C91DD9121B6BB97500B4BB07 /* IOKit.framework */,
-				C91DD9101B6BB97000B4BB07 /* CoreGraphics.framework */,
-				C9192B7F1B1A72EC002D1E08 /* CoreMedia.framework */,
-				C9192B7D1B1A72D5002D1E08 /* ImageIO.framework */,
-				C9192B7B1B1A72D1002D1E08 /* CoreVideo.framework */,
-				C9192B791B1A72A2002D1E08 /* QuartzCore.framework */,
-				C9C736101B15E90C0021F10F /* AppKit.framework */,
-				C9C7360E1B15E6300021F10F /* AVFoundation.framework */,
-				C95A77D01B142ACA00052F3E /* ApplicationServices.framework */,
-				C95A77CE1B142AC500052F3E /* CoreFoundation.framework */,
-				C95A77CC1B142AB200052F3E /* OpenGL.framework */,
+				C9DED8C51B8FC77B004DECCB /* Frameworks */,
 				C95A77A91B14063B00052F3E /* Fluffy Pug */,
 				C95A77BD1B14063C00052F3E /* Fluffy PugTests */,
 				C95A77A81B14063B00052F3E /* Products */,
@@ -299,6 +288,25 @@
 				C95A77BF1B14063C00052F3E /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C9DED8C51B8FC77B004DECCB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C91DD9141B6BB97A00B4BB07 /* IOSurface.framework */,
+				C91DD9121B6BB97500B4BB07 /* IOKit.framework */,
+				C91DD9101B6BB97000B4BB07 /* CoreGraphics.framework */,
+				C9192B7F1B1A72EC002D1E08 /* CoreMedia.framework */,
+				C9192B7D1B1A72D5002D1E08 /* ImageIO.framework */,
+				C9192B7B1B1A72D1002D1E08 /* CoreVideo.framework */,
+				C9192B791B1A72A2002D1E08 /* QuartzCore.framework */,
+				C9C736101B15E90C0021F10F /* AppKit.framework */,
+				C9C7360E1B15E6300021F10F /* AVFoundation.framework */,
+				C95A77D01B142ACA00052F3E /* ApplicationServices.framework */,
+				C95A77CE1B142AC500052F3E /* CoreFoundation.framework */,
+				C95A77CC1B142AB200052F3E /* OpenGL.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

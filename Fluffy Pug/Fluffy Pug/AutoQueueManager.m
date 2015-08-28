@@ -154,7 +154,7 @@ void AutoQueueManager::processLogic() {
 void AutoQueueManager::clickLocation(int x, int y) {
     doubleTapMouseLeft(x + 10, y+10);
     //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
-    //    doubleTapMouseLeft(x + 10, y+10);
+    //    floatTapMouseLeft(x + 10, y+10);
     //});
     //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -169,7 +169,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
     
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_group_async(dispatchGroup, queue, ^{
-    double returnPercentage3 = 0.0;
+    float returnPercentage3 = 0.0;
     Position returnPosition3;
     int xStart2 = 0;
     int yStart2 = 0;
@@ -188,7 +188,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
     
     queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_group_async(dispatchGroup, queue, ^{
-     double returnPercentage3 = 0.0;
+     float returnPercentage3 = 0.0;
         Position returnPosition3;
      int xStart2 = 0;
      int yStart2 = 0;
@@ -219,7 +219,7 @@ size_t intersectRectsNum2;
         dispatch_group_async(dispatchGroup, queue, ^{
             
             
-            double returnPercentage = 0.0;
+            float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = 300;
             int yStart = 0;
@@ -252,7 +252,7 @@ size_t intersectRectsNum2;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            double returnPercentage = 0.0;
+            float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = detectionPlayButtonReferenceLocation.x-100;
             int yStart = detectionPlayButtonReferenceLocation.y+100;
@@ -284,7 +284,7 @@ size_t intersectRectsNum2;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            double returnPercentage = 0.0;
+            float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = detectionPlayButtonReferenceLocation.x-400;
             int yStart = detectionPlayButtonReferenceLocation.y;
@@ -316,7 +316,7 @@ size_t intersectRectsNum2;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            double returnPercentage = 0.0;
+            float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = detectionPlayButtonReferenceLocation.x-400;
             int yStart = detectionPlayButtonReferenceLocation.y;
@@ -348,7 +348,7 @@ size_t intersectRectsNum2;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            double returnPercentage = 0.0;
+            float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = detectionPlayButtonReferenceLocation.x-400;
             int yStart = detectionPlayButtonReferenceLocation.y;
@@ -380,7 +380,7 @@ size_t intersectRectsNum2;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            double returnPercentage = 0.0;
+            float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = detectionPlayButtonReferenceLocation.x-100;
             int yStart = detectionPlayButtonReferenceLocation.y+100;
@@ -413,7 +413,7 @@ size_t intersectRectsNum2;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            double returnPercentage = 0.0;
+            float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = detectionPlayButtonReferenceLocation.x;
             int yStart = detectionPlayButtonReferenceLocation.y+450;
@@ -451,7 +451,7 @@ size_t intersectRectsNum2;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            double returnPercentage = 0.0;
+            float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = data.imageWidth/2 - 150;
             int yStart = data.imageHeight * 0.68125 - 100;
@@ -491,7 +491,7 @@ size_t intersectRectsNum2;
      int yEnd = 250;
      NSLog(@"%d %d", imageData.imageWidth, imageData.imageHeight);
      //NSLog(@"%d,%d to %d, %d", xStart, yStart, xEnd, yEnd);
-     double returnPercentage = 0.0;
+     float returnPercentage = 0.0;
      Position returnPosition;
      
      detectExactImageToImage(step1_PlayButton, imageData, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.83, true);
@@ -679,9 +679,9 @@ size_t intersectRectsNum2;
      }
      if (match) {
      NSLog(@"Clicked location %d %d", clickLocation.x + 10, clickLocation.y+10);
-     doubleTapMouseLeft(clickLocation.x + 10, clickLocation.y+10);
+     floatTapMouseLeft(clickLocation.x + 10, clickLocation.y+10);
      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60.0), dispatch_get_main_queue(), ^{ // one
-     doubleTapMouseLeft(clickLocation.x + 10, clickLocation.y+10);
+     floatTapMouseLeft(clickLocation.x + 10, clickLocation.y+10);
      });
      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 5.0), dispatch_get_main_queue(), ^{ // one
      moveMouse(0, 0);
@@ -703,14 +703,14 @@ size_t intersectRectsNum2;
  int yStart = imageData.imageHeight * 0.68125 - 100;
  int xEnd = imageData.imageWidth/2 + 150;
  int yEnd = imageData.imageHeight * 0.68125 + 100;
- double returnPercentage;
+ float returnPercentage;
  Position returnPosition;
  detectExactImageToImage(step11_EndGameContinueButton, imageData, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.65, true);
  if (returnPercentage >= 0.65) {
- doubleTapMouseLeft(returnPosition.x + 5, returnPosition.y+5);
+ floatTapMouseLeft(returnPosition.x + 5, returnPosition.y+5);
  moveMouse(returnPosition.x + 5, returnPosition.y+5);
  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60.0), dispatch_get_main_queue(), ^{ // one
- doubleTapMouseLeft(returnPosition.x + 5, returnPosition.y+5);
+ floatTapMouseLeft(returnPosition.x + 5, returnPosition.y+5);
  });
  NSLog(@"Clicked end game button");
  }

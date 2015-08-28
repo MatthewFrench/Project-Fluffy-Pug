@@ -11,12 +11,10 @@
 #include "concurrentqueue.h"
 
 class EnemyMinionManager {
-    ImageData topLeftImageData, bottomLeftImageData,
-    bottomRightImageData, topRightImageData, healthSegmentImageData;
     
     
     //moodycamel::ConcurrentQueue<Position> topLeftQueue, bottomLeftQueue, topRightQueue, bottomRightQueue;
-    
+    /*
     bool needsFullScreenUpdate;
     
     double fullScreenUpdateTime, lastUpdateTime;
@@ -29,14 +27,21 @@ class EnemyMinionManager {
     bool containsPosition(NSMutableArray* array, Position p);
     
     const double minionSpeed = 400; //100 pixels per second
-    
+    */
 public:
-    NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
+    
+    static ImageData topLeftImageData, bottomLeftImageData,
+    bottomRightImageData, topRightImageData, healthSegmentImageData, rightSideImageData, topSideImageData, bottomSideImageData;
+    
+    //NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     
     EnemyMinionManager();
-    void processImage(ImageData imageData);
-    MinionBar getNearestMinion(int x, int y);
-    MinionBar getLowestHealthMinion(int x, int y);
     
-    void debugDraw(ImageData imageData);
+    static MinionBar* detectMinionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static NSMutableArray* validateMinionBars(ImageData imageData, NSMutableArray* detectedChampionBars);
+    //void processImage(ImageData imageData);
+    //MinionBar getNearestMinion(int x, int y);
+    //MinionBar getLowestHealthMinion(int x, int y);
+    
+    //void debugDraw(ImageData imageData);
 };

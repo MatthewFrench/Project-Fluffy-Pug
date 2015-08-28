@@ -124,7 +124,7 @@ void ShopManagerOLD::buyItems() {
 void ShopManagerOLD::processImage(ImageData data) {
     imageData = data;
     
-    double lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
+    float lastFullScreenUpdate = (clock() - fullScreenUpdateTime)/CLOCKS_PER_SEC;
     if (lastFullScreenUpdate >= 1.8 || (lastFullScreenUpdate >= 0.5 && buyingItems)) { //It's been a whole second, scan the screen
         fullScreenUpdateTime = clock();
         needsFullScreenUpdate = true;
@@ -140,8 +140,8 @@ void ShopManagerOLD::processImage(ImageData data) {
         int xStart = 128;
         int xEnd = 150;
         
-        //double shopAvailablePercent = 0;
-        double returnPercentage;
+        //float shopAvailablePercent = 0;
+        float returnPercentage;
         Position returnPosition;
         detectExactImageToImage(shopAvailableImageData, imageData, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.85, true);
         //NSLog(@"Shop available location: %d, %d", p.x, p.y);
@@ -206,10 +206,10 @@ void ShopManagerOLD::processImage(ImageData data) {
             NSMutableArray* unsortedBuyableItems = [NSMutableArray new];
             for (int x = xStart; x < xEnd; x+=shopBuyableItemImageData.imageWidth) {
                 for (int y = yStart; y < yEnd; y+=shopBuyableItemImageData.imageHeight) {
-                    double p1Percent = 0;
+                    float p1Percent = 0;
                     Position p1;
                     detectExactImageToImage(shopBuyableItemImageData, imageData, x, y, x+50, y+68, p1Percent, p1, 0.6, true);
-                    double p2Percent = 0;
+                    float p2Percent = 0;
                     Position p2;
                     detectExactImageToImage(shopUnbuyableItemImageData, imageData, x, y, x+50, y+68, p2Percent, p2, 0.6, true);
                     Position p;
