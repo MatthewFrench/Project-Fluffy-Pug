@@ -10,11 +10,12 @@
 #import "EnemyChampionManager.h"
 #import "EnemyMinionManager.h"
 #import "AllyMinionManager.h"
+#import "EnemyTowerManager.h"
 
 class TestController {
     ImageData testImage;
     ImageData playButton;
-    ImageData testAbilitiesActive1280x800Image, testInGameDetection1280x800Image, testItemActives1280x800Image, testLevelUp1280x800Image, testShopAvailable1280x800Image, testShopItems1280x800Image, testShopOpen1280x800Image;
+    ImageData testAbilitiesActive1280x800Image, testInGameDetection1280x800Image, testItemActives1280x800Image, testLevelUp1280x800Image, testShopAvailable1280x800Image, testShopItems1280x800Image, testShopOpen1280x800Image, testEnemyTower1280x800Image;
     
     NSImageView* processedImageView, *unprocessedImageView, *targetImageView, *foundImageView;
     NSTextView* logText;
@@ -35,5 +36,6 @@ public:
     void testEnemyChampionDetection();
     void testEnemyMinionDetection();
     void testAllyMinionDetection();
+    void testEnemyTowerDetection();
     void log(NSString* string);
 };

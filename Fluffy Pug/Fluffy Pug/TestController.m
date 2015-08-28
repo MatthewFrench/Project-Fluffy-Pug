@@ -27,6 +27,7 @@ TestController::TestController(NSImageView* processedImageView, NSImageView *unp
     testShopAvailable1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Available 1280x800" ofType:@"png"]);
     testShopItems1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Items 1280x800" ofType:@"png"]);
     testShopOpen1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Open 1280x800" ofType:@"png"]);
+    testEnemyTower1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Enemy Tower Detection 1280x800" ofType:@"png"]);
     
     //[targetImageView setImage:getImageFromBGRABuffer(testGame1.imageData, testGame1.imageWidth, testGame1.imageHeight)];
 }
@@ -511,6 +512,75 @@ void TestController::testAllyMinionDetection() {
     }
     
     [targetImageView setImage:getImageFromBGRABuffer(AllyMinionManager::healthSegmentImageData.imageData, AllyMinionManager::healthSegmentImageData.imageWidth, AllyMinionManager::healthSegmentImageData.imageHeight)];
+}
+
+void TestController::testEnemyTowerDetection() {
+    testImage = testEnemyTower1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    
+    
+    
+    
+    //[targetImageView setImage:getImageFromBGRABuffer(SelfChampionManager::topRightImageData.imageData, SelfChampionManager::topRightImageData.imageWidth, SelfChampionManager::topRightImageData.imageHeight)];
+    log(@"Testing Enemy Tower Detection...");
+    NSMutableArray* towerBars = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            TowerBar* towerBar = EnemyTowerManager::detectTowerBarAtPixel(testImage, pixel, x, y);
+            if (towerBar != nil) {
+                [towerBars addObject: [NSValue valueWithPointer:towerBar]];
+            }
+        }
+    }
+    towerBars = EnemyTowerManager::validateTowerBars(testImage, towerBars);
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected enemy towers: %lu in milliseconds: %d", [towerBars count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in towerBars) {
+                TowerBar* tower = (TowerBar*)[val pointerValue];
+                if (x >= tower->topLeft.x && x <= tower->bottomRight.x && y >= tower->topLeft.y && y <= tower->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in towerBars) {
+        TowerBar* tower = (TowerBar*)[val pointerValue];
+        log([NSString stringWithFormat:@"Enemy Tower: %d, %d with health: %f", tower->topLeft.x, tower->topLeft.y, tower->health ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([towerBars count] > 0) {
+        TowerBar * tower = (TowerBar*)[[towerBars objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, tower->topLeft.x, tower->topLeft.y, tower->bottomRight.x - tower->topLeft.x, tower->bottomRight.y - tower->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, tower->bottomRight.x - tower->topLeft.x, tower->bottomRight.y - tower->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(EnemyTowerManager::healthSegmentImageData.imageData, EnemyTowerManager::healthSegmentImageData.imageWidth, EnemyTowerManager::healthSegmentImageData.imageHeight)];
 }
 
 

@@ -70,6 +70,7 @@
 - (IBAction) testEnemyChampDetection:(id)sender;
 - (IBAction) testEnemyMinionDetection:(id)sender;
 - (IBAction) testAllyMinionDetection:(id)sender;
+- (IBAction) testEnemyTowerDetection:(id)sender;
 
 @end
 

@@ -8,27 +8,145 @@
 
 #import "EnemyTowerManager.h"
 
-static int Debug_Draw_Red = 255, Debug_Draw_Green = 0, Debug_Draw_Blue = 255;
-static int Health_Bar_Width = 126, Health_Bar_Height = 8;
+//static int Debug_Draw_Red = 255, Debug_Draw_Green = 0, Debug_Draw_Blue = 255;
+//static int Health_Bar_Width = 126, Health_Bar_Height = 8;
+
+ImageData EnemyTowerManager::topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Top Left Corner" ofType:@"png"]);
+
+ImageData EnemyTowerManager::bottomLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Bottom Left Corner" ofType:@"png"]);
+ImageData EnemyTowerManager::bottomRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Bottom Right Corner" ofType:@"png"]);
+ImageData EnemyTowerManager::topRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Top Right Corner" ofType:@"png"]);
+ImageData EnemyTowerManager::healthSegmentImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Health Segment" ofType:@"png"]);
 
 EnemyTowerManager::EnemyTowerManager () {
+   /*
     towerBars = [NSMutableArray new];
     topRightDetect = [NSMutableArray new];
     topLeftDetect = [NSMutableArray new];
     bottomRightDetect = [NSMutableArray new];
     bottomLeftDetect = [NSMutableArray new];
     
-    topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Top Left Corner" ofType:@"png"]);
-    
-    bottomLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Bottom Left Corner" ofType:@"png"]);
-    bottomRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Bottom Right Corner" ofType:@"png"]);
-    topRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Top Right Corner" ofType:@"png"]);
-    healthSegmentImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Enemy Tower Health Bar/Health Segment" ofType:@"png"]);
+
     
     needsFullScreenUpdate = true;
     fullScreenUpdateTime = clock();
     lastUpdateTime = clock();
+    */
 }
+
+
+TowerBar* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    TowerBar* tower = nil;
+    //Look top left corner
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.95) >=  0.95) {
+        int barTopLeftX = x + 3;
+        int barTopLeftY = y + 3;
+        tower = new TowerBar();
+        tower->topLeft.x = barTopLeftX;
+        tower->topLeft.y = barTopLeftY;
+        tower->bottomLeft.x = barTopLeftX;
+        tower->bottomLeft.y = barTopLeftY + 8;
+        tower->topRight.x = barTopLeftX + 126;
+        tower->topRight.y = barTopLeftY;
+        tower->bottomRight.x = barTopLeftX + 126;
+        tower->bottomRight.y = barTopLeftY + 8;
+        tower->detectedTopLeft = true;
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.95) >=  0.95) { // Look for bottom left corner
+        tower = new TowerBar();
+        int barTopLeftX = x + 3;
+        int barTopLeftY = y - 7;
+        tower = new TowerBar();
+        tower->topLeft.x = barTopLeftX;
+        tower->topLeft.y = barTopLeftY;
+        tower->bottomLeft.x = barTopLeftX;
+        tower->bottomLeft.y = barTopLeftY + 8;
+        tower->topRight.x = barTopLeftX + 126;
+        tower->topRight.y = barTopLeftY;
+        tower->bottomRight.x = barTopLeftX + 126;
+        tower->bottomRight.y = barTopLeftY + 8;
+        tower->detectedBottomLeft = true;
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.95) >=  0.95) { // Look for top right corner
+        tower = new TowerBar();
+        int barTopLeftX = x - 126 + 1;
+        int barTopLeftY = y + 3;
+        tower = new TowerBar();
+        tower->topLeft.x = barTopLeftX;
+        tower->topLeft.y = barTopLeftY;
+        tower->bottomLeft.x = barTopLeftX;
+        tower->bottomLeft.y = barTopLeftY + 8;
+        tower->topRight.x = barTopLeftX + 126;
+        tower->topRight.y = barTopLeftY;
+        tower->bottomRight.x = barTopLeftX + 126;
+        tower->bottomRight.y = barTopLeftY + 8;
+        tower->detectedTopRight = true;
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.95) >=  0.95) { // Look for bottom right corner
+        tower = new TowerBar();
+        int barTopLeftX = x - 126 + 1;
+        int barTopLeftY = y - 7;
+        tower = new TowerBar();
+        tower->topLeft.x = barTopLeftX;
+        tower->topLeft.y = barTopLeftY;
+        tower->bottomLeft.x = barTopLeftX;
+        tower->bottomLeft.y = barTopLeftY + 8;
+        tower->topRight.x = barTopLeftX + 126;
+        tower->topRight.y = barTopLeftY;
+        tower->bottomRight.x = barTopLeftX + 126;
+        tower->bottomRight.y = barTopLeftY + 8;
+        tower->detectedBottomRight = true;
+    }
+    //if (x == 364 + 101 + 2 && y == 310 - 3) {
+    //    NSLog(@"Top Right corner test: %f", getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.5));
+    //}
+    return tower;
+}
+
+//To Validate, at least 2 corners need detected then we detect the health percentage
+NSMutableArray* EnemyTowerManager::validateTowerBars(ImageData imageData, NSMutableArray* detectedTowerBars) {
+    NSMutableArray* TowerBars = [NSMutableArray new];
+    
+    while ([detectedTowerBars count] > 0) {
+        TowerBar* tower = (TowerBar*)[[detectedTowerBars lastObject] pointerValue];
+        [detectedTowerBars removeLastObject];
+        int detectedCorners = 1;
+        for (int i = 0; i < [detectedTowerBars count]; i++) {
+            TowerBar * tower2 = (TowerBar*)[[detectedTowerBars objectAtIndex:i] pointerValue];
+            if (tower2->topLeft.x == tower->topLeft.x && tower->topLeft.y == tower2-> topLeft.y) {
+                [detectedTowerBars removeObjectAtIndex:i];
+                i--;
+                if (tower2->detectedBottomLeft) tower->detectedBottomLeft = true;
+                if (tower2->detectedBottomRight) tower->detectedBottomRight = true;
+                if (tower2->detectedTopLeft) tower->detectedTopLeft = true;
+                if (tower2->detectedTopRight) tower->detectedTopRight = true;
+                detectedCorners++;
+            }
+        }
+        if (detectedCorners > 1) {
+            tower->towerCenter.x = tower->topLeft.x+126/2; tower->towerCenter.y = tower->topLeft.y+200;
+            [TowerBars addObject: [NSValue valueWithPointer:tower]];
+        }
+    }
+    
+    //Detect health
+    for (int i = 0; i < [TowerBars count]; i++) {
+        TowerBar* tower = (TowerBar*)[[TowerBars objectAtIndex:i] pointerValue];
+        tower->health = 0;
+        for (int x = 125; x >= 0; x--) {
+            for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+                uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
+                uint8_t*  p = getPixel2(imageData, x + tower->topLeft.x, y + tower->topLeft.y);
+                if (getColorPercentage(healthBarColor, p) >= 0.95) {
+                    tower->health = (float)x / 125 * 100;
+                    y = healthSegmentImageData.imageHeight + 1;
+                    x = -1;
+                }
+            }
+        }
+    }
+    
+    return TowerBars;
+}
+
+/*
 void EnemyTowerManager::debugDraw(ImageData imageData) {
     for (int i = 0; i < [towerBars count]; i++) {
         TowerBar mb;
@@ -411,4 +529,4 @@ void EnemyTowerManager::processTopRightDetect() {
             //NSLog(@"Found enemy Tower with corners: %d at position: %d, %d", corners, cb.topLeft.x, cb.topLeft.y);
         }
     }
-}
+}*/

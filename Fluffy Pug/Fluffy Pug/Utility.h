@@ -51,6 +51,7 @@ struct SelfHealthBar {
 
 struct TowerBar {
     struct Position topLeft, topRight, bottomLeft, bottomRight, towerCenter;
+    bool detectedTopLeft = false, detectedBottomLeft = false, detectedTopRight = false, detectedBottomRight = false;
     float health;
 };
 

@@ -12,9 +12,7 @@
 #import <time.h>
 
 class EnemyTowerManager {
-    ImageData topLeftImageData, bottomLeftImageData,
-    bottomRightImageData, topRightImageData, healthSegmentImageData;
-    
+    /*
     bool needsFullScreenUpdate;
     
     double fullScreenUpdateTime, lastUpdateTime;
@@ -28,12 +26,17 @@ class EnemyTowerManager {
     void processPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     void processTopLeftDetect(); void processBottomLeftDetect(); void processTopRightDetect(); void processBottomRightDetect();
     bool containsPosition(NSMutableArray* array, Position p);
+     */
 public:
+    static ImageData topLeftImageData, bottomLeftImageData,
+    bottomRightImageData, topRightImageData, healthSegmentImageData;
     EnemyTowerManager();
-    void debugDraw(ImageData imageData);
+    static TowerBar* detectTowerBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static NSMutableArray* validateTowerBars(ImageData imageData, NSMutableArray* detectedTowerBars);
+    //void debugDraw(ImageData imageData);
     
-    NSMutableArray* towerBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
-    void processImage(ImageData imageData);
-    TowerBar getNearestTower(int x, int y);
-    TowerBar getLowestHealthTower(int x, int y);
+    //NSMutableArray* towerBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
+    //void processImage(ImageData imageData);
+    //TowerBar getNearestTower(int x, int y);
+    //TowerBar getLowestHealthTower(int x, int y);
 };

@@ -193,6 +193,10 @@
     testController->testAllyMinionDetection();
 }
 
+- (IBAction) testEnemyTowerDetection:(id)sender {
+    testController->testEnemyTowerDetection();
+}
+
 - (IBAction) runAutoQueueButton:(id)sender {
     if ([GlobalSelf->autoQueueCheckbox state] == NSOnState) {
         autoQueueManager->reset(false);
