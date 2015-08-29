@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C90676131B2958B40031AD7F /* AbilityManagerOLD.m in Sources */ = {isa = PBXBuildFile; fileRef = C90676121B2958B40031AD7F /* AbilityManagerOLD.m */; };
 		C9192B7A1B1A72A2002D1E08 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9192B791B1A72A2002D1E08 /* QuartzCore.framework */; };
 		C9192B7C1B1A72D1002D1E08 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9192B7B1B1A72D1002D1E08 /* CoreVideo.framework */; };
 		C9192B7E1B1A72D5002D1E08 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9192B7D1B1A72D5002D1E08 /* ImageIO.framework */; };
@@ -44,8 +43,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C90676111B2958B40031AD7F /* AbilityManagerOLD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbilityManagerOLD.h; sourceTree = "<group>"; };
-		C90676121B2958B40031AD7F /* AbilityManagerOLD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbilityManagerOLD.m; sourceTree = "<group>"; };
 		C9192B741B1A6F96002D1E08 /* concurrentqueue.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = concurrentqueue.h; sourceTree = "<group>"; };
 		C9192B791B1A72A2002D1E08 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C9192B7B1B1A72D1002D1E08 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
@@ -175,8 +172,6 @@
 		C92B82501B30378E00278ED5 /* Ability Manager */ = {
 			isa = PBXGroup;
 			children = (
-				C90676111B2958B40031AD7F /* AbilityManagerOLD.h */,
-				C90676121B2958B40031AD7F /* AbilityManagerOLD.m */,
 				C92B82571B303A7500278ED5 /* AbilityManager.h */,
 				C92B82581B303A7500278ED5 /* AbilityManager.m */,
 			);
@@ -386,7 +381,6 @@
 				C92B825C1B303A9E00278ED5 /* ItemManager.m in Sources */,
 				C9C736041B15937F0021F10F /* AllyMinionManager.m in Sources */,
 				C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */,
-				C90676131B2958B40031AD7F /* AbilityManagerOLD.m in Sources */,
 				C9416A931B2C560E007E0091 /* AutoQueueManager.m in Sources */,
 				C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */,
 				C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */,

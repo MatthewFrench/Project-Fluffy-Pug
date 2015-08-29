@@ -11,8 +11,8 @@
 #import "InteractiveEvents.h"
 
 class AbilityManager {
-    ImageData levelUpImageData, levelDotImageData, levelUpDisabledImageData, abilityEnabledImageData, abilityDisabledImageData, enabledSummonerSpellImageData;
     
+    /*
     void processPixelLevelUp(ImageData imageData, uint8_t *pixel, int x, int y);
     bool containsPosition(NSMutableArray* array, Position p);
     void detectLevelUp(ImageData imageData);
@@ -23,8 +23,8 @@ class AbilityManager {
     void detectSummonerSpells(ImageData imageData);
     
     bool needsFullScreenUpdate;
-    
-    double fullScreenUpdateTime, lastUpdateTime;
+    */
+    //double fullScreenUpdateTime, lastUpdateTime;
     /*
      , topLeftImageData, bottomLeftImageData,
      bottomRightImageData, topRightImageData, healthSegmentImageData;
@@ -39,7 +39,14 @@ class AbilityManager {
      const double minionSpeed = 2000; //100 pixels per second
      */
 public:
+    static ImageData levelUpImageData, levelDotImageData, levelUpDisabledImageData, abilityEnabledImageData, abilityDisabledImageData, enabledSummonerSpellImageData;
     AbilityManager();
+    
+    static GenericObject* detectLevelUpAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static GenericObject* detectLevelDotAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static GenericObject* detectEnabledAbilityAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static GenericObject* detectEnabledSummonerSpellAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    /*
     void processImage(ImageData imageData);
     NSMutableArray* levelUpDetect, *levelUpDisabledDetect, *abilityEnabledDetect, *abilityDisabledDetect;
     bool ability1LevelUpAvailable, ability2LevelUpAvailable, ability3LevelUpAvailable, ability4LevelUpAvailable;
@@ -54,6 +61,7 @@ public:
     
     void useSummonerSpell1();
     void useSummonerSpell2();
+     */
     /*
      NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
      

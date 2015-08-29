@@ -55,6 +55,10 @@ struct TowerBar {
     float health;
 };
 
+struct GenericObject {
+    struct Position topLeft, topRight, bottomLeft, bottomRight, center;
+};
+
 inline Position makePosition(int x, int y);
 inline int getRandomInteger(int minimum, int maximum);
 inline  MinionBar makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health);

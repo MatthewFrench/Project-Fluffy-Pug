@@ -28,6 +28,7 @@ TestController::TestController(NSImageView* processedImageView, NSImageView *unp
     testShopItems1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Items 1280x800" ofType:@"png"]);
     testShopOpen1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Open 1280x800" ofType:@"png"]);
     testEnemyTower1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Enemy Tower Detection 1280x800" ofType:@"png"]);
+    testLevelUpDot1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Level Up Dot 1280x800" ofType:@"png"]);
     
     //[targetImageView setImage:getImageFromBGRABuffer(testGame1.imageData, testGame1.imageWidth, testGame1.imageHeight)];
 }
@@ -134,12 +135,6 @@ void TestController::testShopItems() {
 }
 void TestController::testInGameDetection() {
     NSImage* image = getImageFromBGRABufferImageData(&testInGameDetection1280x800Image);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [unprocessedImageView setImage: image];
-    });
-}
-void TestController::testLevelUp() {
-    NSImage* image = getImageFromBGRABufferImageData(&testLevelUp1280x800Image);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: image];
     });
@@ -581,6 +576,258 @@ void TestController::testEnemyTowerDetection() {
     }
     
     [targetImageView setImage:getImageFromBGRABuffer(EnemyTowerManager::healthSegmentImageData.imageData, EnemyTowerManager::healthSegmentImageData.imageWidth, EnemyTowerManager::healthSegmentImageData.imageHeight)];
+}
+void TestController::testLevelUpDetection() {
+    testImage = testShopAvailable1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::levelUpImageData.imageData, AbilityManager::levelUpImageData.imageWidth, AbilityManager::levelUpImageData.imageHeight)];
+    log(@"Testing Level Up Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = AbilityManager::detectLevelUpAtPixel(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected level ups: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Level Up: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::levelUpImageData.imageData, AbilityManager::levelUpImageData.imageWidth, AbilityManager::levelUpImageData.imageHeight)];
+}
+void TestController::testLevelDotDetection() {
+    testImage = testLevelUpDot1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::levelDotImageData.imageData, AbilityManager::levelDotImageData.imageWidth, AbilityManager::levelDotImageData.imageHeight)];
+    log(@"Testing Level Dot Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = AbilityManager::detectLevelDotAtPixel(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected level dots: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Level Dot: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::levelDotImageData.imageData, AbilityManager::levelDotImageData.imageWidth, AbilityManager::levelDotImageData.imageHeight)];
+}
+void TestController::testEnabledAbilityDetection() {
+    testImage = testLevelUpDot1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::abilityEnabledImageData.imageData, AbilityManager::abilityEnabledImageData.imageWidth, AbilityManager::abilityEnabledImageData.imageHeight)];
+    log(@"Testing Enabled Ability Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = AbilityManager::detectEnabledAbilityAtPixel(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected enabled abilities: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Enabled ability: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::abilityEnabledImageData.imageData, AbilityManager::abilityEnabledImageData.imageWidth, AbilityManager::abilityEnabledImageData.imageHeight)];
+}
+void TestController::testEnabledSummonerSpellDetection() {
+    testImage = testAbilitiesActive1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::enabledSummonerSpellImageData.imageData, AbilityManager::enabledSummonerSpellImageData.imageWidth, AbilityManager::enabledSummonerSpellImageData.imageHeight)];
+    log(@"Testing Enabled Summoner Spell Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = AbilityManager::detectEnabledSummonerSpellAtPixel(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected enabled summoner spells: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Enabled summoner spell: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::enabledSummonerSpellImageData.imageData, AbilityManager::enabledSummonerSpellImageData.imageWidth, AbilityManager::enabledSummonerSpellImageData.imageHeight)];
 }
 
 

@@ -11,11 +11,12 @@
 #import "EnemyMinionManager.h"
 #import "AllyMinionManager.h"
 #import "EnemyTowerManager.h"
+#import "AbilityManager.h"
 
 class TestController {
     ImageData testImage;
     ImageData playButton;
-    ImageData testAbilitiesActive1280x800Image, testInGameDetection1280x800Image, testItemActives1280x800Image, testLevelUp1280x800Image, testShopAvailable1280x800Image, testShopItems1280x800Image, testShopOpen1280x800Image, testEnemyTower1280x800Image;
+    ImageData testAbilitiesActive1280x800Image, testInGameDetection1280x800Image, testItemActives1280x800Image, testLevelUp1280x800Image, testShopAvailable1280x800Image, testShopItems1280x800Image, testShopOpen1280x800Image, testEnemyTower1280x800Image, testLevelUpDot1280x800Image;
     
     NSImageView* processedImageView, *unprocessedImageView, *targetImageView, *foundImageView;
     NSTextView* logText;
@@ -28,7 +29,6 @@ public:
     void testShopOpen();
     void testShopItems();
     void testInGameDetection();
-    void testLevelUp();
     void testAbilitiesActive();
     void testItemActives();
     void testSelfDetection();
@@ -37,5 +37,9 @@ public:
     void testEnemyMinionDetection();
     void testAllyMinionDetection();
     void testEnemyTowerDetection();
+    void testLevelUpDetection();
+    void testLevelDotDetection();
+    void testEnabledAbilityDetection();
+    void testEnabledSummonerSpellDetection();
     void log(NSString* string);
 };

@@ -62,7 +62,6 @@
 - (IBAction) testShopOpen:(id)sender;
 - (IBAction) testShopItems:(id)sender;
 - (IBAction) testInGameDetection:(id)sender;
-- (IBAction) testLevelUp:(id)sender;
 - (IBAction) testAbilitiesActive:(id)sender;
 - (IBAction) testItemActives:(id)sender;
 - (IBAction) testSelfDetection:(id)sender;
@@ -71,6 +70,10 @@
 - (IBAction) testEnemyMinionDetection:(id)sender;
 - (IBAction) testAllyMinionDetection:(id)sender;
 - (IBAction) testEnemyTowerDetection:(id)sender;
+- (IBAction) testLevelUpDetection:(id)sender;
+- (IBAction) testLevelDotDetection:(id)sender;
+- (IBAction) testEnabledAbilityDetection:(id)sender;
+- (IBAction) testEnabledSummonerSpellDetection:(id)sender;
 
 @end
 

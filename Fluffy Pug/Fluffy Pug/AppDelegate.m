@@ -166,9 +166,6 @@
 - (IBAction) testInGameDetection:(id)sender {
     testController->testInGameDetection();
 }
-- (IBAction) testLevelUp:(id)sender {
-    testController->testLevelUp();
-}
 - (IBAction) testAbilitiesActive:(id)sender {
     testController->testAbilitiesActive();
 }
@@ -195,6 +192,19 @@
 
 - (IBAction) testEnemyTowerDetection:(id)sender {
     testController->testEnemyTowerDetection();
+}
+
+- (IBAction) testLevelUpDetection:(id)sender {
+    testController->testLevelUpDetection();
+}
+- (IBAction) testLevelDotDetection:(id)sender {
+    testController->testLevelDotDetection();
+}
+- (IBAction) testEnabledAbilityDetection:(id)sender {
+    testController->testEnabledAbilityDetection();
+}
+- (IBAction) testEnabledSummonerSpellDetection:(id)sender {
+    testController->testEnabledSummonerSpellDetection();
 }
 
 - (IBAction) runAutoQueueButton:(id)sender {

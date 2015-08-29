@@ -1107,18 +1107,6 @@
                                                 <action selector="testEnemyChampDetection:" target="Voe-Tx-rLC" id="rt5-mp-rkY"/>
                                             </connections>
                                         </button>
-                                        <button verticalHuggingPriority="750" id="1O4-ju-dFL">
-                                            <rect key="frame" x="145" y="164" width="122" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <buttonCell key="cell" type="push" title="Test Level Up" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="VcX-tG-8FS">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="testLevelUp:" target="Voe-Tx-rLC" id="C9x-Ku-q6m"/>
-                                            </connections>
-                                        </button>
                                         <button verticalHuggingPriority="750" id="8oi-VD-O0z">
                                             <rect key="frame" x="6" y="223" width="217" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1153,6 +1141,54 @@
                                             </buttonCell>
                                             <connections>
                                                 <action selector="testEnemyTowerDetection:" target="Voe-Tx-rLC" id="SpH-Um-xob"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="GlK-KX-VuV">
+                                            <rect key="frame" x="274" y="284" width="189" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Level Dot Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cTV-2f-oQY">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testLevelDotDetection:" target="Voe-Tx-rLC" id="6Nh-wg-TiA"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="hSo-9i-sCn">
+                                            <rect key="frame" x="241" y="307" width="222" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Enabled Ability Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qyf-Gt-xIY">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testEnabledAbilityDetection:" target="Voe-Tx-rLC" id="lVY-tJ-Twc"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="HHB-tA-gGY">
+                                            <rect key="frame" x="180" y="331" width="283" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Enabled Summoner Spell Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uhL-Ub-Wui">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testEnabledSummonerSpellDetection:" target="Voe-Tx-rLC" id="zxy-Rr-46S"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="mzh-5k-CKl">
+                                            <rect key="frame" x="276" y="358" width="185" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Level Up Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vmh-5j-V3R">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testLevelUpDetection:" target="Voe-Tx-rLC" id="L1a-2h-tW9"/>
                                             </connections>
                                         </button>
                                     </subviews>
