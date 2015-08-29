@@ -18,7 +18,7 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     passiveUseWardTimer = clock();
     cameraLockTimer = clock();
     lastShopBuy = -999999999999999999;
-    gameState->shopManager->buyingItems = false;
+    //gameState->shopManager->buyingItems = false;
 }
 void BasicAI::processAI() {
     /*

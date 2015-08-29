@@ -12,11 +12,12 @@
 #import "AllyMinionManager.h"
 #import "EnemyTowerManager.h"
 #import "AbilityManager.h"
+#import "ItemManager.h"
 
 class TestController {
     ImageData testImage;
     ImageData playButton;
-    ImageData testAbilitiesActive1280x800Image, testInGameDetection1280x800Image, testItemActives1280x800Image, testLevelUp1280x800Image, testShopAvailable1280x800Image, testShopItems1280x800Image, testShopOpen1280x800Image, testEnemyTower1280x800Image, testLevelUpDot1280x800Image;
+    ImageData testAbilitiesActive1280x800Image, testInGameDetection1280x800Image, testItemActives1280x800Image, testLevelUp1280x800Image, testShopAvailable1280x800Image, testShopItems1280x800Image, testShopOpen1280x800Image, testEnemyTower1280x800Image, testLevelUpDot1280x800Image, testUsedPotion1280x800;
     
     NSImageView* processedImageView, *unprocessedImageView, *targetImageView, *foundImageView;
     NSTextView* logText;
@@ -25,12 +26,6 @@ public:
     void copyScreenShot(uint8 *baseAddress, int bufferWidth, int bufferHeight);
     void displayPreprocessedScreenShot();
     void testPlayButton();
-    void testShopAvailable();
-    void testShopOpen();
-    void testShopItems();
-    void testInGameDetection();
-    void testAbilitiesActive();
-    void testItemActives();
     void testSelfDetection();
     void testAllyChampionDetection();
     void testEnemyChampionDetection();
@@ -41,5 +36,9 @@ public:
     void testLevelDotDetection();
     void testEnabledAbilityDetection();
     void testEnabledSummonerSpellDetection();
+    void testTrinketActiveDetection();
+    void testItemActiveDetection();
+    void testPotionActiveDetection();
+    void testUsedPotionActiveDetection();
     void log(NSString* string);
 };

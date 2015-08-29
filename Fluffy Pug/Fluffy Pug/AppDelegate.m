@@ -154,24 +154,6 @@
 - (IBAction) testPlayButton:(id)sender {
     testController->testPlayButton();
 }
-- (IBAction) testShopAvailable:(id)sender {
-    testController->testShopAvailable();
-}
-- (IBAction) testShopOpen:(id)sender {
-    testController->testShopOpen();
-}
-- (IBAction) testShopItems:(id)sender {
-    testController->testShopItems();
-}
-- (IBAction) testInGameDetection:(id)sender {
-    testController->testInGameDetection();
-}
-- (IBAction) testAbilitiesActive:(id)sender {
-    testController->testAbilitiesActive();
-}
-- (IBAction) testItemActives:(id)sender {
-    testController->testItemActives();
-}
 - (IBAction) testSelfDetection:(id)sender {
     testController->testSelfDetection();
 }
@@ -205,6 +187,18 @@
 }
 - (IBAction) testEnabledSummonerSpellDetection:(id)sender {
     testController->testEnabledSummonerSpellDetection();
+}
+- (IBAction) testTrinketActiveDetection:(id)sender{
+    testController->testTrinketActiveDetection();
+}
+- (IBAction) testItemActivesDetection:(id)sender{
+    testController->testItemActiveDetection();
+}
+- (IBAction) testPotionActivesDetection:(id)sender{
+    testController->testPotionActiveDetection();
+}
+- (IBAction) testUsedPotionDetection:(id)sender{
+    testController->testUsedPotionActiveDetection();
 }
 
 - (IBAction) runAutoQueueButton:(id)sender {

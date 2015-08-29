@@ -58,12 +58,6 @@
 - (IBAction) testPlayButton:(id)sender;
 - (IBAction) runAutoQueueButton:(id)sender;
 
-- (IBAction) testShopAvailable:(id)sender;
-- (IBAction) testShopOpen:(id)sender;
-- (IBAction) testShopItems:(id)sender;
-- (IBAction) testInGameDetection:(id)sender;
-- (IBAction) testAbilitiesActive:(id)sender;
-- (IBAction) testItemActives:(id)sender;
 - (IBAction) testSelfDetection:(id)sender;
 - (IBAction) testAllyChampDetection:(id)sender;
 - (IBAction) testEnemyChampDetection:(id)sender;
@@ -74,6 +68,10 @@
 - (IBAction) testLevelDotDetection:(id)sender;
 - (IBAction) testEnabledAbilityDetection:(id)sender;
 - (IBAction) testEnabledSummonerSpellDetection:(id)sender;
+- (IBAction) testTrinketActiveDetection:(id)sender;
+- (IBAction) testItemActivesDetection:(id)sender;
+- (IBAction) testPotionActivesDetection:(id)sender;
+- (IBAction) testUsedPotionDetection:(id)sender;
 
 @end
 

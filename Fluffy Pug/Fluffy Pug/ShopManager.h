@@ -13,10 +13,9 @@
 #import "InteractiveEvents.h"
 
 class ShopManager {
-    ImageData shopWindowImageData, shopEmptyItemSlotImageData, shopAvailableImageData, shopBottomLeftCornerImageData, shopItemImageData;
     
     //void detectItems();
-    
+    /*
     bool needsFullScreenUpdate;
     
     double fullScreenUpdateTime;
@@ -25,9 +24,13 @@ class ShopManager {
     NSMutableArray* buyableItems;
     int emptyItemSlots;
     double lastItemBuyTime;
+     */
     //bool usedItemInFrame;
     //double item1Time, item2Time, item3Time, trinketTime, item5Time, item6Time, item7Time;
 public:
+    static ImageData shopWindowImageData, shopEmptyItemSlotImageData, shopAvailableImageData, shopBottomLeftCornerImageData, shopItemImageData;
+    ShopManager();
+    /*
     bool shopAvailable, boughtItems, buyingItems;
     bool shopOpen;
     ShopManager();
@@ -35,4 +38,5 @@ public:
     void openShop();
     void buyItems();
     void closeShop();
+     */
 };

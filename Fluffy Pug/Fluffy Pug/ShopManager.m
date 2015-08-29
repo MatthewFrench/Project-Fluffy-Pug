@@ -16,9 +16,14 @@
 //  Copyright © 2015 Matthew French. All rights reserved.
 //
 
-#import "ShopManager.h"
+ImageData ShopManager::shopItemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Shop/Item" ofType:@"png"]);
+ImageData ShopManager::shopWindowImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Shop/Shop Window" ofType:@"png"]);
+ImageData ShopManager::shopEmptyItemSlotImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Shop/Empty Item Slot" ofType:@"png"]);
+ImageData ShopManager::shopAvailableImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Shop/Shop Available" ofType:@"png"]);
+ImageData ShopManager::shopBottomLeftCornerImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Shop/Shop Bottom Left Corner" ofType:@"png"]);
 
 ShopManager::ShopManager() {
+    /*
     fullScreenUpdateTime = clock();
     shopItemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Shop/Item" ofType:@"png"]);
     shopWindowImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Shop/Shop Window" ofType:@"png"]);
@@ -29,8 +34,9 @@ ShopManager::ShopManager() {
     lastShopOpenAttempt = clock();
     lastShopCloseAttempt = clock();
     lastItemBuyTime = clock();
+     */
 }
-
+/*
 void ShopManager::openShop() {
     if (!shopOpen && ((clock() - lastShopOpenAttempt)/CLOCKS_PER_SEC >= 5.0)) {
         lastShopOpenAttempt = clock();
@@ -149,26 +155,7 @@ void ShopManager::processImage(ImageData imageData) {
             }
         }
         
-        /*
-        if (shopAvailable) {
-            shopOpen = false;
-            yStart = 0;
-            yEnd = imageData.imageHeight;
-            xStart = 0;
-            xEnd = imageData.imageWidth;
-            for (int y = yStart; y < yEnd; y++) {
-                uint8_t *pixel = imageData.imageData + (y * imageData.imageWidth + xStart)*4;
-                
-                for (int x = xStart; x < xEnd; x++) {
-                    if (detectImageAtPixel(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopWindowImageData, 30)) {
-                        shopOpen = true;
-                        topLeftCornerPosition = makePosition(x, y);
-                        x = xEnd; y = yEnd;
-                    }
-                    pixel += 4;
-                }
-            }
-        }*/
+ 
         shopOpen = false;
         yStart = 0;
         yEnd = imageData.imageHeight/2;
@@ -240,4 +227,4 @@ void ShopManager::processImage(ImageData imageData) {
         }
         
     }
-}
+}*/

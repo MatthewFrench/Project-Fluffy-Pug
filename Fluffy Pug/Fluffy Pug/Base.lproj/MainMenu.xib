@@ -1000,75 +1000,27 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="FFM-DT-VjS">
-                                            <rect key="frame" x="8" y="197" width="158" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <rect key="frame" x="248" y="203" width="215" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
-                                            <buttonCell key="cell" type="push" title="Test Shop Available" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tiz-fc-8X5">
+                                            <buttonCell key="cell" type="push" title="Test Active Trinket Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tiz-fc-8X5">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="testShopAvailable:" target="Voe-Tx-rLC" id="ac1-8Q-bQ9"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" id="2CH-Pi-Z4W">
-                                            <rect key="frame" x="8" y="164" width="137" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <buttonCell key="cell" type="push" title="Test Shop Open" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xAF-EE-Lhx">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="testShopOpen:" target="Voe-Tx-rLC" id="AdY-8W-Rej"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" id="2rN-v9-lcg">
-                                            <rect key="frame" x="9" y="131" width="138" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <buttonCell key="cell" type="push" title="Test Shop Items" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="JRX-Q6-bNv">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="testShopItems:" target="Voe-Tx-rLC" id="bdp-ol-zl9"/>
+                                                <action selector="testTrinketActiveDetection:" target="Voe-Tx-rLC" id="LU1-Zh-mgW"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="ydh-t2-b3I">
-                                            <rect key="frame" x="304" y="164" width="159" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <rect key="frame" x="251" y="149" width="212" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
-                                            <buttonCell key="cell" type="push" title="Test Abilities Active" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YPr-Ah-Md9">
+                                            <buttonCell key="cell" type="push" title="Test Active Potion Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YPr-Ah-Md9">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="testAbilitiesActive:" target="Voe-Tx-rLC" id="9b4-2e-FaJ"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" id="GT0-0u-GhF">
-                                            <rect key="frame" x="278" y="197" width="185" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <buttonCell key="cell" type="push" title="Test In-Game Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KVJ-vK-1Vy">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="testInGameDetection:" target="Voe-Tx-rLC" id="zpk-tT-u9Z"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" id="JBu-0D-IcB">
-                                            <rect key="frame" x="319" y="131" width="144" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <buttonCell key="cell" type="push" title="Test Item Actives" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="28x-g3-jkg">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="testItemActives:" target="Voe-Tx-rLC" id="cgV-gG-uOQ"/>
+                                                <action selector="testPotionActivesDetection:" target="Voe-Tx-rLC" id="BlX-cU-7cM"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="9Mt-nN-AmR">
@@ -1121,7 +1073,7 @@
                                         </button>
                                         <button verticalHuggingPriority="750" id="dvZ-Ny-fw1">
                                             <rect key="frame" x="265" y="230" width="198" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Ally Minion Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WhS-tV-8mT">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1133,7 +1085,7 @@
                                         </button>
                                         <button verticalHuggingPriority="750" id="6LR-Lc-NzY">
                                             <rect key="frame" x="250" y="258" width="213" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Enemy Tower Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2iS-Za-5zw">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1145,7 +1097,7 @@
                                         </button>
                                         <button verticalHuggingPriority="750" id="GlK-KX-VuV">
                                             <rect key="frame" x="274" y="284" width="189" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Level Dot Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cTV-2f-oQY">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1157,7 +1109,7 @@
                                         </button>
                                         <button verticalHuggingPriority="750" id="hSo-9i-sCn">
                                             <rect key="frame" x="241" y="307" width="222" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Enabled Ability Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qyf-Gt-xIY">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1169,7 +1121,7 @@
                                         </button>
                                         <button verticalHuggingPriority="750" id="HHB-tA-gGY">
                                             <rect key="frame" x="180" y="331" width="283" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Enabled Summoner Spell Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uhL-Ub-Wui">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1181,7 +1133,7 @@
                                         </button>
                                         <button verticalHuggingPriority="750" id="mzh-5k-CKl">
                                             <rect key="frame" x="276" y="358" width="185" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Level Up Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vmh-5j-V3R">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1189,6 +1141,30 @@
                                             </buttonCell>
                                             <connections>
                                                 <action selector="testLevelUpDetection:" target="Voe-Tx-rLC" id="L1a-2h-tW9"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="GT0-0u-GhF">
+                                            <rect key="frame" x="263" y="177" width="200" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Active Item Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KVJ-vK-1Vy">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testItemActivesDetection:" target="Voe-Tx-rLC" id="mv8-fM-cEN"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="JBu-0D-IcB">
+                                            <rect key="frame" x="257" y="123" width="206" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Used Potion Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="28x-g3-jkg">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testUsedPotionDetection:" target="Voe-Tx-rLC" id="9cW-dH-R1d"/>
                                             </connections>
                                         </button>
                                     </subviews>

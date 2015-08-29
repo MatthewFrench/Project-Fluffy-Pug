@@ -13,8 +13,8 @@
 #import "InteractiveEvents.h"
 
 class ItemManager {
-    ImageData trinketItemImageData, itemImageData;
     
+    /*
     void detectItems(ImageData imageData);
     
     bool needsFullScreenUpdate;
@@ -22,6 +22,7 @@ class ItemManager {
     double fullScreenUpdateTime, lastUpdateTime;
     bool usedItemInFrame;
     double item1Time, item2Time, item3Time, trinketTime, item5Time, item6Time, item7Time;
+     */
     /*
      , topLeftImageData, bottomLeftImageData,
      bottomRightImageData, topRightImageData, healthSegmentImageData;
@@ -36,7 +37,14 @@ class ItemManager {
      const double minionSpeed = 2000; //100 pixels per second
      */
 public:
+    static ImageData trinketItemImageData, itemImageData, potionImageData, usedPotionImageData, usedPotionInnerImageData;
     ItemManager();
+    
+    static GenericObject* detectTrinketActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static GenericObject* detectItemActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static GenericObject* detectPotionActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static GenericObject* detectUsedPotionAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    /*
     void processImage(ImageData data);
     //NSMutableArray* levelUpDetect, *levelUpDisabledDetect, *abilityEnabledDetect, *abilityDisabledDetect;
     bool item1Active, item2Active, item3Active, trinketActive;
@@ -48,6 +56,7 @@ public:
     void useItem5();
     void useItem6();
     void useItem7();
+     */
     /*
      NSMutableArray* minionBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
      

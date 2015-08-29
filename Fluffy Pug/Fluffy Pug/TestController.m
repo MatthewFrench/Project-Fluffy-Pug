@@ -29,6 +29,7 @@ TestController::TestController(NSImageView* processedImageView, NSImageView *unp
     testShopOpen1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Open 1280x800" ofType:@"png"]);
     testEnemyTower1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Enemy Tower Detection 1280x800" ofType:@"png"]);
     testLevelUpDot1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Level Up Dot 1280x800" ofType:@"png"]);
+    testUsedPotion1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Used Potion 1280x800" ofType:@"png"]);
     
     //[targetImageView setImage:getImageFromBGRABuffer(testGame1.imageData, testGame1.imageWidth, testGame1.imageHeight)];
 }
@@ -115,42 +116,6 @@ void TestController::testGameImage1() {
 }
 */
 
-void TestController::testShopAvailable() {
-    NSImage* image = getImageFromBGRABufferImageData(&testShopAvailable1280x800Image);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [unprocessedImageView setImage: image];
-    });
-}
-void TestController::testShopOpen() {
-    NSImage* image = getImageFromBGRABufferImageData(&testShopOpen1280x800Image);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [unprocessedImageView setImage: image];
-    });
-}
-void TestController::testShopItems() {
-    NSImage* image = getImageFromBGRABufferImageData(&testShopItems1280x800Image);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [unprocessedImageView setImage: image];
-    });
-}
-void TestController::testInGameDetection() {
-    NSImage* image = getImageFromBGRABufferImageData(&testInGameDetection1280x800Image);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [unprocessedImageView setImage: image];
-    });
-}
-void TestController::testAbilitiesActive() {
-    NSImage* image = getImageFromBGRABufferImageData(&testAbilitiesActive1280x800Image);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [unprocessedImageView setImage: image];
-    });
-}
-void TestController::testItemActives() {
-    NSImage* image = getImageFromBGRABufferImageData(&testItemActives1280x800Image);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [unprocessedImageView setImage: image];
-    });
-}
 void TestController::testSelfDetection() {
     testImage = testItemActives1280x800Image;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
@@ -828,6 +793,259 @@ void TestController::testEnabledSummonerSpellDetection() {
     }
     
     [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::enabledSummonerSpellImageData.imageData, AbilityManager::enabledSummonerSpellImageData.imageWidth, AbilityManager::enabledSummonerSpellImageData.imageHeight)];
+}
+
+void TestController::testTrinketActiveDetection() {
+    testImage = testAbilitiesActive1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(ItemManager::trinketItemImageData.imageData, ItemManager::trinketItemImageData.imageWidth, ItemManager::trinketItemImageData.imageHeight)];
+    log(@"Testing Trinket Active Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = ItemManager::detectTrinketActiveAtPixel(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected active trinkets: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Trinket active: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(ItemManager::trinketItemImageData.imageData, ItemManager::trinketItemImageData.imageWidth, ItemManager::trinketItemImageData.imageHeight)];
+}
+void TestController::testItemActiveDetection() {
+    testImage = testItemActives1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(ItemManager::itemImageData.imageData, ItemManager::itemImageData.imageWidth, ItemManager::itemImageData.imageHeight)];
+    log(@"Testing Item Active Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = ItemManager::detectItemActiveAtPixel(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected active items: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Item active: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(ItemManager::itemImageData.imageData, ItemManager::itemImageData.imageWidth, ItemManager::itemImageData.imageHeight)];
+}
+void TestController::testPotionActiveDetection() {
+    testImage = testItemActives1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(ItemManager::potionImageData.imageData, ItemManager::potionImageData.imageWidth, ItemManager::potionImageData.imageHeight)];
+    log(@"Testing Potion Active Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = ItemManager::detectPotionActiveAtPixel(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected active potions: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Potion active: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(ItemManager::potionImageData.imageData, ItemManager::potionImageData.imageWidth, ItemManager::potionImageData.imageHeight)];
+}
+void TestController::testUsedPotionActiveDetection() {
+    testImage = testUsedPotion1280x800;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(ItemManager::usedPotionImageData.imageData, ItemManager::usedPotionImageData.imageWidth, ItemManager::usedPotionImageData.imageHeight)];
+    log(@"Testing Used Potions Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = ItemManager::detectUsedPotionAtPixel(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected used potions: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Used potion: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(ItemManager::usedPotionImageData.imageData, ItemManager::usedPotionImageData.imageWidth, ItemManager::usedPotionImageData.imageHeight)];
 }
 
 

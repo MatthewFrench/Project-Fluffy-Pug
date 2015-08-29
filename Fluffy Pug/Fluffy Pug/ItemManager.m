@@ -8,11 +8,14 @@
 
 #import "ItemManager.h"
 
+ImageData ItemManager::trinketItemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Trinket Active" ofType:@"png"]);
+ImageData ItemManager::itemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Usable Item" ofType:@"png"]);
+ImageData ItemManager::potionImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Potion" ofType:@"png"]);
+ImageData ItemManager::usedPotionImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Used Potion" ofType:@"png"]);
+ImageData ItemManager::usedPotionInnerImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Used Potion Inner" ofType:@"png"]);
+
 ItemManager::ItemManager() {
-    
-    trinketItemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Trinket Active" ofType:@"png"]);
-    itemImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Item Bar/Usable Item" ofType:@"png"]);
-    
+    /*
     item1Active = false;
     item2Active = false;
     item3Active = false;
@@ -29,8 +32,87 @@ ItemManager::ItemManager() {
     item6Time = clock();
     item7Time = clock();
     usedItemInFrame = false;
+     */
 }
-
+GenericObject* ItemManager::detectTrinketActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    GenericObject* object = nil;
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, trinketItemImageData, 0.8) >=  0.8) {
+        object = new GenericObject();
+        object->topLeft.x = x;
+        object->topLeft.y = y;
+        object->bottomLeft.x = x;
+        object->bottomLeft.y = y + trinketItemImageData.imageHeight;
+        object->topRight.x = x + trinketItemImageData.imageWidth;
+        object->topRight.y = y;
+        object->bottomRight.x = x + trinketItemImageData.imageWidth;
+        object->bottomRight.y = y + trinketItemImageData.imageHeight;
+        object->center.x = (object->topRight.x - object->topLeft.x) / 2 + object->topLeft.x;
+        object->center.y = (object->bottomLeft.y - object->topLeft.y) / 2 + object->topLeft.y;
+    }
+    
+    return object;
+}
+GenericObject* ItemManager::detectItemActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    GenericObject* object = nil;
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, itemImageData, 0.8) >=  0.8) {
+        object = new GenericObject();
+        object->topLeft.x = x;
+        object->topLeft.y = y;
+        object->bottomLeft.x = x;
+        object->bottomLeft.y = y + itemImageData.imageHeight;
+        object->topRight.x = x + itemImageData.imageWidth;
+        object->topRight.y = y;
+        object->bottomRight.x = x + itemImageData.imageWidth;
+        object->bottomRight.y = y + itemImageData.imageHeight;
+        object->center.x = (object->topRight.x - object->topLeft.x) / 2 + object->topLeft.x;
+        object->center.y = (object->bottomLeft.y - object->topLeft.y) / 2 + object->topLeft.y;
+    }
+    
+    return object;
+}
+GenericObject* ItemManager::detectPotionActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    GenericObject* object = nil;
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, potionImageData, 0.8) >=  0.8) {
+        object = new GenericObject();
+        object->topLeft.x = x;
+        object->topLeft.y = y;
+        object->bottomLeft.x = x;
+        object->bottomLeft.y = y + potionImageData.imageHeight;
+        object->topRight.x = x + potionImageData.imageWidth;
+        object->topRight.y = y;
+        object->bottomRight.x = x + potionImageData.imageWidth;
+        object->bottomRight.y = y + potionImageData.imageHeight;
+        object->center.x = (object->topRight.x - object->topLeft.x) / 2 + object->topLeft.x;
+        object->center.y = (object->bottomLeft.y - object->topLeft.y) / 2 + object->topLeft.y;
+    }
+    
+    return object;
+}
+GenericObject* ItemManager::detectUsedPotionAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    GenericObject* object = nil;
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, usedPotionImageData, 0.8) >=  0.8) {
+        
+        //Now test if we have at least 50% of the inside somewhat matching the inner potion
+        if (getImageAtPixelPercentageOptimized(getPixel2(imageData, x+1, y+1), x+1, y+1, imageData.imageWidth, imageData.imageHeight, usedPotionInnerImageData, 0.5) >= 0.5) {
+        
+            object = new GenericObject();
+            object->topLeft.x = x;
+            object->topLeft.y = y;
+            object->bottomLeft.x = x;
+            object->bottomLeft.y = y + usedPotionImageData.imageHeight;
+            object->topRight.x = x + usedPotionImageData.imageWidth;
+            object->topRight.y = y;
+            object->bottomRight.x = x + usedPotionImageData.imageWidth;
+            object->bottomRight.y = y + usedPotionImageData.imageHeight;
+            object->center.x = (object->topRight.x - object->topLeft.x) / 2 + object->topLeft.x;
+            object->center.y = (object->bottomLeft.y - object->topLeft.y) / 2 + object->topLeft.y;
+        
+        }
+    }
+    
+    return object;
+}
+/*
 void ItemManager::processImage(ImageData data) {
     
     lastUpdateTime = clock();
@@ -224,4 +306,4 @@ void ItemManager::detectItems(ImageData imageData) {
         }
     }
     if (isActive) item7Active = true;
-}
+}*/

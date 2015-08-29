@@ -31,7 +31,6 @@
 		C95A77CF1B142AC500052F3E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77CE1B142AC500052F3E /* CoreFoundation.framework */; };
 		C95A77D11B142ACA00052F3E /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77D01B142ACA00052F3E /* ApplicationServices.framework */; };
 		C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77D41B1432A600052F3E /* LeagueGameState.m */; };
-		C96C94681B2A7A490003E688 /* ItemManagerOLD.m in Sources */ = {isa = PBXBuildFile; fileRef = C96C94671B2A7A490003E688 /* ItemManagerOLD.m */; };
 		C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F461B28720600A965E6 /* SelfChampionManager.m */; };
 		C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F491B2872DC00A965E6 /* AllyChampionManager.m */; };
 		C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F4C1B28931700A965E6 /* BasicAI.m */; };
@@ -82,8 +81,6 @@
 		C95A77D01B142ACA00052F3E /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
 		C95A77D31B1432A600052F3E /* LeagueGameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeagueGameState.h; sourceTree = "<group>"; };
 		C95A77D41B1432A600052F3E /* LeagueGameState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeagueGameState.m; sourceTree = "<group>"; };
-		C96C94661B2A7A490003E688 /* ItemManagerOLD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemManagerOLD.h; sourceTree = "<group>"; };
-		C96C94671B2A7A490003E688 /* ItemManagerOLD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ItemManagerOLD.m; sourceTree = "<group>"; };
 		C974F2601B7CEE83009886ED /* TestGame1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestGame1.png; sourceTree = "<group>"; };
 		C974F2611B7CEE83009886ED /* TestGame2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestGame2.png; sourceTree = "<group>"; };
 		C9928F451B28720600A965E6 /* SelfChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfChampionManager.h; sourceTree = "<group>"; };
@@ -181,8 +178,6 @@
 		C92B82511B30379C00278ED5 /* Item Manager */ = {
 			isa = PBXGroup;
 			children = (
-				C96C94661B2A7A490003E688 /* ItemManagerOLD.h */,
-				C96C94671B2A7A490003E688 /* ItemManagerOLD.m */,
 				C92B825A1B303A9E00278ED5 /* ItemManager.h */,
 				C92B825B1B303A9E00278ED5 /* ItemManager.m */,
 			);
@@ -388,7 +383,6 @@
 				C939B4751B6A01C800B42054 /* TestController.m in Sources */,
 				C9A9111A1B2AC6F300DC33D1 /* ShopManager.m in Sources */,
 				C9F5E6821B1C1AD10072BB9C /* EnemyMinionManager.m in Sources */,
-				C96C94681B2A7A490003E688 /* ItemManagerOLD.m in Sources */,
 				C92B82561B303A3300278ED5 /* ShopManagerOLD.m in Sources */,
 				C92B82591B303A7500278ED5 /* AbilityManager.m in Sources */,
 				C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */,
