@@ -1167,6 +1167,54 @@
                                                 <action selector="testUsedPotionDetection:" target="Voe-Tx-rLC" id="9cW-dH-R1d"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" id="VKN-PJ-hUp">
+                                            <rect key="frame" x="5" y="197" width="221" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Shop Available Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vbg-is-sv7">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testShopAvailableDetection:" target="Voe-Tx-rLC" id="Bod-6i-oPE"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="vkf-D7-xl0">
+                                            <rect key="frame" x="1" y="170" width="262" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Shop Top Left Corner Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AHJ-f2-FnJ">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testShopTopLeftCornerDetection:" target="Voe-Tx-rLC" id="75B-fg-FKN"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="goK-Ah-AEk">
+                                            <rect key="frame" x="-10" y="144" width="284" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Shop Bottom Left Corner Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="amQ-4h-8bB">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testShopBottomLeftCornerDetection:" target="Voe-Tx-rLC" id="is3-w9-Pww"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="YZp-3a-B7H">
+                                            <rect key="frame" x="5" y="118" width="252" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Shop Buyable Items Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r4C-Jl-Wn9">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testShopBuyableItemsDetection:" target="Voe-Tx-rLC" id="9mP-Sm-yVy"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <animations/>
                                 </view>
@@ -1176,7 +1224,7 @@
                 </subviews>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="-513" y="264.5"/>
+            <point key="canvasLocation" x="-636" y="218.5"/>
         </window>
         <window title="Screen Shot Viewer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="VMG-ED-3M6" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES" HUD="YES"/>

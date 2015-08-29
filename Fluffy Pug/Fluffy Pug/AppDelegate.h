@@ -72,6 +72,10 @@
 - (IBAction) testItemActivesDetection:(id)sender;
 - (IBAction) testPotionActivesDetection:(id)sender;
 - (IBAction) testUsedPotionDetection:(id)sender;
+- (IBAction) testShopAvailableDetection:(id)sender;
+- (IBAction) testShopTopLeftCornerDetection:(id)sender;
+- (IBAction) testShopBottomLeftCornerDetection:(id)sender;
+- (IBAction) testShopBuyableItemsDetection:(id)sender;
 
 @end
 

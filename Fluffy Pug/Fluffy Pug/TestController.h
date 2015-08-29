@@ -13,6 +13,7 @@
 #import "EnemyTowerManager.h"
 #import "AbilityManager.h"
 #import "ItemManager.h"
+#import "ShopManager.h"
 
 class TestController {
     ImageData testImage;
@@ -40,5 +41,9 @@ public:
     void testItemActiveDetection();
     void testPotionActiveDetection();
     void testUsedPotionActiveDetection();
+    void testShopAvailable();
+    void testShopTopLeftCorner();
+    void testShopBottomLeftCorner();
+    void testShopBuyableItems();
     void log(NSString* string);
 };

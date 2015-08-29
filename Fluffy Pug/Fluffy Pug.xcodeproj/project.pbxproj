@@ -17,7 +17,6 @@
 		C91DD9151B6BB97A00B4BB07 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C91DD9141B6BB97A00B4BB07 /* IOSurface.framework */; };
 		C91E65D01B1D309E00432FCA /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = C91E65CF1B1D309E00432FCA /* Resources */; };
 		C91E65D31B1D30D200432FCA /* EnemyChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C91E65D21B1D30D200432FCA /* EnemyChampionManager.m */; };
-		C92B82561B303A3300278ED5 /* ShopManagerOLD.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B82551B303A3300278ED5 /* ShopManagerOLD.m */; };
 		C92B82591B303A7500278ED5 /* AbilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B82581B303A7500278ED5 /* AbilityManager.m */; };
 		C92B825C1B303A9E00278ED5 /* ItemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B825B1B303A9E00278ED5 /* ItemManager.m */; };
 		C939B4751B6A01C800B42054 /* TestController.m in Sources */ = {isa = PBXBuildFile; fileRef = C939B4731B6A01C800B42054 /* TestController.m */; };
@@ -55,8 +54,6 @@
 		C91E65CF1B1D309E00432FCA /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		C91E65D11B1D30D200432FCA /* EnemyChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyChampionManager.h; sourceTree = "<group>"; };
 		C91E65D21B1D30D200432FCA /* EnemyChampionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EnemyChampionManager.m; sourceTree = "<group>"; };
-		C92B82541B303A3300278ED5 /* ShopManagerOLD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShopManagerOLD.h; sourceTree = "<group>"; };
-		C92B82551B303A3300278ED5 /* ShopManagerOLD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShopManagerOLD.m; sourceTree = "<group>"; };
 		C92B82571B303A7500278ED5 /* AbilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbilityManager.h; sourceTree = "<group>"; };
 		C92B82581B303A7500278ED5 /* AbilityManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbilityManager.m; sourceTree = "<group>"; };
 		C92B825A1B303A9E00278ED5 /* ItemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemManager.h; sourceTree = "<group>"; };
@@ -189,8 +186,6 @@
 			children = (
 				C9A911181B2AC6F300DC33D1 /* ShopManager.h */,
 				C9A911191B2AC6F300DC33D1 /* ShopManager.m */,
-				C92B82541B303A3300278ED5 /* ShopManagerOLD.h */,
-				C92B82551B303A3300278ED5 /* ShopManagerOLD.m */,
 			);
 			name = "Shop Manager";
 			sourceTree = "<group>";
@@ -383,7 +378,6 @@
 				C939B4751B6A01C800B42054 /* TestController.m in Sources */,
 				C9A9111A1B2AC6F300DC33D1 /* ShopManager.m in Sources */,
 				C9F5E6821B1C1AD10072BB9C /* EnemyMinionManager.m in Sources */,
-				C92B82561B303A3300278ED5 /* ShopManagerOLD.m in Sources */,
 				C92B82591B303A7500278ED5 /* AbilityManager.m in Sources */,
 				C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */,
 			);

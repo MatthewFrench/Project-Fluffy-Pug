@@ -200,6 +200,18 @@
 - (IBAction) testUsedPotionDetection:(id)sender{
     testController->testUsedPotionActiveDetection();
 }
+- (IBAction) testShopAvailableDetection:(id)sender{
+    testController->testShopAvailable();
+}
+- (IBAction) testShopTopLeftCornerDetection:(id)sender{
+    testController->testShopTopLeftCorner();
+}
+- (IBAction) testShopBottomLeftCornerDetection:(id)sender{
+    testController->testShopBottomLeftCorner();
+}
+- (IBAction) testShopBuyableItemsDetection:(id)sender{
+    testController->testShopBuyableItems();
+}
 
 - (IBAction) runAutoQueueButton:(id)sender {
     if ([GlobalSelf->autoQueueCheckbox state] == NSOnState) {

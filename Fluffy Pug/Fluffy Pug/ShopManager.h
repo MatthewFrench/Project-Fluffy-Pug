@@ -28,8 +28,12 @@ class ShopManager {
     //bool usedItemInFrame;
     //double item1Time, item2Time, item3Time, trinketTime, item5Time, item6Time, item7Time;
 public:
-    static ImageData shopWindowImageData, shopEmptyItemSlotImageData, shopAvailableImageData, shopBottomLeftCornerImageData, shopItemImageData;
+    static ImageData shopTopLeftCornerImageData, shopAvailableImageData, shopBottomLeftCornerImageData, shopBuyableItemTopLeftCornerImageData, shopBuyableItemBottomLeftCornerImageData, shopBuyableItemTopRightCornerImageData, shopBuyableItemBottomRightCornerImageData;
     ShopManager();
+    static GenericObject* detectShopAvailable(ImageData imageData, uint8_t *pixel, int x, int y);
+    static GenericObject* detectShopTopLeftCorner(ImageData imageData, uint8_t *pixel, int x, int y);
+    static GenericObject* detectShopBottomLeftCorner(ImageData imageData, uint8_t *pixel, int x, int y);
+    static GenericObject* detectBuyableItems(ImageData imageData, uint8_t *pixel, int x, int y);
     /*
     bool shopAvailable, boughtItems, buyingItems;
     bool shopOpen;
