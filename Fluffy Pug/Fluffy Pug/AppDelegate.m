@@ -212,6 +212,15 @@
 - (IBAction) testShopBuyableItemsDetection:(id)sender{
     testController->testShopBuyableItems();
 }
+- (IBAction) testMapDetection:(id)sender {
+    testController->testMapDetection();
+}
+- (IBAction) testMapShopDetection:(id)sender {
+    testController->testMapShopDetection();
+}
+- (IBAction) testMapLocation:(id)sender {
+    testController->testMapLocationDetection();
+}
 
 - (IBAction) runAutoQueueButton:(id)sender {
     if ([GlobalSelf->autoQueueCheckbox state] == NSOnState) {

@@ -76,6 +76,9 @@
 - (IBAction) testShopTopLeftCornerDetection:(id)sender;
 - (IBAction) testShopBottomLeftCornerDetection:(id)sender;
 - (IBAction) testShopBuyableItemsDetection:(id)sender;
+- (IBAction) testMapDetection:(id)sender;
+- (IBAction) testMapShopDetection:(id)sender;
+- (IBAction) testMapLocation:(id)sender;
 
 @end
 

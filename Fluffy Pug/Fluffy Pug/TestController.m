@@ -1301,6 +1301,195 @@ void TestController::testShopBuyableItems() {
     [targetImageView setImage:getImageFromBGRABuffer(ShopManager::shopBuyableItemTopLeftCornerImageData.imageData, ShopManager::shopBuyableItemTopLeftCornerImageData.imageWidth, ShopManager::shopBuyableItemTopLeftCornerImageData.imageHeight)];
 }
 
+void TestController::testMapDetection() {
+    testImage = testInGameDetection1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(MapManager::mapTopLeftCornerImageData.imageData, MapManager::mapTopLeftCornerImageData.imageWidth, MapManager::mapTopLeftCornerImageData.imageHeight)];
+    log(@"Testing Map Top Left Corner Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = MapManager::detectMap(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Detected maps: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Map: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(MapManager::mapTopLeftCornerImageData.imageData, MapManager::mapTopLeftCornerImageData.imageWidth, MapManager::mapTopLeftCornerImageData.imageHeight)];
+}
+void TestController::testMapShopDetection() {
+    testImage = testInGameDetection1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(MapManager::shopIconImageData.imageData, MapManager::shopIconImageData.imageWidth, MapManager::shopIconImageData.imageHeight)];
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = MapManager::detectShop(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Shops: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Shop: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(MapManager::shopIconImageData.imageData, MapManager::shopIconImageData.imageWidth, MapManager::shopIconImageData.imageHeight)];
+}
+void TestController::testMapLocationDetection() {
+    testImage = testInGameDetection1280x800Image;
+    NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [unprocessedImageView setImage: nsimage];
+    });
+    
+    
+    [targetImageView setImage:getImageFromBGRABuffer(MapManager::locationTopLeftCornerImageData.imageData, MapManager::locationTopLeftCornerImageData.imageWidth, MapManager::locationTopLeftCornerImageData.imageHeight)];
+    log(@"Testing Map Location Detection...");
+    NSMutableArray* levelups = [NSMutableArray new];
+    uint64 startTime = mach_absolute_time();
+    
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(testImage, x, y);
+            GenericObject* levelup = MapManager::detectLocation(testImage, pixel, x, y);
+            if (levelup != nil) {
+                [levelups addObject: [NSValue valueWithPointer:levelup]];
+            }
+        }
+    }
+    uint64 endTime = mach_absolute_time();
+    log([NSString stringWithFormat:@"Results -- Map locations: %lu in milliseconds: %d", [levelups count], getTimeInMilliseconds(endTime-startTime)]);
+    
+    //Highlight the areas of the image that match
+    uint8* image = copyImageBuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
+    ImageData imageData;
+    imageData.imageData = image;
+    imageData.imageWidth = testImage.imageWidth;
+    imageData.imageHeight = testImage.imageHeight;
+    for (int x = 0; x < testImage.imageWidth; x++) {
+        for (int y = 0; y < testImage.imageHeight; y++) {
+            uint8* pixel = getPixel2(imageData, x, y);
+            BOOL inChamp = false;
+            for (NSValue* val in levelups) {
+                GenericObject* levelup = (GenericObject*)[val pointerValue];
+                if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
+                    inChamp = true;
+                }
+            }
+            if (inChamp == false) {
+                pixel[0] /= 4;
+                pixel[1] /= 4;
+                pixel[2] /= 4;
+                pixel[3] = 0;
+            }
+        }
+    }
+    for (NSValue* val in levelups) {
+        GenericObject* levelup = (GenericObject*)[val pointerValue];
+        log([NSString stringWithFormat:@"Map Location: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
+    }
+    [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
+    
+    if ([levelups count] > 0) {
+        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
+        [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
+    }
+    
+    [targetImageView setImage:getImageFromBGRABuffer(MapManager::locationTopLeftCornerImageData.imageData, MapManager::locationTopLeftCornerImageData.imageWidth, MapManager::locationTopLeftCornerImageData.imageHeight)];
+}
+
 
 void TestController::log(NSString* string) {
     [[logText textStorage] appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n", string]]];

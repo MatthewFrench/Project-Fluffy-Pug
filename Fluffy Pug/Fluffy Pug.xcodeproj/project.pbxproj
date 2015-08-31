@@ -30,6 +30,7 @@
 		C95A77CF1B142AC500052F3E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77CE1B142AC500052F3E /* CoreFoundation.framework */; };
 		C95A77D11B142ACA00052F3E /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77D01B142ACA00052F3E /* ApplicationServices.framework */; };
 		C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77D41B1432A600052F3E /* LeagueGameState.m */; };
+		C981B24B1B94966400C7F5AB /* MapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C981B24A1B94966400C7F5AB /* MapManager.m */; };
 		C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F461B28720600A965E6 /* SelfChampionManager.m */; };
 		C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F491B2872DC00A965E6 /* AllyChampionManager.m */; };
 		C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F4C1B28931700A965E6 /* BasicAI.m */; };
@@ -80,6 +81,8 @@
 		C95A77D41B1432A600052F3E /* LeagueGameState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeagueGameState.m; sourceTree = "<group>"; };
 		C974F2601B7CEE83009886ED /* TestGame1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestGame1.png; sourceTree = "<group>"; };
 		C974F2611B7CEE83009886ED /* TestGame2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TestGame2.png; sourceTree = "<group>"; };
+		C981B24A1B94966400C7F5AB /* MapManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapManager.m; sourceTree = "<group>"; };
+		C981B24C1B94967500C7F5AB /* MapManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapManager.h; sourceTree = "<group>"; };
 		C9928F451B28720600A965E6 /* SelfChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfChampionManager.h; sourceTree = "<group>"; };
 		C9928F461B28720600A965E6 /* SelfChampionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelfChampionManager.m; sourceTree = "<group>"; };
 		C9928F481B2872DC00A965E6 /* AllyChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllyChampionManager.h; sourceTree = "<group>"; };
@@ -126,6 +129,7 @@
 			children = (
 				C91DD90D1B6B6C1400B4BB07 /* LeagueDetector.m */,
 				C91DD90E1B6B6C1400B4BB07 /* LeagueDetector.h */,
+				C981B2491B94962800C7F5AB /* Map Manager */,
 				C92B82521B3037AA00278ED5 /* Shop Manager */,
 				C92B82511B30379C00278ED5 /* Item Manager */,
 				C92B82501B30378E00278ED5 /* Ability Manager */,
@@ -275,6 +279,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C981B2491B94962800C7F5AB /* Map Manager */ = {
+			isa = PBXGroup;
+			children = (
+				C981B24C1B94967500C7F5AB /* MapManager.h */,
+				C981B24A1B94966400C7F5AB /* MapManager.m */,
+			);
+			name = "Map Manager";
+			sourceTree = "<group>";
+		};
 		C9DED8C51B8FC77B004DECCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,6 +390,7 @@
 				C91E65D31B1D30D200432FCA /* EnemyChampionManager.m in Sources */,
 				C939B4751B6A01C800B42054 /* TestController.m in Sources */,
 				C9A9111A1B2AC6F300DC33D1 /* ShopManager.m in Sources */,
+				C981B24B1B94966400C7F5AB /* MapManager.m in Sources */,
 				C9F5E6821B1C1AD10072BB9C /* EnemyMinionManager.m in Sources */,
 				C92B82591B303A7500278ED5 /* AbilityManager.m in Sources */,
 				C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */,

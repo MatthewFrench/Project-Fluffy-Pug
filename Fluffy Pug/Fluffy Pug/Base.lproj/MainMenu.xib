@@ -689,25 +689,25 @@
         <window title="Fluffy Pug" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="270" y="299" width="518" height="469"/>
+            <rect key="contentRect" x="270" y="299" width="518" height="553"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="777"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="518" height="469"/>
+                <rect key="frame" x="0.0" y="0.0" width="518" height="553"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <tabView id="Jc9-cP-pXh">
-                        <rect key="frame" x="13" y="2" width="492" height="460"/>
+                        <rect key="frame" x="19" y="6" width="492" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                         <animations/>
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Control" identifier="1" id="5tU-po-h5c">
                                 <view key="view" id="q5j-7P-NWj">
-                                    <rect key="frame" x="10" y="33" width="472" height="414"/>
+                                    <rect key="frame" x="10" y="33" width="472" height="490"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="2TM-fP-sB5">
-                                            <rect key="frame" x="65" y="415" width="388" height="17"/>
+                                            <rect key="frame" x="65" y="491" width="388" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="No League Instance Found" id="OZB-pM-vJ4">
@@ -717,7 +717,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Rsk-oM-PXf">
-                                            <rect key="frame" x="9" y="390" width="123" height="17"/>
+                                            <rect key="frame" x="9" y="466" width="123" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Logic Performance:" id="Cwt-8g-YmA">
@@ -727,7 +727,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="eT4-WU-iMY">
-                                            <rect key="frame" x="9" y="415" width="52" height="17"/>
+                                            <rect key="frame" x="9" y="491" width="52" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Status: " id="RnX-CB-udu">
@@ -737,7 +737,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="l1p-00-dqi">
-                                            <rect key="frame" x="136" y="390" width="317" height="17"/>
+                                            <rect key="frame" x="136" y="466" width="317" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Calculating" id="bJb-6R-f1c">
@@ -747,7 +747,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="QH3-v7-0UU">
-                                            <rect key="frame" x="9" y="365" width="109" height="17"/>
+                                            <rect key="frame" x="9" y="441" width="109" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Screen Analyze:" id="wpe-Fy-UKG">
@@ -757,7 +757,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="lAb-AP-Xae">
-                                            <rect key="frame" x="9" y="338" width="146" height="17"/>
+                                            <rect key="frame" x="9" y="414" width="146" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ally Minions Detected: " id="nNR-Tq-O3A">
@@ -767,7 +767,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="pw1-Sb-MwS">
-                                            <rect key="frame" x="159" y="338" width="294" height="17"/>
+                                            <rect key="frame" x="159" y="414" width="294" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 minions" id="Rta-wE-juX">
@@ -777,7 +777,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="SIg-Iy-kWa">
-                                            <rect key="frame" x="9" y="313" width="166" height="17"/>
+                                            <rect key="frame" x="9" y="389" width="166" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enemy Minions Detected: " id="cTk-IU-JYK">
@@ -787,7 +787,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="wip-Tv-DnA">
-                                            <rect key="frame" x="179" y="313" width="274" height="17"/>
+                                            <rect key="frame" x="179" y="389" width="274" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 minions" id="7dh-vw-YJe">
@@ -797,7 +797,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="PfG-xx-WEk">
-                                            <rect key="frame" x="9" y="288" width="168" height="17"/>
+                                            <rect key="frame" x="9" y="364" width="168" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Ally Champions Detected: " id="DMs-6P-qly">
@@ -807,7 +807,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="8bZ-bC-uE3">
-                                            <rect key="frame" x="179" y="288" width="274" height="17"/>
+                                            <rect key="frame" x="179" y="364" width="274" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 champions" id="hNv-2e-tnA">
@@ -817,7 +817,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="RkS-3O-8eF">
-                                            <rect key="frame" x="9" y="263" width="188" height="17"/>
+                                            <rect key="frame" x="9" y="339" width="188" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enemy Champions Detected: " id="cmt-FQ-ZJ7">
@@ -827,7 +827,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Jkg-Ns-ebB">
-                                            <rect key="frame" x="201" y="263" width="252" height="17"/>
+                                            <rect key="frame" x="201" y="339" width="252" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 champions" id="PoO-5K-mEk">
@@ -837,7 +837,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="1Ez-nW-gq6">
-                                            <rect key="frame" x="9" y="238" width="188" height="17"/>
+                                            <rect key="frame" x="9" y="314" width="188" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Self Champions Detected: " id="Cn1-pa-BdY">
@@ -847,7 +847,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="35w-er-u4R">
-                                            <rect key="frame" x="201" y="238" width="252" height="17"/>
+                                            <rect key="frame" x="201" y="314" width="252" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0 champions" id="zui-gl-pbv">
@@ -857,7 +857,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <button id="s2D-5n-UuO">
-                                            <rect key="frame" x="9" y="213" width="380" height="18"/>
+                                            <rect key="frame" x="9" y="289" width="380" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="check" title="Auto Queue Active" bezelStyle="regularSquare" imagePosition="left" inset="2" id="chz-Pu-ZcO">
@@ -869,7 +869,7 @@
                                             </connections>
                                         </button>
                                         <button id="RWd-oc-9AZ">
-                                            <rect key="frame" x="9" y="185" width="380" height="18"/>
+                                            <rect key="frame" x="9" y="261" width="380" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="check" title="Record Screen" bezelStyle="regularSquare" imagePosition="left" inset="2" id="86x-WI-Vu8">
@@ -878,7 +878,7 @@
                                             </buttonCell>
                                         </button>
                                         <button id="Gxv-74-hKm">
-                                            <rect key="frame" x="9" y="158" width="380" height="18"/>
+                                            <rect key="frame" x="9" y="234" width="380" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="check" title="Artificial Intelligence Active" bezelStyle="regularSquare" imagePosition="left" inset="2" id="dvS-KP-nyK">
@@ -887,7 +887,7 @@
                                             </buttonCell>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="qVL-90-mc1">
-                                            <rect key="frame" x="117" y="365" width="340" height="17"/>
+                                            <rect key="frame" x="117" y="441" width="340" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Calculating" id="0Iy-iP-9MV">
@@ -902,11 +902,11 @@
                             </tabViewItem>
                             <tabViewItem label="Debug View" identifier="2" id="prs-GI-thg">
                                 <view key="view" id="HdV-Ue-6k8">
-                                    <rect key="frame" x="10" y="33" width="472" height="414"/>
+                                    <rect key="frame" x="10" y="33" width="472" height="490"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button id="hCP-l2-ffx">
-                                            <rect key="frame" x="15" y="395" width="444" height="18"/>
+                                            <rect key="frame" x="15" y="471" width="444" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="check" title="Enable Debug View (Uses lots of CPU)" bezelStyle="regularSquare" imagePosition="left" inset="2" id="9cw-xs-gsS">
@@ -915,7 +915,7 @@
                                             </buttonCell>
                                         </button>
                                         <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" id="HHv-Ka-ht7">
-                                            <rect key="frame" x="14" y="99" width="444" height="293"/>
+                                            <rect key="frame" x="14" y="175" width="444" height="293"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                             <animations/>
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" imageFrameStyle="grayBezel" id="EXU-S8-jMb"/>
@@ -926,25 +926,25 @@
                             </tabViewItem>
                             <tabViewItem label="Tests" identifier="" id="YbT-KM-hBJ">
                                 <view key="view" id="hIX-T2-c3D">
-                                    <rect key="frame" x="10" y="33" width="472" height="414"/>
+                                    <rect key="frame" x="10" y="33" width="472" height="490"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="OVF-J7-1r2">
-                                            <rect key="frame" x="17" y="17" width="438" height="101"/>
+                                            <rect key="frame" x="17" y="12" width="438" height="125"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                             <clipView key="contentView" id="Mbm-B3-W50">
-                                                <rect key="frame" x="1" y="1" width="436" height="99"/>
+                                                <rect key="frame" x="1" y="1" width="436" height="123"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textView importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="KTn-4Y-VhW">
-                                                        <rect key="frame" x="0.0" y="0.0" width="436" height="99"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="436" height="123"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <animations/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <size key="minSize" width="436" height="99"/>
+                                                        <size key="minSize" width="436" height="123"/>
                                                         <size key="maxSize" width="480" height="10000000"/>
                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="minSize" width="436" height="99"/>
+                                                        <size key="minSize" width="436" height="123"/>
                                                         <size key="maxSize" width="480" height="10000000"/>
                                                     </textView>
                                                 </subviews>
@@ -958,13 +958,13 @@
                                                 <animations/>
                                             </scroller>
                                             <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="otB-Gf-LZt">
-                                                <rect key="frame" x="421" y="1" width="16" height="99"/>
+                                                <rect key="frame" x="421" y="1" width="16" height="123"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <animations/>
                                             </scroller>
                                         </scrollView>
                                         <button verticalHuggingPriority="750" id="ZWw-oq-fUx">
-                                            <rect key="frame" x="343" y="383" width="118" height="32"/>
+                                            <rect key="frame" x="343" y="459" width="118" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Open Viewer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xGW-of-A9b">
@@ -976,7 +976,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="ZSS-HT-smV">
-                                            <rect key="frame" x="5" y="383" width="185" height="32"/>
+                                            <rect key="frame" x="5" y="459" width="185" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Get Screen Shot (Alt+8)" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DLJ-Eo-Ilo">
@@ -988,7 +988,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="yBP-OB-l8K">
-                                            <rect key="frame" x="5" y="350" width="159" height="32"/>
+                                            <rect key="frame" x="5" y="426" width="159" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test for Play Button" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Inj-WQ-huo">
@@ -1000,7 +1000,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="FFM-DT-VjS">
-                                            <rect key="frame" x="248" y="203" width="215" height="32"/>
+                                            <rect key="frame" x="248" y="279" width="215" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Active Trinket Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tiz-fc-8X5">
@@ -1012,7 +1012,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="ydh-t2-b3I">
-                                            <rect key="frame" x="251" y="149" width="212" height="32"/>
+                                            <rect key="frame" x="251" y="225" width="212" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Active Potion Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="YPr-Ah-Md9">
@@ -1024,7 +1024,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="9Mt-nN-AmR">
-                                            <rect key="frame" x="5" y="317" width="156" height="32"/>
+                                            <rect key="frame" x="5" y="393" width="156" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Self Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="bWJ-xo-a7l">
@@ -1036,7 +1036,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="dUX-vW-g6d">
-                                            <rect key="frame" x="5" y="284" width="201" height="32"/>
+                                            <rect key="frame" x="5" y="360" width="201" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Ally Champ Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jar-Tc-dgY">
@@ -1048,7 +1048,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="nkv-H2-vmH">
-                                            <rect key="frame" x="5" y="251" width="219" height="32"/>
+                                            <rect key="frame" x="5" y="327" width="219" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Enemy Champ Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DQc-vd-ZUa">
@@ -1060,7 +1060,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="8oi-VD-O0z">
-                                            <rect key="frame" x="6" y="223" width="217" height="32"/>
+                                            <rect key="frame" x="6" y="299" width="217" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Enemy Minion Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5tS-ud-Wrl">
@@ -1072,7 +1072,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="dvZ-Ny-fw1">
-                                            <rect key="frame" x="265" y="230" width="198" height="32"/>
+                                            <rect key="frame" x="265" y="306" width="198" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Ally Minion Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WhS-tV-8mT">
@@ -1084,7 +1084,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="6LR-Lc-NzY">
-                                            <rect key="frame" x="250" y="258" width="213" height="32"/>
+                                            <rect key="frame" x="250" y="334" width="213" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Enemy Tower Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2iS-Za-5zw">
@@ -1096,7 +1096,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="GlK-KX-VuV">
-                                            <rect key="frame" x="274" y="284" width="189" height="32"/>
+                                            <rect key="frame" x="274" y="360" width="189" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Level Dot Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cTV-2f-oQY">
@@ -1108,7 +1108,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="hSo-9i-sCn">
-                                            <rect key="frame" x="241" y="307" width="222" height="32"/>
+                                            <rect key="frame" x="241" y="383" width="222" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Enabled Ability Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="qyf-Gt-xIY">
@@ -1120,7 +1120,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="HHB-tA-gGY">
-                                            <rect key="frame" x="180" y="331" width="283" height="32"/>
+                                            <rect key="frame" x="180" y="407" width="283" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Enabled Summoner Spell Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="uhL-Ub-Wui">
@@ -1132,7 +1132,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="mzh-5k-CKl">
-                                            <rect key="frame" x="276" y="358" width="185" height="32"/>
+                                            <rect key="frame" x="276" y="434" width="185" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Level Up Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vmh-5j-V3R">
@@ -1144,7 +1144,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="GT0-0u-GhF">
-                                            <rect key="frame" x="263" y="177" width="200" height="32"/>
+                                            <rect key="frame" x="263" y="253" width="200" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Active Item Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="KVJ-vK-1Vy">
@@ -1156,7 +1156,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="JBu-0D-IcB">
-                                            <rect key="frame" x="257" y="123" width="206" height="32"/>
+                                            <rect key="frame" x="257" y="199" width="206" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Used Potion Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="28x-g3-jkg">
@@ -1168,7 +1168,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="VKN-PJ-hUp">
-                                            <rect key="frame" x="5" y="197" width="221" height="32"/>
+                                            <rect key="frame" x="5" y="273" width="221" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Shop Available Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Vbg-is-sv7">
@@ -1180,7 +1180,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="vkf-D7-xl0">
-                                            <rect key="frame" x="1" y="170" width="262" height="32"/>
+                                            <rect key="frame" x="1" y="246" width="262" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Shop Top Left Corner Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AHJ-f2-FnJ">
@@ -1192,7 +1192,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="goK-Ah-AEk">
-                                            <rect key="frame" x="-10" y="144" width="284" height="32"/>
+                                            <rect key="frame" x="-10" y="220" width="284" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Shop Bottom Left Corner Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="amQ-4h-8bB">
@@ -1204,7 +1204,7 @@
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" id="YZp-3a-B7H">
-                                            <rect key="frame" x="5" y="118" width="252" height="32"/>
+                                            <rect key="frame" x="5" y="194" width="252" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <buttonCell key="cell" type="push" title="Test Shop Buyable Items Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="r4C-Jl-Wn9">
@@ -1213,6 +1213,42 @@
                                             </buttonCell>
                                             <connections>
                                                 <action selector="testShopBuyableItemsDetection:" target="Voe-Tx-rLC" id="9mP-Sm-yVy"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="WEp-wB-O25">
+                                            <rect key="frame" x="201" y="166" width="164" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Shop Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="zu9-SL-ABS">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testMapShopDetection:" target="Voe-Tx-rLC" id="4kk-h6-fu2"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="pJC-rq-fEb">
+                                            <rect key="frame" x="6" y="139" width="184" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Location Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jEz-Bn-6RS">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testMapLocation:" target="Voe-Tx-rLC" id="Nrr-db-yvQ"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" id="nmg-Kh-shv">
+                                            <rect key="frame" x="6" y="166" width="159" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <buttonCell key="cell" type="push" title="Test Map Detection" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="i6H-oJ-Pd3">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="testMapDetection:" target="Voe-Tx-rLC" id="xqS-px-tHF"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -1224,7 +1260,7 @@
                 </subviews>
                 <animations/>
             </view>
-            <point key="canvasLocation" x="-636" y="218.5"/>
+            <point key="canvasLocation" x="-636" y="224.5"/>
         </window>
         <window title="Screen Shot Viewer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="VMG-ED-3M6" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" utility="YES" HUD="YES"/>

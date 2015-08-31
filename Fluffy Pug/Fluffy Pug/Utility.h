@@ -202,7 +202,6 @@ extern inline float getImageAtPixelPercentageOptimizedExact(const uint8_t *pixel
     for (int y1 = 0; y1 < image.imageHeight; y1++) {
         //const uint8_t *pixel1 = pixel + y1 * width * 4;
         for (int x1 = 0; x1 < image.imageWidth; x1++) {
-            //NSLog(@"x: %d, y: %d, r1: %d, r2: %d, g1: %d, g2: %d, b1: %d, b2: %d, a1: %d, a2: %d", x1, y1, pixel[2], pixel2[2], pixel[1], pixel2[1], pixel[0], pixel2[0], pixel[3], pixel2[3]);
             if (pixel2[3] != 0) {
                 pixels++;
                 float p = getColorPercentage(pixel, pixel2);

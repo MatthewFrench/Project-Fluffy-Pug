@@ -28,8 +28,8 @@ void LeagueGameState::processLogic() {
 void LeagueGameState::processDetection(ImageData image) {
     
     if (leaguePID != -1) {
-        dispatch_group_t dispatchGroup = dispatch_group_create();
-        dispatch_queue_t queue;
+        //dispatch_group_t dispatchGroup = dispatch_group_create();
+        //dispatch_queue_t queue;
         
         // Add a task to the group
         /*

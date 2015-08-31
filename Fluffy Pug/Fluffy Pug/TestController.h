@@ -14,6 +14,7 @@
 #import "AbilityManager.h"
 #import "ItemManager.h"
 #import "ShopManager.h"
+#import "MapManager.h"
 
 class TestController {
     ImageData testImage;
@@ -45,5 +46,8 @@ public:
     void testShopTopLeftCorner();
     void testShopBottomLeftCorner();
     void testShopBuyableItems();
+    void testMapDetection();
+    void testMapShopDetection();
+    void testMapLocationDetection();
     void log(NSString* string);
 };
