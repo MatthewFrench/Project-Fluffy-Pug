@@ -25,15 +25,6 @@ public:
     /*volatile*/ CGRect leagueSize;
     
     //struct ImageData imageData;
-    AllyMinionManager* allyMinionManager;
-    EnemyMinionManager* enemyMinionManager;
-    EnemyChampionManager* enemyChampionManager;
-    SelfChampionManager* selfChampionManager;
-    AllyChampionManager* allyChampionManager;
-    AbilityManager* abilityManager;
-    ItemManager* itemManager;
-    ShopManager* shopManager;
-    EnemyTowerManager* enemyTowerManager;
     
     LeagueGameState();
     void processDetection(struct ImageData image);

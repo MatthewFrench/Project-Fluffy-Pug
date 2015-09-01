@@ -97,7 +97,22 @@ inline void detectExactImageToImageToRectangles(ImageData smallImage, ImageData 
 inline CGRect* getIntersectionRectangles(CGRect baseRect, const CGRect* rects, size_t num_rects, size_t &returnNumRects);
 
 inline void detectExactImageToImageToRectangle(ImageData smallImage, ImageData largeImage, CGRect rect, float &returnPercentage, Position &returnPosition, float minimumPercentage, bool getFirstMatching);
+inline int getTimeInMilliseconds(int64_t absoluteTime);
 
+
+extern inline int getTimeInMilliseconds(int64_t absoluteTime)
+{
+    const int64_t kOneMillion = 1000 * 1000;
+    static mach_timebase_info_data_t s_timebase_info;
+    
+    if (s_timebase_info.denom == 0) {
+        (void) mach_timebase_info(&s_timebase_info);
+    }
+    
+    // mach_absolute_time() returns billionth of seconds,
+    // so divide by one million to get milliseconds
+    return (int)((absoluteTime * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
+}
 extern inline CGRect* getIntersectionRectangles(CGRect baseRect, const CGRect* rects, size_t num_rects, size_t &returnNumRects) {
     returnNumRects = 0;
     CGRect* newRects = (CGRect*) calloc (num_rects,sizeof(CGRect));

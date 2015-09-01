@@ -11,6 +11,7 @@
 LeagueGameState::LeagueGameState() {
     autoQueueActive = false;
     leaguePID = -1;
+    /*
     allyMinionManager = new AllyMinionManager();
     enemyMinionManager = new EnemyMinionManager();
     enemyChampionManager = new EnemyChampionManager();
@@ -20,6 +21,7 @@ LeagueGameState::LeagueGameState() {
     itemManager = new ItemManager();
     shopManager = new ShopManager();
     enemyTowerManager = new EnemyTowerManager();
+     */
 }
 void LeagueGameState::processLogic() {
     
