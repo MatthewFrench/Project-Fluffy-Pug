@@ -97,8 +97,44 @@ inline void detectExactImageToImageToRectangles(ImageData smallImage, ImageData 
 inline CGRect* getIntersectionRectangles(CGRect baseRect, const CGRect* rects, size_t num_rects, size_t &returnNumRects);
 
 inline void detectExactImageToImageToRectangle(ImageData smallImage, ImageData largeImage, CGRect rect, float &returnPercentage, Position &returnPosition, float minimumPercentage, bool getFirstMatching);
-inline int getTimeInMilliseconds(int64_t absoluteTime);
+inline void combineRectangles(NSMutableArray* rectangles, CGRect newRect);
+inline NSMutableArray* getCGRectDifference(CGRect sourceRect, CGRect minusRect);
 
+///Return all rectangles in source rect that don't contain minus rect.
+inline NSMutableArray* getCGRectDifference(CGRect sourceRect, CGRect minusRect) {
+    NSMutableArray* rectArr = [NSMutableArray new];
+    CGRect intersectRect = CGRectIntersection(sourceRect, minusRect);
+    if (CGRectIsNull(intersectRect)) {
+        //Return source rect
+        [rectArr addObject:[NSValue valueWithRect:sourceRect]];
+    } else {
+        //Chop source rect up
+        //Minus rect could contain source rect, that'd mean return nothing
+        //Source rect could contain all of minus rect, that'd mean return 4 rects
+        //Source rect could contain 2 edges of minus rect, that'd mean return 2 rects
+    }
+    return rectArr;
+}
+
+///Combine rectangles adds a new rectangle without allowing it to overlap.
+extern inline void combineRectangles(NSMutableArray* rectangles, CGRect newRect) {
+    NSMutableArray* addRectangles = [NSMutableArray new];
+    [addRectangles addObject: [NSValue valueWithRect: newRect]];
+    for (int i = 0; i < [rectangles count]; i++) {
+        CGRect rect = [[rectangles objectAtIndex:i] rectValue];
+        //Now loop through each added rectangle and break up intersections
+        for (int i2 = 0; i2 < [addRectangles count]; i2++) {
+            CGRect rect2 = [[addRectangles objectAtIndex:i2] rectValue];
+            
+            NSMutableArray* rectDifference = getCGRectDifference(rect2, rect);
+            [addRectangles removeObjectAtIndex:i2];
+            i2--;
+            [addRectangles insertObjects:rectDifference atIndexes:[NSIndexSet indexSetWithIndex:0]];
+            i2 += [rectDifference count];
+        }
+    }
+    [rectangles addObjectsFromArray: addRectangles];
+}
 
 extern inline int getTimeInMilliseconds(int64_t absoluteTime)
 {
@@ -124,19 +160,6 @@ extern inline CGRect* getIntersectionRectangles(CGRect baseRect, const CGRect* r
         }
     }
     return newRects;
-}
-extern inline int getTimeInMilliseconds(int64_t absoluteTime)
-{
-    const int64_t kOneMillion = 1000 * 1000;
-    static mach_timebase_info_data_t s_timebase_info;
-    
-    if (s_timebase_info.denom == 0) {
-        (void) mach_timebase_info(&s_timebase_info);
-    }
-    
-    // mach_absolute_time() returns billionth of seconds,
-    // so divide by one million to get milliseconds
-    return (int)((absoluteTime * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom));
 }
 
 extern inline uint8 * copyImageBufferSection(uint8 *baseAddress, int bufferWidth, int bufferHeight, int copyX, int copyY, int copyWidth, int copyHeight) {

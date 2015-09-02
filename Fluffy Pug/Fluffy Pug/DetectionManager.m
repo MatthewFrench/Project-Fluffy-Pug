@@ -39,7 +39,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image) {
     //Why not scan certain sections in intervals?
     //I know it takes about 80 ms for a full scan.
     //I want to keep it to 1 ms scan time per frame.
-    //So I need to split the screen into 49 sections and scan one each frame. Plus where minions already are.
+    //So I need to split the screen into 49 sections and scan one section each frame. Plus where minions already are.
     //A full screen scan happens every 0.81666666666667 seconds
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
