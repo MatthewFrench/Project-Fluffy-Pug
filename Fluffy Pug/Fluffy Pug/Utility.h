@@ -99,14 +99,42 @@ inline CGRect* getIntersectionRectangles(CGRect baseRect, const CGRect* rects, s
 inline void detectExactImageToImageToRectangle(ImageData smallImage, ImageData largeImage, CGRect rect, float &returnPercentage, Position &returnPosition, float minimumPercentage, bool getFirstMatching);
 inline void combineRectangles(NSMutableArray* rectangles, CGRect newRect);
 inline NSMutableArray* getCGRectDifference(CGRect sourceRect, CGRect minusRect);
+inline CGRect fitRectangleInRectangle(CGRect smallRect, CGRect bigRect);
+
+
+extern inline CGRect fitRectangleInRectangle(CGRect smallRect, CGRect bigRect) {
+    if (CGRectIntersectsRect(smallRect, bigRect) == false) {
+        smallRect.size.width = 0.0;
+        return smallRect;
+    }
+    if (smallRect.origin.x < bigRect.origin.x) {
+        float diff = bigRect.origin.x - smallRect.origin.x;
+        smallRect.origin.x = bigRect.origin.x;
+        smallRect.size.width -= diff;
+    }
+    if (smallRect.origin.y < bigRect.origin.y) {
+        float diff = bigRect.origin.y - smallRect.origin.y;
+        smallRect.origin.y = bigRect.origin.y;
+        smallRect.size.height -= diff;
+    }
+    if (smallRect.origin.x + smallRect.size.width > bigRect.origin.x + bigRect.size.width) {
+        float diff = (bigRect.origin.x + bigRect.size.width) - (smallRect.origin.x + smallRect.size.width);
+        smallRect.size.width += diff;
+    }
+    if (smallRect.origin.y + smallRect.size.height > bigRect.origin.y + bigRect.size.height) {
+        float diff = (bigRect.origin.y + bigRect.size.height) - (smallRect.origin.y + smallRect.size.height);
+        smallRect.size.height += diff;
+    }
+    return smallRect;
+}
 
 ///Return all rectangles in source rect that don't contain minus rect.
-inline NSMutableArray* getCGRectDifference(CGRect sourceRect, CGRect minusRect) {
+extern inline NSMutableArray* getCGRectDifference(CGRect sourceRect, CGRect minusRect) {
     NSMutableArray* rectArr = [NSMutableArray new];
     CGRect intersectRect = CGRectIntersection(sourceRect, minusRect);
     if (CGRectIsNull(intersectRect)) {
         //Return source rect
-        [rectArr addObject:[NSValue valueWithRect:sourceRect]];
+        if (sourceRect.size.width > 0 && sourceRect.size.height > 0) [rectArr addObject:[NSValue valueWithRect:sourceRect]];
     } else {
         //Chop source rect up
         //Minus rect could contain source rect, that'd mean return nothing
@@ -125,26 +153,26 @@ inline NSMutableArray* getCGRectDifference(CGRect sourceRect, CGRect minusRect) 
             CGRect newRect = CGRectMake(sourceRect.origin.x, sourceRect.origin.y, minusRect.origin.x - sourceRect.origin.x, sourceRect.size.height);
             sourceRect.size.width -= newRect.size.width;
             sourceRect.origin.x = minusRect.origin.x;
-            [rectArr addObject:[NSValue valueWithRect:newRect]];
+            if (newRect.size.width > 0 && newRect.size.height > 0) [rectArr addObject:[NSValue valueWithRect:newRect]];
         }
         if (sourceRect.origin.x+sourceRect.size.width > minusRect.origin.x+minusRect.size.width) {
             //Chop off right half
             CGRect newRect = CGRectMake(minusRect.origin.x+minusRect.size.width, sourceRect.origin.y, sourceRect.size.width - (minusRect.origin.x+minusRect.size.width - sourceRect.origin.x), sourceRect.size.height);
             sourceRect.size.width -= newRect.size.width;
-            [rectArr addObject:[NSValue valueWithRect:newRect]];
+            if (newRect.size.width > 0 && newRect.size.height > 0) [rectArr addObject:[NSValue valueWithRect:newRect]];
         }
         if (sourceRect.origin.y < minusRect.origin.y) {
             //Chop off top half
             CGRect newRect = CGRectMake(sourceRect.origin.x, sourceRect.origin.y, sourceRect.size.width, minusRect.origin.y - sourceRect.origin.y);
             sourceRect.size.height -= newRect.size.height;
             sourceRect.origin.y = minusRect.origin.y;
-            [rectArr addObject:[NSValue valueWithRect:newRect]];
+            if (newRect.size.width > 0 && newRect.size.height > 0) [rectArr addObject:[NSValue valueWithRect:newRect]];
         }
         if (sourceRect.origin.y+sourceRect.size.height > minusRect.origin.y+minusRect.size.height) {
             //Chop off bottom half
             CGRect newRect = CGRectMake(sourceRect.origin.x, minusRect.origin.y+minusRect.size.height, sourceRect.size.width, sourceRect.size.height - (minusRect.origin.y+minusRect.size.height - sourceRect.origin.y));
             sourceRect.size.height -= newRect.size.height;
-            [rectArr addObject:[NSValue valueWithRect:newRect]];
+            if (newRect.size.width > 0 && newRect.size.height > 0) [rectArr addObject:[NSValue valueWithRect:newRect]];
         }
     }
     return rectArr;
@@ -152,6 +180,7 @@ inline NSMutableArray* getCGRectDifference(CGRect sourceRect, CGRect minusRect) 
 
 ///Combine rectangles adds a new rectangle without allowing it to overlap.
 extern inline void combineRectangles(NSMutableArray* rectangles, CGRect newRect) {
+    if (newRect.size.width <= 0 || newRect.size.height <= 0 || CGRectIsNull(newRect)) return;
     NSMutableArray* addRectangles = [NSMutableArray new];
     [addRectangles addObject: [NSValue valueWithRect: newRect]];
     for (int i = 0; i < [rectangles count]; i++) {
@@ -273,6 +302,20 @@ extern inline float getImageAtPixelPercentageOptimizedExact(const uint8_t *pixel
     int skipPixels = 4 * (width - image.imageWidth);
     float percentage = 0.0;
     uint8_t *pixel2 = image.imageData;
+    //int xLimit = image.imageWidth;
+    //int yLimit = image.imageHeight;
+    if (x + image.imageWidth > width || y + image.imageHeight > height) {
+        return 0.0;
+        //xLimit = width - x;
+        //NSLog(@"%d vs %d", x + image.imageWidth, width);
+        //NSLog(@"Add amount pixels: %d", (image.imageWidth - xLimit));
+        //NSLog(@"Old limit: %d vs new limit: %d", image.imageWidth, xLimit);
+    }
+    //if (y + image.imageHeight > height) yLimit = height - y;
+    //int addAmountPixels = (image.imageWidth - xLimit);
+    //int addAmount = addAmountPixels * 4;
+    int perfectPixels = 0;
+    int nonPerfectPixels = 0;
     for (int y1 = 0; y1 < image.imageHeight; y1++) {
         //const uint8_t *pixel1 = pixel + y1 * width * 4;
         for (int x1 = 0; x1 < image.imageWidth; x1++) {
@@ -284,10 +327,17 @@ extern inline float getImageAtPixelPercentageOptimizedExact(const uint8_t *pixel
                 if (p < minimumPercentage) {
                     return percentage / maxPixelCount;
                 }
+                if (p == 1.0) {
+                    perfectPixels++;
+                } else {
+                    nonPerfectPixels++;
+                }
             } else {maxPixelCount--;}
             pixel2 += 4;
             pixel += 4;
         }
+        //pixel2 += addAmount;
+        //pixels += addAmountPixels;
         pixel += skipPixels;
     }
     return percentage / pixels;

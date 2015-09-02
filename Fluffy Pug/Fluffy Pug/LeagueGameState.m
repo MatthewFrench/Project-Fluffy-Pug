@@ -22,12 +22,15 @@ LeagueGameState::LeagueGameState() {
     shopManager = new ShopManager();
     enemyTowerManager = new EnemyTowerManager();
      */
+    detectionManager = new DetectionManager();
 }
 void LeagueGameState::processLogic() {
     
 }
 
 void LeagueGameState::processDetection(ImageData image) {
+    
+    detectionManager->processDetection(image);
     
     if (leaguePID != -1) {
         //dispatch_group_t dispatchGroup = dispatch_group_create();

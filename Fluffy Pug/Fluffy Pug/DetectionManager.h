@@ -41,5 +41,7 @@ class DetectionManager {
 public:
     DetectionManager();
     void processDetection(ImageData image);
-    void processAllyMinionDetection(ImageData image);
+    void processAllyMinionDetection(ImageData image, dispatch_group_t dispatchGroup);
+    
+    NSMutableArray* getAllyMinions();
 };

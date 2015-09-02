@@ -17,6 +17,7 @@
 #import "ItemManager.h"
 #import "ShopManager.h"
 #import "EnemyTowerManager.h"
+#import "DetectionManager.h"
 
 class LeagueGameState {
 public:
@@ -25,6 +26,7 @@ public:
     /*volatile*/ CGRect leagueSize;
     
     //struct ImageData imageData;
+    DetectionManager* detectionManager;
     
     LeagueGameState();
     void processDetection(struct ImageData image);

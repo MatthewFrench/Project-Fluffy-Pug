@@ -25,15 +25,6 @@
         self->_activity = [[NSProcessInfo processInfo] beginActivityWithOptions:0x00FFFFFF reason:@"receiving messages"];
     }
     
-    // Insert code here to initialize your application
-    //timer = [NSTimer scheduledTimerWithTimeInterval:1.0/60.0 //2000.0
-    //                                         target:self
-    //                                       selector:@selector(timerLogic)
-    //                                       userInfo:nil
-    //                                        repeats:YES];
-    
-    //[fpsTextField setFocusRingType:NSFocusRingTypeNone];
-    
     leagueGameState = new LeagueGameState();
     testController = new TestController(processedImage, unprocessedImage, targetImage, foundImage, logText);
     leagueDetector = new LeagueDetector();
@@ -269,6 +260,8 @@ AppDelegate *GlobalSelf;
         screenLoops = 0;
         [GlobalSelf updateLeagueWindowStatus];
         
+        [GlobalSelf->allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getAllyMinions().count]];
+        
         /**** I DONT BELIEVE THIS IS THREAD SAFE ***/
         //Display minions
         //[GlobalSelf->allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->allyMinionManager->minionBars.count]];
@@ -356,9 +349,9 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     
     //GlobalSelf->leagueGameState->processImage(imageData);
     
-    if (GlobalSelf->leagueGameState->leaguePID != -1) {
+    //if (GlobalSelf->leagueGameState->leaguePID != -1) {
         GlobalSelf->leagueGameState->processDetection(imageData);
-    }
+    //}
     
     if (GlobalSelf->runAutoQueue && GlobalSelf->leagueGameState->leaguePID == -1) {
         const CGRect * rects;

@@ -19,7 +19,7 @@
 class TestController {
     ImageData testImage;
     ImageData playButton;
-    ImageData testAbilitiesActive1280x800Image, testInGameDetection1280x800Image, testItemActives1280x800Image, testLevelUp1280x800Image, testShopAvailable1280x800Image, testShopItems1280x800Image, testShopOpen1280x800Image, testEnemyTower1280x800Image, testLevelUpDot1280x800Image, testUsedPotion1280x800;
+    ImageData testAbilitiesActive1280x800Image, testInGameDetection1280x800Image, testItemActives1280x800Image, testLevelUp1280x800Image, testShopAvailable1280x800Image, testShopItems1280x800Image, testShopOpen1280x800Image, testEnemyTower1280x800Image, testLevelUpDot1280x800Image, testUsedPotion1280x800, testOutsideImage1280x800;
     
     NSImageView* processedImageView, *unprocessedImageView, *targetImageView, *foundImageView;
     NSTextView* logText;

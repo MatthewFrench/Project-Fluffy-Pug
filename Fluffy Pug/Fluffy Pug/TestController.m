@@ -30,6 +30,7 @@ TestController::TestController(NSImageView* processedImageView, NSImageView *unp
     testEnemyTower1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Enemy Tower Detection 1280x800" ofType:@"png"]);
     testLevelUpDot1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Level Up Dot 1280x800" ofType:@"png"]);
     testUsedPotion1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Used Potion 1280x800" ofType:@"png"]);
+    testOutsideImage1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Outside Image 1280x800" ofType:@"png"]);
     
     //[targetImageView setImage:getImageFromBGRABuffer(testGame1.imageData, testGame1.imageWidth, testGame1.imageHeight)];
 }
@@ -406,7 +407,7 @@ void TestController::testEnemyMinionDetection() {
 }
 
 void TestController::testAllyMinionDetection() {
-    testImage = testInGameDetection1280x800Image;
+    testImage = testOutsideImage1280x800;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -431,6 +432,7 @@ void TestController::testAllyMinionDetection() {
             }
         }
     }
+    NSLog(@"Preprocessed minions: %lu", (unsigned long)[minionBars count]);
     minionBars = AllyMinionManager::validateMinionBars(testImage, minionBars);
     uint64 endTime = mach_absolute_time();
     log([NSString stringWithFormat:@"Results -- Detected ally minions: %lu in milliseconds: %d", [minionBars count], getTimeInMilliseconds(endTime-startTime)]);
