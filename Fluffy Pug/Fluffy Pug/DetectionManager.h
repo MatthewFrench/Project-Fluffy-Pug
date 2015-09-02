@@ -35,7 +35,8 @@ class DetectionManager {
     bool selfHealthBarVisible = false;
     SelfHealthBar* selfHealthBar=nil;
     
-    uint64_t allyMinionTime;
+    int allyMinionScanCurrentChunkX = 0;
+    int allyMinionScanCurrentChunkY = 0;
     
 public:
     DetectionManager();

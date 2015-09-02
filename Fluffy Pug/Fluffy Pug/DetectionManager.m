@@ -27,16 +27,29 @@ DetectionManager::DetectionManager() {
     selfChampions = [NSMutableArray new];
     enemyTowers = [NSMutableArray new];
     buyableItems = [NSMutableArray new];
-    allyMinionTime = mach_absolute_time();
 }
 void DetectionManager::processDetection(ImageData image) {
     processAllyMinionDetection(image);
 }
-const int allyMinionFullScanSeconds = 1.0;
+//Make it scan a chunk each frame
+const int allyMinionScanChunksX = 6; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+const int allyMinionScanChunksY = 6;
 void DetectionManager::processAllyMinionDetection(ImageData image) {
+    
+    //Why not scan certain sections in intervals?
+    //I know it takes about 80 ms for a full scan.
+    //I want to keep it to 1 ms scan time per frame.
+    //So I need to split the screen into 49 sections and scan one each frame. Plus where minions already are.
+    //A full screen scan happens every 0.81666666666667 seconds
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        
-        if (getTimeInMilliseconds(mach_absolute_time() - allyMinionTime) >= allyMinionFullScanSeconds) {
+        //Make an array of rectangles for all the ally minions
+        //Add scan chunk to array
+        //While adding to array, make it remove overlapping parts of rectangles
+        //Loop through array, loop through pixels in array and scan each pixel
+        //Add new minions to array.
+        /*
+        if (getTimeInMilliseconds(mach_absolute_time() - allyMinionTime) >= allyMinionPatialScanMilliseconds) {
             allyMinionTime = mach_absolute_time();
             
             //Full screen scan
@@ -59,7 +72,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image) {
         } else {
             //Do partial scan
             
-        }
+        }*/
     });
 }
 
