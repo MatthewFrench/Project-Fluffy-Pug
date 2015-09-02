@@ -110,8 +110,42 @@ inline NSMutableArray* getCGRectDifference(CGRect sourceRect, CGRect minusRect) 
     } else {
         //Chop source rect up
         //Minus rect could contain source rect, that'd mean return nothing
-        //Source rect could contain all of minus rect, that'd mean return 4 rects
-        //Source rect could contain 2 edges of minus rect, that'd mean return 2 rects
+        if (sourceRect.origin.x >= minusRect.origin.x && sourceRect.origin.x < minusRect.origin.x + minusRect.size.width
+            && sourceRect.origin.x + sourceRect.size.width > minusRect.origin.x &&
+            sourceRect.origin.x + sourceRect.size.width <= minusRect.origin.x + minusRect.size.width &&
+            
+            sourceRect.origin.y >= minusRect.origin.y && sourceRect.origin.y < minusRect.origin.y + minusRect.size.height
+            && sourceRect.origin.y + sourceRect.size.height > minusRect.origin.y &&
+            sourceRect.origin.y + sourceRect.size.height <= minusRect.origin.y + minusRect.size.height) {
+            return rectArr; //sourceRect is inside minusRect. Return nothing
+        }
+        //Can't I just scan from left to right and chop pieces off then from top to bottom?
+        if (sourceRect.origin.x < minusRect.origin.x) {
+            //Chop off left half
+            CGRect newRect = CGRectMake(sourceRect.origin.x, sourceRect.origin.y, minusRect.origin.x - sourceRect.origin.x, sourceRect.size.height);
+            sourceRect.size.width -= newRect.size.width;
+            sourceRect.origin.x = minusRect.origin.x;
+            [rectArr addObject:[NSValue valueWithRect:newRect]];
+        }
+        if (sourceRect.origin.x+sourceRect.size.width > minusRect.origin.x+minusRect.size.width) {
+            //Chop off right half
+            CGRect newRect = CGRectMake(minusRect.origin.x+minusRect.size.width, sourceRect.origin.y, sourceRect.size.width - (minusRect.origin.x+minusRect.size.width - sourceRect.origin.x), sourceRect.size.height);
+            sourceRect.size.width -= newRect.size.width;
+            [rectArr addObject:[NSValue valueWithRect:newRect]];
+        }
+        if (sourceRect.origin.y < minusRect.origin.y) {
+            //Chop off top half
+            CGRect newRect = CGRectMake(sourceRect.origin.x, sourceRect.origin.y, sourceRect.size.width, minusRect.origin.y - sourceRect.origin.y);
+            sourceRect.size.height -= newRect.size.height;
+            sourceRect.origin.y = minusRect.origin.y;
+            [rectArr addObject:[NSValue valueWithRect:newRect]];
+        }
+        if (sourceRect.origin.y+sourceRect.size.height > minusRect.origin.y+minusRect.size.height) {
+            //Chop off bottom half
+            CGRect newRect = CGRectMake(sourceRect.origin.x, minusRect.origin.y+minusRect.size.height, sourceRect.size.width, sourceRect.size.height - (minusRect.origin.y+minusRect.size.height - sourceRect.origin.y));
+            sourceRect.size.height -= newRect.size.height;
+            [rectArr addObject:[NSValue valueWithRect:newRect]];
+        }
     }
     return rectArr;
 }
@@ -129,7 +163,9 @@ extern inline void combineRectangles(NSMutableArray* rectangles, CGRect newRect)
             NSMutableArray* rectDifference = getCGRectDifference(rect2, rect);
             [addRectangles removeObjectAtIndex:i2];
             i2--;
-            [addRectangles insertObjects:rectDifference atIndexes:[NSIndexSet indexSetWithIndex:0]];
+            for (NSValue* r : rectDifference) {
+                [addRectangles insertObject:r atIndex:0];
+            }
             i2 += [rectDifference count];
         }
     }
