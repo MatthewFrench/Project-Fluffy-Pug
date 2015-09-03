@@ -75,4 +75,12 @@ public:
     NSMutableArray* getSelfChampions();
     bool getSelfHealthBarVisible();
     SelfHealthBar* getSelfHealthBar();
+    bool getSpell1LevelUpVisible();
+    bool getSpell2LevelUpVisible();
+    bool getSpell3LevelUpVisible();
+    bool getSpell4LevelUpVisible();
+    GenericObject* getSpell1LevelUp();
+    GenericObject* getSpell2LevelUp();
+    GenericObject* getSpell3LevelUp();
+    GenericObject* getSpell4LevelUp();
 };
