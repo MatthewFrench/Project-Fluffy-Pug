@@ -23,10 +23,15 @@ class BasicAI {
     //double lastShopBuy;
     
     uint64_t lastLevelUp;
+    uint64_t lastShopBuy, lastShopOpenTap, lastShopCloseTap;
+    uint64_t lastCameraFocus;
+    uint64_t lastPlacedWard;
     
 public:
     BasicAI(LeagueGameState* leagueGameState);
     void processAI();
     void handleAbilityLevelUps();
     void handleBuyingItems();
+    void handleCameraFocus();
+    void handlePlacingWard();
 };

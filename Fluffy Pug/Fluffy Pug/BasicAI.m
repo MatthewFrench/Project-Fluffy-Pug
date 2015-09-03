@@ -15,6 +15,11 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     gameState = leagueGameState;
     
     lastLevelUp = mach_absolute_time();
+    lastShopBuy = 0;
+    lastShopOpenTap = 0;
+    lastShopCloseTap = 0;
+    lastCameraFocus = mach_absolute_time();
+    lastPlacedWard = mach_absolute_time();
     //lastMovementClick = clock();
     //lastAction = -1;
     //passiveUseWardTimer = clock();
@@ -61,42 +66,70 @@ void BasicAI::handleAbilityLevelUps() {
     }
 }
 void BasicAI::handleBuyingItems() {
-    
+    bool closeShop = false;
+    if (getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*5) {
+        if (gameState->detectionManager->getShopAvailable()) {
+            if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible()) {
+                lastShopBuy = mach_absolute_time();
+                //Buy items
+                NSMutableArray* itemsToBuy = gameState->detectionManager->getBuyableItems();
+                for (int i = 0; i < [itemsToBuy count]; i++) {
+                    GenericObject* item = (GenericObject*)[[itemsToBuy objectAtIndex:i] pointerValue];
+                    doubleTapMouseLeft(item->center.x, item->center.y);
+                }
+            } else { //Open up the shop
+                if (getTimeInMilliseconds(mach_absolute_time() - lastShopOpenTap) >= 500) {
+                    lastShopOpenTap = mach_absolute_time();
+                    tapShop();
+                }
+            }
+        } else {
+            if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible()) {
+                closeShop = true;
+            }
+        }
+    } else {
+        //Close shop
+        if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible()) {
+            closeShop = true;
+        }
+    }
+    if (closeShop) {
+        if (getTimeInMilliseconds(mach_absolute_time() - lastShopCloseTap) >= 500) {
+            lastShopCloseTap = mach_absolute_time();
+            tapShop();
+        }
+    }
 }
+void BasicAI::handleCameraFocus() {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastCameraFocus) >= 500) {
+        if (gameState->detectionManager->getSelfHealthBarVisible()) {
+            //We see the health bar at the bottom so lets focus camera
+            if (gameState->detectionManager->getSelfChampions().count == 0) {
+                lastCameraFocus = mach_absolute_time();
+                tapCameraLock();
+            }
+        }
+    }
+}
+void BasicAI::handlePlacingWard() {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastPlacedWard) >= 500) {
+        if (gameState->detectionManager->getTrinketActiveAvailable()) {
+            if ([gameState->detectionManager->getSelfChampions() count] > 0) {
+                ChampionBar* champ = (ChampionBar*)[[gameState->detectionManager->getSelfChampions() firstObject] pointerValue];
+                moveMouse(champ->characterCenter.x, champ->characterCenter.y);
+                tapWard();
+                lastPlacedWard = mach_absolute_time();
+            }
+        }
+    }
+}
+
 void BasicAI::processAI() {
     handleAbilityLevelUps();
     handleBuyingItems();
-    
-    /*
-    if ((clock() - lastShopBuy)/CLOCKS_PER_SEC >= 120 && gameState->shopManager->shopAvailable) {
-        //If shop is availabe and haven't bought in 2 minutes, buy items
-        gameState->shopManager->buyingItems = true;
-        lastShopBuy = clock();
-        gameState->shopManager->boughtItems = false;
-        stopMovement();
-    }*/
-    /*
-    if (gameState->shopManager->buyingItems) {
-        if (gameState->shopManager->shopOpen == false && gameState->shopManager->boughtItems == false) {
-            stopMovement();
-            //If shop isn't open and we haven't bought items, wait for shop to open
-            gameState->shopManager->openShop();
-        } else if (gameState->shopManager->shopOpen == true) {
-            //If shop is open, wait to buy items
-            gameState->shopManager->buyItems();
-            if (gameState->shopManager->boughtItems == true) {
-                //It bought items, wait for shop to close
-                gameState->shopManager->closeShop();
-            }
-        } else {
-            //If shop isn't open and we bought items, finish it
-            gameState->shopManager->buyingItems = false;
-            lastShopBuy = clock();
-        }
-    } else if ([gameState->selfChampionManager->championBars count] == 0 && gameState->shopManager->shopOpen) {
-        gameState->shopManager->closeShop();
-    }
-    */
+    handleCameraFocus();
+    handlePlacingWard();
     /*
     if ([gameState->selfChampionManager->championBars count] > 0 && !gameState->shopManager->buyingItems) {
         ChampionBar selfChamp; [[gameState->selfChampionManager->championBars objectAtIndex:0] getValue:&selfChamp];
@@ -367,23 +400,6 @@ void BasicAI::processAI() {
         
         lastAction = action;
         
-        //Randomly place wards
-        if (gameState->itemManager->trinketActive && (clock()-passiveUseWardTimer)/CLOCKS_PER_SEC >= 20.0 && lastAction!=ACTION_Recall) {
-         gameState->itemManager->useTrinket(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
-            passiveUseWardTimer = clock();
-        }
-        
-        //Detect unlocked camera
-        //getTimeInMilliseconds(mach_absolute_time() - cameraLockTimer)
-        if (getTimeInMilliseconds(mach_absolute_time() - cameraLockTimer) >= 1000.0) {
-            cameraLockTimer = mach_absolute_time();
-            tapCameraLock();
-            //Go to mid
-            int x = gameState->leagueSize.size.width - 150;
-            int y = gameState->leagueSize.size.height - 140;
-            tapMouseRight(x, y);
-        }
-        
     
         if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= 3.0) {
             lastMovementClick = clock(); //Move every 3 seconds, less if enemies near
@@ -416,27 +432,6 @@ void BasicAI::processAI() {
             }
         }
         //NSLog(@"self");
-    } else if ([gameState->selfChampionManager->championBars count] == 0 && !gameState->shopManager->buyingItems) {
-        //Doesn't see self but if we do see shop available, assume camera unlocked
-        if ((clock() - cameraLockTimer)/CLOCKS_PER_SEC >= 5.0) {
-            cameraLockTimer = clock();
-            tapCameraLock();
-            //Go to mid
-            int x = gameState->leagueSize.size.width - 150;
-            int y = gameState->leagueSize.size.height - 140;
-            tapMouseRight(x, y);
-        }
-    }
-    //Try this
-    if ((clock() - cameraLockTimer)/CLOCKS_PER_SEC >= 60.0 && !gameState->shopManager->buyingItems) { //Try a random camera tap to make sure the AI isn't stuck
-        cameraLockTimer = clock();
-        tapCameraLock();
-        gameState->shopManager->closeShop();
-        //Go to mid
-        int x = gameState->leagueSize.size.width - 150;
-        int y = gameState->leagueSize.size.height - 140;
-        tapMouseRight(x, y);
-        moveMouse(0, 0);
     }
 */
 }
