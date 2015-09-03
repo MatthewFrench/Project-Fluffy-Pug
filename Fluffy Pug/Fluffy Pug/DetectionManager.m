@@ -38,6 +38,7 @@ void DetectionManager::processDetection(ImageData image) {
     processEnemyTowerDetection(image, dispatchGroup);
     processSelfChampionDetection(image, dispatchGroup);
     processSelfHealthBarDetection(image, dispatchGroup);
+    processSpellLevelUps(image, dispatchGroup);
     
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
 }
@@ -65,6 +66,141 @@ bool DetectionManager::getSelfHealthBarVisible() {
 SelfHealthBar* DetectionManager::getSelfHealthBar() {
     return selfHealthBar;
 }
+bool DetectionManager::getSpell1LevelUpVisible() {
+    return spell1LevelUpAvailable;
+}
+bool DetectionManager::getSpell2LevelUpVisible() {
+    return spell2LevelUpAvailable;
+}
+bool DetectionManager::getSpell3LevelUpVisible() {
+    return spell3LevelUpAvailable;
+}
+bool DetectionManager::getSpell4LevelUpVisible() {
+    return spell4LevelUpAvailable;
+}
+GenericObject* DetectionManager::getSpell1LevelUp() {
+    return spell1LevelUp;
+}
+GenericObject* DetectionManager::getSpell2LevelUp() {
+    return spell2LevelUp;
+}
+GenericObject* DetectionManager::getSpell3LevelUp() {
+    return spell3LevelUp;
+}
+GenericObject* DetectionManager::getSpell4LevelUp() {
+    return spell4LevelUp;
+}
+
+void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t dispatchGroup) {
+    //If we assume our screen is 1280x800, we can look in specific places
+    //Width = 10, Height = 5
+    //465, 660
+    //515, 660
+    //565, 660
+    //615, 660
+    int searchWidth = 10; int searchHeight = 5;
+    CGPoint levelUp1Pos = CGPointMake(465, 660);
+    CGPoint levelUp2Pos = CGPointMake(515, 660);
+    CGPoint levelUp3Pos = CGPointMake(565, 660);
+    CGPoint levelUp4Pos = CGPointMake(615, 660);
+    
+    //Search for first level up
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* levelUp = nullptr;
+        for (int x = levelUp1Pos.x; x < levelUp1Pos.x + searchWidth; x++) {
+            for (int y = levelUp1Pos.y; y < levelUp1Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                GenericObject* levelup = AbilityManager::detectLevelUpAtPixel(image, pixel, x, y);
+                if (levelup != nil) {
+                    levelUp = levelup;
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (levelUp != NULL) {
+                spell1LevelUpAvailable = true;
+                spell1LevelUp = levelUp;
+            } else {
+                spell1LevelUpAvailable = false;
+            }
+        });
+    });
+    
+    //Search for second level up
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* levelUp = nullptr;
+        for (int x = levelUp2Pos.x; x < levelUp2Pos.x + searchWidth; x++) {
+            for (int y = levelUp2Pos.y; y < levelUp2Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                GenericObject* levelup = AbilityManager::detectLevelUpAtPixel(image, pixel, x, y);
+                if (levelup != nil) {
+                    levelUp = levelup;
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (levelUp != NULL) {
+                spell2LevelUpAvailable = true;
+                spell2LevelUp = levelUp;
+            } else {
+                spell2LevelUpAvailable = false;
+            }
+        });
+    });
+    
+    //Search for third level up
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* levelUp = nullptr;
+        for (int x = levelUp3Pos.x; x < levelUp3Pos.x + searchWidth; x++) {
+            for (int y = levelUp3Pos.y; y < levelUp3Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                GenericObject* levelup = AbilityManager::detectLevelUpAtPixel(image, pixel, x, y);
+                if (levelup != nil) {
+                    levelUp = levelup;
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (levelUp != NULL) {
+                spell3LevelUpAvailable = true;
+                spell3LevelUp = levelUp;
+            } else {
+                spell3LevelUpAvailable = false;
+            }
+        });
+    });
+    
+    //Search for fourth level up
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* levelUp = nullptr;
+        for (int x = levelUp4Pos.x; x < levelUp4Pos.x + searchWidth; x++) {
+            for (int y = levelUp4Pos.y; y < levelUp4Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                GenericObject* levelup = AbilityManager::detectLevelUpAtPixel(image, pixel, x, y);
+                if (levelup != nil) {
+                    levelUp = levelup;
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (levelUp != NULL) {
+                spell4LevelUpAvailable = true;
+                spell4LevelUp = levelUp;
+            } else {
+                spell4LevelUpAvailable = false;
+            }
+        });
+    });
+}
+
 //Make it scan a chunk each frame
 const int allyMinionScanChunksX = 8; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
 const int allyMinionScanChunksY = 8;

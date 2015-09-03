@@ -23,7 +23,7 @@
     @public IBOutlet NSImageView* unprocessedImage, *processedImage, *targetImage, *foundImage;
     IBOutlet NSTextView* logText;
     @public IBOutlet NSTextField *fpsText, *screenAnalyzeText;
-    NSTimer* timer;
+    //NSTimer* timer;
     @public LeagueGameState* leagueGameState;
     @public AutoQueueManager* autoQueueManager;
     //AVCaptureScreenInput *input;
@@ -48,6 +48,8 @@
     volatile bool runAutoQueue;
     
     @public BasicAI* basicAI;
+    
+    dispatch_source_t timer;
     
 }
 @property (strong) id activity;

@@ -10,6 +10,22 @@
 
 @implementation AppDelegate
 
+dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
+                                      uint64_t leewayNanoseconds,
+                                      dispatch_queue_t queue,
+                                      dispatch_block_t block)
+{
+    dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER,
+                                                     0, 0, queue);
+    if (timer)
+    {
+        dispatch_source_set_timer(timer, dispatch_walltime(NULL, 0), intervalNanoseconds, leewayNanoseconds);
+        dispatch_source_set_event_handler(timer, block);
+        dispatch_resume(timer);
+    }
+    return timer;
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     GlobalSelf = self;
     saveTestScreenshot = false;
@@ -55,11 +71,17 @@
     lastTime = mach_absolute_time();
     CGDisplayStreamStart(stream);
     
+    /*
     timer = [NSTimer scheduledTimerWithTimeInterval:1.0/1000.0
                                              target:self
                                            selector:@selector(logic)
                                            userInfo:nil
                                             repeats:YES];
+     */
+    timer = CreateDispatchTimer(NSEC_PER_SEC/1000, //30ull * NSEC_PER_SEC
+                                0, //1ull * NSEC_PER_SEC
+                                dispatch_get_main_queue(),
+                                ^{ [self logic]; });
     
     //sleep(1);
     
@@ -358,7 +380,8 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
         bool fireLogic = GlobalSelf->autoQueueManager->processDetection(imageData, rects, num_rects);
         if (fireLogic) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [GlobalSelf->timer fire];
+                [GlobalSelf logic];
+                //[GlobalSelf->timer fire];
             });
         }
     }

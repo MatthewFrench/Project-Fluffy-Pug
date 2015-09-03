@@ -66,6 +66,7 @@ public:
     void processEnemyTowerDetection(ImageData image, dispatch_group_t dispatchGroup);
     void processSelfChampionDetection(ImageData image, dispatch_group_t dispatchGroup);
     void processSelfHealthBarDetection(ImageData image, dispatch_group_t dispatchGroup);
+    void processSpellLevelUps(ImageData image, dispatch_group_t dispatchGroup);
     
     NSMutableArray* getAllyMinions();
     NSMutableArray* getEnemyMinions();
