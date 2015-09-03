@@ -38,10 +38,41 @@ class DetectionManager {
     int allyMinionScanCurrentChunkX = 0;
     int allyMinionScanCurrentChunkY = 0;
     
+    int enemyMinionScanCurrentChunkX = 0;
+    int enemyMinionScanCurrentChunkY = 0;
+    
+    int allyChampionScanCurrentChunkX = 0;
+    int allyChampionScanCurrentChunkY = 0;
+    
+    int enemyChampionScanCurrentChunkX = 0;
+    int enemyChampionScanCurrentChunkY = 0;
+    
+    int enemyTowerScanCurrentChunkX = 0;
+    int enemyTowerScanCurrentChunkY = 0;
+    
+    int selfChampionScanCurrentChunkX = 0;
+    int selfChampionScanCurrentChunkY = 0;
+    
+    int selfHealthBarScanCurrentChunkX = 0;
+    int selfHealthBarScanCurrentChunkY = 0;
+    
 public:
     DetectionManager();
     void processDetection(ImageData image);
     void processAllyMinionDetection(ImageData image, dispatch_group_t dispatchGroup);
+    void processEnemyMinionDetection(ImageData image, dispatch_group_t dispatchGroup);
+    void processAllyChampionDetection(ImageData image, dispatch_group_t dispatchGroup);
+    void processEnemyChampionDetection(ImageData image, dispatch_group_t dispatchGroup);
+    void processEnemyTowerDetection(ImageData image, dispatch_group_t dispatchGroup);
+    void processSelfChampionDetection(ImageData image, dispatch_group_t dispatchGroup);
+    void processSelfHealthBarDetection(ImageData image, dispatch_group_t dispatchGroup);
     
     NSMutableArray* getAllyMinions();
+    NSMutableArray* getEnemyMinions();
+    NSMutableArray* getAllyChampions();
+    NSMutableArray* getEnemyChampions();
+    NSMutableArray* getEnemyTowers();
+    NSMutableArray* getSelfChampions();
+    bool getSelfHealthBarVisible();
+    SelfHealthBar* getSelfHealthBar();
 };

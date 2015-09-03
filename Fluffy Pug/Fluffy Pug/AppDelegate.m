@@ -262,17 +262,13 @@ AppDelegate *GlobalSelf;
         
         [GlobalSelf->allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getAllyMinions().count]];
         
-        /**** I DONT BELIEVE THIS IS THREAD SAFE ***/
-        //Display minions
-        //[GlobalSelf->allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->allyMinionManager->minionBars.count]];
+        [GlobalSelf->enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getEnemyMinions().count]];
         
-        //[GlobalSelf->enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->enemyMinionManager->minionBars.count]];
+        [GlobalSelf->enemyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getEnemyChampions().count]];
         
-        //[GlobalSelf->enemyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->enemyChampionManager->championBars.count]];
+        [GlobalSelf->allyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getAllyChampions().count]];
         
-        //[GlobalSelf->allyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->allyChampionManager->championBars.count]];
-        
-        //[GlobalSelf->selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->selfChampionManager->championBars.count]];
+        [GlobalSelf->selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getSelfChampions().count]];
     }
     else
     {

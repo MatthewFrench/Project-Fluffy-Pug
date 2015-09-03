@@ -407,7 +407,7 @@ void TestController::testEnemyMinionDetection() {
 }
 
 void TestController::testAllyMinionDetection() {
-    testImage = testOutsideImage1280x800;
+    testImage = testInGameDetection1280x800Image;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -432,7 +432,6 @@ void TestController::testAllyMinionDetection() {
             }
         }
     }
-    NSLog(@"Preprocessed minions: %lu", (unsigned long)[minionBars count]);
     minionBars = AllyMinionManager::validateMinionBars(testImage, minionBars);
     uint64 endTime = mach_absolute_time();
     log([NSString stringWithFormat:@"Results -- Detected ally minions: %lu in milliseconds: %d", [minionBars count], getTimeInMilliseconds(endTime-startTime)]);

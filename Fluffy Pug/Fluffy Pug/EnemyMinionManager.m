@@ -36,11 +36,13 @@ EnemyMinionManager::EnemyMinionManager () {
      lastUpdateTime = clock();
      */
 }
-
+const float coloredPixelPrecision = 0.96; //0.97
+const float overalImagePrecision = 0.96; //0.97
+const float minionHealthMatch = 0.80; //0.87
 MinionBar* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     MinionBar* minion = nil;
     //Look top left corner
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 1.0) >=  1.0) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, coloredPixelPrecision) >=  overalImagePrecision) {
         int barTopLeftX = x + 1;
         int barTopLeftY = y + 1;
         minion = new MinionBar();
@@ -55,7 +57,7 @@ MinionBar* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8
         minion->health = 0;
         minion->detectedTopLeft = true;
         //NSLog(@"Top left at %d %d", barTopLeftX, barTopLeftY);
-    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 1.0) >=  1.0) { // Look for bottom left corner
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, coloredPixelPrecision) >=  overalImagePrecision) { // Look for bottom left corner
         int barTopLeftX = x + 1;
         int barTopLeftY = y - 3;
         minion = new MinionBar();
@@ -70,7 +72,8 @@ MinionBar* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8
         minion->detectedBottomLeft = true;
         minion->health = 0;
         //NSLog(@"Bottom left at %d %d", barTopLeftX, barTopLeftY);
-    } else {
+    }/* else {
+        
         bool detectedCorner = false;
         if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 1.0) >=  1.0) { // Look for top right corner
             int barTopLeftX = x - 61;
@@ -128,7 +131,7 @@ MinionBar* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8
                 }
             }
         }
-    }
+    }*/
     return minion;
 }
 
@@ -154,10 +157,10 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
                 detectedCorners++;
             }
         }
-        if (detectedCorners > 1) {
+        //if (detectedCorners > 1) {
             minion->characterCenter.x = minion->topLeft.x+30; minion->characterCenter.y = minion->topLeft.y+32;
             [minionBars addObject: [NSValue valueWithPointer:minion]];
-        }
+        //}
     }
     
     //Detect health
@@ -168,7 +171,7 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
                 for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
                     uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
                     uint8_t*  p = getPixel2(imageData, x + minion->topLeft.x, y + minion->topLeft.y);
-                    if (getColorPercentage(healthBarColor, p) >= 0.95) {
+                    if (getColorPercentage(healthBarColor, p) >= minionHealthMatch) {
                         minion->health = (float)x / 61 * 100;
                         y = healthSegmentImageData.imageHeight + 1;
                         x = -1;
