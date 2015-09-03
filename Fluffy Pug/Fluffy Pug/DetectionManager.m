@@ -48,6 +48,8 @@ void DetectionManager::processDetection(ImageData image) {
     processSummonerSpellActives(image, dispatchGroup);
     processItemActives(image, dispatchGroup);
     processUsedPotion(image, dispatchGroup);
+    processShopAvailable(image, dispatchGroup);
+    processShop(image, dispatchGroup);
     
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
 }
@@ -204,7 +206,62 @@ bool DetectionManager::getPotionBeingUsedVisible() {
 GenericObject* DetectionManager::getPotionBeingUsed() {
     return potionBeingUsed;
 }
+bool DetectionManager::getShopAvailable() {
+    return shopAvailableShown;
+}
+GenericObject* DetectionManager::getShopAvailableObject() {
+    return shopAvailable;
+}
+bool DetectionManager::getShopTopLeftCornerVisible() {
+    return shopTopLeftCornerShown;
+}
+GenericObject* DetectionManager::getShopTopLeftCorner() {
+    return shopTopLeftCorner;
+}
+bool DetectionManager::getShopBottomLeftCornerVisible() {
+    return shopBottomLeftCornerShown;
+}
+GenericObject* DetectionManager::getShopBottomleftCorner() {
+    return shopBottomLeftCorner;
+}
+NSMutableArray* DetectionManager::getBuyableItems() {
+    return buyableItems;
+}
 
+void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGroup) {
+    //First detect top left corner, but do it as a slow scan
+    
+    //As soon as top left corner is confirmed, do a full scan for bottom left corner
+    
+    //As soon as bottom left corner is confirmed, do a full scan for all items between
+    
+    //Probably the most expensive search if shop is open
+    
+    
+}
+void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t dispatchGroup) {
+    CGPoint searchStart = CGPointMake(762, 770);
+    CGPoint searchEnd = CGPointMake(770, 775);
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* shop = nullptr;
+        for (int x = searchStart.x; x < searchEnd.x; x++) {
+            for (int y = searchStart.y; y < searchEnd.y; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                shop = ShopManager::detectShopAvailable(image, pixel, x, y);
+                x = searchEnd.x;
+                y = searchEnd.y;
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (shop != NULL) {
+                shopAvailableShown = true;
+                shopAvailable = shop;
+            } else {
+                shopAvailableShown = false;
+            }
+        });
+    });
+}
 void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispatchGroup) {
     //Potion being used
     //from 400, 620

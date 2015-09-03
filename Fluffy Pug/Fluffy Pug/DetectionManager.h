@@ -76,6 +76,8 @@ public:
     void processTrinketActive(ImageData image, dispatch_group_t dispatchGroup);
     void processItemActives(ImageData image, dispatch_group_t dispatchGroup);
     void processUsedPotion(ImageData image, dispatch_group_t dispatchGroup);
+    void processShopAvailable(ImageData image, dispatch_group_t dispatchGroup);
+    void processShop(ImageData image, dispatch_group_t dispatchGroup);
     
     NSMutableArray* getAllyMinions();
     NSMutableArray* getEnemyMinions();
@@ -128,4 +130,11 @@ public:
     GenericObject* getPotionActive();
     bool getPotionBeingUsedVisible();
     GenericObject* getPotionBeingUsed();
+    bool getShopAvailable();
+    GenericObject* getShopAvailableObject();
+    bool getShopTopLeftCornerVisible();
+    GenericObject* getShopTopLeftCorner();
+    bool getShopBottomLeftCornerVisible();
+    GenericObject* getShopBottomleftCorner();
+    NSMutableArray* getBuyableItems();
 };

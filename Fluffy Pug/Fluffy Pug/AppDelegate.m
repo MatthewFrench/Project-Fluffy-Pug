@@ -377,15 +377,20 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
         size_t num_rects;
         
         rects = CGDisplayStreamUpdateGetRects(updateRef, kCGDisplayStreamUpdateDirtyRects, &num_rects);
-        bool fireLogic = GlobalSelf->autoQueueManager->processDetection(imageData, rects, num_rects);
-        if (fireLogic) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [GlobalSelf logic];
+        GlobalSelf->autoQueueManager->processDetection(imageData, rects, num_rects);
+        //if (fireLogic) {
+        //    dispatch_async(dispatch_get_main_queue(), ^{
+        //        [GlobalSelf logic];
                 //[GlobalSelf->timer fire];
-            });
-        }
+        //    });
+        //}
     }
     
+    //Fire logic after detection is finished for higher response times
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [GlobalSelf logic];
+        //[GlobalSelf->timer fire];
+    });
     
     
     
