@@ -46,6 +46,8 @@ void DetectionManager::processDetection(ImageData image) {
     processSpellLevelDots(image, dispatchGroup);
     processSpellActives(image, dispatchGroup);
     processSummonerSpellActives(image, dispatchGroup);
+    processItemActives(image, dispatchGroup);
+    processUsedPotion(image, dispatchGroup);
     
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
 }
@@ -148,7 +150,286 @@ GenericObject* DetectionManager::getSummonerSpell1() {
 GenericObject* DetectionManager::getSummonerSpell2() {
     return summonerSpell2Active;
 }
+bool DetectionManager::getTrinketActiveAvailable() {
+    return trinketActiveAvailable;
+}
+GenericObject* DetectionManager::getTrinketActive() {
+    return trinketActive;
+}
+bool DetectionManager::getItem1ActiveAvailable() {
+    return item1ActiveAvailable;
+}
+bool DetectionManager::getItem2ActiveAvailable() {
+    return item2ActiveAvailable;
+}
+bool DetectionManager::getItem3ActiveAvailable() {
+    return item3ActiveAvailable;
+}
+bool DetectionManager::getItem4ActiveAvailable() {
+    return item4ActiveAvailable;
+}
+bool DetectionManager::getItem5ActiveAvailable() {
+    return item5ActiveAvailable;
+}
+bool DetectionManager::getItem6ActiveAvailable() {
+    return item6ActiveAvailable;
+}
+GenericObject* DetectionManager::getItem1Active() {
+    return item1Active;
+}
+GenericObject* DetectionManager::getItem2Active() {
+    return item2Active;
+}
+GenericObject* DetectionManager::getItem3Active() {
+    return item3Active;
+}
+GenericObject* DetectionManager::getItem4Active() {
+    return item4Active;
+}
+GenericObject* DetectionManager::getItem5Active() {
+    return item5Active;
+}
+GenericObject* DetectionManager::getItem6Active() {
+    return item6Active;
+}
+bool DetectionManager::getPotionActiveAvailable() {
+    return potionActiveAvailable;
+}
+GenericObject* DetectionManager::getPotionActive() {
+    return potionActive;
+}
+bool DetectionManager::getPotionBeingUsedVisible() {
+    return potionBeingUsedShown;
+}
+GenericObject* DetectionManager::getPotionBeingUsed() {
+    return potionBeingUsed;
+}
 
+void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispatchGroup) {
+    //Potion being used
+    //from 400, 620
+    //to 560, 660
+    CGPoint searchStart = CGPointMake(400, 620);
+    CGPoint searchEnd = CGPointMake(560, 660);
+    
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* potionUsed = nullptr;
+        for (int x = searchStart.x; x < searchEnd.x; x++) {
+            for (int y = searchStart.y; y < searchEnd.y; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                potionUsed = ItemManager::detectUsedPotionAtPixel(image, pixel, x, y);
+                x = searchEnd.x;
+                y = searchEnd.y;
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (potionUsed != NULL) {
+                potionBeingUsedShown = true;
+                potionBeingUsed = potionUsed;
+            } else {
+                potionBeingUsedShown = false;
+            }
+        });
+    });
+}
+
+void DetectionManager::processItemActives(ImageData image, dispatch_group_t dispatchGroup) {
+    int searchWidth = 6; int searchHeight = 6;
+    CGPoint item1Pos = CGPointMake(764, 700);
+    CGPoint item2Pos = CGPointMake(800, 700);
+    CGPoint item3Pos = CGPointMake(836, 700);
+    CGPoint item4Pos = CGPointMake(764, 734);
+    CGPoint item5Pos = CGPointMake(800, 734);
+    CGPoint item6Pos = CGPointMake(836, 734);
+    
+    //Search for item 1 and if it is a potion
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* item = nullptr;
+        GenericObject* potion = nullptr;
+        for (int x = item1Pos.x; x < item1Pos.x + searchWidth; x++) {
+            for (int y = item1Pos.y; y < item1Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (item != NULL) {
+                item1ActiveAvailable = true;
+                item1Active = item;
+            } else {
+                item1ActiveAvailable = false;
+            }
+            if (potion != NULL) {
+                potionActiveAvailable = true;
+                potionActive = potion;
+            } else {
+                potionActiveAvailable = false;
+            }
+        });
+    });
+    
+    //Search for item 2 and if it is a potion
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* item = nullptr;
+        GenericObject* potion = nullptr;
+        for (int x = item2Pos.x; x < item2Pos.x + searchWidth; x++) {
+            for (int y = item2Pos.y; y < item2Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (item != NULL) {
+                item2ActiveAvailable = true;
+                item2Active = item;
+            } else {
+                item2ActiveAvailable = false;
+            }
+            if (potion != NULL) {
+                potionActiveAvailable = true;
+                potionActive = potion;
+            } else {
+                potionActiveAvailable = false;
+            }
+        });
+    });
+    
+    //Search for item 3 and if it is a potion
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* item = nullptr;
+        GenericObject* potion = nullptr;
+        for (int x = item3Pos.x; x < item3Pos.x + searchWidth; x++) {
+            for (int y = item3Pos.y; y < item3Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (item != NULL) {
+                item3ActiveAvailable = true;
+                item3Active = item;
+            } else {
+                item3ActiveAvailable = false;
+            }
+            if (potion != NULL) {
+                potionActiveAvailable = true;
+                potionActive = potion;
+            } else {
+                potionActiveAvailable = false;
+            }
+        });
+    });
+    
+    //Search for item 4 and if it is a potion
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* item = nullptr;
+        GenericObject* potion = nullptr;
+        for (int x = item4Pos.x; x < item4Pos.x + searchWidth; x++) {
+            for (int y = item4Pos.y; y < item4Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (item != NULL) {
+                item4ActiveAvailable = true;
+                item4Active = item;
+            } else {
+                item4ActiveAvailable = false;
+            }
+            if (potion != NULL) {
+                potionActiveAvailable = true;
+                potionActive = potion;
+            } else {
+                potionActiveAvailable = false;
+            }
+        });
+    });
+    
+    //Search for item 5 and if it is a potion
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* item = nullptr;
+        GenericObject* potion = nullptr;
+        for (int x = item5Pos.x; x < item5Pos.x + searchWidth; x++) {
+            for (int y = item5Pos.y; y < item5Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (item != NULL) {
+                item5ActiveAvailable = true;
+                item5Active = item;
+            } else {
+                item5ActiveAvailable = false;
+            }
+            if (potion != NULL) {
+                potionActiveAvailable = true;
+                potionActive = potion;
+            } else {
+                potionActiveAvailable = false;
+            }
+        });
+    });
+    
+    //Search for item 6 and if it is a potion
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* item = nullptr;
+        GenericObject* potion = nullptr;
+        for (int x = item6Pos.x; x < item6Pos.x + searchWidth; x++) {
+            for (int y = item6Pos.y; y < item6Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (item != NULL) {
+                item6ActiveAvailable = true;
+                item6Active = item;
+            } else {
+                item6ActiveAvailable = false;
+            }
+            if (potion != NULL) {
+                potionActiveAvailable = true;
+                potionActive = potion;
+            } else {
+                potionActiveAvailable = false;
+            }
+        });
+    });
+}
+void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t dispatchGroup) {
+    int searchWidth = 6; int searchHeight = 6;
+    CGPoint trinketPos = CGPointMake(873, 702);
+    //Search for trinket to use
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* trinket = nullptr;
+        for (int x = trinketPos.x; x < trinketPos.x + searchWidth; x++) {
+            for (int y = trinketPos.y; y < trinketPos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                trinket = ItemManager::detectTrinketActiveAtPixel(image, pixel, x, y);
+                if (trinket != nil) {
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (trinket != NULL) {
+                trinketActiveAvailable = true;
+                trinketActive = trinket;
+            } else {
+                trinketActiveAvailable = false;
+            }
+        });
+    });
+}
 void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dispatchGroup) {
     int searchWidth = 6; int searchHeight = 6;
     CGPoint level1Pos = CGPointMake(466, 750);

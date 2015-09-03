@@ -73,6 +73,9 @@ public:
     void processSpellLevelDots(ImageData image, dispatch_group_t dispatchGroup);
     void processSpellActives(ImageData image, dispatch_group_t dispatchGroup);
     void processSummonerSpellActives(ImageData image, dispatch_group_t dispatchGroup);
+    void processTrinketActive(ImageData image, dispatch_group_t dispatchGroup);
+    void processItemActives(ImageData image, dispatch_group_t dispatchGroup);
+    void processUsedPotion(ImageData image, dispatch_group_t dispatchGroup);
     
     NSMutableArray* getAllyMinions();
     NSMutableArray* getEnemyMinions();
@@ -107,4 +110,22 @@ public:
     bool getSummonerSpell2Available();
     GenericObject* getSummonerSpell1();
     GenericObject* getSummonerSpell2();
+    bool getTrinketActiveAvailable();
+    GenericObject* getTrinketActive();
+    bool getItem1ActiveAvailable();
+    bool getItem2ActiveAvailable();
+    bool getItem3ActiveAvailable();
+    bool getItem4ActiveAvailable();
+    bool getItem5ActiveAvailable();
+    bool getItem6ActiveAvailable();
+    GenericObject* getItem1Active();
+    GenericObject* getItem2Active();
+    GenericObject* getItem3Active();
+    GenericObject* getItem4Active();
+    GenericObject* getItem5Active();
+    GenericObject* getItem6Active();
+    bool getPotionActiveAvailable();
+    GenericObject* getPotionActive();
+    bool getPotionBeingUsedVisible();
+    GenericObject* getPotionBeingUsed();
 };
