@@ -59,6 +59,9 @@ class DetectionManager {
     int selfHealthBarScanCurrentChunkX = 0;
     int selfHealthBarScanCurrentChunkY = 0;
     
+    int shopScanCurrentChunkX = 0;
+    int shopScanCurrentChunkY = 0;
+    
 public:
     DetectionManager();
     void processDetection(ImageData image);

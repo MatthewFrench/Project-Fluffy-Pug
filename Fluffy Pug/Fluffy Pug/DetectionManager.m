@@ -228,6 +228,8 @@ NSMutableArray* DetectionManager::getBuyableItems() {
     return buyableItems;
 }
 
+const int shopScanChunksX = 10;
+const int shopScanChunksY = 10;
 void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGroup) {
     //First detect top left corner, but do it as a slow scan
     
@@ -237,7 +239,102 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
     
     //Probably the most expensive search if shop is open
     
+    float leagueGameWidth = image.imageWidth;
+    float leagueGameHeight = image.imageHeight;
+    CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
     
+    //Increase the scan chunk by 1
+    shopScanCurrentChunkX += 1;
+    if (shopScanCurrentChunkX >= shopScanChunksX) {
+        shopScanCurrentChunkX = 0;
+        shopScanCurrentChunkY++;
+    }
+    if (shopScanCurrentChunkY >= shopScanChunksY) {
+        shopScanCurrentChunkY = 0;
+    }
+    NSMutableArray* scanRectangles = [NSMutableArray new];
+    //Add chunk to scan
+    CGRect scanRect = CGRectMake( leagueGameWidth * shopScanCurrentChunkX / shopScanChunksX ,
+                                 leagueGameHeight * shopScanCurrentChunkY / shopScanChunksY ,
+                                 leagueGameWidth * 1 / shopScanChunksX ,
+                                 leagueGameHeight * 1 / shopScanChunksY );
+    scanRect = CGRectIntegral(scanRect);
+    scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+    combineRectangles(scanRectangles, scanRect);
+    //If last seen, add it to the scan
+    if (shopTopLeftCorner != NULL) {
+        CGRect rect = CGRectMake(shopTopLeftCorner->topLeft.x - 5,
+                                 shopTopLeftCorner->topLeft.y - 5,
+                                 10,
+                                 10);
+        rect = CGRectIntegral(rect);
+        rect = fitRectangleInRectangle(rect, leagueWindowRect);
+        combineRectangles(scanRectangles, rect);
+    }
+    
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* topLeftCorner = nullptr;
+        GenericObject* bottomLeftCorner = nullptr;
+        NSMutableArray* itemsCanBuy = [NSMutableArray new];
+        //Loop through scan chunks
+        for (int i = 0; i < [scanRectangles count]; i++) {
+            CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
+            for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
+                for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
+                    uint8* pixel = getPixel2(image, x, y);
+                    topLeftCorner = ShopManager::detectShopTopLeftCorner(image, pixel, x, y);
+                    if (topLeftCorner != nil) {
+                        i = (int)[scanRectangles count];
+                        x = rect.origin.x + rect.size.width;
+                        y = rect.origin.y + rect.size.height;
+                    }
+                }
+            }
+        }
+        if (topLeftCorner != NULL) {
+            //Scan immediately for bottom left corner
+            for (int x = topLeftCorner->topLeft.x - 5; x < topLeftCorner->topLeft.x + 5; x++) {
+                for (int y = topLeftCorner->bottomLeft.y + 600; y < leagueGameHeight; y++) {
+                    uint8* pixel = getPixel2(image, x, y);
+                    bottomLeftCorner = ShopManager::detectShopBottomLeftCorner(image, pixel, x, y);
+                    if (bottomLeftCorner != nil) {
+                        x = topLeftCorner->topLeft.x + 5;
+                        y = leagueGameHeight;
+                    }
+                }
+            }
+            if (bottomLeftCorner != NULL) {
+                //Scan immediately for items
+                CGPoint searchStart = CGPointMake(topLeftCorner->topLeft.x + 15, topLeftCorner->topLeft.y + 75);
+                CGPoint searchEnd = CGPointMake(topLeftCorner->topLeft.x + 400, bottomLeftCorner->bottomLeft.y - 25);
+                for (int x = searchStart.x; x < searchEnd.x; x++) {
+                    for (int y = searchStart.y; y < searchEnd.y; y++) {
+                        uint8* pixel = getPixel2(image, x, y);
+                        GenericObject* item = ShopManager::detectBuyableItems(image, pixel, x, y);
+                        if (item != nil) {
+                            [itemsCanBuy addObject: [NSValue valueWithPointer:item]];
+                        }
+                    }
+                }
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (topLeftCorner != NULL) {
+                shopTopLeftCornerShown = true;
+                shopTopLeftCorner = topLeftCorner;
+            } else {
+                shopTopLeftCornerShown = false;
+            }
+            if (shopBottomLeftCorner != NULL) {
+                shopBottomLeftCornerShown = true;
+                shopBottomLeftCorner = topLeftCorner;
+            } else {
+                shopBottomLeftCornerShown = false;
+            }
+            buyableItems = itemsCanBuy;
+        });
+    });
 }
 void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t dispatchGroup) {
     CGPoint searchStart = CGPointMake(762, 770);
