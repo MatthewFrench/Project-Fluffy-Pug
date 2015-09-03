@@ -272,7 +272,7 @@ AppDelegate *GlobalSelf;
     }
     
     //Profile code
-    if (getTimeInMilliseconds(mach_absolute_time() - lastTime) > 500)
+    if (getTimeInMilliseconds(mach_absolute_time() - lastTime) > 1000)
     {
         int time = getTimeInMilliseconds(mach_absolute_time() - lastTime);
         [GlobalSelf->fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / loops, (1000.0)/(time * 1.0 / loops)]];

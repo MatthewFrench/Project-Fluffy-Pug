@@ -13,14 +13,60 @@
 
 BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     gameState = leagueGameState;
-    lastMovementClick = clock();
-    lastAction = -1;
-    passiveUseWardTimer = clock();
-    cameraLockTimer = clock();
-    lastShopBuy = -999999999999999999;
+    
+    lastLevelUp = mach_absolute_time();
+    //lastMovementClick = clock();
+    //lastAction = -1;
+    //passiveUseWardTimer = clock();
+    //cameraLockTimer = clock();
+    //lastShopBuy = -999999999999999999;
     //gameState->shopManager->buyingItems = false;
 }
+void BasicAI::handleAbilityLevelUps() {
+    int abilityLevelUpOrder[] = {1, 2, 3, 1, 2, 4, 3, 1, 2, 3, 4, 1, 2, 3, 1, 4, 2, 3};
+    //Level up an ability as soon as possible but only one ability every 500 milliseconds
+    if (getTimeInMilliseconds(mach_absolute_time() - lastLevelUp) >= 500) {
+        bool leveledUp = false;
+        if (gameState->detectionManager->getCurrentLevel() < 18) {
+            int preferredLevelUp = abilityLevelUpOrder[gameState->detectionManager->getCurrentLevel()];
+            if (preferredLevelUp == 1 && gameState->detectionManager->getSpell1LevelUpVisible()) {
+                levelUpAbility1();
+                leveledUp = true;
+            } else if (preferredLevelUp == 2 && gameState->detectionManager->getSpell2LevelUpVisible()) {
+                levelUpAbility2();
+                leveledUp = true;
+            } else if (preferredLevelUp == 3 && gameState->detectionManager->getSpell3LevelUpVisible()) {
+                levelUpAbility3();
+                leveledUp = true;
+            } else if (preferredLevelUp == 4 && gameState->detectionManager->getSpell4LevelUpVisible()) {
+                levelUpAbility4();
+                leveledUp = true;
+            } else if (gameState->detectionManager->getSpell1LevelUpVisible()) {
+                levelUpAbility1();
+                leveledUp = true;
+            } else if (gameState->detectionManager->getSpell2LevelUpVisible()) {
+                levelUpAbility2();
+                leveledUp = true;
+            } else if (gameState->detectionManager->getSpell3LevelUpVisible()) {
+                levelUpAbility3();
+                leveledUp = true;
+            } else if (gameState->detectionManager->getSpell4LevelUpVisible()) {
+                levelUpAbility4();
+                leveledUp = true;
+            }
+        }
+        if (leveledUp) {
+            lastLevelUp = mach_absolute_time();
+        }
+    }
+}
+void BasicAI::handleBuyingItems() {
+    
+}
 void BasicAI::processAI() {
+    handleAbilityLevelUps();
+    handleBuyingItems();
+    
     /*
     if ((clock() - lastShopBuy)/CLOCKS_PER_SEC >= 120 && gameState->shopManager->shopAvailable) {
         //If shop is availabe and haven't bought in 2 minutes, buy items
@@ -320,53 +366,6 @@ void BasicAI::processAI() {
         }
         
         lastAction = action;
-        
-        //Level up stuff
-        
-        if (gameState->abilityManager->ability3LevelUpAvailable || gameState->abilityManager->ability2LevelUpAvailable || gameState->abilityManager->ability1LevelUpAvailable  || gameState->abilityManager->ability4LevelUpAvailable) {
-            levelUpAbility4();
-            levelUpAbility1();
-            levelUpAbility2();
-            levelUpAbility3();
-        }
-     
-        if (gameState->abilityManager->ability4LevelUpAvailable || gameState->abilityManager->ability3LevelUpAvailable || gameState->abilityManager->ability2LevelUpAvailable || gameState->abilityManager->ability1LevelUpAvailable) {
-            //NSLog(@"Dots: %d", gameState->abilityManager->levelUpCount);
-            switch (gameState->abilityManager->levelUpCount+1) {
-                case 1:
-                case 4:
-                case 5:
-                case 7:
-                case 9:
-                    levelUpAbility1();
-                    break;
-                case 2:
-                case 8:
-                case 10:
-                case 12:
-                case 13:
-                    levelUpAbility3();
-                    break;
-                case 3:
-                case 14:
-                case 15:
-                case 17:
-                case 18:
-                    levelUpAbility2();
-                    break;
-                case 6:
-                case 11:
-                case 16:
-                    levelUpAbility4();
-                    break;
-                default:
-                    levelUpAbility1();
-                    levelUpAbility2();
-                    levelUpAbility3();
-                    levelUpAbility4();
-                    break;
-            }
-        }
         
         //Randomly place wards
         if (gameState->itemManager->trinketActive && (clock()-passiveUseWardTimer)/CLOCKS_PER_SEC >= 20.0 && lastAction!=ACTION_Recall) {

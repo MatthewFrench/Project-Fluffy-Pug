@@ -16,13 +16,17 @@ class LeagueGameState;
 class BasicAI {
     LeagueGameState* gameState;
     
-    double lastMovementClick;
-    int lastAction;
-    double passiveUseWardTimer;
-    double cameraLockTimer;
-    double lastShopBuy;
+    //double lastMovementClick;
+    //int lastAction;
+    //double passiveUseWardTimer;
+    //double cameraLockTimer;
+    //double lastShopBuy;
+    
+    uint64_t lastLevelUp;
     
 public:
     BasicAI(LeagueGameState* leagueGameState);
     void processAI();
+    void handleAbilityLevelUps();
+    void handleBuyingItems();
 };

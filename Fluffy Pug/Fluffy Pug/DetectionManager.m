@@ -33,6 +33,8 @@ DetectionManager::DetectionManager() {
     spell4LevelDots = [NSMutableArray new];
 }
 void DetectionManager::processDetection(ImageData image) {
+    //uint64_t startTime = mach_absolute_time();
+    
     dispatch_group_t dispatchGroup = dispatch_group_create();
     
     processAllyMinionDetection(image, dispatchGroup);
@@ -53,6 +55,8 @@ void DetectionManager::processDetection(ImageData image) {
     processMap(image, dispatchGroup);
     
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    
+    //NSLog(@"Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
 }
 NSMutableArray* DetectionManager::getAllyMinions() {
     return allyMinions;
