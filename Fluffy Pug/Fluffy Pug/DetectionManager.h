@@ -7,10 +7,13 @@ class DetectionManager {
                     *selfChampions, *enemyTowers;
     bool spell1LevelUpAvailable = false, spell2LevelUpAvailable = false, spell3LevelUpAvailable = false, spell4LevelUpAvailable = false;
     GenericObject* spell1LevelUp=nil, *spell2LevelUp=nil, *spell3LevelUp=nil, *spell4LevelUp=nil;
+    NSMutableArray* spell1LevelDots, *spell2LevelDots, *spell3LevelDots, *spell4LevelDots;
+    bool spell1LevelDotsVisible = false, spell2LevelDotsVisible = false, spell3LevelDotsVisible = false, spell4LevelDotsVisible = false;
+    int currentLevel = 0;
     bool spell1ActiveAvailable = false, spell2ActiveAvailable = false, spell3ActiveAvailable = false, spell4ActiveAvailable = false;
     GenericObject* spell1Active=nil, *spell2Active=nil, *spell3Active=nil, *spell4Active=nil;
     bool summonerSpell1ActiveAvailable = false, summonerSpell2ActiveAvailable = false;
-    GenericObject* summonerSpell1Active=nil, *summonerSpell2Active=nil, *summonerSpell3Active=nil, *summonerSpell4Active=nil;
+    GenericObject* summonerSpell1Active=nil, *summonerSpell2Active=nil;
     bool trinketActiveAvailable = false;
     GenericObject* trinketActive=nil;
     bool item1ActiveAvailable = false, item2ActiveAvailable = false, item3ActiveAvailable = false, item4ActiveAvailable = false, item5ActiveAvailable = false, item6ActiveAvailable = false;
@@ -67,6 +70,9 @@ public:
     void processSelfChampionDetection(ImageData image, dispatch_group_t dispatchGroup);
     void processSelfHealthBarDetection(ImageData image, dispatch_group_t dispatchGroup);
     void processSpellLevelUps(ImageData image, dispatch_group_t dispatchGroup);
+    void processSpellLevelDots(ImageData image, dispatch_group_t dispatchGroup);
+    void processSpellActives(ImageData image, dispatch_group_t dispatchGroup);
+    void processSummonerSpellActives(ImageData image, dispatch_group_t dispatchGroup);
     
     NSMutableArray* getAllyMinions();
     NSMutableArray* getEnemyMinions();
@@ -84,4 +90,21 @@ public:
     GenericObject* getSpell2LevelUp();
     GenericObject* getSpell3LevelUp();
     GenericObject* getSpell4LevelUp();
+    NSMutableArray* getSpell1LevelDots();
+    NSMutableArray* getSpell2LevelDots();
+    NSMutableArray* getSpell3LevelDots();
+    NSMutableArray* getSpell4LevelDots();
+    int getCurrentLevel();
+    bool getSpell1Available();
+    bool getSpell2Available();
+    bool getSpell3Available();
+    bool getSpell4Available();
+    GenericObject* getSpell1();
+    GenericObject* getSpell2();
+    GenericObject* getSpell3();
+    GenericObject* getSpell4();
+    bool getSummonerSpell1Available();
+    bool getSummonerSpell2Available();
+    GenericObject* getSummonerSpell1();
+    GenericObject* getSummonerSpell2();
 };

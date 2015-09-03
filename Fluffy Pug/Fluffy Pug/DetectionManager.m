@@ -27,6 +27,10 @@ DetectionManager::DetectionManager() {
     selfChampions = [NSMutableArray new];
     enemyTowers = [NSMutableArray new];
     buyableItems = [NSMutableArray new];
+    spell1LevelDots = [NSMutableArray new];
+    spell2LevelDots = [NSMutableArray new];
+    spell3LevelDots = [NSMutableArray new];
+    spell4LevelDots = [NSMutableArray new];
 }
 void DetectionManager::processDetection(ImageData image) {
     dispatch_group_t dispatchGroup = dispatch_group_create();
@@ -39,6 +43,9 @@ void DetectionManager::processDetection(ImageData image) {
     processSelfChampionDetection(image, dispatchGroup);
     processSelfHealthBarDetection(image, dispatchGroup);
     processSpellLevelUps(image, dispatchGroup);
+    processSpellLevelDots(image, dispatchGroup);
+    processSpellActives(image, dispatchGroup);
+    processSummonerSpellActives(image, dispatchGroup);
     
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
 }
@@ -89,6 +96,282 @@ GenericObject* DetectionManager::getSpell3LevelUp() {
 }
 GenericObject* DetectionManager::getSpell4LevelUp() {
     return spell4LevelUp;
+}
+NSMutableArray* DetectionManager::getSpell1LevelDots() {
+    return spell1LevelDots;
+}
+NSMutableArray* DetectionManager::getSpell2LevelDots() {
+    return spell2LevelDots;
+}
+NSMutableArray* DetectionManager::getSpell3LevelDots() {
+    return spell3LevelDots;
+}
+NSMutableArray* DetectionManager::getSpell4LevelDots() {
+    return spell4LevelDots;
+}
+int DetectionManager::getCurrentLevel() {
+    return currentLevel;
+}
+bool DetectionManager::getSpell1Available() {
+    return spell1ActiveAvailable;
+}
+bool DetectionManager::getSpell2Available() {
+    return spell2ActiveAvailable;
+}
+bool DetectionManager::getSpell3Available() {
+    return spell3ActiveAvailable;
+}
+bool DetectionManager::getSpell4Available() {
+    return spell4ActiveAvailable;
+}
+GenericObject* DetectionManager::getSpell1() {
+    return spell1Active;
+}
+GenericObject* DetectionManager::getSpell2() {
+    return spell2Active;
+}
+GenericObject* DetectionManager::getSpell3() {
+    return spell3Active;
+}
+GenericObject* DetectionManager::getSpell4() {
+    return spell4Active;
+}
+bool DetectionManager::getSummonerSpell1Available() {
+    return summonerSpell1ActiveAvailable;
+}
+bool DetectionManager::getSummonerSpell2Available() {
+    return summonerSpell2ActiveAvailable;
+}
+GenericObject* DetectionManager::getSummonerSpell1() {
+    return summonerSpell1Active;
+}
+GenericObject* DetectionManager::getSummonerSpell2() {
+    return summonerSpell2Active;
+}
+
+void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dispatchGroup) {
+    int searchWidth = 6; int searchHeight = 6;
+    CGPoint level1Pos = CGPointMake(466, 750);
+    CGPoint level2Pos = CGPointMake(515, 750);
+    CGPoint level3Pos = CGPointMake(565, 750);
+    CGPoint level4Pos = CGPointMake(614, 700);
+    
+    //Search for first level up
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* ability = nullptr;
+        for (int x = level1Pos.x; x < level1Pos.x + searchWidth; x++) {
+            for (int y = level1Pos.y; y < level1Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                ability = AbilityManager::detectEnabledAbilityAtPixel(image, pixel, x, y);
+                if (ability != nil) {
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (ability != NULL) {
+                spell1ActiveAvailable = true;
+                spell1Active = ability;
+            } else {
+                spell1ActiveAvailable = false;
+            }
+        });
+    });
+    
+    //Search for second level up
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* ability = nullptr;
+        for (int x = level2Pos.x; x < level2Pos.x + searchWidth; x++) {
+            for (int y = level2Pos.y; y < level2Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                ability = AbilityManager::detectEnabledAbilityAtPixel(image, pixel, x, y);
+                if (ability != nil) {
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (ability != NULL) {
+                spell2ActiveAvailable = true;
+                spell2Active = ability;
+            } else {
+                spell2ActiveAvailable = false;
+            }
+        });
+    });
+    
+    //Search for third level up
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* ability = nullptr;
+        for (int x = level3Pos.x; x < level3Pos.x + searchWidth; x++) {
+            for (int y = level3Pos.y; y < level3Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                ability = AbilityManager::detectEnabledAbilityAtPixel(image, pixel, x, y);
+                if (ability != nil) {
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (ability != NULL) {
+                spell3ActiveAvailable = true;
+                spell3Active = ability;
+            } else {
+                spell3ActiveAvailable = false;
+            }
+        });
+    });
+    
+    //Search for fourth level up
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* ability = nullptr;
+        for (int x = level4Pos.x; x < level4Pos.x + searchWidth; x++) {
+            for (int y = level4Pos.y; y < level4Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                ability = AbilityManager::detectEnabledAbilityAtPixel(image, pixel, x, y);
+                if (ability != nil) {
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (ability != NULL) {
+                spell4ActiveAvailable = true;
+                spell4Active = ability;
+            } else {
+                spell4ActiveAvailable = false;
+            }
+        });
+    });
+}
+
+void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_group_t dispatchGroup) {
+    int searchWidth = 6; int searchHeight = 6;
+    CGPoint spell1Pos = CGPointMake(670, 700);
+    CGPoint spell2Pos = CGPointMake(708, 750);
+    
+    //Search for first summoner spell
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* ability = nullptr;
+        for (int x = spell1Pos.x; x < spell1Pos.x + searchWidth; x++) {
+            for (int y = spell1Pos.y; y < spell1Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                ability = AbilityManager::detectEnabledSummonerSpellAtPixel(image, pixel, x, y);
+                if (ability != nil) {
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (ability != NULL) {
+                summonerSpell1ActiveAvailable = true;
+                summonerSpell1Active = ability;
+            } else {
+                summonerSpell1ActiveAvailable = false;
+            }
+        });
+    });
+    
+    //Search for second summoner spell
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* ability = nullptr;
+        for (int x = spell2Pos.x; x < spell2Pos.x + searchWidth; x++) {
+            for (int y = spell2Pos.y; y < spell2Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                ability = AbilityManager::detectEnabledSummonerSpellAtPixel(image, pixel, x, y);
+                if (ability != nil) {
+                    x = image.imageWidth;
+                    y = image.imageHeight;
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (ability != NULL) {
+                summonerSpell2ActiveAvailable = true;
+                summonerSpell2Active = ability;
+            } else {
+                summonerSpell2ActiveAvailable = false;
+            }
+        });
+    });
+
+}
+
+void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t dispatchGroup) {
+    int searchWidth = 40; int searchHeight = 5;
+    CGPoint levelDot1Pos = CGPointMake(470, 750);
+    CGPoint levelDot2Pos = CGPointMake(522, 750);
+    CGPoint levelDot3Pos = CGPointMake(572, 750);
+    CGPoint levelDot4Pos = CGPointMake(620, 750);
+    
+    //Search for level up dots
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        NSMutableArray* level1Dots = [NSMutableArray new];
+        for (int x = levelDot1Pos.x; x < levelDot1Pos.x + searchWidth; x++) {
+            for (int y = levelDot1Pos.y; y < levelDot1Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                GenericObject* leveldot = AbilityManager::detectLevelDotAtPixel(image, pixel, x, y);
+                if (leveldot != nil) {
+                    [level1Dots addObject: [NSValue valueWithPointer:leveldot]];
+                    y = levelDot1Pos.y;
+                    x += AbilityManager::levelDotImageData.imageWidth;
+                }
+            }
+        }
+        
+        NSMutableArray* level2Dots = [NSMutableArray new];
+        for (int x = levelDot2Pos.x; x < levelDot2Pos.x + searchWidth; x++) {
+            for (int y = levelDot2Pos.y; y < levelDot2Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                GenericObject* leveldot = AbilityManager::detectLevelDotAtPixel(image, pixel, x, y);
+                if (leveldot != nil) {
+                    [level2Dots addObject: [NSValue valueWithPointer:leveldot]];
+                    y = levelDot2Pos.y;
+                    x += AbilityManager::levelDotImageData.imageWidth;
+                }
+            }
+        }
+        
+        NSMutableArray* level3Dots = [NSMutableArray new];
+        for (int x = levelDot3Pos.x; x < levelDot3Pos.x + searchWidth; x++) {
+            for (int y = levelDot3Pos.y; y < levelDot3Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                GenericObject* leveldot = AbilityManager::detectLevelDotAtPixel(image, pixel, x, y);
+                if (leveldot != nil) {
+                    [level3Dots addObject: [NSValue valueWithPointer:leveldot]];
+                    y = levelDot3Pos.y;
+                    x += AbilityManager::levelDotImageData.imageWidth;
+                }
+            }
+        }
+        
+        NSMutableArray* level4Dots = [NSMutableArray new];
+        for (int x = levelDot4Pos.x; x < levelDot4Pos.x + searchWidth; x++) {
+            for (int y = levelDot4Pos.y; y < levelDot4Pos.y + searchHeight; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                GenericObject* leveldot = AbilityManager::detectLevelDotAtPixel(image, pixel, x, y);
+                if (leveldot != nil) {
+                    [level4Dots addObject: [NSValue valueWithPointer:leveldot]];
+                    y = levelDot4Pos.y;
+                    x += AbilityManager::levelDotImageData.imageWidth;
+                }
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            spell1LevelDots = level1Dots;
+            spell2LevelDots = level2Dots;
+            spell3LevelDots = level3Dots;
+            spell4LevelDots = level4Dots;
+            currentLevel = (int)(spell1LevelDots.count + spell2LevelDots.count + spell3LevelDots.count + spell4LevelDots.count);
+        });
+    });
+    
 }
 
 void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t dispatchGroup) {
