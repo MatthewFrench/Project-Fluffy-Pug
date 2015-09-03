@@ -11,17 +11,7 @@
 LeagueGameState::LeagueGameState() {
     autoQueueActive = false;
     leaguePID = -1;
-    /*
-    allyMinionManager = new AllyMinionManager();
-    enemyMinionManager = new EnemyMinionManager();
-    enemyChampionManager = new EnemyChampionManager();
-    selfChampionManager = new SelfChampionManager();
-    allyChampionManager = new AllyChampionManager();
-    abilityManager = new AbilityManager();
-    itemManager = new ItemManager();
-    shopManager = new ShopManager();
-    enemyTowerManager = new EnemyTowerManager();
-     */
+
     detectionManager = new DetectionManager();
 }
 void LeagueGameState::processLogic() {
@@ -29,108 +19,9 @@ void LeagueGameState::processLogic() {
 }
 
 void LeagueGameState::processDetection(ImageData image) {
-    
-    detectionManager->processDetection(image);
-    
     if (leaguePID != -1) {
-        //dispatch_group_t dispatchGroup = dispatch_group_create();
-        //dispatch_queue_t queue;
-        
-        // Add a task to the group
-        /*
-        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            allyMinionManager->processImage(image);
-        });
-        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            allyChampionManager->processImage(image);
-        });
-        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            selfChampionManager->processImage(image);
-        });
-        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            enemyMinionManager->processImage(image);
-        });
-        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            enemyChampionManager->processImage(image);
-        });
-        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            //abilityManager->processImage(image);
-        });
-        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            //itemManager->processImage(image);
-        });
-        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            //shopManager->processImage(image);
-        });
-        queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            //enemyTowerManager->processImage(image);
-        });
-         
-        
-        // wait on the group to block the current thread.
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
-         */
-    }// else if (autoQueueActive) {
-    //    autoQueueManager->processImage(image);
-    //}
-    //if (leaguePID != -1 && [selfChampionManager->championBars count] == 0 && autoQueueActive) {
-    //    autoQueueManager->checkForEndGame(image);
-    //}
-    
-    
-    //allyMinionManager->setImageData(imageData);
-    //allyMinionManager->prepareForPixelProcessing();
-    //allyMinionManager->processImage(image);
-    
-    //enemyMinionManager->setImageData(imageData);
-    //enemyMinionManager->prepareForPixelProcessing();
-    //enemyMinionManager->processImage(image);
-    
-    //enemyChampionManager->processImage(image);
-    
-    //enemyChampionManager->setImageData(imageData);
-    //enemyChampionManager->prepareForPixelProcessing();
-    /*
-     int cores = 4;
-     int section = imageData.imageHeight/cores;
-     if (section < 1) {
-     section = 1;
-     }
-     
-     dispatch_apply(cores, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(size_t i) {
-     int yStart = section * (int)i;
-     int yEnd = yStart + section;
-     if (i == cores - 1) {
-     yEnd = imageData.imageHeight;
-     }
-     uint8_t *pixel = imageData.imageData + (yStart * imageData.imageWidth)*4;
-     for (int y = yStart; y < yEnd; y++) {
-     for (int x = 0; x < imageData.imageWidth; x++) {
-     allyMinionManager->processPixel(pixel, x, y);
-     //enemyMinionManager->processPixel(pixel, x, y);
-     //enemyChampionManager->processPixel(pixel, x, y);
-     pixel += 4;
-     }
-     }
-     });*/
-    
-    //allyMinionManager->postPixelProcessing();
-    //enemyMinionManager->postPixelProcessing();
-    //enemyChampionManager->postPixelProcessing();
+        detectionManager->processDetection(image);
+    }
 }
 void LeagueGameState::debugDraw(ImageData imageData) {
-    //allyMinionManager->debugDraw(imageData);
-    //enemyMinionManager->debugDraw(imageData);
-    //enemyChampionManager->debugDraw(imageData);
-    //selfChampionManager->debugDraw(imageData);
-    //allyChampionManager->debugDraw(imageData);
 }

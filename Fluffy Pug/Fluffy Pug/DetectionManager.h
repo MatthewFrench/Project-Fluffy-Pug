@@ -81,6 +81,7 @@ public:
     void processUsedPotion(ImageData image, dispatch_group_t dispatchGroup);
     void processShopAvailable(ImageData image, dispatch_group_t dispatchGroup);
     void processShop(ImageData image, dispatch_group_t dispatchGroup);
+    void processMap(ImageData image, dispatch_group_t dispatchGroup);
     
     NSMutableArray* getAllyMinions();
     NSMutableArray* getEnemyMinions();
@@ -140,4 +141,10 @@ public:
     bool getShopBottomLeftCornerVisible();
     GenericObject* getShopBottomleftCorner();
     NSMutableArray* getBuyableItems();
+    bool getMapVisible();
+    GenericObject* getMap();
+    bool getMapShopVisible();
+    GenericObject* getMapShop();
+    bool getMapLocationVisible();
+    GenericObject* getMapLocation();
 };

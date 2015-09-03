@@ -50,6 +50,7 @@ void DetectionManager::processDetection(ImageData image) {
     processUsedPotion(image, dispatchGroup);
     processShopAvailable(image, dispatchGroup);
     processShop(image, dispatchGroup);
+    processMap(image, dispatchGroup);
     
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
 }
@@ -227,7 +228,103 @@ GenericObject* DetectionManager::getShopBottomleftCorner() {
 NSMutableArray* DetectionManager::getBuyableItems() {
     return buyableItems;
 }
+bool DetectionManager::getMapVisible() {
+    return mapVisible;
+}
+GenericObject* DetectionManager::getMap() {
+    return map;
+}
+bool DetectionManager::getMapShopVisible() {
+    return mapShopVisible;
+}
+GenericObject* DetectionManager::getMapShop() {
+    return mapShop;
+}
+bool DetectionManager::getMapLocationVisible() {
+    return mapSelfLocationVisible;
+}
+GenericObject* DetectionManager::getMapLocation() {
+    return mapSelfLocation;
+}
 
+void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGroup) {
+    //First we do an immediate map location search
+    //If the map is found them we search for shop and self location
+    
+    CGPoint searchStart = CGPointMake(image.imageWidth - 212, image.imageHeight - 212);
+    CGPoint searchEnd = CGPointMake(searchStart.x + 10, searchStart.y + 10);
+    
+    dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        GenericObject* foundMap = nullptr;
+        GenericObject* foundLocation = nullptr;
+        GenericObject* foundShop = nullptr;
+        for (int x = searchStart.x; x < searchEnd.x; x++) {
+            for (int y = searchStart.y; y < searchEnd.y; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                foundMap = MapManager::detectMap(image, pixel, x, y);
+                x = searchEnd.x;
+                y = searchEnd.y;
+            }
+        }
+        if (foundMap != NULL) {
+            //Search for location
+            CGPoint searchStart = CGPointMake(foundMap->topLeft.x, foundMap->topLeft.y);
+            CGPoint searchEnd = CGPointMake(image.imageWidth, image.imageHeight);
+            for (int x = searchStart.x; x < searchEnd.x; x++) {
+                for (int y = searchStart.y; y < searchEnd.y; y++) {
+                    uint8* pixel = getPixel2(image, x, y);
+                    foundLocation = MapManager::detectLocation(image, pixel, x, y);
+                    x = searchEnd.x;
+                    y = searchEnd.y;
+                }
+            }
+            //Search for shop at the bottom left
+            searchStart = CGPointMake(foundMap->topLeft.x, image.imageHeight - 35);
+            searchEnd = CGPointMake(foundMap->topLeft.x + 25, image.imageHeight - 15);
+            for (int x = searchStart.x; x < searchEnd.x; x++) {
+                for (int y = searchStart.y; y < searchEnd.y; y++) {
+                    uint8* pixel = getPixel2(image, x, y);
+                    foundShop = MapManager::detectShop(image, pixel, x, y);
+                    x = searchEnd.x;
+                    y = searchEnd.y;
+                }
+            }
+            if (foundShop == NULL) {
+                //Search for shop at top right
+                searchStart = CGPointMake(image.imageWidth - 35, foundMap->topLeft.y);
+                searchEnd = CGPointMake(image.imageWidth - 15, foundMap->topLeft.y + 25);
+                for (int x = searchStart.x; x < searchEnd.x; x++) {
+                    for (int y = searchStart.y; y < searchEnd.y; y++) {
+                        uint8* pixel = getPixel2(image, x, y);
+                        foundShop = MapManager::detectShop(image, pixel, x, y);
+                        x = searchEnd.x;
+                        y = searchEnd.y;
+                    }
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue(), ^(void) {
+            if (foundMap != NULL) {
+                mapVisible = true;
+                map = foundMap;
+            } else {
+                mapVisible = false;
+            }
+            if (foundLocation != NULL) {
+                mapSelfLocationVisible = true;
+                mapSelfLocation = foundLocation;
+            } else {
+                mapSelfLocationVisible = false;
+            }
+            if (foundShop != NULL) {
+                mapShopVisible = true;
+                mapShop = foundShop;
+            } else {
+                mapShopVisible = false;
+            }
+        });
+    });
+}
 const int shopScanChunksX = 10;
 const int shopScanChunksY = 10;
 void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGroup) {
