@@ -18,7 +18,7 @@ class BasicAI {
     LeagueGameState* gameState;
     
     uint64_t lastLevelUp;
-    uint64_t lastShopBuy, lastShopOpenTap, lastShopCloseTap;
+    uint64_t lastShopBuy, lastShopOpenTap, lastShopCloseTap, lastShopBuying;
     uint64_t lastCameraFocus;
     uint64_t lastPlacedWard;
     uint64_t lastRunAwayClick, lastClickEnemyChamp, lastClickEnemyMinion, lastClickEnemyTower, lastClickAllyChampion, lastClickAllyMinion;

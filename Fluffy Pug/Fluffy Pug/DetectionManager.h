@@ -56,8 +56,8 @@ class DetectionManager {
     int selfChampionScanCurrentChunkX = 0;
     int selfChampionScanCurrentChunkY = 0;
     
-    int selfHealthBarScanCurrentChunkX = 0;
-    int selfHealthBarScanCurrentChunkY = 0;
+    //int selfHealthBarScanCurrentChunkX = 0;
+    //int selfHealthBarScanCurrentChunkY = 0;
     
     int shopScanCurrentChunkX = 0;
     int shopScanCurrentChunkY = 0;

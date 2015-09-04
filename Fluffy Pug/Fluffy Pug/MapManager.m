@@ -26,7 +26,7 @@ MapManager::MapManager() {}
 
 GenericObject* MapManager::detectMap(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, mapTopLeftCornerImageData, 0.8) >=  0.8) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, mapTopLeftCornerImageData, 0.7) >=  0.7) {
         object = new GenericObject();
         object->topLeft.x = x;
         object->topLeft.y = y;
@@ -44,7 +44,7 @@ GenericObject* MapManager::detectMap(ImageData imageData, uint8_t *pixel, int x,
 }
 GenericObject* MapManager::detectShop(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopIconImageData, 0.0) >=  0.8) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopIconImageData, 0.0) >=  0.7) {
         object = new GenericObject();
         object->topLeft.x = x;
         object->topLeft.y = y;

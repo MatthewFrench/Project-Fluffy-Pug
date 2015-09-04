@@ -255,8 +255,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
     //First we do an immediate map location search
     //If the map is found them we search for shop and self location
     
-    CGPoint searchStart = CGPointMake(image.imageWidth - 212, image.imageHeight - 212);
-    CGPoint searchEnd = CGPointMake(searchStart.x + 10, searchStart.y + 10);
+    CGPoint searchStart = CGPointMake(image.imageWidth - 220, image.imageHeight - 220);
+    CGPoint searchEnd = CGPointMake(image.imageWidth, image.imageHeight);
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         GenericObject* foundMap = nullptr;
@@ -266,8 +266,10 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
             for (int y = searchStart.y; y < searchEnd.y; y++) {
                 uint8* pixel = getPixel2(image, x, y);
                 foundMap = MapManager::detectMap(image, pixel, x, y);
-                x = searchEnd.x;
-                y = searchEnd.y;
+                if (foundMap != NULL) {
+                    x = searchEnd.x;
+                    y = searchEnd.y;
+                }
             }
         }
         if (foundMap != NULL) {
@@ -278,8 +280,10 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                 for (int y = searchStart.y; y < searchEnd.y; y++) {
                     uint8* pixel = getPixel2(image, x, y);
                     foundLocation = MapManager::detectLocation(image, pixel, x, y);
-                    x = searchEnd.x;
-                    y = searchEnd.y;
+                    if (foundLocation != NULL) {
+                        x = searchEnd.x;
+                        y = searchEnd.y;
+                    }
                 }
             }
             //Search for shop at the bottom left
@@ -289,8 +293,10 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                 for (int y = searchStart.y; y < searchEnd.y; y++) {
                     uint8* pixel = getPixel2(image, x, y);
                     foundShop = MapManager::detectShop(image, pixel, x, y);
-                    x = searchEnd.x;
-                    y = searchEnd.y;
+                    if (foundShop != NULL) {
+                        x = searchEnd.x;
+                        y = searchEnd.y;
+                    }
                 }
             }
             if (foundShop == NULL) {
@@ -301,8 +307,10 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                     for (int y = searchStart.y; y < searchEnd.y; y++) {
                         uint8* pixel = getPixel2(image, x, y);
                         foundShop = MapManager::detectShop(image, pixel, x, y);
-                        x = searchEnd.x;
-                        y = searchEnd.y;
+                        if (foundShop != NULL) {
+                            x = searchEnd.x;
+                            y = searchEnd.y;
+                        }
                     }
                 }
             }
@@ -339,7 +347,6 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
     //As soon as bottom left corner is confirmed, do a full scan for all items between
     
     //Probably the most expensive search if shop is open
-    
     float leagueGameWidth = image.imageWidth;
     float leagueGameHeight = image.imageHeight;
     CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
@@ -371,6 +378,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
         rect = CGRectIntegral(rect);
         rect = fitRectangleInRectangle(rect, leagueWindowRect);
         combineRectangles(scanRectangles, rect);
+        
     }
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
@@ -395,7 +403,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
         if (topLeftCorner != NULL) {
             //Scan immediately for bottom left corner
             for (int x = topLeftCorner->topLeft.x - 5; x < topLeftCorner->topLeft.x + 5; x++) {
-                for (int y = topLeftCorner->bottomLeft.y + 600; y < leagueGameHeight; y++) {
+                for (int y = topLeftCorner->topLeft.y + 500; y < leagueGameHeight; y++) {
                     uint8* pixel = getPixel2(image, x, y);
                     bottomLeftCorner = ShopManager::detectShopBottomLeftCorner(image, pixel, x, y);
                     if (bottomLeftCorner != nil) {
@@ -407,7 +415,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
             if (bottomLeftCorner != NULL) {
                 //Scan immediately for items
                 CGPoint searchStart = CGPointMake(topLeftCorner->topLeft.x + 15, topLeftCorner->topLeft.y + 75);
-                CGPoint searchEnd = CGPointMake(topLeftCorner->topLeft.x + 400, bottomLeftCorner->bottomLeft.y - 25);
+                CGPoint searchEnd = CGPointMake(topLeftCorner->topLeft.x + 400, bottomLeftCorner->topLeft.y - 25);
                 for (int x = searchStart.x; x < searchEnd.x; x++) {
                     for (int y = searchStart.y; y < searchEnd.y; y++) {
                         uint8* pixel = getPixel2(image, x, y);
@@ -427,9 +435,9 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
             } else {
                 shopTopLeftCornerShown = false;
             }
-            if (shopBottomLeftCorner != NULL) {
+            if (bottomLeftCorner != NULL) {
                 shopBottomLeftCornerShown = true;
-                shopBottomLeftCorner = topLeftCorner;
+                shopBottomLeftCorner = bottomLeftCorner;
             } else {
                 shopBottomLeftCornerShown = false;
             }
@@ -438,16 +446,19 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
     });
 }
 void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t dispatchGroup) {
-    CGPoint searchStart = CGPointMake(762, 770);
-    CGPoint searchEnd = CGPointMake(770, 775);
+    CGPoint searchStart = CGPointMake(760, 765);
+    CGPoint searchEnd = CGPointMake(770, 780);
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        //NSLog(@"Searching for shop");
         GenericObject* shop = nullptr;
         for (int x = searchStart.x; x < searchEnd.x; x++) {
             for (int y = searchStart.y; y < searchEnd.y; y++) {
                 uint8* pixel = getPixel2(image, x, y);
                 shop = ShopManager::detectShopAvailable(image, pixel, x, y);
-                x = searchEnd.x;
-                y = searchEnd.y;
+                if (shop != NULL) {
+                    x = searchEnd.x;
+                    y = searchEnd.y;
+                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -473,8 +484,10 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
             for (int y = searchStart.y; y < searchEnd.y; y++) {
                 uint8* pixel = getPixel2(image, x, y);
                 potionUsed = ItemManager::detectUsedPotionAtPixel(image, pixel, x, y);
-                x = searchEnd.x;
-                y = searchEnd.y;
+                if (potionUsed != NULL) {
+                    x = searchEnd.x;
+                    y = searchEnd.y;
+                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -504,8 +517,15 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         for (int x = item1Pos.x; x < item1Pos.x + searchWidth; x++) {
             for (int y = item1Pos.y; y < item1Pos.y + searchHeight; y++) {
                 uint8* pixel = getPixel2(image, x, y);
-                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
-                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                if (item == NULL) {
+                    item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion == NULL) {
+                    potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion != NULL && item != NULL) {
+                    x = item1Pos.x; y = item1Pos.y;
+                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -531,8 +551,15 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         for (int x = item2Pos.x; x < item2Pos.x + searchWidth; x++) {
             for (int y = item2Pos.y; y < item2Pos.y + searchHeight; y++) {
                 uint8* pixel = getPixel2(image, x, y);
-                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
-                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                if (item == NULL) {
+                    item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion == NULL) {
+                    potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion != NULL && item != NULL) {
+                    x = item2Pos.x; y = item2Pos.y;
+                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -558,8 +585,15 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         for (int x = item3Pos.x; x < item3Pos.x + searchWidth; x++) {
             for (int y = item3Pos.y; y < item3Pos.y + searchHeight; y++) {
                 uint8* pixel = getPixel2(image, x, y);
-                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
-                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                if (item == NULL) {
+                    item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion == NULL) {
+                    potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion != NULL && item != NULL) {
+                    x = item3Pos.x; y = item3Pos.y;
+                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -585,8 +619,15 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         for (int x = item4Pos.x; x < item4Pos.x + searchWidth; x++) {
             for (int y = item4Pos.y; y < item4Pos.y + searchHeight; y++) {
                 uint8* pixel = getPixel2(image, x, y);
-                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
-                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                if (item == NULL) {
+                    item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion == NULL) {
+                    potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion != NULL && item != NULL) {
+                    x = item4Pos.x; y = item4Pos.y;
+                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -612,8 +653,15 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         for (int x = item5Pos.x; x < item5Pos.x + searchWidth; x++) {
             for (int y = item5Pos.y; y < item5Pos.y + searchHeight; y++) {
                 uint8* pixel = getPixel2(image, x, y);
-                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
-                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                if (item == NULL) {
+                    item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion == NULL) {
+                    potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion != NULL && item != NULL) {
+                    x = item5Pos.x; y = item5Pos.y;
+                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -639,8 +687,15 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         for (int x = item6Pos.x; x < item6Pos.x + searchWidth; x++) {
             for (int y = item6Pos.y; y < item6Pos.y + searchHeight; y++) {
                 uint8* pixel = getPixel2(image, x, y);
-                item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
-                potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                if (item == NULL) {
+                    item = ItemManager::detectItemActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion == NULL) {
+                    potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
+                }
+                if (potion != NULL && item != NULL) {
+                    x = item6Pos.x; y = item6Pos.y;
+                }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
@@ -1448,14 +1503,20 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
     });
 }
 
-const int selfHealthBarScanChunksX = 8; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-const int selfHealthBarScanChunksY = 8;
+//const int selfHealthBarScanChunksX = 8; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+//const int selfHealthBarScanChunksY = 8;
 void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_group_t dispatchGroup) {
-    float leagueGameWidth = 750 - 425;
-    float leagueGameHeight = 780 - 755;
-    CGRect leagueWindowRect = CGRectMake(425, 755, 750 - 425, 780 - 755);
+    //float leagueGameWidth = image.imageWidth - 600;
+    //float leagueGameHeight = image.imageHeight - 700;
+    //CGRect leagueWindowRect = CGRectMake(300, 700, leagueGameWidth, leagueGameHeight);
+    //float leagueGameWidth = image.imageWidth;
+    //float leagueGameHeight =image.imageHeight;
+    //CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
+    CGPoint searchStart = CGPointMake(400, 750);
+    CGPoint searchEnd = CGPointMake(750, 780);
     
     //Increase the scan chunk by 1
+    /*
     selfHealthBarScanCurrentChunkX += 1;
     if (selfHealthBarScanCurrentChunkX >= selfHealthBarScanChunksX) {
         selfHealthBarScanCurrentChunkX = 0;
@@ -1463,7 +1524,8 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
     }
     if (selfHealthBarScanCurrentChunkY >= selfHealthBarScanChunksY) {
         selfHealthBarScanCurrentChunkY = 0;
-    }
+    }*/
+    /*
     NSMutableArray* scanRectangles = [NSMutableArray new];
     //Add chunk to scan
     CGRect scanRect = CGRectMake( leagueGameWidth * selfHealthBarScanCurrentChunkX / selfHealthBarScanChunksX ,
@@ -1475,6 +1537,7 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
     combineRectangles(scanRectangles, scanRect);
     //Add previous HealthBars to scan
     if (selfHealthBar != NULL) {
+        //NSLog(@"Health bar exists at %d, %d", selfHealthBar->topLeft.x, selfHealthBar->topLeft.y);
         CGRect rect = CGRectMake(selfHealthBar->topLeft.x - 20,
                                  selfHealthBar->topLeft.y - 20,
                                  selfHealthBar->bottomRight.x - selfHealthBar->topLeft.x + 20,
@@ -1482,30 +1545,30 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
         rect = CGRectIntegral(rect);
         rect = fitRectangleInRectangle(rect, leagueWindowRect);
         combineRectangles(scanRectangles, rect);
-    }
+    }*/
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         NSMutableArray* HealthBarBars = [NSMutableArray new];
         //Loop through scan chunks
-        for (int i = 0; i < [scanRectangles count]; i++) {
-            CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
-            for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
-                for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
+        //for (int i = 0; i < [scanRectangles count]; i++) {
+        //    CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
+            for (int x = searchStart.x; x < searchEnd.x; x++) {
+                for (int y = searchStart.y; y < searchEnd.y; y++) {
                     uint8* pixel = getPixel2(image, x, y);
                     SelfHealthBar* HealthBarBar = SelfChampionManager::detectSelfHealthBarAtPixel(image, pixel, x, y);
                     if (HealthBarBar != nil) {
+                        //NSLog(@"Found self health bar");
                         //Add extra rectangle to scan
-                        CGRect rect = CGRectMake(HealthBarBar->topLeft.x-5, HealthBarBar->topLeft.y-5, HealthBarBar->bottomRight.x - HealthBarBar->topLeft.x + 10, HealthBarBar->bottomRight.y - HealthBarBar->topLeft.y + 10);
-                        rect = CGRectIntegral(rect);
-                        rect = fitRectangleInRectangle(rect, leagueWindowRect);
-                        combineRectangles(scanRectangles, rect);
+                        //CGRect rect = CGRectMake(HealthBarBar->topLeft.x-5, HealthBarBar->topLeft.y-5, HealthBarBar->bottomRight.x - HealthBarBar->topLeft.x + 10, HealthBarBar->bottomRight.y - HealthBarBar->topLeft.y + 10);
+                        //rect = CGRectIntegral(rect);
+                        //rect = fitRectangleInRectangle(rect, leagueWindowRect);
+                        //combineRectangles(scanRectangles, rect);
                         [HealthBarBars addObject: [NSValue valueWithPointer:HealthBarBar]];
                     }
                 }
             }
-        }
+        //}
         HealthBarBars = SelfChampionManager::validateSelfHealthBars(image, HealthBarBars);
-        
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if ([HealthBarBars count] > 0) {
                 selfHealthBarVisible = true;

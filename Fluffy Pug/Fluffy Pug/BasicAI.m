@@ -16,6 +16,7 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     lastShopBuy = 0;
     lastShopOpenTap = 0;
     lastShopCloseTap = 0;
+    lastShopBuying = mach_absolute_time();
     lastCameraFocus = mach_absolute_time();
     lastPlacedWard = mach_absolute_time();
     lastRunAwayClick = mach_absolute_time();
@@ -60,6 +61,9 @@ void BasicAI::handleAbilityLevelUps() {
     }
 }
 void BasicAI::handleBuyingItems() {
+    //if (gameState->detectionManager->getShopBottomLeftCornerVisible()) {
+    //    NSLog(@"Shop bottom left visible");
+    //}
     bool closeShop = false;
     if (getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*5) {
         if (gameState->detectionManager->getShopAvailable()) {
@@ -69,10 +73,16 @@ void BasicAI::handleBuyingItems() {
                 NSMutableArray* itemsToBuy = gameState->detectionManager->getBuyableItems();
                 for (int i = 0; i < [itemsToBuy count]; i++) {
                     GenericObject* item = (GenericObject*)[[itemsToBuy objectAtIndex:i] pointerValue];
-                    doubleTapMouseLeft(item->center.x, item->center.y);
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * 500), dispatch_get_main_queue(), ^{
+                        moveMouse(item->center.x, item->center.y);
+                    });
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+50)), dispatch_get_main_queue(), ^{
+                        doubleTapMouseLeft(item->center.x, item->center.y);
+                    });
                 }
+                lastShopBuying = mach_absolute_time();
             } else { //Open up the shop
-                if (getTimeInMilliseconds(mach_absolute_time() - lastShopOpenTap) >= 500) {
+                if (getTimeInMilliseconds(mach_absolute_time() - lastShopOpenTap) >= 3000) {
                     lastShopOpenTap = mach_absolute_time();
                     tapShop();
                 }
@@ -84,8 +94,11 @@ void BasicAI::handleBuyingItems() {
         }
     } else {
         //Close shop
-        if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible()) {
+        if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible() &&
+            getTimeInMilliseconds(mach_absolute_time() - lastShopBuying) >= 4000) {
+            //Gave a 4 seconds to buy
             closeShop = true;
+            //NSLog(@"Closing shop because we already bought.");
         }
     }
     if (closeShop) {
@@ -96,8 +109,8 @@ void BasicAI::handleBuyingItems() {
     }
 }
 void BasicAI::handleCameraFocus() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastCameraFocus) >= 500) {
-        if (gameState->detectionManager->getSelfHealthBarVisible()) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastCameraFocus) >= 1500) {
+        if (gameState->detectionManager->getSelfHealthBarVisible() && !gameState->detectionManager->getShopTopLeftCornerVisible()) {
             //We see the health bar at the bottom so lets focus camera
             if (gameState->detectionManager->getSelfChampions().count == 0) {
                 lastCameraFocus = mach_absolute_time();
@@ -167,7 +180,7 @@ void BasicAI::handleMovementAndAttacking() {
             action = ACTION_Run_Away;
         }
         //Now some more attack logic
-        if (action == ACTION_Attack_Enemy_Champion) {
+        if (action == ACTION_Attack_Enemy_Champion && enemyTowerNear) {
             //If enemy is under tower, ignore
             if (hypot(lowestHealthEnemyChampion->characterCenter.x - nearestEnemyTower->towerCenter.x, lowestHealthEnemyChampion->characterCenter.y - nearestEnemyTower->towerCenter.y) < 430 && lowestHealthEnemyChampion->health > 20) {
                 action = ACTION_Move_To_Mid;
@@ -184,7 +197,7 @@ void BasicAI::handleMovementAndAttacking() {
             }
         }
         
-        if (action == ACTION_Attack_Enemy_Minion) {
+        if (action == ACTION_Attack_Enemy_Minion && enemyTowerNear) {
             if (hypot(lowestHealthEnemyMinion->characterCenter.x - nearestEnemyTower->towerCenter.x, lowestHealthEnemyMinion->characterCenter.y - nearestEnemyTower->towerCenter.y) < 430) {
                 action = ACTION_Move_To_Mid;
                 
@@ -239,7 +252,7 @@ void BasicAI::handleMovementAndAttacking() {
                 //Run back to base by right clicking on the shop on the minimap
                 //If no shop, stand still and fight.
                 if (gameState->detectionManager->getMapShopVisible()) {
-                    if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 500) {
+                    if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 700) {
                         tapMouseRight(gameState->detectionManager->getMapShop()->center.x, gameState->detectionManager->getMapShop()->center.y);
                         lastRunAwayClick = mach_absolute_time();
                     }
@@ -354,7 +367,7 @@ void BasicAI::handleMovementAndAttacking() {
             {
                 if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 100) {
                     if (gameState->detectionManager->getMapVisible()) {
-                        lastMovementClick = clock();
+                        lastMovementClick = mach_absolute_time();
                         int x = gameState->detectionManager->getMap()->center.x;
                         int y = gameState->detectionManager->getMap()->center.y;
                         tapMouseRight(x, y);
