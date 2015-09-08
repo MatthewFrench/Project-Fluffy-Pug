@@ -207,9 +207,9 @@ NSMutableArray* SelfChampionManager::validateSelfHealthBars(ImageData imageData,
                 detectedSides++;
             }
         }
-        if (detectedSides > 1) {
+        //if (detectedSides > 1) {
             [healthBars addObject: [NSValue valueWithPointer:healthBar]];
-        }
+        //}
     }
     
     //Detect health

@@ -373,8 +373,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
         });
     });
 }
-const int shopScanChunksX = 10;
-const int shopScanChunksY = 10;
+const int shopScanChunksX = 14;
+const int shopScanChunksY = 14;
 void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGroup) {
     //First detect top left corner, but do it as a slow scan
     
@@ -397,14 +397,6 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
         shopScanCurrentChunkY = 0;
     }
     NSMutableArray* scanRectangles = [NSMutableArray new];
-    //Add chunk to scan
-    CGRect scanRect = CGRectMake( leagueGameWidth * shopScanCurrentChunkX / shopScanChunksX ,
-                                 leagueGameHeight * shopScanCurrentChunkY / shopScanChunksY ,
-                                 leagueGameWidth * 1 / shopScanChunksX ,
-                                 leagueGameHeight * 1 / shopScanChunksY );
-    scanRect = CGRectIntegral(scanRect);
-    scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
-    combineRectangles(scanRectangles, scanRect);
     //If last seen, add it to the scan
     if (shopTopLeftCorner != NULL) {
         CGRect rect = CGRectMake(shopTopLeftCorner->topLeft.x - 5,
@@ -416,6 +408,14 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
         combineRectangles(scanRectangles, rect);
         
     }
+    //Add chunk to scan
+    CGRect scanRect = CGRectMake( leagueGameWidth * shopScanCurrentChunkX / shopScanChunksX ,
+                                 leagueGameHeight * shopScanCurrentChunkY / shopScanChunksY ,
+                                 leagueGameWidth * 1 / shopScanChunksX ,
+                                 leagueGameHeight * 1 / shopScanChunksY );
+    scanRect = CGRectIntegral(scanRect);
+    scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+    combineRectangles(scanRectangles, scanRect);
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         uint64_t startTime = mach_absolute_time();
@@ -1647,8 +1647,8 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
     //float leagueGameWidth = image.imageWidth;
     //float leagueGameHeight =image.imageHeight;
     //CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
-    CGPoint searchStart = CGPointMake(400, 750);
-    CGPoint searchEnd = CGPointMake(750, 780);
+    CGPoint searchStart = CGPointMake(410, 750);
+    CGPoint searchEnd = CGPointMake(430, 770);
     
     //Increase the scan chunk by 1
     /*
@@ -1700,10 +1700,13 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
                     //rect = fitRectangleInRectangle(rect, leagueWindowRect);
                     //combineRectangles(scanRectangles, rect);
                     [HealthBarBars addObject: [NSValue valueWithPointer:HealthBarBar]];
+                    x = searchEnd.x;
+                    y = searchEnd.y;
                 }
             }
         }
         //}
+        //NSLog(@"health bars: %lu", (unsigned long)HealthBarBars.count);
         HealthBarBars = SelfChampionManager::validateSelfHealthBars(image, HealthBarBars);
         if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
             NSLog(@"Process self health bar Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
