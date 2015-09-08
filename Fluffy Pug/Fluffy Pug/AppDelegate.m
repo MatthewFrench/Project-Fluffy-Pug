@@ -27,6 +27,7 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    uiUpdateTime = mach_absolute_time();
     GlobalSelf = self;
     saveTestScreenshot = false;
     
@@ -381,6 +382,9 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
         //[GlobalSelf logic];
         //[GlobalSelf->timer fire];
         
+        if (getTimeInMilliseconds(mach_absolute_time() - GlobalSelf->uiUpdateTime) >= 500) {
+            GlobalSelf->uiUpdateTime = mach_absolute_time();
+        
         [GlobalSelf->allyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getAllyMinions().count]];
         
         [GlobalSelf->enemyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getEnemyMinions().count]];
@@ -422,6 +426,8 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
         [GlobalSelf->shopAvailableTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getShopAvailable()?@"true":@"false"]];
         [GlobalSelf->shopWindowOpenTxt setStringValue:[NSString stringWithFormat:@"%@", (GlobalSelf->leagueGameState->detectionManager->getShopTopLeftCornerVisible() && GlobalSelf->leagueGameState->detectionManager->getShopBottomLeftCornerVisible())?@"true":@"false"]];
         [GlobalSelf->buyableItemsTxt setStringValue:[NSString stringWithFormat:@"%lu", GlobalSelf->leagueGameState->detectionManager->getBuyableItems().count]];
+            
+        }
         
     });
     

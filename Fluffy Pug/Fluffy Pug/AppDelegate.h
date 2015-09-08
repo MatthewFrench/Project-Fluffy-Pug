@@ -53,6 +53,8 @@
     
     dispatch_source_t timer;
     
+    @public uint64_t uiUpdateTime;
+    
 }
 @property (strong) id activity;
 @property (weak) IBOutlet NSWindow *window, *window2;
