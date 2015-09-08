@@ -28,7 +28,7 @@ public:
     //struct ImageData imageData;
     DetectionManager* detectionManager;
     
-    LeagueGameState();
+    LeagueGameState(dispatch_queue_t _aiThread, dispatch_queue_t _detectionThread);
     void processDetection(struct ImageData image);
     void processLogic();
     void debugDraw(ImageData imageData);

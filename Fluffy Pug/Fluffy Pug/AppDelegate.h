@@ -44,7 +44,6 @@
     @public TestController* testController;
     LeagueDetector* leagueDetector;
     
-    dispatch_queue_t streamQueue;
     CGDisplayStreamRef stream;
     
     volatile bool runAutoQueue;
@@ -54,6 +53,8 @@
     dispatch_source_t timer;
     
     @public uint64_t uiUpdateTime;
+    
+    @public dispatch_queue_t aiThread, detectionThread;
     
 }
 @property (strong) id activity;

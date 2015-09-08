@@ -671,7 +671,7 @@ void TestController::testLevelDotDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::levelDotImageData.imageData, AbilityManager::levelDotImageData.imageWidth, AbilityManager::levelDotImageData.imageHeight)];
 }
 void TestController::testEnabledAbilityDetection() {
-    testImage = testLevelUpDot1280x800Image;
+    testImage = testAbilitiesActive1280x800Image;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];

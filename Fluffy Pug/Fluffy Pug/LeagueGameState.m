@@ -8,11 +8,11 @@
 
 #import "LeagueGameState.h"
 
-LeagueGameState::LeagueGameState() {
+LeagueGameState::LeagueGameState(dispatch_queue_t _aiThread, dispatch_queue_t _detectionThread) {
     autoQueueActive = false;
     leaguePID = -1;
 
-    detectionManager = new DetectionManager();
+    detectionManager = new DetectionManager(_aiThread, _detectionThread);
 }
 void LeagueGameState::processLogic() {
     

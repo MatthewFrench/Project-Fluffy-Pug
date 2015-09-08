@@ -81,8 +81,15 @@ class DetectionManager {
     int shopScanCurrentChunkX = 0;
     int shopScanCurrentChunkY = 0;
     
+    dispatch_queue_t aiThread;
+    dispatch_queue_t detectionThread;
+    
+    //Detection thread only variables:
+    GenericObject* mapDetectionObject, *shopTopLeftCornerDetectionObject;
+    NSMutableArray* allyMinionsDetectionObject, *enemyMinionsDetectionObject, *selfChampionsDetectionObject, *enemyTowersDetectionObject, *allyChampionsDetectionObject, *enemyChampionsDetectionObject;
+    
 public:
-    DetectionManager();
+    DetectionManager(dispatch_queue_t _aiThread, dispatch_queue_t _detectionThread);
     void processDetection(ImageData image);
     void processAllyMinionDetection(ImageData image, dispatch_group_t dispatchGroup);
     void processEnemyMinionDetection(ImageData image, dispatch_group_t dispatchGroup);
