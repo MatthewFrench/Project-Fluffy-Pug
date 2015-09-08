@@ -51,7 +51,7 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
     
     basicAI = new BasicAI(leagueGameState);
     
-    [self updateLeagueWindowStatus];
+    //[self updateLeagueWindowStatus];
     //lastTime = clock();
     
     CGDirectDisplayID display_id;
@@ -66,7 +66,7 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
     
     //stream = CGDisplayStreamCreate(display_id, pixelWidth, pixelHeight, 'BGRA', NULL, handleStream);
     stream = CGDisplayStreamCreateWithDispatchQueue(display_id, pixelWidth, pixelHeight, 'BGRA',
-                                                    (__bridge CFDictionaryRef)(@{(__bridge NSString *)kCGDisplayStreamQueueDepth : @8,  (__bridge NSString *)kCGDisplayStreamShowCursor: @NO})
+                                                    (__bridge CFDictionaryRef)(@{(__bridge NSString *)kCGDisplayStreamQueueDepth : @1,  (__bridge NSString *)kCGDisplayStreamShowCursor: @NO})
                                                     , detectionThread, handleStream);
     
     lastTime = mach_absolute_time();
@@ -255,7 +255,9 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
             [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", leagueGameState->leagueSize.size.width, leagueGameState->leagueSize.size.height]];
         });
     } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
         [statusText setStringValue:@"No League Instance Found"];
+             });
     }
 }
 

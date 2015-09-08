@@ -52,7 +52,6 @@ TowerBar* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t 
         tower->bottomRight.y = barTopLeftY + 8;
         tower->detectedTopLeft = true;
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.95) >=  0.95) { // Look for bottom left corner
-        tower = new TowerBar();
         int barTopLeftX = x + 3;
         int barTopLeftY = y - 7;
         tower = new TowerBar();
@@ -66,7 +65,6 @@ TowerBar* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t 
         tower->bottomRight.y = barTopLeftY + 8;
         tower->detectedBottomLeft = true;
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.95) >=  0.95) { // Look for top right corner
-        tower = new TowerBar();
         int barTopLeftX = x - 126 + 1;
         int barTopLeftY = y + 3;
         tower = new TowerBar();
@@ -80,7 +78,6 @@ TowerBar* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t 
         tower->bottomRight.y = barTopLeftY + 8;
         tower->detectedTopRight = true;
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.95) >=  0.95) { // Look for bottom right corner
-        tower = new TowerBar();
         int barTopLeftX = x - 126 + 1;
         int barTopLeftY = y - 7;
         tower = new TowerBar();

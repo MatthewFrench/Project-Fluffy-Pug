@@ -233,9 +233,9 @@ void BasicAI::handleMovementAndAttacking() {
                 enemyChampionCloseEnough = true;
             }
         }
-        if (selfChamp->health < 25 && (enemyChampionCloseEnough || enemyMinionsNear)) {
+        if (selfChamp->health < 25 && (enemyChampionCloseEnough || enemyMinionsNear || underEnemyTower)) {
             action = ACTION_Run_Away;
-        } else if (selfChamp->health < 25 && !enemyChampionsNear) {
+        } else if (selfChamp->health < 25 && !enemyChampionsNear && !underEnemyTower) {
             action = ACTION_Recall;
         }
         

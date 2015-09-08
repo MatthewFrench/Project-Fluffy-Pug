@@ -100,7 +100,6 @@ ChampionBar* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, 
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedTopLeft = true;
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.95) >=  0.95) { // Look for bottom left corner
-        champ = new ChampionBar();
         int barTopLeftX = x + 3;
         int barTopLeftY = y - 8;
         champ = new ChampionBar();
@@ -114,7 +113,6 @@ ChampionBar* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, 
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedBottomLeft = true;
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.95) >=  0.95) { // Look for top right corner
-        champ = new ChampionBar();
         int barTopLeftX = x - 101 - 2;
         int barTopLeftY = y + 3;
         champ = new ChampionBar();
@@ -128,7 +126,6 @@ ChampionBar* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, 
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedTopRight = true;
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.95) >=  0.95) { // Look for bottom right corner
-        champ = new ChampionBar();
         int barTopLeftX = x - 101 - 2;
         int barTopLeftY = y - 8;
         champ = new ChampionBar();

@@ -45,33 +45,188 @@ DetectionManager::DetectionManager(dispatch_queue_t _aiThread, dispatch_queue_t 
     mapDetectionObject = nullptr;
     shopTopLeftCornerDetectionObject = nullptr;
 }
+/*
+ void DetectionManager::processDetection(ImageData image) {
+ uint64_t startTime = mach_absolute_time();
+ 
+ dispatch_group_t dispatchGroup = dispatch_group_create();
+ 
+ processAllyMinionDetection(image, dispatchGroup);
+ processEnemyMinionDetection(image, dispatchGroup);
+ processAllyChampionDetection(image, dispatchGroup);
+ processEnemyChampionDetection(image, dispatchGroup);
+ processEnemyTowerDetection(image, dispatchGroup);
+ processSelfChampionDetection(image, dispatchGroup);
+ processSelfHealthBarDetection(image, dispatchGroup);
+ processSpellLevelUps(image, dispatchGroup);
+ processSpellLevelDots(image, dispatchGroup);
+ processSpellActives(image, dispatchGroup);
+ processSummonerSpellActives(image, dispatchGroup);
+ processItemActives(image, dispatchGroup);
+ processUsedPotion(image, dispatchGroup);
+ processShopAvailable(image, dispatchGroup);
+ processShop(image, dispatchGroup);
+ processMap(image, dispatchGroup);
+ 
+ dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+ 
+ if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+ NSLog(@"Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+ }
+ }*/
 void DetectionManager::processDetection(ImageData image) {
-    //uint64_t startTime = mach_absolute_time();
+    uint64_t overallStartTime = mach_absolute_time();
+    
+    uint64_t startTime = mach_absolute_time();
     
     dispatch_group_t dispatchGroup = dispatch_group_create();
     
     processAllyMinionDetection(image, dispatchGroup);
-    processEnemyMinionDetection(image, dispatchGroup);
-    processAllyChampionDetection(image, dispatchGroup);
-    processEnemyChampionDetection(image, dispatchGroup);
-    processEnemyTowerDetection(image, dispatchGroup);
-    processSelfChampionDetection(image, dispatchGroup);
-    processSelfHealthBarDetection(image, dispatchGroup);
-    processSpellLevelUps(image, dispatchGroup);
-    processSpellLevelDots(image, dispatchGroup);
-    processSpellActives(image, dispatchGroup);
-    processSummonerSpellActives(image, dispatchGroup);
-    processItemActives(image, dispatchGroup);
-    processUsedPotion(image, dispatchGroup);
-    processShopAvailable(image, dispatchGroup);
-    processShop(image, dispatchGroup);
-    processMap(image, dispatchGroup);
     
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
     
-    //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-    //    NSLog(@"Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
-    //}
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processAllyMinionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processEnemyMinionDetection(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processEnemyMinionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processAllyChampionDetection(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processAllyChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processEnemyChampionDetection(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processEnemyChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processEnemyTowerDetection(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processEnemyTowerDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processSelfChampionDetection(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processSelfChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processSelfHealthBarDetection(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processSelfHealthBarDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processSpellLevelUps(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processSpellLevelUps detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processSpellLevelDots(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processSpellLevelDots detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processSpellActives(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processSpellActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processSummonerSpellActives(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processSummonerSpellActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processItemActives(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processItemActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processUsedPotion(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processUsedPotion detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processShopAvailable(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processShopAvailable detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processShop(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processShop detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    startTime = mach_absolute_time();
+    dispatchGroup = dispatch_group_create();
+    
+    processMap(image, dispatchGroup);
+    
+    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+    if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+        NSLog(@"processMap detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    }
+    
+    if (getTimeInMilliseconds(mach_absolute_time() - overallStartTime) > longAlert) {
+        NSLog(@"\tOverall detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - overallStartTime));
+    }
 }
 NSMutableArray* DetectionManager::getAllyMinions() {
     return allyMinions;
@@ -365,24 +520,28 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
         
         if (foundMap != NULL) {
             dispatch_async(detectionThread, ^(void){
-                mapDetectionObject = foundMap;
+                if (mapDetectionObject != NULL) delete mapDetectionObject;
+                mapDetectionObject = new GenericObject(*foundMap);
             });
         }
         
         dispatch_async(aiThread, ^(void) {
             if (foundMap != NULL) {
+                if (map != NULL) delete map;
                 mapVisible = true;
                 map = foundMap;
             } else {
                 mapVisible = false;
             }
             if (foundLocation != NULL) {
+                if (mapSelfLocation != NULL) delete mapSelfLocation;
                 mapSelfLocationVisible = true;
                 mapSelfLocation = foundLocation;
             } else {
                 mapSelfLocationVisible = false;
             }
             if (foundShop != NULL) {
+                if (mapShop != NULL) delete mapShop;
                 mapShopVisible = true;
                 mapShop = foundShop;
             } else {
@@ -489,21 +648,29 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
         }
         if (topLeftCorner != NULL) {
             dispatch_async(detectionThread, ^(void){
-                shopTopLeftCornerDetectionObject = topLeftCorner;
+                if (shopTopLeftCornerDetectionObject != NULL) delete shopTopLeftCornerDetectionObject;
+                shopTopLeftCornerDetectionObject = new GenericObject(*topLeftCorner);
             });
         }
         dispatch_async(aiThread, ^(void) {
             if (topLeftCorner != NULL) {
+                if (shopTopLeftCorner != NULL) delete shopTopLeftCorner;
                 shopTopLeftCornerShown = true;
                 shopTopLeftCorner = topLeftCorner;
             } else {
                 shopTopLeftCornerShown = false;
             }
             if (bottomLeftCorner != NULL) {
+                if (shopBottomLeftCorner != NULL) delete shopBottomLeftCorner;
                 shopBottomLeftCornerShown = true;
                 shopBottomLeftCorner = bottomLeftCorner;
             } else {
                 shopBottomLeftCornerShown = false;
+            }
+            while (buyableItems.count > 0) {
+                GenericObject* item = (GenericObject*)[[buyableItems lastObject] pointerValue];
+                delete item;
+                [buyableItems removeLastObject];
             }
             buyableItems = itemsCanBuy;
         });
@@ -533,6 +700,7 @@ void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t di
         }
         dispatch_async(aiThread, ^(void) {
             if (shop != NULL) {
+                if (shopAvailable != NULL) delete shopAvailable;
                 shopAvailableShown = true;
                 shopAvailable = shop;
             } else {
@@ -567,6 +735,7 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
         }
         dispatch_async(aiThread, ^(void) {
             if (potionUsed != NULL) {
+                if (potionBeingUsed != NULL) delete potionBeingUsed;
                 potionBeingUsedShown = true;
                 potionBeingUsed = potionUsed;
             } else {
@@ -611,12 +780,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         }
         dispatch_async(aiThread, ^(void) {
             if (item != NULL) {
+                if (item1Active != NULL) delete item1Active;
                 item1ActiveAvailable = true;
                 item1Active = item;
             } else {
                 item1ActiveAvailable = false;
             }
             if (potion != NULL) {
+                if (potionActive != NULL) delete potionActive;
                 potionActiveAvailable = true;
                 potionActive = potion;
                 potionOnActive = 1;
@@ -648,12 +819,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         }
         dispatch_async(aiThread, ^(void) {
             if (item != NULL) {
+                if (item2Active != NULL) delete item2Active;
                 item2ActiveAvailable = true;
                 item2Active = item;
             } else {
                 item2ActiveAvailable = false;
             }
             if (potion != NULL) {
+                if (potionActive != NULL) delete potionActive;
                 potionActiveAvailable = true;
                 potionActive = potion;
                 potionOnActive = 2;
@@ -685,12 +858,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         }
         dispatch_async(aiThread, ^(void) {
             if (item != NULL) {
+                if (item3Active != NULL) delete item3Active;
                 item3ActiveAvailable = true;
                 item3Active = item;
             } else {
                 item3ActiveAvailable = false;
             }
             if (potion != NULL) {
+                if (potionActive != NULL) delete potionActive;
                 potionActiveAvailable = true;
                 potionActive = potion;
                 potionOnActive = 3;
@@ -722,12 +897,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         }
         dispatch_async(aiThread, ^(void) {
             if (item != NULL) {
+                if (item4Active != NULL) delete item4Active;
                 item4ActiveAvailable = true;
                 item4Active = item;
             } else {
                 item4ActiveAvailable = false;
             }
             if (potion != NULL) {
+                if (potionActive != NULL) delete potionActive;
                 potionActiveAvailable = true;
                 potionActive = potion;
                 potionOnActive = 4;
@@ -759,12 +936,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         }
         dispatch_async(aiThread, ^(void) {
             if (item != NULL) {
+                if (item5Active != NULL) delete item5Active;
                 item5ActiveAvailable = true;
                 item5Active = item;
             } else {
                 item5ActiveAvailable = false;
             }
             if (potion != NULL) {
+                if (potionActive != NULL) delete potionActive;
                 potionActiveAvailable = true;
                 potionActive = potion;
                 potionOnActive = 5;
@@ -796,12 +975,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
         }
         dispatch_async(aiThread, ^(void) {
             if (item != NULL) {
+                if (item6Active != NULL) delete item6Active;
                 item6ActiveAvailable = true;
                 item6Active = item;
             } else {
                 item6ActiveAvailable = false;
             }
             if (potion != NULL) {
+                if (potionActive != NULL) delete potionActive;
                 potionActiveAvailable = true;
                 potionActive = potion;
                 potionOnActive = 6;
@@ -833,6 +1014,7 @@ void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t di
         }
         dispatch_async(aiThread, ^(void) {
             if (trinket != NULL) {
+                if (trinketActive != NULL) delete trinketActive;
                 trinketActiveAvailable = true;
                 trinketActive = trinket;
             } else {
@@ -868,6 +1050,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
         }
         dispatch_async(aiThread, ^(void) {
             if (ability != NULL) {
+                if (spell1Active != NULL) delete spell1Active;
                 spell1ActiveAvailable = true;
                 spell1Active = ability;
             } else {
@@ -895,6 +1078,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
         }
         dispatch_async(aiThread, ^(void) {
             if (ability != NULL) {
+                if (spell2Active != NULL) delete spell2Active;
                 spell2ActiveAvailable = true;
                 spell2Active = ability;
             } else {
@@ -922,6 +1106,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
         }
         dispatch_async(aiThread, ^(void) {
             if (ability != NULL) {
+                if (spell3Active != NULL) delete spell3Active;
                 spell3ActiveAvailable = true;
                 spell3Active = ability;
             } else {
@@ -949,6 +1134,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
         }
         dispatch_async(aiThread, ^(void) {
             if (ability != NULL) {
+                if (spell4Active != NULL) delete spell4Active;
                 spell4ActiveAvailable = true;
                 spell4Active = ability;
             } else {
@@ -982,6 +1168,7 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
         }
         dispatch_async(aiThread, ^(void) {
             if (ability != NULL) {
+                if (summonerSpell1Active != NULL) delete summonerSpell1Active;
                 summonerSpell1ActiveAvailable = true;
                 summonerSpell1Active = ability;
             } else {
@@ -1005,6 +1192,7 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
         }
         dispatch_async(aiThread, ^(void) {
             if (ability != NULL) {
+                if (summonerSpell2Active != NULL) delete summonerSpell2Active;
                 summonerSpell2ActiveAvailable = true;
                 summonerSpell2Active = ability;
             } else {
@@ -1081,6 +1269,26 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
         }
         
         dispatch_async(aiThread, ^(void) {
+            while (spell1LevelDots.count > 0) {
+                GenericObject* dot = (GenericObject*)[spell1LevelDots.lastObject pointerValue];
+                delete dot;
+                [spell1LevelDots removeLastObject];
+            }
+            while (spell2LevelDots.count > 0) {
+                GenericObject* dot = (GenericObject*)[spell2LevelDots.lastObject pointerValue];
+                delete dot;
+                [spell2LevelDots removeLastObject];
+            }
+            while (spell3LevelDots.count > 0) {
+                GenericObject* dot = (GenericObject*)[spell3LevelDots.lastObject pointerValue];
+                delete dot;
+                [spell3LevelDots removeLastObject];
+            }
+            while (spell4LevelDots.count > 0) {
+                GenericObject* dot = (GenericObject*)[spell4LevelDots.lastObject pointerValue];
+                delete dot;
+                [spell4LevelDots removeLastObject];
+            }
             spell1LevelDots = level1Dots;
             spell2LevelDots = level2Dots;
             spell3LevelDots = level3Dots;
@@ -1124,6 +1332,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
         }
         dispatch_async(aiThread, ^(void) {
             if (levelUp != NULL) {
+                if (spell1LevelUp != NULL) delete spell1LevelUp;
                 spell1LevelUpAvailable = true;
                 spell1LevelUp = levelUp;
             } else {
@@ -1148,6 +1357,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
         }
         dispatch_async(aiThread, ^(void) {
             if (levelUp != NULL) {
+                if (spell2LevelUp != NULL) delete spell2LevelUp;
                 spell2LevelUpAvailable = true;
                 spell2LevelUp = levelUp;
             } else {
@@ -1172,6 +1382,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
         }
         dispatch_async(aiThread, ^(void) {
             if (levelUp != NULL) {
+                if (spell3LevelUp != NULL) delete spell3LevelUp;
                 spell3LevelUpAvailable = true;
                 spell3LevelUp = levelUp;
             } else {
@@ -1196,6 +1407,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
         }
         dispatch_async(aiThread, ^(void) {
             if (levelUp != NULL) {
+                if (spell4LevelUp != NULL) delete spell4LevelUp;
                 spell4LevelUpAvailable = true;
                 spell4LevelUp = levelUp;
             } else {
@@ -1271,12 +1483,23 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
         if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
             NSLog(@"Process ally minions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
-            dispatch_async(detectionThread, ^(void){
-                [allyMinionsDetectionObject removeAllObjects];
-                [allyMinionsDetectionObject addObjectsFromArray:minionBars];
-            });
+        dispatch_async(detectionThread, ^(void){
+            while (allyMinionsDetectionObject.count > 0) {
+                MinionBar* minion = (MinionBar*)[allyMinionsDetectionObject.lastObject pointerValue];
+                delete minion;
+                [allyMinionsDetectionObject removeLastObject];
+            }
+            for (int i = 0; i < minionBars.count; i++) {
+                MinionBar* minion = (MinionBar*)[[minionBars objectAtIndex:i] pointerValue];
+                [allyMinionsDetectionObject addObject:[NSValue valueWithPointer:new MinionBar(*minion)]];
+            }
+        });
         dispatch_async(aiThread, ^(void) {
-            [allyMinions removeAllObjects];
+            while (allyMinions.count > 0) {
+                MinionBar* minion = (MinionBar*)[allyMinions.lastObject pointerValue];
+                delete minion;
+                [allyMinions removeLastObject];
+            }
             [allyMinions addObjectsFromArray:minionBars];
         });
     });
@@ -1348,11 +1571,22 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
             NSLog(@"Process enemy minions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(detectionThread, ^(void){
-            [enemyMinionsDetectionObject removeAllObjects];
-            [enemyMinionsDetectionObject addObjectsFromArray:minionBars];
+            while (enemyMinionsDetectionObject.count > 0) {
+                MinionBar* minion = (MinionBar*)[enemyMinionsDetectionObject.lastObject pointerValue];
+                delete minion;
+                [enemyMinionsDetectionObject removeLastObject];
+            }
+            for (int i = 0; i < minionBars.count; i++) {
+                MinionBar* minion = (MinionBar*)[[minionBars objectAtIndex:i] pointerValue];
+                [enemyMinionsDetectionObject addObject:[NSValue valueWithPointer:new MinionBar(*minion)]];
+            }
         });
         dispatch_async(aiThread, ^(void) {
-            [enemyMinions removeAllObjects];
+            while (enemyMinions.count > 0) {
+                MinionBar* minion = (MinionBar*)[enemyMinions.lastObject pointerValue];
+                delete minion;
+                [enemyMinions removeLastObject];
+            }
             [enemyMinions addObjectsFromArray:minionBars];
         });
     });
@@ -1428,11 +1662,22 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
             NSLog(@"Process enemy champions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(detectionThread, ^(void){
-            [enemyChampionsDetectionObject removeAllObjects];
-            [enemyChampionsDetectionObject addObjectsFromArray:ChampionBars];
+            while (enemyChampionsDetectionObject.count > 0) {
+                ChampionBar* champ = (ChampionBar*)[enemyChampionsDetectionObject.lastObject pointerValue];
+                delete champ;
+                [enemyChampionsDetectionObject removeLastObject];
+            }
+            for (int i = 0; i < ChampionBars.count; i++) {
+                ChampionBar* champ = (ChampionBar*)[[ChampionBars objectAtIndex:i] pointerValue];
+                [enemyChampionsDetectionObject addObject:[NSValue valueWithPointer:new ChampionBar(*champ)]];
+            }
         });
         dispatch_async(aiThread, ^(void) {
-            [enemyChampions removeAllObjects];
+            while (enemyChampions.count > 0) {
+                ChampionBar* champ = (ChampionBar*)[enemyChampions.lastObject pointerValue];
+                delete champ;
+                [enemyChampions removeLastObject];
+            }
             [enemyChampions addObjectsFromArray:ChampionBars];
         });
     });
@@ -1509,11 +1754,22 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
             NSLog(@"Process ally champions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(detectionThread, ^(void){
-            [allyChampionsDetectionObject removeAllObjects];
-            [allyChampionsDetectionObject addObjectsFromArray:ChampionBars];
+            while (allyChampionsDetectionObject.count > 0) {
+                ChampionBar* champ = (ChampionBar*)[allyChampionsDetectionObject.lastObject pointerValue];
+                delete champ;
+                [allyChampionsDetectionObject removeLastObject];
+            }
+            for (int i = 0; i < ChampionBars.count; i++) {
+                ChampionBar* champ = (ChampionBar*)[[ChampionBars objectAtIndex:i] pointerValue];
+                [allyChampionsDetectionObject addObject:[NSValue valueWithPointer:new ChampionBar(*champ)]];
+            }
         });
         dispatch_async(aiThread, ^(void) {
-            [allyChampions removeAllObjects];
+            while (allyChampions.count > 0) {
+                ChampionBar* champ = (ChampionBar*)[allyChampions.lastObject pointerValue];
+                delete champ;
+                [allyChampions removeLastObject];
+            }
             [allyChampions addObjectsFromArray:ChampionBars];
         });
     });
@@ -1590,11 +1846,22 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
             NSLog(@"Process enemy tower Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(detectionThread, ^(void){
-            [enemyTowersDetectionObject removeAllObjects];
-            [enemyTowersDetectionObject addObjectsFromArray:TowerBars];
+            while (enemyTowersDetectionObject.count > 0) {
+                TowerBar* tower = (TowerBar*)[enemyTowersDetectionObject.lastObject pointerValue];
+                delete tower;
+                [enemyTowersDetectionObject removeLastObject];
+            }
+            for (int i = 0; i < TowerBars.count; i++) {
+                TowerBar* tower = (TowerBar*)[[TowerBars objectAtIndex:i] pointerValue];
+                [enemyTowersDetectionObject addObject:[NSValue valueWithPointer:new TowerBar(*tower)]];
+            }
         });
         dispatch_async(aiThread, ^(void) {
-            [enemyTowers removeAllObjects];
+            while (enemyTowers.count > 0) {
+                TowerBar* tower = (TowerBar*)[enemyTowers.lastObject pointerValue];
+                delete tower;
+                [enemyTowers removeLastObject];
+            }
             [enemyTowers addObjectsFromArray:TowerBars];
         });
     });
@@ -1671,11 +1938,22 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
             NSLog(@"Process self champs Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(detectionThread, ^(void){
-            [selfChampionsDetectionObject removeAllObjects];
-            [selfChampionsDetectionObject addObjectsFromArray:ChampionBars];
+            while (selfChampionsDetectionObject.count > 0) {
+                ChampionBar* champ = (ChampionBar*)[selfChampionsDetectionObject.lastObject pointerValue];
+                delete champ;
+                [selfChampionsDetectionObject removeLastObject];
+            }
+            for (int i = 0; i < ChampionBars.count; i++) {
+                ChampionBar* champ = (ChampionBar*)[[ChampionBars objectAtIndex:i] pointerValue];
+                [selfChampionsDetectionObject addObject:[NSValue valueWithPointer:new ChampionBar(*champ)]];
+            }
         });
         dispatch_async(aiThread, ^(void) {
-            [selfChampions removeAllObjects];
+            while (selfChampions.count > 0) {
+                ChampionBar* champ = (ChampionBar*)[selfChampions.lastObject pointerValue];
+                delete champ;
+                [selfChampions removeLastObject];
+            }
             [selfChampions addObjectsFromArray:ChampionBars];
         });
     });
@@ -1756,6 +2034,7 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
         }
         dispatch_async(aiThread, ^(void) {
             if ([HealthBarBars count] > 0) {
+                if (selfHealthBar != NULL) delete selfHealthBar;
                 selfHealthBarVisible = true;
                 selfHealthBar = (SelfHealthBar*)[[HealthBarBars firstObject] pointerValue];
             } else {

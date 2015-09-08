@@ -433,6 +433,8 @@ size_t intersectRectsNum2;
             
             detectExactImageToImageToRectangles(step12_HomeButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
             
+            free(intersectSearch);
+            
             if (returnPercentage >= 0.3) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     foundHomeButton = true;

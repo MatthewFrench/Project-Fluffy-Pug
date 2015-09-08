@@ -85,7 +85,7 @@ class DetectionManager {
     dispatch_queue_t detectionThread;
     
     //Detection thread only variables:
-    GenericObject* mapDetectionObject, *shopTopLeftCornerDetectionObject;
+    GenericObject* mapDetectionObject=nil, *shopTopLeftCornerDetectionObject=nil;
     NSMutableArray* allyMinionsDetectionObject, *enemyMinionsDetectionObject, *selfChampionsDetectionObject, *enemyTowersDetectionObject, *allyChampionsDetectionObject, *enemyChampionsDetectionObject;
     
 public:
