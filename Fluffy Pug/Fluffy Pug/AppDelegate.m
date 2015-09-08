@@ -51,7 +51,7 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
     [self updateLeagueWindowStatus];
     //lastTime = clock();
     
-    streamQueue = dispatch_queue_create("herp.derp.mcgerp", NULL);
+    streamQueue = dispatch_get_main_queue();//dispatch_queue_create("herp.derp.mcgerp", NULL);
     
     CGDirectDisplayID display_id;
     display_id = CGMainDisplayID();
@@ -78,7 +78,7 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
                                            userInfo:nil
                                             repeats:YES];
      */
-    timer = CreateDispatchTimer(NSEC_PER_SEC/1000, //30ull * NSEC_PER_SEC
+    timer = CreateDispatchTimer(NSEC_PER_SEC/120, //30ull * NSEC_PER_SEC
                                 0, //1ull * NSEC_PER_SEC
                                 dispatch_get_main_queue(),
                                 ^{ [self logic]; });
@@ -272,7 +272,7 @@ AppDelegate *GlobalSelf;
     }
     
     //Profile code
-    if (getTimeInMilliseconds(mach_absolute_time() - lastTime) > 1000)
+    if (getTimeInMilliseconds(mach_absolute_time() - lastTime) >= 500)
     {
         int time = getTimeInMilliseconds(mach_absolute_time() - lastTime);
         [GlobalSelf->fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / loops, (1000.0)/(time * 1.0 / loops)]];
@@ -281,16 +281,6 @@ AppDelegate *GlobalSelf;
         loops = 0;
         screenLoops = 0;
         [GlobalSelf updateLeagueWindowStatus];
-        
-        [GlobalSelf->allyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getAllyMinions().count]];
-        
-        [GlobalSelf->enemyMinionText setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getEnemyMinions().count]];
-        
-        [GlobalSelf->enemyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getEnemyChampions().count]];
-        
-        [GlobalSelf->allyChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getAllyChampions().count]];
-        
-        [GlobalSelf->selfChampionText setStringValue:[NSString stringWithFormat:@"%lu champions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getSelfChampions().count]];
     }
     else
     {
@@ -388,8 +378,51 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     
     //Fire logic after detection is finished for higher response times
     dispatch_async(dispatch_get_main_queue(), ^{
-        [GlobalSelf logic];
+        //[GlobalSelf logic];
         //[GlobalSelf->timer fire];
+        
+        [GlobalSelf->allyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getAllyMinions().count]];
+        
+        [GlobalSelf->enemyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getEnemyMinions().count]];
+        
+        [GlobalSelf->enemyChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getEnemyChampions().count]];
+        
+        [GlobalSelf->allyChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getAllyChampions().count]];
+        
+        [GlobalSelf->selfChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getSelfChampions().count]];
+        [GlobalSelf->selfCurrentLvlTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getCurrentLevel()]];
+        [GlobalSelf->enemyTowersTxt setStringValue:[NSString stringWithFormat:@"%lu towers", (unsigned long)GlobalSelf->leagueGameState->detectionManager->getEnemyTowers().count]];
+        [GlobalSelf->selfHealthTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSelfHealthBarVisible()?@"true":@"false"]];
+        [GlobalSelf->mapTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getMapVisible()?@"true":@"false"]];
+        [GlobalSelf->mapLocTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getMapLocationVisible()?@"true":@"false"]];
+        [GlobalSelf->mapShopTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getMapShopVisible()?@"true":@"false"]];
+        [GlobalSelf->item1Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getItem1ActiveAvailable()?@"true":@"false"]];
+        [GlobalSelf->item2Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getItem2ActiveAvailable()?@"true":@"false"]];
+        [GlobalSelf->item3Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getItem3ActiveAvailable()?@"true":@"false"]];
+        [GlobalSelf->item4Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getItem4ActiveAvailable()?@"true":@"false"]];
+        [GlobalSelf->item5Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getItem5ActiveAvailable()?@"true":@"false"]];
+        [GlobalSelf->item6Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getItem6ActiveAvailable()?@"true":@"false"]];
+        [GlobalSelf->summonerSpell1Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSummonerSpell1Available()?@"true":@"false"]];
+        [GlobalSelf->summonerSpell2Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSummonerSpell2Available()?@"true":@"false"]];
+        [GlobalSelf->trinketTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getTrinketActiveAvailable()?@"true":@"false"]];
+        [GlobalSelf->usedPotionTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getPotionBeingUsedVisible()?@"true":@"false"]];
+        [GlobalSelf->potionActiveTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getPotionActiveAvailable()?@"true":@"false"]];
+        [GlobalSelf->spell1Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell1Available()?@"true":@"false"]];
+        [GlobalSelf->spell2Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell2Available()?@"true":@"false"]];
+        [GlobalSelf->spell3Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell3Available()?@"true":@"false"]];
+        [GlobalSelf->spell4Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell4Available()?@"true":@"false"]];
+        [GlobalSelf->spell1LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell1LevelUp()?@"true":@"false"]];
+        [GlobalSelf->spell2LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell2LevelUp()?@"true":@"false"]];
+        [GlobalSelf->spell3LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell3LevelUp()?@"true":@"false"]];
+        [GlobalSelf->spell4LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell4LevelUp()?@"true":@"false"]];
+        [GlobalSelf->spell1LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", GlobalSelf->leagueGameState->detectionManager->getSpell1LevelDots().count]];
+        [GlobalSelf->spell2LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", GlobalSelf->leagueGameState->detectionManager->getSpell2LevelDots().count]];
+        [GlobalSelf->spell3LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", GlobalSelf->leagueGameState->detectionManager->getSpell3LevelDots().count]];
+        [GlobalSelf->spell4LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", GlobalSelf->leagueGameState->detectionManager->getSpell4LevelDots().count]];
+        [GlobalSelf->shopAvailableTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getShopAvailable()?@"true":@"false"]];
+        [GlobalSelf->shopWindowOpenTxt setStringValue:[NSString stringWithFormat:@"%@", (GlobalSelf->leagueGameState->detectionManager->getShopTopLeftCornerVisible() && GlobalSelf->leagueGameState->detectionManager->getShopBottomLeftCornerVisible())?@"true":@"false"]];
+        [GlobalSelf->buyableItemsTxt setStringValue:[NSString stringWithFormat:@"%lu", GlobalSelf->leagueGameState->detectionManager->getBuyableItems().count]];
+        
     });
     
     

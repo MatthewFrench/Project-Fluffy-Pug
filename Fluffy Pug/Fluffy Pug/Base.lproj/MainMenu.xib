@@ -15,16 +15,55 @@
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
                 <outlet property="aiActiveCheckbox" destination="Gxv-74-hKm" id="RbW-1I-9AM"/>
+                <outlet property="allyChampsTxt" destination="yxS-0r-xHR" id="nJS-WP-WJY"/>
+                <outlet property="allyMinionsTxt" destination="qu7-6e-UA8" id="sgs-Ex-ZhK"/>
                 <outlet property="autoQueueCheckbox" destination="s2D-5n-UuO" id="ASI-EE-eew"/>
+                <outlet property="buyableItemsTxt" destination="MQ4-9g-gmq" id="n4s-W6-M1V"/>
                 <outlet property="debugCheckbox" destination="hCP-l2-ffx" id="T47-5N-KAp"/>
+                <outlet property="enemyChampsTxt" destination="ae8-KQ-8Ix" id="6Ds-n9-zXu"/>
+                <outlet property="enemyMinionsTxt" destination="aBb-DI-Ha4" id="JXK-o8-uOZ"/>
+                <outlet property="enemyTowersTxt" destination="cY7-OG-x56" id="2Ow-DU-Zd5"/>
                 <outlet property="foundImage" destination="uPF-fW-ond" id="tpX-cg-F09"/>
+                <outlet property="fpsText" destination="nPV-75-v0d" id="jrI-gu-Uut"/>
                 <outlet property="imageView" destination="HHv-Ka-ht7" id="pl5-KH-twK"/>
+                <outlet property="item1Txt" destination="hFf-Pt-nEt" id="MjG-a3-1SN"/>
+                <outlet property="item2Txt" destination="LrX-8K-lEs" id="7DU-9H-bc3"/>
+                <outlet property="item3Txt" destination="b6C-YN-UU8" id="mlC-YD-JVR"/>
+                <outlet property="item4Txt" destination="vgL-BN-iBy" id="tLM-y7-SRH"/>
+                <outlet property="item5Txt" destination="C7k-ZT-Mhc" id="JBG-JO-xY0"/>
+                <outlet property="item6Txt" destination="WRQ-9w-KAG" id="1iw-pJ-xyd"/>
                 <outlet property="logText" destination="KTn-4Y-VhW" id="GGp-Zp-adE"/>
+                <outlet property="mapLocTxt" destination="0Ez-Ts-BIl" id="Gp4-OI-fGz"/>
+                <outlet property="mapShopTxt" destination="rSX-Pu-5iw" id="GEz-wg-kni"/>
+                <outlet property="mapTxt" destination="EIT-JZ-89v" id="cq8-Hy-ag7"/>
+                <outlet property="potionActiveTxt" destination="RdM-hE-zJc" id="6t3-kG-wjH"/>
                 <outlet property="processedImage" destination="tj8-74-u4n" id="AyV-Zg-3lW"/>
                 <outlet property="recordScreenCheckbox" destination="RWd-oc-9AZ" id="75d-p8-mVV"/>
-                <outlet property="statusText" destination="2TM-fP-sB5" id="QWa-XV-dty"/>
+                <outlet property="screenAnalyzeText" destination="Z5L-QU-mbh" id="CmY-xW-CnZ"/>
+                <outlet property="selfChampsTxt" destination="g1e-WQ-UnC" id="S0a-WE-IPE"/>
+                <outlet property="selfCurrentLvlTxt" destination="zhe-mY-pFk" id="xZe-Os-4Xh"/>
+                <outlet property="selfHealthTxt" destination="dMb-QE-E7Q" id="a8U-7K-Byx"/>
+                <outlet property="shopAvailableTxt" destination="cNe-CI-o6Z" id="hYR-Zn-VWf"/>
+                <outlet property="shopWindowOpenTxt" destination="gSt-gA-xVK" id="YCK-OY-pwG"/>
+                <outlet property="spell1LvlTxt" destination="v3c-3Z-mWd" id="qSz-6N-E9I"/>
+                <outlet property="spell1LvlUpTxt" destination="33h-dT-ejz" id="ZXP-Vf-lNt"/>
+                <outlet property="spell1Txt" destination="lbq-aa-GP6" id="qyG-zZ-wCM"/>
+                <outlet property="spell2LvlTxt" destination="rVF-eE-eeg" id="Wda-CQ-Df0"/>
+                <outlet property="spell2LvlUpTxt" destination="8xq-iM-jfn" id="bAS-GX-WJl"/>
+                <outlet property="spell2Txt" destination="uS2-WU-1hZ" id="nFT-l7-PpK"/>
+                <outlet property="spell3LvlTxt" destination="H7I-fQ-vC4" id="d1F-1F-K0c"/>
+                <outlet property="spell3LvlUpTxt" destination="VjC-95-5gG" id="Cls-vN-Lk7"/>
+                <outlet property="spell3Txt" destination="sy3-dj-tfm" id="NDq-RY-47F"/>
+                <outlet property="spell4LvlTxt" destination="90l-kd-XB3" id="t8R-1a-s6L"/>
+                <outlet property="spell4LvlUpTxt" destination="ut0-jz-NHw" id="km0-i8-9Na"/>
+                <outlet property="spell4Txt" destination="W6o-qd-cuD" id="A0d-8H-IC4"/>
+                <outlet property="statusText" destination="a7z-Q6-9IE" id="YQo-5Z-S0i"/>
+                <outlet property="summonerSpell1Txt" destination="uRt-CE-ars" id="PnR-x1-IWU"/>
+                <outlet property="summonerSpell2Txt" destination="8JE-mm-MeC" id="rVq-kN-PAn"/>
                 <outlet property="targetImage" destination="j7e-PM-F4A" id="HOH-El-YvI"/>
+                <outlet property="trinketTxt" destination="Hcz-HU-uJo" id="Z2I-e0-Hhb"/>
                 <outlet property="unprocessedImage" destination="oNC-yk-Kkl" id="XB0-eA-0ao"/>
+                <outlet property="usedPotionTxt" destination="6RH-Wp-2ig" id="Sig-hP-Swf"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
                 <outlet property="window2" destination="VMG-ED-3M6" id="oL4-cT-5Hr"/>
             </connections>
@@ -1124,7 +1163,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="nPV-75-v0d">
-                                            <rect key="frame" x="139" y="464" width="144" height="17"/>
+                                            <rect key="frame" x="139" y="464" width="372" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Calculating" id="iaE-Gj-Jzn">
@@ -1244,7 +1283,7 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="Z5L-QU-mbh">
-                                            <rect key="frame" x="120" y="439" width="163" height="17"/>
+                                            <rect key="frame" x="120" y="439" width="391" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Calculating" id="POM-bD-9kc">
@@ -1793,46 +1832,6 @@
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="gxj-Kr-GZN">
-                                            <rect key="frame" x="306" y="465" width="120" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Self Current Level: " id="gpR-v9-v0n">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="zhe-mY-pFk">
-                                            <rect key="frame" x="443" y="465" width="53" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0" id="6PY-Vd-5Ka">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="WFM-yp-Vlz">
-                                            <rect key="frame" x="307" y="439" width="95" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enemy Towers:" id="mHE-Qu-dDR">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="cY7-OG-x56">
-                                            <rect key="frame" x="440" y="439" width="53" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <animations/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0" id="jVx-2p-OC7">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="q3A-YT-YWv">
                                             <rect key="frame" x="6" y="137" width="100" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1888,6 +1887,66 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <animations/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0" id="Eip-11-IGF">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="l1U-mf-ckl">
+                                            <rect key="frame" x="6" y="112" width="104" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="League Process:" id="XRE-di-Dq2">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="a7z-Q6-9IE">
+                                            <rect key="frame" x="133" y="112" width="378" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Calculating" id="Uv5-Vv-qe0">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="gxj-Kr-GZN">
+                                            <rect key="frame" x="6" y="87" width="120" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Self Current Level: " id="gpR-v9-v0n">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="zhe-mY-pFk">
+                                            <rect key="frame" x="143" y="87" width="53" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0" id="6PY-Vd-5Ka">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="WFM-yp-Vlz">
+                                            <rect key="frame" x="7" y="61" width="95" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Enemy Towers:" id="mHE-Qu-dDR">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="cY7-OG-x56">
+                                            <rect key="frame" x="140" y="61" width="53" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="0" id="jVx-2p-OC7">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

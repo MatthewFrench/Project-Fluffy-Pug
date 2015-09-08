@@ -1377,6 +1377,8 @@ void TestController::testMapShopDetection() {
     NSMutableArray* levelups = [NSMutableArray new];
     uint64 startTime = mach_absolute_time();
     
+    
+    
     for (int x = 0; x < testImage.imageWidth; x++) {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(testImage, x, y);

@@ -18,6 +18,7 @@
 #import "ShopManager.h"
 #import "MapManager.h"
 
+const int longAlert = 5;
 
 DetectionManager::DetectionManager() {
     allyMinions = [NSMutableArray new];
@@ -56,7 +57,9 @@ void DetectionManager::processDetection(ImageData image) {
     
     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
     
-    //NSLog(@"Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+    //    NSLog(@"Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+    //}
 }
 NSMutableArray* DetectionManager::getAllyMinions() {
     return allyMinions;
@@ -255,24 +258,47 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
     //First we do an immediate map location search
     //If the map is found them we search for shop and self location
     
-    CGPoint searchStart = CGPointMake(image.imageWidth - 220, image.imageHeight - 220);
-    CGPoint searchEnd = CGPointMake(image.imageWidth, image.imageHeight);
+    CGPoint searchStart = CGPointMake(image.imageWidth - 210, image.imageHeight - 210);
+    CGPoint searchEnd = CGPointMake(image.imageWidth - 200, image.imageHeight - 200);
+    
+    int oldMapX = -1;
+    int oldMapY = -1;
+    if (map != nullptr) {
+        oldMapX = map->topLeft.x;
+        oldMapY = map->topLeft.y;
+    }
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
+        
+        
         GenericObject* foundMap = nullptr;
         GenericObject* foundLocation = nullptr;
         GenericObject* foundShop = nullptr;
-        for (int x = searchStart.x; x < searchEnd.x; x++) {
-            for (int y = searchStart.y; y < searchEnd.y; y++) {
-                uint8* pixel = getPixel2(image, x, y);
-                foundMap = MapManager::detectMap(image, pixel, x, y);
-                if (foundMap != NULL) {
-                    x = searchEnd.x;
-                    y = searchEnd.y;
+        
+        if (oldMapX != -1) {
+            uint8* pixel = getPixel2(image, oldMapX, oldMapY);
+            foundMap = MapManager::detectMap(image, pixel, oldMapX, oldMapY);
+        }
+        
+        if (foundMap == nullptr) {
+            for (int x = searchStart.x; x < searchEnd.x; x++) {
+                for (int y = searchStart.y; y < searchEnd.y; y++) {
+                    uint8* pixel = getPixel2(image, x, y);
+                    foundMap = MapManager::detectMap(image, pixel, x, y);
+                    if (foundMap != NULL) {
+                        x = searchEnd.x;
+                        y = searchEnd.y;
+                    }
                 }
             }
         }
+        
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process Map Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         if (foundMap != NULL) {
+            uint64_t startTime = mach_absolute_time();
             //Search for location
             CGPoint searchStart = CGPointMake(foundMap->topLeft.x, foundMap->topLeft.y);
             CGPoint searchEnd = CGPointMake(image.imageWidth, image.imageHeight);
@@ -286,9 +312,15 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                     }
                 }
             }
+            if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+                NSLog(@"Process Map location Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+            }
+            
+            
+            startTime = mach_absolute_time();
             //Search for shop at the bottom left
-            searchStart = CGPointMake(foundMap->topLeft.x, image.imageHeight - 35);
-            searchEnd = CGPointMake(foundMap->topLeft.x + 25, image.imageHeight - 15);
+            searchStart = CGPointMake(image.imageWidth - 200, image.imageHeight - 34);
+            searchEnd = CGPointMake(image.imageWidth - 196, image.imageHeight - 30);
             for (int x = searchStart.x; x < searchEnd.x; x++) {
                 for (int y = searchStart.y; y < searchEnd.y; y++) {
                     uint8* pixel = getPixel2(image, x, y);
@@ -301,8 +333,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
             }
             if (foundShop == NULL) {
                 //Search for shop at top right
-                searchStart = CGPointMake(image.imageWidth - 35, foundMap->topLeft.y);
-                searchEnd = CGPointMake(image.imageWidth - 15, foundMap->topLeft.y + 25);
+                searchStart = CGPointMake(image.imageWidth - 34, image.imageHeight - 200);
+                searchEnd = CGPointMake(image.imageWidth - 30, image.imageHeight - 196);
                 for (int x = searchStart.x; x < searchEnd.x; x++) {
                     for (int y = searchStart.y; y < searchEnd.y; y++) {
                         uint8* pixel = getPixel2(image, x, y);
@@ -314,7 +346,11 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                     }
                 }
             }
+            if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+                NSLog(@"Process Map shop location Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+            }
         }
+        
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (foundMap != NULL) {
                 mapVisible = true;
@@ -382,6 +418,9 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
     }
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
+        
+        
         GenericObject* topLeftCorner = nullptr;
         GenericObject* bottomLeftCorner = nullptr;
         NSMutableArray* itemsCanBuy = [NSMutableArray new];
@@ -427,7 +466,9 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                 }
             }
         }
-        
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process shop Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (topLeftCorner != NULL) {
                 shopTopLeftCornerShown = true;
@@ -449,6 +490,9 @@ void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t di
     CGPoint searchStart = CGPointMake(760, 765);
     CGPoint searchEnd = CGPointMake(770, 780);
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
+        
+        
         //NSLog(@"Searching for shop");
         GenericObject* shop = nullptr;
         for (int x = searchStart.x; x < searchEnd.x; x++) {
@@ -460,6 +504,9 @@ void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t di
                     y = searchEnd.y;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process shop available Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (shop != NULL) {
@@ -479,6 +526,8 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
     CGPoint searchEnd = CGPointMake(560, 660);
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
+        
         GenericObject* potionUsed = nullptr;
         for (int x = searchStart.x; x < searchEnd.x; x++) {
             for (int y = searchStart.y; y < searchEnd.y; y++) {
@@ -489,6 +538,9 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
                     y = searchEnd.y;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process used potion Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (potionUsed != NULL) {
@@ -512,6 +564,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
     
     //Search for item 1 and if it is a potion
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* item = nullptr;
         GenericObject* potion = nullptr;
         for (int x = item1Pos.x; x < item1Pos.x + searchWidth; x++) {
@@ -524,9 +577,12 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
                 }
                 if (potion != NULL && item != NULL) {
-                    x = item1Pos.x; y = item1Pos.y;
+                    x = image.imageWidth; y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Processing item actives 1 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (item != NULL) {
@@ -546,6 +602,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
     
     //Search for item 2 and if it is a potion
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* item = nullptr;
         GenericObject* potion = nullptr;
         for (int x = item2Pos.x; x < item2Pos.x + searchWidth; x++) {
@@ -558,9 +615,12 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
                 }
                 if (potion != NULL && item != NULL) {
-                    x = item2Pos.x; y = item2Pos.y;
+                    x = image.imageWidth; y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Processing item actives 2 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (item != NULL) {
@@ -580,6 +640,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
     
     //Search for item 3 and if it is a potion
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* item = nullptr;
         GenericObject* potion = nullptr;
         for (int x = item3Pos.x; x < item3Pos.x + searchWidth; x++) {
@@ -592,9 +653,12 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
                 }
                 if (potion != NULL && item != NULL) {
-                    x = item3Pos.x; y = item3Pos.y;
+                    x = image.imageWidth; y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Processing item actives 3 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (item != NULL) {
@@ -614,6 +678,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
     
     //Search for item 4 and if it is a potion
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* item = nullptr;
         GenericObject* potion = nullptr;
         for (int x = item4Pos.x; x < item4Pos.x + searchWidth; x++) {
@@ -626,9 +691,12 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
                 }
                 if (potion != NULL && item != NULL) {
-                    x = item4Pos.x; y = item4Pos.y;
+                    x = image.imageWidth; y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Processing item actives 4 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (item != NULL) {
@@ -648,6 +716,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
     
     //Search for item 5 and if it is a potion
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* item = nullptr;
         GenericObject* potion = nullptr;
         for (int x = item5Pos.x; x < item5Pos.x + searchWidth; x++) {
@@ -660,9 +729,12 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
                 }
                 if (potion != NULL && item != NULL) {
-                    x = item5Pos.x; y = item5Pos.y;
+                    x = image.imageWidth; y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Processing item actives 5 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (item != NULL) {
@@ -682,6 +754,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
     
     //Search for item 6 and if it is a potion
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* item = nullptr;
         GenericObject* potion = nullptr;
         for (int x = item6Pos.x; x < item6Pos.x + searchWidth; x++) {
@@ -694,9 +767,12 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     potion = ItemManager::detectPotionActiveAtPixel(image, pixel, x, y);
                 }
                 if (potion != NULL && item != NULL) {
-                    x = item6Pos.x; y = item6Pos.y;
+                    x = image.imageWidth; y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Processing item actives 6 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (item != NULL) {
@@ -715,10 +791,13 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
     });
 }
 void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t dispatchGroup) {
+    
     int searchWidth = 6; int searchHeight = 6;
     CGPoint trinketPos = CGPointMake(873, 702);
     //Search for trinket to use
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        
+        uint64_t startTime = mach_absolute_time();
         GenericObject* trinket = nullptr;
         for (int x = trinketPos.x; x < trinketPos.x + searchWidth; x++) {
             for (int y = trinketPos.y; y < trinketPos.y + searchHeight; y++) {
@@ -729,6 +808,9 @@ void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t di
                     y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process trinket active Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (trinket != NULL) {
@@ -749,6 +831,8 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
     
     //Search for first level up
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
+        
         GenericObject* ability = nullptr;
         for (int x = level1Pos.x; x < level1Pos.x + searchWidth; x++) {
             for (int y = level1Pos.y; y < level1Pos.y + searchHeight; y++) {
@@ -759,6 +843,9 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
                     y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process spell actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (ability != NULL) {
@@ -772,6 +859,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
     
     //Search for second level up
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* ability = nullptr;
         for (int x = level2Pos.x; x < level2Pos.x + searchWidth; x++) {
             for (int y = level2Pos.y; y < level2Pos.y + searchHeight; y++) {
@@ -782,6 +870,9 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
                     y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (ability != NULL) {
@@ -795,6 +886,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
     
     //Search for third level up
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* ability = nullptr;
         for (int x = level3Pos.x; x < level3Pos.x + searchWidth; x++) {
             for (int y = level3Pos.y; y < level3Pos.y + searchHeight; y++) {
@@ -805,6 +897,9 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
                     y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (ability != NULL) {
@@ -818,6 +913,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
     
     //Search for fourth level up
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* ability = nullptr;
         for (int x = level4Pos.x; x < level4Pos.x + searchWidth; x++) {
             for (int y = level4Pos.y; y < level4Pos.y + searchHeight; y++) {
@@ -828,6 +924,9 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
                     y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (ability != NULL) {
@@ -847,6 +946,7 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
     
     //Search for first summoner spell
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* ability = nullptr;
         for (int x = spell1Pos.x; x < spell1Pos.x + searchWidth; x++) {
             for (int y = spell1Pos.y; y < spell1Pos.y + searchHeight; y++) {
@@ -857,6 +957,9 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
                     y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime)* 2 > longAlert) {
+            NSLog(@"Processing summoner spell actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (ability != NULL) {
@@ -890,7 +993,7 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
             }
         });
     });
-
+    
 }
 
 void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t dispatchGroup) {
@@ -902,6 +1005,7 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
     
     //Search for level up dots
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         NSMutableArray* level1Dots = [NSMutableArray new];
         for (int x = levelDot1Pos.x; x < levelDot1Pos.x + searchWidth; x++) {
             for (int y = levelDot1Pos.y; y < levelDot1Pos.y + searchHeight; y++) {
@@ -953,6 +1057,9 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
                 }
             }
         }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process level up dots Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             spell1LevelDots = level1Dots;
@@ -980,6 +1087,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
     
     //Search for first level up
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         GenericObject* levelUp = nullptr;
         for (int x = levelUp1Pos.x; x < levelUp1Pos.x + searchWidth; x++) {
             for (int y = levelUp1Pos.y; y < levelUp1Pos.y + searchHeight; y++) {
@@ -991,6 +1099,9 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
                     y = image.imageHeight;
                 }
             }
+        }
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime)*4 > longAlert) {
+            NSLog(@"Process spell level ups Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if (levelUp != NULL) {
@@ -1088,7 +1199,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
     //I know it takes about 80 ms for a full scan.
     //I want to keep it to 1 ms scan time per frame.
     //So I need to split the screen into 49 sections and scan one section each frame. Plus where minions already are.
-    //A full screen scan happens every 0.81666666666667 seconds
+    //A full screen scan happens every 0.8longAlert66666666667 seconds
     
     //Increase the scan chunk by 1
     allyMinionScanCurrentChunkX += 1;
@@ -1121,6 +1232,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
     }
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         NSMutableArray* minionBars = [NSMutableArray new];
         //Loop through scan chunks
         for (int i = 0; i < [scanRectangles count]; i++) {
@@ -1137,6 +1249,9 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
         }
         minionBars = AllyMinionManager::validateMinionBars(image, minionBars);
         
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process ally minions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [allyMinions removeAllObjects];
             [allyMinions addObjectsFromArray:minionBars];
@@ -1156,7 +1271,7 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     //I know it takes about 80 ms for a full scan.
     //I want to keep it to 1 ms scan time per frame.
     //So I need to split the screen into 49 sections and scan one section each frame. Plus where minions already are.
-    //A full screen scan happens every 0.81666666666667 seconds
+    //A full screen scan happens every 0.8longAlert66666666667 seconds
     
     //Increase the scan chunk by 1
     enemyMinionScanCurrentChunkX += 1;
@@ -1189,6 +1304,7 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     }
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         NSMutableArray* minionBars = [NSMutableArray new];
         //Loop through scan chunks
         for (int i = 0; i < [scanRectangles count]; i++) {
@@ -1205,6 +1321,9 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
         }
         minionBars = EnemyMinionManager::validateMinionBars(image, minionBars);
         
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process enemy minions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [enemyMinions removeAllObjects];
             [enemyMinions addObjectsFromArray:minionBars];
@@ -1257,6 +1376,7 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
     }
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         NSMutableArray* ChampionBars = [NSMutableArray new];
         //Loop through scan chunks
         for (int i = 0; i < [scanRectangles count]; i++) {
@@ -1277,6 +1397,9 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
         }
         ChampionBars = EnemyChampionManager::validateChampionBars(image, ChampionBars);
         
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process enemy champions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [enemyChampions removeAllObjects];
             [enemyChampions addObjectsFromArray:ChampionBars];
@@ -1329,6 +1452,7 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
     }
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         NSMutableArray* ChampionBars = [NSMutableArray new];
         //Loop through scan chunks
         for (int i = 0; i < [scanRectangles count]; i++) {
@@ -1350,6 +1474,9 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
         }
         ChampionBars = AllyChampionManager::validateChampionBars(image, ChampionBars);
         
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process ally champions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [allyChampions removeAllObjects];
             [allyChampions addObjectsFromArray:ChampionBars];
@@ -1402,6 +1529,7 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
     }
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         NSMutableArray* TowerBars = [NSMutableArray new];
         //Loop through scan chunks
         for (int i = 0; i < [scanRectangles count]; i++) {
@@ -1423,6 +1551,9 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
         }
         TowerBars = EnemyTowerManager::validateTowerBars(image, TowerBars);
         
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process enemy tower Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [enemyTowers removeAllObjects];
             [enemyTowers addObjectsFromArray:TowerBars];
@@ -1475,6 +1606,7 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
     }
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         NSMutableArray* ChampionBars = [NSMutableArray new];
         //Loop through scan chunks
         for (int i = 0; i < [scanRectangles count]; i++) {
@@ -1496,6 +1628,9 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
         }
         ChampionBars = SelfChampionManager::validateChampionBars(image, ChampionBars);
         
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process self champs Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             [selfChampions removeAllObjects];
             [selfChampions addObjectsFromArray:ChampionBars];
@@ -1517,58 +1652,62 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
     
     //Increase the scan chunk by 1
     /*
-    selfHealthBarScanCurrentChunkX += 1;
-    if (selfHealthBarScanCurrentChunkX >= selfHealthBarScanChunksX) {
-        selfHealthBarScanCurrentChunkX = 0;
-        selfHealthBarScanCurrentChunkY++;
-    }
-    if (selfHealthBarScanCurrentChunkY >= selfHealthBarScanChunksY) {
-        selfHealthBarScanCurrentChunkY = 0;
-    }*/
+     selfHealthBarScanCurrentChunkX += 1;
+     if (selfHealthBarScanCurrentChunkX >= selfHealthBarScanChunksX) {
+     selfHealthBarScanCurrentChunkX = 0;
+     selfHealthBarScanCurrentChunkY++;
+     }
+     if (selfHealthBarScanCurrentChunkY >= selfHealthBarScanChunksY) {
+     selfHealthBarScanCurrentChunkY = 0;
+     }*/
     /*
-    NSMutableArray* scanRectangles = [NSMutableArray new];
-    //Add chunk to scan
-    CGRect scanRect = CGRectMake( leagueGameWidth * selfHealthBarScanCurrentChunkX / selfHealthBarScanChunksX ,
-                                 leagueGameHeight * selfHealthBarScanCurrentChunkY / selfHealthBarScanChunksY ,
-                                 leagueGameWidth * 1 / selfHealthBarScanChunksX ,
-                                 leagueGameHeight * 1 / selfHealthBarScanChunksY );
-    scanRect = CGRectIntegral(scanRect);
-    scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
-    combineRectangles(scanRectangles, scanRect);
-    //Add previous HealthBars to scan
-    if (selfHealthBar != NULL) {
-        //NSLog(@"Health bar exists at %d, %d", selfHealthBar->topLeft.x, selfHealthBar->topLeft.y);
-        CGRect rect = CGRectMake(selfHealthBar->topLeft.x - 20,
-                                 selfHealthBar->topLeft.y - 20,
-                                 selfHealthBar->bottomRight.x - selfHealthBar->topLeft.x + 20,
-                                 selfHealthBar->bottomRight.y - selfHealthBar->topLeft.y + 20);
-        rect = CGRectIntegral(rect);
-        rect = fitRectangleInRectangle(rect, leagueWindowRect);
-        combineRectangles(scanRectangles, rect);
-    }*/
+     NSMutableArray* scanRectangles = [NSMutableArray new];
+     //Add chunk to scan
+     CGRect scanRect = CGRectMake( leagueGameWidth * selfHealthBarScanCurrentChunkX / selfHealthBarScanChunksX ,
+     leagueGameHeight * selfHealthBarScanCurrentChunkY / selfHealthBarScanChunksY ,
+     leagueGameWidth * 1 / selfHealthBarScanChunksX ,
+     leagueGameHeight * 1 / selfHealthBarScanChunksY );
+     scanRect = CGRectIntegral(scanRect);
+     scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+     combineRectangles(scanRectangles, scanRect);
+     //Add previous HealthBars to scan
+     if (selfHealthBar != NULL) {
+     //NSLog(@"Health bar exists at %d, %d", selfHealthBar->topLeft.x, selfHealthBar->topLeft.y);
+     CGRect rect = CGRectMake(selfHealthBar->topLeft.x - 20,
+     selfHealthBar->topLeft.y - 20,
+     selfHealthBar->bottomRight.x - selfHealthBar->topLeft.x + 20,
+     selfHealthBar->bottomRight.y - selfHealthBar->topLeft.y + 20);
+     rect = CGRectIntegral(rect);
+     rect = fitRectangleInRectangle(rect, leagueWindowRect);
+     combineRectangles(scanRectangles, rect);
+     }*/
     
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        uint64_t startTime = mach_absolute_time();
         NSMutableArray* HealthBarBars = [NSMutableArray new];
         //Loop through scan chunks
         //for (int i = 0; i < [scanRectangles count]; i++) {
         //    CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
-            for (int x = searchStart.x; x < searchEnd.x; x++) {
-                for (int y = searchStart.y; y < searchEnd.y; y++) {
-                    uint8* pixel = getPixel2(image, x, y);
-                    SelfHealthBar* HealthBarBar = SelfChampionManager::detectSelfHealthBarAtPixel(image, pixel, x, y);
-                    if (HealthBarBar != nil) {
-                        //NSLog(@"Found self health bar");
-                        //Add extra rectangle to scan
-                        //CGRect rect = CGRectMake(HealthBarBar->topLeft.x-5, HealthBarBar->topLeft.y-5, HealthBarBar->bottomRight.x - HealthBarBar->topLeft.x + 10, HealthBarBar->bottomRight.y - HealthBarBar->topLeft.y + 10);
-                        //rect = CGRectIntegral(rect);
-                        //rect = fitRectangleInRectangle(rect, leagueWindowRect);
-                        //combineRectangles(scanRectangles, rect);
-                        [HealthBarBars addObject: [NSValue valueWithPointer:HealthBarBar]];
-                    }
+        for (int x = searchStart.x; x < searchEnd.x; x++) {
+            for (int y = searchStart.y; y < searchEnd.y; y++) {
+                uint8* pixel = getPixel2(image, x, y);
+                SelfHealthBar* HealthBarBar = SelfChampionManager::detectSelfHealthBarAtPixel(image, pixel, x, y);
+                if (HealthBarBar != nil) {
+                    //NSLog(@"Found self health bar");
+                    //Add extra rectangle to scan
+                    //CGRect rect = CGRectMake(HealthBarBar->topLeft.x-5, HealthBarBar->topLeft.y-5, HealthBarBar->bottomRight.x - HealthBarBar->topLeft.x + 10, HealthBarBar->bottomRight.y - HealthBarBar->topLeft.y + 10);
+                    //rect = CGRectIntegral(rect);
+                    //rect = fitRectangleInRectangle(rect, leagueWindowRect);
+                    //combineRectangles(scanRectangles, rect);
+                    [HealthBarBars addObject: [NSValue valueWithPointer:HealthBarBar]];
                 }
             }
+        }
         //}
         HealthBarBars = SelfChampionManager::validateSelfHealthBars(image, HealthBarBars);
+        if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            NSLog(@"Process self health bar Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        }
         dispatch_async(dispatch_get_main_queue(), ^(void) {
             if ([HealthBarBars count] > 0) {
                 selfHealthBarVisible = true;
@@ -1578,7 +1717,7 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
             }
         });
     });
-
+    
 }
 
 

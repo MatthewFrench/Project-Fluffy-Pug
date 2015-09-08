@@ -19,10 +19,12 @@
 #import "BasicAI.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
-    @public IBOutlet NSTextField* statusText, *allyMinionText, *enemyMinionText, *enemyChampionText, *selfChampionText, *allyChampionText;
     @public IBOutlet NSImageView* unprocessedImage, *processedImage, *targetImage, *foundImage;
     IBOutlet NSTextView* logText;
     @public IBOutlet NSTextField *fpsText, *screenAnalyzeText;
+    
+@public IBOutlet NSTextField *selfCurrentLvlTxt, *enemyTowersTxt, *allyMinionsTxt, *enemyMinionsTxt, *allyChampsTxt, *enemyChampsTxt, *selfChampsTxt, *selfHealthTxt, *mapTxt, *mapLocTxt, *mapShopTxt, *item1Txt, *item2Txt, *item3Txt, *item4Txt, *item5Txt, *item6Txt, *summonerSpell1Txt, *summonerSpell2Txt, *trinketTxt, *usedPotionTxt, *potionActiveTxt, *spell1Txt, *spell2Txt, *spell3Txt, *spell4Txt, *spell1LvlUpTxt, *spell2LvlUpTxt, *spell3LvlUpTxt, *spell4LvlUpTxt, *spell1LvlTxt, *spell2LvlTxt, *spell3LvlTxt, *spell4LvlTxt, *shopAvailableTxt, *shopWindowOpenTxt, *buyableItemsTxt, *statusText;
+    
     //NSTimer* timer;
     @public LeagueGameState* leagueGameState;
     @public AutoQueueManager* autoQueueManager;

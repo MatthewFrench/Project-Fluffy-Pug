@@ -70,6 +70,7 @@ inline void drawRect( ImageData imageData, int left, int top, int width, int hei
 inline BOOL isPixelColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
 inline BOOL isPixelPreciseColor( Pixel pixel, unsigned char r, unsigned char g, unsigned char b);
 inline BOOL isColor(const uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b, int tolerance);
+inline BOOL isColor3(const uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b);
 inline BOOL isColor2(const uint8_t *pixel, const uint8_t *pixel2, int tolerance);
 inline  ImageData makeImageData(uint8_t * data, int imageWidth, int imageHeight);
 inline ImageData makeImageDataFrom(NSString* path);
@@ -671,6 +672,13 @@ extern BOOL isColor2(const uint8_t *pixel, const uint8_t *pixel2, int tolerance)
     if (abs(pixel[0] - pixel2[0]) > tolerance) return false;
     if (abs(pixel[1] - pixel2[1]) > tolerance) return false;
     if (abs(pixel[2] - pixel2[2]) > tolerance) return false;
+    return true;
+}
+
+extern BOOL isColor3(const uint8_t *pixel, unsigned char r, unsigned char g, unsigned char b) {
+    if (pixel[0] != b) return false;
+    if (pixel[1] != g) return false;
+    if (pixel[2] != r) return false;
     return true;
 }
 

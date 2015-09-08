@@ -2,6 +2,24 @@
 #import "Utility.h"
 
 class DetectionManager {
+    
+    
+    /*
+     
+     One of my problems is that I'm running the AI on the main thread.
+     I'm running detection on a separate thread.
+     Detection is sending results to the AI thread but detection needs to get back some of the results.
+     Perhaps add a private variable at the start of detection methods that need access?
+     */
+    
+    /*
+     
+     Detection is taking way too long in some situations. Also the ai loop seems to stutter every now and then.
+     
+     */
+    
+    
+    
     NSMutableArray  *allyMinions, *enemyMinions,
                     *allyChampions, *enemyChampions,
                     *selfChampions, *enemyTowers;
