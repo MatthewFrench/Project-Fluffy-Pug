@@ -31,6 +31,7 @@ TestController::TestController(NSImageView* processedImageView, NSImageView *unp
     testLevelUpDot1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Level Up Dot 1280x800" ofType:@"png"]);
     testUsedPotion1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Used Potion 1280x800" ofType:@"png"]);
     testOutsideImage1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Outside Image 1280x800" ofType:@"png"]);
+    testHextechGunblade1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Hextech Gunblade 1280x800" ofType:@"png"]);
     
     //[targetImageView setImage:getImageFromBGRABuffer(testGame1.imageData, testGame1.imageWidth, testGame1.imageHeight)];
 }
@@ -860,7 +861,7 @@ void TestController::testTrinketActiveDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(ItemManager::trinketItemImageData.imageData, ItemManager::trinketItemImageData.imageWidth, ItemManager::trinketItemImageData.imageHeight)];
 }
 void TestController::testItemActiveDetection() {
-    testImage = testItemActives1280x800Image;
+    testImage = testHextechGunblade1280x800;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];

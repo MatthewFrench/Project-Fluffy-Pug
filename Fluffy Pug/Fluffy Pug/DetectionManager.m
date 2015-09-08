@@ -820,9 +820,9 @@ void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t di
 }
 void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dispatchGroup) {
     int searchWidth = 6; int searchHeight = 6;
-    CGPoint level1Pos = CGPointMake(466, 750);
-    CGPoint level2Pos = CGPointMake(515, 750);
-    CGPoint level3Pos = CGPointMake(565, 750);
+    CGPoint level1Pos = CGPointMake(466, 700);
+    CGPoint level2Pos = CGPointMake(515, 700);
+    CGPoint level3Pos = CGPointMake(565, 700);
     CGPoint level4Pos = CGPointMake(614, 700);
     
     //Search for first level up
@@ -938,7 +938,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
 void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_group_t dispatchGroup) {
     int searchWidth = 6; int searchHeight = 6;
     CGPoint spell1Pos = CGPointMake(670, 700);
-    CGPoint spell2Pos = CGPointMake(708, 750);
+    CGPoint spell2Pos = CGPointMake(708, 700);
     
     //Search for first summoner spell
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
@@ -1327,8 +1327,8 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     });
 }
 
-const int enemyChampionScanChunksX = 16; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-const int enemyChampionScanChunksY = 16;
+const int enemyChampionScanChunksX = 5; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+const int enemyChampionScanChunksY = 24;
 const float enemyChampionFrameMove = 80.0; //Assume Champions can move 80 pixels in 1 frames
 void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_group_t dispatchGroup) {
     float leagueGameWidth = image.imageWidth;
@@ -1403,8 +1403,8 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
     });
 }
 
-const int allyChampionScanChunksX = 16; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-const int allyChampionScanChunksY = 16;
+const int allyChampionScanChunksX = 5; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+const int allyChampionScanChunksY = 24;
 const float allyChampionFrameMove = 80.0; //Assume Champions can move 80 pixels in 1 frames
 void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_group_t dispatchGroup) {
     float leagueGameWidth = image.imageWidth;
@@ -1480,8 +1480,8 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
     });
 }
 
-const int enemyTowerScanChunksX = 16; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-const int enemyTowerScanChunksY = 16;
+const int enemyTowerScanChunksX = 4; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+const int enemyTowerScanChunksY = 24;
 const float enemyTowerFrameMove = 80.0; //Assume Towers can move 80 pixels in 1 frames
 void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_group_t dispatchGroup) {
     float leagueGameWidth = image.imageWidth;

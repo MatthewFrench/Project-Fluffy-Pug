@@ -209,8 +209,8 @@
 		C939B4721B6A008A00B42054 /* Test Algorithms */ = {
 			isa = PBXGroup;
 			children = (
-				C939B4731B6A01C800B42054 /* TestController.m */,
 				C939B4741B6A01C800B42054 /* TestController.h */,
+				C939B4731B6A01C800B42054 /* TestController.m */,
 			);
 			name = "Test Algorithms";
 			sourceTree = "<group>";
