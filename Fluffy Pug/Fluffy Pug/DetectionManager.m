@@ -562,6 +562,8 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
     CGPoint item5Pos = CGPointMake(800, 734);
     CGPoint item6Pos = CGPointMake(836, 734);
     
+    potionActiveAvailable = false;
+    
     //Search for item 1 and if it is a potion
     dispatch_group_async(dispatchGroup, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         uint64_t startTime = mach_absolute_time();
@@ -594,8 +596,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             if (potion != NULL) {
                 potionActiveAvailable = true;
                 potionActive = potion;
-            } else {
-                potionActiveAvailable = false;
+                potionOnActive = 1;
             }
         });
     });
@@ -632,8 +633,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             if (potion != NULL) {
                 potionActiveAvailable = true;
                 potionActive = potion;
-            } else {
-                potionActiveAvailable = false;
+                potionOnActive = 2;
             }
         });
     });
@@ -670,8 +670,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             if (potion != NULL) {
                 potionActiveAvailable = true;
                 potionActive = potion;
-            } else {
-                potionActiveAvailable = false;
+                potionOnActive = 3;
             }
         });
     });
@@ -708,8 +707,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             if (potion != NULL) {
                 potionActiveAvailable = true;
                 potionActive = potion;
-            } else {
-                potionActiveAvailable = false;
+                potionOnActive = 4;
             }
         });
     });
@@ -746,8 +744,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             if (potion != NULL) {
                 potionActiveAvailable = true;
                 potionActive = potion;
-            } else {
-                potionActiveAvailable = false;
+                potionOnActive = 5;
             }
         });
     });
@@ -784,8 +781,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             if (potion != NULL) {
                 potionActiveAvailable = true;
                 potionActive = potion;
-            } else {
-                potionActiveAvailable = false;
+                potionOnActive = 6;
             }
         });
     });

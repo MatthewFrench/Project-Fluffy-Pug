@@ -415,10 +415,10 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
         [GlobalSelf->spell2Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell2Available()?@"true":@"false"]];
         [GlobalSelf->spell3Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell3Available()?@"true":@"false"]];
         [GlobalSelf->spell4Txt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell4Available()?@"true":@"false"]];
-        [GlobalSelf->spell1LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell1LevelUp()?@"true":@"false"]];
-        [GlobalSelf->spell2LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell2LevelUp()?@"true":@"false"]];
-        [GlobalSelf->spell3LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell3LevelUp()?@"true":@"false"]];
-        [GlobalSelf->spell4LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell4LevelUp()?@"true":@"false"]];
+        [GlobalSelf->spell1LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell1LevelUpVisible()?@"true":@"false"]];
+        [GlobalSelf->spell2LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell2LevelUpVisible()?@"true":@"false"]];
+        [GlobalSelf->spell3LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell3LevelUpVisible()?@"true":@"false"]];
+        [GlobalSelf->spell4LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", GlobalSelf->leagueGameState->detectionManager->getSpell4LevelUpVisible()?@"true":@"false"]];
         [GlobalSelf->spell1LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", GlobalSelf->leagueGameState->detectionManager->getSpell1LevelDots().count]];
         [GlobalSelf->spell2LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", GlobalSelf->leagueGameState->detectionManager->getSpell2LevelDots().count]];
         [GlobalSelf->spell3LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", GlobalSelf->leagueGameState->detectionManager->getSpell3LevelDots().count]];

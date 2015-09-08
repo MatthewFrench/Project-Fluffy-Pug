@@ -37,6 +37,7 @@ class DetectionManager {
     bool item1ActiveAvailable = false, item2ActiveAvailable = false, item3ActiveAvailable = false, item4ActiveAvailable = false, item5ActiveAvailable = false, item6ActiveAvailable = false;
     GenericObject* item1Active=nil, *item2Active=nil, *item3Active=nil, *item4Active=nil, *item5Active=nil, *item6Active=nil;
     bool potionActiveAvailable = false;
+    int potionOnActive;
     GenericObject* potionActive=nil;
     bool potionBeingUsedShown = false;
     GenericObject* potionBeingUsed=nil;
