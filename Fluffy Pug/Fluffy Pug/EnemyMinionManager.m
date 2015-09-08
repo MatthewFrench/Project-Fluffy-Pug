@@ -41,97 +41,99 @@ const float overalImagePrecision = 0.96; //0.97
 const float minionHealthMatch = 0.80; //0.87
 MinionBar* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     MinionBar* minion = nil;
-    //Look top left corner
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, coloredPixelPrecision) >=  overalImagePrecision) {
-        int barTopLeftX = x + 1;
-        int barTopLeftY = y + 1;
-        minion = new MinionBar();
-        minion->topLeft.x = barTopLeftX;
-        minion->topLeft.y = barTopLeftY;
-        minion->bottomLeft.x = barTopLeftX;
-        minion->bottomLeft.y = barTopLeftY + 4;
-        minion->topRight.x = barTopLeftX + 62;
-        minion->topRight.y = barTopLeftY;
-        minion->bottomRight.x = barTopLeftX + 62;
-        minion->bottomRight.y = barTopLeftY + 4;
-        minion->health = 0;
-        minion->detectedTopLeft = true;
-        //NSLog(@"Top left at %d %d", barTopLeftX, barTopLeftY);
-    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, coloredPixelPrecision) >=  overalImagePrecision) { // Look for bottom left corner
-        int barTopLeftX = x + 1;
-        int barTopLeftY = y - 3;
-        minion = new MinionBar();
-        minion->topLeft.x = barTopLeftX;
-        minion->topLeft.y = barTopLeftY;
-        minion->bottomLeft.x = barTopLeftX;
-        minion->bottomLeft.y = barTopLeftY + 4;
-        minion->topRight.x = barTopLeftX + 62;
-        minion->topRight.y = barTopLeftY;
-        minion->bottomRight.x = barTopLeftX + 62;
-        minion->bottomRight.y = barTopLeftY + 4;
-        minion->detectedBottomLeft = true;
-        minion->health = 0;
-        //NSLog(@"Bottom left at %d %d", barTopLeftX, barTopLeftY);
-    }/* else {
-        
-        bool detectedCorner = false;
-        if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 1.0) >=  1.0) { // Look for top right corner
-            int barTopLeftX = x - 61;
+    if (isColor3(pixel, 0, 0, 0)) {
+        //Look top left corner
+        if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, coloredPixelPrecision) >=  overalImagePrecision) {
+            int barTopLeftX = x + 1;
             int barTopLeftY = y + 1;
-            //Now scan backwards by 61 pixels, looking for minion health bar
-            for (int x = 61; x >= 0; x--) {
-                for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
-                    uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
-                    uint8_t*  p = getPixel2(imageData, x + barTopLeftX, y + barTopLeftY);
-                    if (getColorPercentage(healthBarColor, p) >= 0.95) {
-                        minion = new MinionBar();
-                        minion->health = (float)x / 61 * 100;
-                        detectedCorner = true;
-                        minion->topLeft.x = barTopLeftX;
-                        minion->topLeft.y = barTopLeftY;
-                        minion->bottomLeft.x = barTopLeftX;
-                        minion->bottomLeft.y = barTopLeftY + 4;
-                        minion->topRight.x = barTopLeftX + 62;
-                        minion->topRight.y = barTopLeftY;
-                        minion->bottomRight.x = barTopLeftX + 62;
-                        minion->bottomRight.y = barTopLeftY + 4;
-                        minion->detectedTopRight = true;
-                        y = healthSegmentImageData.imageHeight + 1;
-                        x = -1;
-                    }
-                }
-            }
+            minion = new MinionBar();
+            minion->topLeft.x = barTopLeftX;
+            minion->topLeft.y = barTopLeftY;
+            minion->bottomLeft.x = barTopLeftX;
+            minion->bottomLeft.y = barTopLeftY + 4;
+            minion->topRight.x = barTopLeftX + 62;
+            minion->topRight.y = barTopLeftY;
+            minion->bottomRight.x = barTopLeftX + 62;
+            minion->bottomRight.y = barTopLeftY + 4;
+            minion->health = 0;
+            minion->detectedTopLeft = true;
+            //NSLog(@"Top left at %d %d", barTopLeftX, barTopLeftY);
+        } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, coloredPixelPrecision) >=  overalImagePrecision) { // Look for bottom left corner
+            int barTopLeftX = x + 1;
+            int barTopLeftY = y - 3;
+            minion = new MinionBar();
+            minion->topLeft.x = barTopLeftX;
+            minion->topLeft.y = barTopLeftY;
+            minion->bottomLeft.x = barTopLeftX;
+            minion->bottomLeft.y = barTopLeftY + 4;
+            minion->topRight.x = barTopLeftX + 62;
+            minion->topRight.y = barTopLeftY;
+            minion->bottomRight.x = barTopLeftX + 62;
+            minion->bottomRight.y = barTopLeftY + 4;
+            minion->detectedBottomLeft = true;
+            minion->health = 0;
+            //NSLog(@"Bottom left at %d %d", barTopLeftX, barTopLeftY);
         }
-        if (detectedCorner == false) {
-            if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 1.0) >=  1.0) { // Look for bottom right corner
-                int barTopLeftX = x - 61;
-                int barTopLeftY = y - 3;
-                
-                //Now scan backwards by 61 pixels, looking for minion health bar
-                for (int x = 61; x >= 0; x--) {
-                    for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
-                        uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
-                        uint8_t*  p = getPixel2(imageData, x + barTopLeftX, y + barTopLeftY);
-                        if (getColorPercentage(healthBarColor, p) >= 0.95) {
-                            minion = new MinionBar();
-                            minion->health = (float)x / 61 * 100;
-                            minion->topLeft.x = barTopLeftX;
-                            minion->topLeft.y = barTopLeftY;
-                            minion->bottomLeft.x = barTopLeftX;
-                            minion->bottomLeft.y = barTopLeftY + 4;
-                            minion->topRight.x = barTopLeftX + 62;
-                            minion->topRight.y = barTopLeftY;
-                            minion->bottomRight.x = barTopLeftX + 62;
-                            minion->bottomRight.y = barTopLeftY + 4;
-                            minion->detectedBottomRight = true;
-                            y = healthSegmentImageData.imageHeight + 1;
-                            x = -1;
-                        }
-                    }
-                }
-            }
-        }
-    }*/
+    }/* else {
+      
+      bool detectedCorner = false;
+      if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 1.0) >=  1.0) { // Look for top right corner
+      int barTopLeftX = x - 61;
+      int barTopLeftY = y + 1;
+      //Now scan backwards by 61 pixels, looking for minion health bar
+      for (int x = 61; x >= 0; x--) {
+      for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+      uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
+      uint8_t*  p = getPixel2(imageData, x + barTopLeftX, y + barTopLeftY);
+      if (getColorPercentage(healthBarColor, p) >= 0.95) {
+      minion = new MinionBar();
+      minion->health = (float)x / 61 * 100;
+      detectedCorner = true;
+      minion->topLeft.x = barTopLeftX;
+      minion->topLeft.y = barTopLeftY;
+      minion->bottomLeft.x = barTopLeftX;
+      minion->bottomLeft.y = barTopLeftY + 4;
+      minion->topRight.x = barTopLeftX + 62;
+      minion->topRight.y = barTopLeftY;
+      minion->bottomRight.x = barTopLeftX + 62;
+      minion->bottomRight.y = barTopLeftY + 4;
+      minion->detectedTopRight = true;
+      y = healthSegmentImageData.imageHeight + 1;
+      x = -1;
+      }
+      }
+      }
+      }
+      if (detectedCorner == false) {
+      if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 1.0) >=  1.0) { // Look for bottom right corner
+      int barTopLeftX = x - 61;
+      int barTopLeftY = y - 3;
+      
+      //Now scan backwards by 61 pixels, looking for minion health bar
+      for (int x = 61; x >= 0; x--) {
+      for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+      uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
+      uint8_t*  p = getPixel2(imageData, x + barTopLeftX, y + barTopLeftY);
+      if (getColorPercentage(healthBarColor, p) >= 0.95) {
+      minion = new MinionBar();
+      minion->health = (float)x / 61 * 100;
+      minion->topLeft.x = barTopLeftX;
+      minion->topLeft.y = barTopLeftY;
+      minion->bottomLeft.x = barTopLeftX;
+      minion->bottomLeft.y = barTopLeftY + 4;
+      minion->topRight.x = barTopLeftX + 62;
+      minion->topRight.y = barTopLeftY;
+      minion->bottomRight.x = barTopLeftX + 62;
+      minion->bottomRight.y = barTopLeftY + 4;
+      minion->detectedBottomRight = true;
+      y = healthSegmentImageData.imageHeight + 1;
+      x = -1;
+      }
+      }
+      }
+      }
+      }
+      }*/
     return minion;
 }
 
@@ -158,8 +160,8 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
             }
         }
         //if (detectedCorners > 1) {
-            minion->characterCenter.x = minion->topLeft.x+30; minion->characterCenter.y = minion->topLeft.y+32;
-            [minionBars addObject: [NSValue valueWithPointer:minion]];
+        minion->characterCenter.x = minion->topLeft.x+30; minion->characterCenter.y = minion->topLeft.y+32;
+        [minionBars addObject: [NSValue valueWithPointer:minion]];
         //}
     }
     
