@@ -580,7 +580,7 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                 });
             }
             
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (foundMap != NULL) {
                         if (map != NULL) delete map;
@@ -713,7 +713,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                     }
                 });
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (topLeftCorner != NULL) {
                         if (shopTopLeftCorner != NULL) delete shopTopLeftCorner;
@@ -763,7 +763,7 @@ void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t di
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 NSLog(@"Process shop available Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (shop != NULL) {
                         if (shopAvailable != NULL) delete shopAvailable;
@@ -802,7 +802,7 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 NSLog(@"Process used potion Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (potionUsed != NULL) {
                         if (potionBeingUsed != NULL) delete potionBeingUsed;
@@ -849,7 +849,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                 }
             }
             
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
                         if (item1Active != NULL) delete item1Active;
@@ -893,7 +893,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                 }
             }
             
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
                         if (item2Active != NULL) delete item2Active;
@@ -937,7 +937,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                 }
             }
             
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
                         if (item3Active != NULL) delete item3Active;
@@ -979,7 +979,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     }
                 }
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
                         if (item4Active != NULL) delete item4Active;
@@ -1022,7 +1022,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     }
                 }
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
                         if (item5Active != NULL) delete item5Active;
@@ -1065,7 +1065,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     }
                 }
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
                         if (item6Active != NULL) delete item6Active;
@@ -1111,7 +1111,7 @@ void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t di
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 NSLog(@"Process trinket active Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (trinket != NULL) {
                         if (trinketActive != NULL) delete trinketActive;
@@ -1151,7 +1151,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 NSLog(@"Process spell actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
                         if (spell1Active != NULL) delete spell1Active;
@@ -1183,7 +1183,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
                         if (spell2Active != NULL) delete spell2Active;
@@ -1215,7 +1215,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
                         if (spell3Active != NULL) delete spell3Active;
@@ -1247,7 +1247,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
                         if (spell4Active != NULL) delete spell4Active;
@@ -1285,7 +1285,7 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
             if (getTimeInMilliseconds(mach_absolute_time() - startTime)* 2 > longAlert) {
                 NSLog(@"Processing summoner spell actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
                         if (summonerSpell1Active != NULL) delete summonerSpell1Active;
@@ -1313,7 +1313,7 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
                     }
                 }
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
                         if (summonerSpell2Active != NULL) delete summonerSpell2Active;
@@ -1395,7 +1395,7 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
                 NSLog(@"Process level up dots Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (spell1LevelDots.count > 0) {
                         GenericObject* dot = (GenericObject*)[spell1LevelDots.lastObject pointerValue];
@@ -1461,7 +1461,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
             if (getTimeInMilliseconds(mach_absolute_time() - startTime)*4 > longAlert) {
                 NSLog(@"Process spell level ups Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (levelUp != NULL) {
                         if (spell1LevelUp != NULL) delete spell1LevelUp;
@@ -1490,7 +1490,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
                     }
                 }
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (levelUp != NULL) {
                         if (spell2LevelUp != NULL) delete spell2LevelUp;
@@ -1519,7 +1519,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
                     }
                 }
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (levelUp != NULL) {
                         if (spell3LevelUp != NULL) delete spell3LevelUp;
@@ -1548,7 +1548,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
                     }
                 }
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (levelUp != NULL) {
                         if (spell4LevelUp != NULL) delete spell4LevelUp;
@@ -1643,7 +1643,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
                     }
                 }
             });
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (allyMinions.count > 0) {
                         MinionBar* minion = (MinionBar*)[allyMinions.lastObject pointerValue];
@@ -1736,7 +1736,7 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
                     }
                 }
             });
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (enemyMinions.count > 0) {
                         MinionBar* minion = (MinionBar*)[enemyMinions.lastObject pointerValue];
@@ -1833,7 +1833,7 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
                     }
                 }
             });
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (enemyChampions.count > 0) {
                         ChampionBar* champ = (ChampionBar*)[enemyChampions.lastObject pointerValue];
@@ -1931,7 +1931,7 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
                     }
                 }
             });
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (allyChampions.count > 0) {
                         ChampionBar* champ = (ChampionBar*)[allyChampions.lastObject pointerValue];
@@ -2029,7 +2029,7 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
                     }
                 }
             });
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (enemyTowers.count > 0) {
                         TowerBar* tower = (TowerBar*)[enemyTowers.lastObject pointerValue];
@@ -2127,7 +2127,7 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
                     }
                 }
             });
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (selfChampions.count > 0) {
                         ChampionBar* champ = (ChampionBar*)[selfChampions.lastObject pointerValue];
@@ -2215,7 +2215,7 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 NSLog(@"Process self health bar Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
-            dispatch_async(aiThread, ^(void) {
+            dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if ([HealthBarBars count] > 0) {
                         if (selfHealthBar != NULL) delete selfHealthBar;

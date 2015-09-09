@@ -133,7 +133,12 @@ void BasicAI::handleMovementAndAttacking() {
     //If we see our selves and the shop is closed, then lets move around
     if ([gameState->detectionManager->getSelfChampions() count] > 0 && !gameState->detectionManager->getShopTopLeftCornerVisible()) {
         NSMutableArray* selfChamps = gameState->detectionManager->getSelfChampions();
-        ChampionBar* selfChamp = (ChampionBar*)[[selfChamps firstObject] pointerValue];
+        int numberOfSelfChamps = (int)selfChamps.count;
+        if (numberOfSelfChamps == 0) {
+            NSLog(@"We have a problem");
+        }
+        id firstObject = [selfChamps firstObject];
+        ChampionBar* selfChamp = (ChampionBar*)[firstObject pointerValue];
         
         bool enemyChampionsNear = [gameState->detectionManager->getEnemyChampions() count] > 0;
         bool enemyMinionsNear = [gameState->detectionManager->getEnemyMinions() count] > 0;
