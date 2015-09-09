@@ -120,6 +120,8 @@ NSMutableArray* EnemyTowerManager::validateTowerBars(ImageData imageData, NSMuta
         if (detectedCorners > 1) {
             tower->towerCenter.x = tower->topLeft.x+126/2; tower->towerCenter.y = tower->topLeft.y+200;
             [TowerBars addObject: [NSValue valueWithPointer:tower]];
+        } else {
+            delete tower;
         }
     }
     

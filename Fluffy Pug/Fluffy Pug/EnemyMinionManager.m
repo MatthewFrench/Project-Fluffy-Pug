@@ -184,6 +184,7 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
         if (minion->health == 0) { //Not a minion
             [minionBars removeObjectAtIndex:i];
             i--;
+            delete minion;
         }
     }
     

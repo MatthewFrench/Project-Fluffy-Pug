@@ -163,6 +163,7 @@ NSMutableArray* AllyMinionManager::validateMinionBars(ImageData imageData, NSMut
         if (minion->health == 0) { //Not a minion
             [minionBars removeObjectAtIndex:i];
             i--;
+            delete minion;
         }
     }
     
