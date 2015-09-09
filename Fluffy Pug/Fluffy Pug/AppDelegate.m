@@ -245,6 +245,7 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
     }
 }
 - (void) updateLeagueWindowStatus {
+    @autoreleasepool {
     leagueDetector->detectLeagueWindow();
     if (leagueDetector->leaguePID != -1) {
         leagueGameState->leagueSize = CGRectMake(leagueDetector->xOrigin, leagueDetector->yOrigin, leagueDetector->width, leagueDetector->height);
@@ -252,12 +253,17 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
         //NSLog(@"Width: %f, height: %f", [width floatValue], [height floatValue]);
         //NSLog(@"Found league instance: %@", info);
         dispatch_async(dispatch_get_main_queue(), ^{
+            @autoreleasepool {
             [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", leagueGameState->leagueSize.size.width, leagueGameState->leagueSize.size.height]];
+            }
         });
     } else {
         dispatch_async(dispatch_get_main_queue(), ^{
+            @autoreleasepool {
         [statusText setStringValue:@"No League Instance Found"];
+            }
              });
+    }
     }
 }
 
@@ -285,13 +291,15 @@ AppDelegate *GlobalSelf;
         int l = loops;
         int sl = screenLoops;
         dispatch_async(dispatch_get_main_queue(), ^{
+            @autoreleasepool {
             [GlobalSelf->fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / l, (1000.0)/(time * 1.0 / l)]];
             [GlobalSelf->screenAnalyzeText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / sl, (1000.0)/(time * 1.0 / sl)]];
+            }
         });
         lastTime = mach_absolute_time();
         loops = 0;
         screenLoops = 0;
-        [GlobalSelf updateLeagueWindowStatus];
+        //[GlobalSelf updateLeagueWindowStatus];
     }
     else
     {
@@ -340,6 +348,7 @@ AppDelegate *GlobalSelf;
         int buyableItems = (int)GlobalSelf->leagueGameState->detectionManager->getBuyableItems().count;
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            @autoreleasepool {
             [GlobalSelf->allyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)allyMinionCount]];
             [GlobalSelf->enemyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)enemyMinionCount]];
             [GlobalSelf->enemyChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)enemyChampCount]];
@@ -377,7 +386,7 @@ AppDelegate *GlobalSelf;
             [GlobalSelf->shopAvailableTxt setStringValue:[NSString stringWithFormat:@"%@", shopAvailable?@"true":@"false"]];
             [GlobalSelf->shopWindowOpenTxt setStringValue:[NSString stringWithFormat:@"%@", shopWindowOpen?@"true":@"false"]];
             [GlobalSelf->buyableItemsTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)buyableItems]];
-            
+            }
             //[[GlobalSelf.window contentView] setNeedsDisplay:true];
         });
     }
@@ -390,9 +399,10 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
                                                                                                         IOSurfaceRef frameSurface,
                                                                                                         CGDisplayStreamUpdateRef updateRef)
 {
+    @autoreleasepool {
     if (status != kCGDisplayStreamFrameStatusFrameComplete) return;
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(GlobalSelf->aiThread, ^{
         screenLoops++;
     });
     uint32_t aseed;
@@ -474,7 +484,9 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     }
     
     dispatch_async(GlobalSelf->aiThread, ^{
-        [GlobalSelf logic];
+        @autoreleasepool {
+            [GlobalSelf logic];
+        }
     });
     
     
@@ -492,6 +504,7 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
         // Add a task to the group
         queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
+            @autoreleasepool {
             NSDateFormatter *DateFormatter=[[NSDateFormatter alloc] init];
             [DateFormatter setDateFormat:@"yyyy-MM-dd hh:mm:ss"];
             
@@ -504,7 +517,7 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
             if (!wrote) {
                 NSLog(@"Couldn't save image");
             }
-            
+            }
         });
     }
 
@@ -589,6 +602,7 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
            uRect.origin.x + uRect.size.width,
            uRect.origin.y + uRect.size.height);
     */
+    }
 };
 
 

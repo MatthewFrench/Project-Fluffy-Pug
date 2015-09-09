@@ -126,104 +126,104 @@ void DetectionManager::processDetection(ImageData image) {
         
         processAllyMinionDetection(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processAllyMinionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processEnemyMinionDetection(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processEnemyMinionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processAllyChampionDetection(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processAllyChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processEnemyChampionDetection(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processEnemyChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processEnemyTowerDetection(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processEnemyTowerDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processSelfChampionDetection(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processSelfChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processSelfHealthBarDetection(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processSelfHealthBarDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processSpellLevelUps(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processSpellLevelUps detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processSpellLevelDots(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processSpellLevelDots detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processSpellActives(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processSpellActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processSummonerSpellActives(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processSummonerSpellActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //uint64_t startTime3 = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         //NSLog(@"dispatch group creation time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime3));
         
         //startTime3 = mach_absolute_time();
@@ -231,40 +231,40 @@ void DetectionManager::processDetection(ImageData image) {
         //NSLog(@"processItemActives(image, dispatchGroup) time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime3));
         
         //startTime3 = mach_absolute_time();
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //NSLog(@"dispatch_group_wait time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime3));
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //NSLog(@"processItemActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processUsedPotion(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processUsedPotion detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processShopAvailable(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processShopAvailable detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processShop(image, dispatchGroup);
         
-        dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
+        //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    NSLog(@"processShop detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
-        dispatchGroup = dispatch_group_create();
+        //dispatchGroup = dispatch_group_create();
         
         processMap(image, dispatchGroup);
         
