@@ -73,16 +73,18 @@ void BasicAI::handleBuyingItems() {
                 NSMutableArray* itemsToBuy = gameState->detectionManager->getBuyableItems();
                 for (int i = 0; i < [itemsToBuy count]; i++) {
                     GenericObject* item = (GenericObject*)[[itemsToBuy objectAtIndex:i] pointerValue];
+                    int clickX = item->center.x;
+                    int clickY = item->center.y;
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * 500), dispatch_get_main_queue(), ^{
-                        moveMouse(item->center.x, item->center.y);
+                        moveMouse(clickX, clickY);
                     });
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+50)), dispatch_get_main_queue(), ^{
-                        doubleTapMouseLeft(item->center.x, item->center.y);
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+250)), dispatch_get_main_queue(), ^{
+                        doubleTapMouseLeft(clickX, clickY);
                     });
                 }
                 lastShopBuying = mach_absolute_time();
             } else { //Open up the shop
-                if (getTimeInMilliseconds(mach_absolute_time() - lastShopOpenTap) >= 3000) {
+                if (getTimeInMilliseconds(mach_absolute_time() - lastShopOpenTap) >= 8000) {
                     lastShopOpenTap = mach_absolute_time();
                     tapShop();
                 }
@@ -95,7 +97,7 @@ void BasicAI::handleBuyingItems() {
     } else {
         //Close shop
         if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible() &&
-            getTimeInMilliseconds(mach_absolute_time() - lastShopBuying) >= 4000) {
+            getTimeInMilliseconds(mach_absolute_time() - lastShopBuying) >= 8000) {
             //Gave a 4 seconds to buy
             closeShop = true;
             //NSLog(@"Closing shop because we already bought.");
@@ -109,7 +111,7 @@ void BasicAI::handleBuyingItems() {
     }
 }
 void BasicAI::handleCameraFocus() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastCameraFocus) >= 1500) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastCameraFocus) >= 4000) {
         if (gameState->detectionManager->getSelfHealthBarVisible() && !gameState->detectionManager->getShopTopLeftCornerVisible()) {
             //We see the health bar at the bottom so lets focus camera
             if (gameState->detectionManager->getSelfChampions().count == 0) {
@@ -130,7 +132,8 @@ const int ACTION_Run_Away = 0, ACTION_Attack_Enemy_Champion = 1, ACTION_Attack_E
 void BasicAI::handleMovementAndAttacking() {
     //If we see our selves and the shop is closed, then lets move around
     if ([gameState->detectionManager->getSelfChampions() count] > 0 && !gameState->detectionManager->getShopTopLeftCornerVisible()) {
-        ChampionBar* selfChamp = (ChampionBar*)[[gameState->detectionManager->getSelfChampions() firstObject] pointerValue];
+        NSMutableArray* selfChamps = gameState->detectionManager->getSelfChampions();
+        ChampionBar* selfChamp = (ChampionBar*)[[selfChamps firstObject] pointerValue];
         
         bool enemyChampionsNear = [gameState->detectionManager->getEnemyChampions() count] > 0;
         bool enemyMinionsNear = [gameState->detectionManager->getEnemyMinions() count] > 0;

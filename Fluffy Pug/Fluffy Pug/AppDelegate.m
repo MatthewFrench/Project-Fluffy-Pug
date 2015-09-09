@@ -252,9 +252,11 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
         leagueGameState->leaguePID = leagueDetector->leaguePID;
         //NSLog(@"Width: %f, height: %f", [width floatValue], [height floatValue]);
         //NSLog(@"Found league instance: %@", info);
+        float width = leagueGameState->leagueSize.size.width;
+        float height = leagueGameState->leagueSize.size.height;
         dispatch_async(dispatch_get_main_queue(), ^{
             @autoreleasepool {
-            [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", leagueGameState->leagueSize.size.width, leagueGameState->leagueSize.size.height]];
+            [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", width, height]];
             }
         });
     } else {
@@ -299,7 +301,7 @@ AppDelegate *GlobalSelf;
         lastTime = mach_absolute_time();
         loops = 0;
         screenLoops = 0;
-        //[GlobalSelf updateLeagueWindowStatus];
+        [GlobalSelf updateLeagueWindowStatus];
     }
     else
     {
