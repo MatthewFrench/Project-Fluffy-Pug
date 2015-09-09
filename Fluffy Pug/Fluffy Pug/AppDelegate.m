@@ -267,6 +267,8 @@ int screenLoops = 0;
 AppDelegate *GlobalSelf;
 
 - (void) logic {
+    @autoreleasepool {
+    
     GlobalSelf->leagueGameState->autoQueueActive = [GlobalSelf->autoQueueCheckbox state] == NSOnState;
     //Run auto queue logic and AI logic
     if ([GlobalSelf->aiActiveCheckbox state] == NSOnState && GlobalSelf->leagueGameState->leaguePID != -1) {
@@ -376,8 +378,10 @@ AppDelegate *GlobalSelf;
             [GlobalSelf->shopWindowOpenTxt setStringValue:[NSString stringWithFormat:@"%@", shopWindowOpen?@"true":@"false"]];
             [GlobalSelf->buyableItemsTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)buyableItems]];
             
-            [[GlobalSelf.window contentView] setNeedsDisplay:true];
+            //[[GlobalSelf.window contentView] setNeedsDisplay:true];
         });
+    }
+        
     }
 }
 
