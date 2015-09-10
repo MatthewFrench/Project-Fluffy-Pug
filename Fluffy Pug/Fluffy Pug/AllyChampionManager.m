@@ -35,7 +35,7 @@ AllyChampionManager::AllyChampionManager () {
 Champion* AllyChampionManager::detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     Champion* champ = nil;
     //Look top left corner
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.95) >=  0.95) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.85) >=  0.85) {
         int barTopLeftX = x + 3;
         int barTopLeftY = y + 3;
         champ = [Champion new];
@@ -48,7 +48,7 @@ Champion* AllyChampionManager::detectChampionBarAtPixel(ImageData imageData, uin
         champ->bottomRight.x = barTopLeftX + 104;
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedTopLeft = true;
-    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.95) >=  0.95) { // Look for bottom left corner
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.85) >=  0.85) { // Look for bottom left corner
         int barTopLeftX = x + 3;
         int barTopLeftY = y - 8;
         champ = [Champion new];
@@ -61,7 +61,7 @@ Champion* AllyChampionManager::detectChampionBarAtPixel(ImageData imageData, uin
         champ->bottomRight.x = barTopLeftX + 104;
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedBottomLeft = true;
-    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.95) >=  0.95) { // Look for top right corner
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.85) >=  0.85) { // Look for top right corner
         int barTopLeftX = x - 101 - 2;
         int barTopLeftY = y + 3;
         champ = [Champion new];
@@ -74,7 +74,7 @@ Champion* AllyChampionManager::detectChampionBarAtPixel(ImageData imageData, uin
         champ->bottomRight.x = barTopLeftX + 104;
         champ->bottomRight.y = barTopLeftY + 9;
         champ->detectedTopRight = true;
-    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.95) >=  0.95) { // Look for bottom right corner
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.85) >=  0.85) { // Look for bottom right corner
         int barTopLeftX = x - 101 - 2;
         int barTopLeftY = y - 8;
         champ = [Champion new];

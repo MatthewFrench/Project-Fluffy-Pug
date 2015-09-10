@@ -114,14 +114,14 @@ DetectionManager::DetectionManager(dispatch_queue_t _aiThread, dispatch_queue_t 
  dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
  
  if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
- NSLog(@"Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+ //NSLog(@"Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
  }
  }*/
 void DetectionManager::processDetection(ImageData image) {
     
     @autoreleasepool {
         //if (scanningScreen) {
-        //    NSLog(@"Screen is being scanned");
+        //    //NSLog(@"Screen is being scanned");
         //}
         
         //scanningScreen = true;
@@ -138,7 +138,7 @@ void DetectionManager::processDetection(ImageData image) {
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processAllyMinionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processAllyMinionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -147,7 +147,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processEnemyMinionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processEnemyMinionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -156,7 +156,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processAllyChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processAllyChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -165,7 +165,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processEnemyChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processEnemyChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -174,7 +174,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processEnemyTowerDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processEnemyTowerDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -183,7 +183,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processSelfChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processSelfChampionDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -192,7 +192,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processSelfHealthBarDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processSelfHealthBarDetection detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -201,7 +201,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processSpellLevelUps detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processSpellLevelUps detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -210,7 +210,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processSpellLevelDots detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processSpellLevelDots detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -219,7 +219,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processSpellActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processSpellActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -228,22 +228,22 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processSummonerSpellActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processSummonerSpellActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //uint64_t startTime3 = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
-        //NSLog(@"dispatch group creation time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime3));
+        ////NSLog(@"dispatch group creation time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime3));
         
         //startTime3 = mach_absolute_time();
         processItemActives(image, dispatchGroup);
-        //NSLog(@"processItemActives(image, dispatchGroup) time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime3));
+        ////NSLog(@"processItemActives(image, dispatchGroup) time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime3));
         
         //startTime3 = mach_absolute_time();
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
-        //NSLog(@"dispatch_group_wait time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime3));
+        ////NSLog(@"dispatch_group_wait time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime3));
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //NSLog(@"processItemActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        ////NSLog(@"processItemActives detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -252,7 +252,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processUsedPotion detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processUsedPotion detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -261,7 +261,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processShopAvailable detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processShopAvailable detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -270,7 +270,7 @@ void DetectionManager::processDetection(ImageData image) {
         
         //dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processShop detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processShop detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         //startTime = mach_absolute_time();
         //dispatchGroup = dispatch_group_create();
@@ -279,11 +279,11 @@ void DetectionManager::processDetection(ImageData image) {
         
         dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-        //    NSLog(@"processMap detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+        //    //NSLog(@"processMap detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
         //}
         
         //if (getTimeInMilliseconds(mach_absolute_time() - overallStartTime) > longAlert) {
-        //    NSLog(@"\tOverall detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - overallStartTime));
+        //    //NSLog(@"\tOverall detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - overallStartTime));
         //}
         
         //scanningScreen = false;
@@ -975,7 +975,7 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
             }
             
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process Map Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process Map Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             if (foundMap != NULL) {
                 uint64_t startTime = mach_absolute_time();
@@ -993,7 +993,7 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                     }
                 }
                 if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                    NSLog(@"Process Map location Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                    //NSLog(@"Process Map location Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
                 }
                 
                 
@@ -1027,7 +1027,7 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                     }
                 }
                 if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                    NSLog(@"Process Map shop location Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                    //NSLog(@"Process Map shop location Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
                 }
             }
             /*
@@ -1104,8 +1104,8 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
             shopScanCurrentChunkY = 0;
         }
         //Add chunk to scan
-        CGRect scanRect = CGRectMake( scanWidth * shopScanCurrentChunkX / shopScanChunksX + scanStartX ,
-                                     scanHeight * shopScanCurrentChunkY / shopScanChunksY + scanStartY ,
+        CGRect scanRect = CGRectMake( scanWidth * shopScanCurrentChunkX + scanStartX ,
+                                     scanHeight * shopScanCurrentChunkY + scanStartY ,
                                      scanWidth ,
                                      scanHeight );
         scanRect = CGRectIntegral(scanRect);
@@ -1176,7 +1176,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process shop Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process shop Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             /*
             if (topLeftCorner != NULL) {
@@ -1222,7 +1222,7 @@ void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t di
             uint64_t startTime = mach_absolute_time();
             
             
-            //NSLog(@"Searching for shop");
+            ////NSLog(@"Searching for shop");
             GenericObject* shop = nullptr;
             for (int x = searchStart.x; x < searchEnd.x; x++) {
                 for (int y = searchStart.y; y < searchEnd.y; y++) {
@@ -1235,7 +1235,7 @@ void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t di
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process shop available Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process shop available Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
@@ -1274,7 +1274,7 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process used potion Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process used potion Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
@@ -1341,7 +1341,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                 }
             });
             //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-            //NSLog(@"Processing item actives 1 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+            ////NSLog(@"Processing item actives 1 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             //}
         }
     });
@@ -1385,7 +1385,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                 }
             });
             //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-            //NSLog(@"Processing item actives 2 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+            ////NSLog(@"Processing item actives 2 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             //}
         }
     });
@@ -1428,7 +1428,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                     }
                 }
             });//if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-            //NSLog(@"Processing item actives 3 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+            ////NSLog(@"Processing item actives 3 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             //}
         }
     });
@@ -1471,7 +1471,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                 }
             });
             //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-            //NSLog(@"Processing item actives 4 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+            ////NSLog(@"Processing item actives 4 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             //}
         }
     });
@@ -1514,7 +1514,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                 }
             });
             //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-            //NSLog(@"Processing item actives 5 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+            ////NSLog(@"Processing item actives 5 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             //}
         }
     });
@@ -1557,7 +1557,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
                 }
             });
             //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-            //NSLog(@"Processing item actives 6 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+            ////NSLog(@"Processing item actives 6 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             //}
         }
     });
@@ -1583,7 +1583,7 @@ void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t di
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process trinket active Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process trinket active Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
@@ -1623,7 +1623,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process spell actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process spell actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
@@ -1655,7 +1655,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
@@ -1687,7 +1687,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
@@ -1719,7 +1719,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process spell 2 actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
@@ -1757,7 +1757,7 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime)* 2 > longAlert) {
-                NSLog(@"Processing summoner spell actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Processing summoner spell actives Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
@@ -1866,7 +1866,7 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process level up dots Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process level up dots Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             
             dispatch_async(detectionThread, ^(void) {
@@ -1933,7 +1933,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
                 }
             }
             if (getTimeInMilliseconds(mach_absolute_time() - startTime)*4 > longAlert) {
-                NSLog(@"Process spell level ups Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process spell level ups Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
@@ -2071,8 +2071,8 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
             allyMinionScanCurrentChunkY = 0;
         }
         //Add chunk to scan
-        CGRect scanRect = CGRectMake( scanWidth * allyMinionScanCurrentChunkX / allyMinionScanChunksX + scanStartX ,
-                                     scanHeight * allyMinionScanCurrentChunkY / allyMinionScanChunksY + scanStartY ,
+        CGRect scanRect = CGRectMake( scanWidth * allyMinionScanCurrentChunkX + scanStartX ,
+                                     scanHeight * allyMinionScanCurrentChunkY + scanStartY ,
                                      scanWidth ,
                                      scanHeight );
         scanRect = CGRectIntegral(scanRect);
@@ -2113,10 +2113,10 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
     //Add previous minions to scan
     for (int i = 0; i < [allyMinions count]; i++) {
         Minion* minion = [allyMinions objectAtIndex:i];
-        CGRect rect = CGRectMake(minion->topLeft.x - allyMinionFrameMove,
-                                 minion->topLeft.y - allyMinionFrameMove,
-                                 minion->bottomRight.x - minion->topLeft.x + allyMinionFrameMove,
-                                 minion->bottomRight.y - minion->topLeft.y + allyMinionFrameMove);
+        CGRect rect = CGRectMake(minion->topLeft.x - allyMinionFrameMove*framesPassed,
+                                 minion->topLeft.y - allyMinionFrameMove*framesPassed,
+                                 minion->bottomRight.x - minion->topLeft.x + allyMinionFrameMove*framesPassed*2,
+                                 minion->bottomRight.y - minion->topLeft.y + allyMinionFrameMove*framesPassed*2);
         rect = CGRectIntegral(rect);
         rect = fitRectangleInRectangle(rect, leagueWindowRect);
         combineRectangles(scanRectangles, rect);
@@ -2142,7 +2142,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
             minionBars = AllyMinionManager::validateMinionBars(image, minionBars);
             
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process ally minions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process ally minions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             /*
             dispatch_async(detectionThread, ^(void){
@@ -2205,8 +2205,8 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
             enemyMinionScanCurrentChunkY = 0;
         }
         //Add chunk to scan
-        CGRect scanRect = CGRectMake( scanWidth * enemyMinionScanCurrentChunkX / enemyMinionScanChunksX + scanStartX ,
-                                     scanHeight * enemyMinionScanCurrentChunkY / enemyMinionScanChunksY + scanStartY ,
+        CGRect scanRect = CGRectMake( scanWidth * enemyMinionScanCurrentChunkX + scanStartX ,
+                                     scanHeight * enemyMinionScanCurrentChunkY + scanStartY ,
                                      scanWidth ,
                                      scanHeight );
         scanRect = CGRectIntegral(scanRect);
@@ -2243,18 +2243,31 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
     combineRectangles(scanRectangles, scanRect);
      */
+    
+    //MyLog(@"Enemy minion rectangles 1:\n");
+    //for (int i = 0; i < [scanRectangles count]; i++) {
+    //    CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
+    //    MyLog(@"\t X: %f, Y: %f, Width: %f, Height: %f\n", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+    //}
      
     //Add previous minions to scan
     for (int i = 0; i < [enemyMinions count]; i++) {
         Minion* minion = [enemyMinions objectAtIndex:i];
-        CGRect rect = CGRectMake(minion->topLeft.x - enemyMinionFrameMove,
-                                 minion->topLeft.y - enemyMinionFrameMove,
-                                 minion->bottomRight.x - minion->topLeft.x + enemyMinionFrameMove,
-                                 minion->bottomRight.y - minion->topLeft.y + enemyMinionFrameMove);
+        CGRect rect = CGRectMake(minion->topLeft.x - enemyMinionFrameMove*framesPassed,
+                                 minion->topLeft.y - enemyMinionFrameMove*framesPassed,
+                                 minion->bottomRight.x - minion->topLeft.x + enemyMinionFrameMove*framesPassed*2,
+                                 minion->bottomRight.y - minion->topLeft.y + enemyMinionFrameMove*framesPassed*2);
         rect = CGRectIntegral(rect);
         rect = fitRectangleInRectangle(rect, leagueWindowRect);
         combineRectangles(scanRectangles, rect);
     }
+    
+    ////NSLog(@"Enemy minion rectangles 2:");
+    //for (int i = 0; i < [scanRectangles count]; i++) {
+    //    CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
+    //    //NSLog(@"\t X: %f, Y: %f, Width: %f, Height: %f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
+    //}
+    
     
     dispatch_group_async(dispatchGroup, enemyMinionThread, ^{
         @autoreleasepool {
@@ -2273,10 +2286,11 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
                     }
                 }
             }
+           // //NSLog(@"Found %d possible minions");
             minionBars = EnemyMinionManager::validateMinionBars(image, minionBars);
             
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process enemy minions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process enemy minions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }/*
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
@@ -2306,8 +2320,8 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     });
 }
 
-const int enemyChampionScanChunksX = 5; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-const int enemyChampionScanChunksY = 24;
+const int enemyChampionScanChunksX = 4; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+const int enemyChampionScanChunksY = 8;
 const float enemyChampionFrameMove = 80.0; //Assume Champions can move 80 pixels in 1 frames
 void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_group_t dispatchGroup) {
     float leagueGameWidth = image.imageWidth;
@@ -2336,8 +2350,8 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
             enemyChampionScanCurrentChunkY = 0;
         }
         //Add chunk to scan
-        CGRect scanRect = CGRectMake( scanWidth * enemyChampionScanCurrentChunkX / enemyChampionScanChunksX + scanStartX ,
-                                     scanHeight * enemyChampionScanCurrentChunkY / enemyChampionScanChunksY + scanStartY ,
+        CGRect scanRect = CGRectMake( scanWidth * enemyChampionScanCurrentChunkX + scanStartX ,
+                                     scanHeight * enemyChampionScanCurrentChunkY + scanStartY ,
                                      scanWidth ,
                                      scanHeight );
         scanRect = CGRectIntegral(scanRect);
@@ -2376,10 +2390,10 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
     //Add previous Champions to scan
     for (int i = 0; i < [enemyChampions count]; i++) {
         Champion* Champion = [enemyChampions objectAtIndex:i];
-        CGRect rect = CGRectMake(Champion->topLeft.x - enemyChampionFrameMove,
-                                 Champion->topLeft.y - enemyChampionFrameMove,
-                                 Champion->bottomRight.x - Champion->topLeft.x + enemyChampionFrameMove,
-                                 Champion->bottomRight.y - Champion->topLeft.y + enemyChampionFrameMove);
+        CGRect rect = CGRectMake(Champion->topLeft.x - enemyChampionFrameMove*framesPassed,
+                                 Champion->topLeft.y - enemyChampionFrameMove*framesPassed,
+                                 Champion->bottomRight.x - Champion->topLeft.x + enemyChampionFrameMove*framesPassed*2,
+                                 Champion->bottomRight.y - Champion->topLeft.y + enemyChampionFrameMove*framesPassed*2);
         rect = CGRectIntegral(rect);
         rect = fitRectangleInRectangle(rect, leagueWindowRect);
         combineRectangles(scanRectangles, rect);
@@ -2409,7 +2423,7 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
             ChampionBars = EnemyChampionManager::validateChampionBars(image, ChampionBars);
             
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process enemy champions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                ////NSLog(@"Process enemy champions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }/*
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
@@ -2470,8 +2484,8 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
             allyChampionScanCurrentChunkY = 0;
         }
         //Add chunk to scan
-        CGRect scanRect = CGRectMake( scanWidth * allyChampionScanCurrentChunkX / allyChampionScanChunksX + scanStartX ,
-                                     scanHeight * allyChampionScanCurrentChunkY / allyChampionScanChunksY + scanStartY ,
+        CGRect scanRect = CGRectMake( scanWidth * allyChampionScanCurrentChunkX + scanStartX ,
+                                     scanHeight * allyChampionScanCurrentChunkY + scanStartY ,
                                      scanWidth ,
                                      scanHeight );
         scanRect = CGRectIntegral(scanRect);
@@ -2512,10 +2526,10 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
     //Add previous Champions to scan
     for (int i = 0; i < [allyChampions count]; i++) {
         Champion* Champion = [allyChampions objectAtIndex:i];
-        CGRect rect = CGRectMake(Champion->topLeft.x - allyChampionFrameMove,
-                                 Champion->topLeft.y - allyChampionFrameMove,
-                                 Champion->bottomRight.x - Champion->topLeft.x + allyChampionFrameMove,
-                                 Champion->bottomRight.y - Champion->topLeft.y + allyChampionFrameMove);
+        CGRect rect = CGRectMake(Champion->topLeft.x - allyChampionFrameMove*framesPassed,
+                                 Champion->topLeft.y - allyChampionFrameMove*framesPassed,
+                                 Champion->bottomRight.x - Champion->topLeft.x + allyChampionFrameMove*framesPassed*2,
+                                 Champion->bottomRight.y - Champion->topLeft.y + allyChampionFrameMove*framesPassed*2);
         rect = CGRectIntegral(rect);
         rect = fitRectangleInRectangle(rect, leagueWindowRect);
         combineRectangles(scanRectangles, rect);
@@ -2546,7 +2560,7 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
             ChampionBars = AllyChampionManager::validateChampionBars(image, ChampionBars);
             
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process ally champions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process ally champions Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }/*
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
@@ -2577,7 +2591,7 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
 }
 
 const int enemyTowerScanChunksX = 4; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-const int enemyTowerScanChunksY = 24;
+const int enemyTowerScanChunksY = 8;
 const float enemyTowerFrameMove = 80.0; //Assume Towers can move 80 pixels in 1 frames
 void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_group_t dispatchGroup) {
     float leagueGameWidth = image.imageWidth;
@@ -2608,8 +2622,8 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
             enemyTowerScanCurrentChunkY = 0;
         }
         //Add chunk to scan
-        CGRect scanRect = CGRectMake( scanWidth * enemyTowerScanCurrentChunkX / enemyTowerScanChunksX + scanStartX ,
-                                     scanHeight * enemyTowerScanCurrentChunkY / enemyTowerScanChunksY + scanStartY ,
+        CGRect scanRect = CGRectMake( scanWidth * enemyTowerScanCurrentChunkX + scanStartX ,
+                                     scanHeight * enemyTowerScanCurrentChunkY + scanStartY ,
                                      scanWidth ,
                                      scanHeight );
         scanRect = CGRectIntegral(scanRect);
@@ -2648,10 +2662,10 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
     //Add previous Towers to scan
     for (int i = 0; i < [enemyTowers count]; i++) {
         Tower* Tower = [enemyTowers objectAtIndex:i];
-        CGRect rect = CGRectMake(Tower->topLeft.x - enemyTowerFrameMove,
-                                 Tower->topLeft.y - enemyTowerFrameMove,
-                                 Tower->bottomRight.x - Tower->topLeft.x + enemyTowerFrameMove,
-                                 Tower->bottomRight.y - Tower->topLeft.y + enemyTowerFrameMove);
+        CGRect rect = CGRectMake(Tower->topLeft.x - enemyTowerFrameMove*framesPassed,
+                                 Tower->topLeft.y - enemyTowerFrameMove*framesPassed,
+                                 Tower->bottomRight.x - Tower->topLeft.x + enemyTowerFrameMove*framesPassed*2,
+                                 Tower->bottomRight.y - Tower->topLeft.y + enemyTowerFrameMove*framesPassed*2);
         rect = CGRectIntegral(rect);
         rect = fitRectangleInRectangle(rect, leagueWindowRect);
         combineRectangles(scanRectangles, rect);
@@ -2682,7 +2696,7 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
             TowerBars = EnemyTowerManager::validateTowerBars(image, TowerBars);
             
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process enemy tower Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process enemy tower Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }/*
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
@@ -2712,7 +2726,7 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
     });
 }
 
-const int selfChampionScanChunksX = 5; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+const int selfChampionScanChunksX = 14; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
 const int selfChampionScanChunksY = 24;
 const float SelfChampionFrameMove = 80.0; //Assume Champions can move 80 pixels in 1 frames
 void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_group_t dispatchGroup) {
@@ -2744,8 +2758,8 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
             selfChampionScanCurrentChunkY = 0;
         }
         //Add chunk to scan
-        CGRect scanRect = CGRectMake( scanWidth * selfChampionScanCurrentChunkX / selfChampionScanChunksX + scanStartX ,
-                                     scanHeight * selfChampionScanCurrentChunkY / selfChampionScanChunksY + scanStartY ,
+        CGRect scanRect = CGRectMake( scanWidth * selfChampionScanCurrentChunkX + scanStartX ,
+                                     scanHeight * selfChampionScanCurrentChunkY + scanStartY ,
                                      scanWidth ,
                                      scanHeight );
         scanRect = CGRectIntegral(scanRect);
@@ -2785,14 +2799,15 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
     //Add previous Champions to scan
     for (int i = 0; i < [selfChampions count]; i++) {
         Champion* Champion = [selfChampions objectAtIndex:i];
-        CGRect rect = CGRectMake(Champion->topLeft.x - SelfChampionFrameMove,
-                                 Champion->topLeft.y - SelfChampionFrameMove,
-                                 Champion->bottomRight.x - Champion->topLeft.x + SelfChampionFrameMove,
-                                 Champion->bottomRight.y - Champion->topLeft.y + SelfChampionFrameMove);
+        CGRect rect = CGRectMake(Champion->topLeft.x - SelfChampionFrameMove*framesPassed,
+                                 Champion->topLeft.y - SelfChampionFrameMove*framesPassed,
+                                 Champion->bottomRight.x - Champion->topLeft.x + SelfChampionFrameMove*framesPassed*2,
+                                 Champion->bottomRight.y - Champion->topLeft.y + SelfChampionFrameMove*framesPassed*2);
         rect = CGRectIntegral(rect);
         rect = fitRectangleInRectangle(rect, leagueWindowRect);
         combineRectangles(scanRectangles, rect);
     }
+    //Scan middle of the screen
     CGRect rect = CGRectMake(image.imageWidth / 2 - 150,
                              image.imageHeight / 2 - 230,
                              220,
@@ -2819,7 +2834,7 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
                             //rect = fitRectangleInRectangle(rect, leagueWindowRect);
                             //combineRectangles(scanRectangles, rect);
                             [ChampionBars addObject: ChampionBar];
-                            //NSLog(@"Adding self champ");
+                            ////NSLog(@"Adding self champ");
                         }
                     }
                 }
@@ -2827,7 +2842,7 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
             ChampionBars = SelfChampionManager::validateChampionBars(image, ChampionBars);
             
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process self champs Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process self champs Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }/*
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
@@ -2891,7 +2906,7 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
      combineRectangles(scanRectangles, scanRect);
      //Add previous HealthBars to scan
      if (selfHealthBar != NULL) {
-     //NSLog(@"Health bar exists at %d, %d", selfHealthBar->topLeft.x, selfHealthBar->topLeft.y);
+     ////NSLog(@"Health bar exists at %d, %d", selfHealthBar->topLeft.x, selfHealthBar->topLeft.y);
      CGRect rect = CGRectMake(selfHealthBar->topLeft.x - 20,
      selfHealthBar->topLeft.y - 20,
      selfHealthBar->bottomRight.x - selfHealthBar->topLeft.x + 20,
@@ -2913,7 +2928,7 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
                     uint8* pixel = getPixel2(image, x, y);
                     SelfHealth* HealthBarBar = SelfChampionManager::detectSelfHealthBarAtPixel(image, pixel, x, y);
                     if (HealthBarBar != nil) {
-                        //NSLog(@"Found self health bar");
+                        ////NSLog(@"Found self health bar");
                         //Add extra rectangle to scan
                         //CGRect rect = CGRectMake(HealthBarBar->topLeft.x-5, HealthBarBar->topLeft.y-5, HealthBarBar->bottomRight.x - HealthBarBar->topLeft.x + 10, HealthBarBar->bottomRight.y - HealthBarBar->topLeft.y + 10);
                         //rect = CGRectIntegral(rect);
@@ -2926,10 +2941,10 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
                 }
             }
             //}
-            //NSLog(@"health bars: %lu", (unsigned long)HealthBarBars.count);
+            ////NSLog(@"health bars: %lu", (unsigned long)HealthBarBars.count);
             HealthBarBars = SelfChampionManager::validateSelfHealthBars(image, HealthBarBars);
             if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
-                NSLog(@"Process self health bar Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+                //NSLog(@"Process self health bar Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             }
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {

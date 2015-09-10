@@ -41,46 +41,46 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     lastItem4Use = mach_absolute_time();
     lastItem5Use = mach_absolute_time();
     lastItem6Use = mach_absolute_time();
+    
+    moveToLane = arc4random_uniform(3) + 1;
+    NSLog(@"Chose lane %d", moveToLane);
+    moveToLanePathSwitch = mach_absolute_time();
 }
 void BasicAI::handleAbilityLevelUps() {
     int abilityLevelUpOrder[] = {1, 2, 3, 1, 2, 4, 3, 1, 2, 3, 4, 1, 2, 3, 1, 4, 2, 3};
     //Level up an ability as soon as possible but only one ability every 500 milliseconds
     if (getTimeInMilliseconds(mach_absolute_time() - lastLevelUp) >= 500) {
+        lastLevelUp = mach_absolute_time();
         bool leveledUp = false;
         if (gameState->detectionManager->getCurrentLevel() < 18) {
             int preferredLevelUp = abilityLevelUpOrder[gameState->detectionManager->getCurrentLevel()];
-            if (preferredLevelUp == 1 && gameState->detectionManager->getSpell1LevelUpVisible()) {
-                levelUpAbility1();
-                leveledUp = true;
-                NSLog(@"Leveling Spell 1");
-            } else if (preferredLevelUp == 2 && gameState->detectionManager->getSpell2LevelUpVisible()) {
-                levelUpAbility2();
-                leveledUp = true;
-                NSLog(@"Leveling Spell 2");
-            } else if (preferredLevelUp == 3 && gameState->detectionManager->getSpell3LevelUpVisible()) {
-                levelUpAbility3();
-                leveledUp = true;
-                NSLog(@"Leveling Spell 3");
-            } else if (preferredLevelUp == 4 && gameState->detectionManager->getSpell4LevelUpVisible()) {
+            if (gameState->detectionManager->getSpell1LevelUpVisible() || gameState->detectionManager->getSpell2LevelUpVisible() || gameState->detectionManager->getSpell3LevelUpVisible() || gameState->detectionManager->getSpell4LevelUpVisible()) {
+                if (preferredLevelUp == 1) {
+                    levelUpAbility1();
+                    leveledUp = true;
+                } else if (preferredLevelUp == 2) {
+                    levelUpAbility2();
+                    leveledUp = true;
+                } else if (preferredLevelUp == 3) {
+                    levelUpAbility3();
+                    leveledUp = true;
+                } else if (preferredLevelUp == 4) {
+                    levelUpAbility4();
+                    leveledUp = true;
+                }
+            }
+            if (gameState->detectionManager->getSpell4LevelUpVisible()) {
                 levelUpAbility4();
                 leveledUp = true;
-                NSLog(@"Leveling Spell 4");
             } else if (gameState->detectionManager->getSpell1LevelUpVisible()) {
                 levelUpAbility1();
                 leveledUp = true;
-                NSLog(@"Leveling Spell 1");
             } else if (gameState->detectionManager->getSpell2LevelUpVisible()) {
                 levelUpAbility2();
                 leveledUp = true;
-                NSLog(@"Leveling Spell 2");
             } else if (gameState->detectionManager->getSpell3LevelUpVisible()) {
                 levelUpAbility3();
                 leveledUp = true;
-                NSLog(@"Leveling Spell 3");
-            } else if (gameState->detectionManager->getSpell4LevelUpVisible()) {
-                levelUpAbility4();
-                leveledUp = true;
-                NSLog(@"Leveling Spell 4");
             }
         }
         if (leveledUp) {
@@ -293,13 +293,13 @@ void BasicAI::handleMovementAndAttacking() {
         bool enemyChampionCloseEnough = false;
         if ([enemyChampions count] > 0) {
             Champion* closeEnemyChampion = getNearestChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-            if (hypot(closeEnemyChampion->characterCenter.x - selfChamp->characterCenter.x, closeEnemyChampion->characterCenter.y - selfChamp->characterCenter.y) < 400) {
+            if (hypot(closeEnemyChampion->characterCenter.x - selfChamp->characterCenter.x, closeEnemyChampion->characterCenter.y - selfChamp->characterCenter.y) < 600) {
                 enemyChampionCloseEnough = true;
             }
         }
-        if (selfChamp->health < 25 && (enemyChampionCloseEnough || enemyMinionsNear || underEnemyTower)) {
+        if (selfChamp->health < 35 && (enemyChampionCloseEnough || enemyMinionsNear || underEnemyTower)) {
             action = ACTION_Run_Away;
-        } else if (selfChamp->health < 25 && !enemyChampionsNear && !underEnemyTower) {
+        } else if (selfChamp->health < 35 && !enemyChampionsNear && !underEnemyTower) {
             action = ACTION_Recall;
         }
         
@@ -313,7 +313,7 @@ void BasicAI::handleMovementAndAttacking() {
         switch (action) {
             case ACTION_Run_Away:
             {
-                NSLog(@"\t\tAction: Running Away");
+                //NSLog(@"\t\tAction: Running Away");
                 //Run back to base by right clicking on the shop on the minimap
                 //If no shop, stand still and fight.
                 if (mapShopVisible) {
@@ -350,7 +350,7 @@ void BasicAI::handleMovementAndAttacking() {
             case ACTION_Attack_Enemy_Champion:
             case ACTION_Go_Ham:
             {
-                NSLog(@"\t\tAction: Attacking enemy champion");
+                //NSLog(@"\t\tAction: Attacking enemy champion");
                 int x = lowestHealthEnemyChampion->characterCenter.x;
                 int y = lowestHealthEnemyChampion->characterCenter.y;
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickEnemyChamp) >= 500) {
@@ -379,7 +379,7 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Attack_Enemy_Minion:
             {
-                NSLog(@"\t\tAction: Attacking Enemy Minion");
+                //NSLog(@"\t\tAction: Attacking Enemy Minion");
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickEnemyMinion) >= 100) {
                     lastClickEnemyMinion = mach_absolute_time();
                     tapAttackMove(lowestHealthEnemyMinion->characterCenter.x, lowestHealthEnemyMinion->characterCenter.y);
@@ -395,7 +395,7 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Attack_Tower:
             {
-                NSLog(@"\t\tAction: Attacking Tower");
+                //NSLog(@"\t\tAction: Attacking Tower");
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickEnemyTower) >= 100) {
                     lastClickEnemyTower = mach_absolute_time();
                     tapAttackMove(nearestEnemyTower->towerCenter.x, nearestEnemyTower->towerCenter.y);
@@ -411,7 +411,7 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Follow_Ally_Champion:
             {
-                NSLog(@"\t\tAction: Following Ally Champion");
+                //NSLog(@"\t\tAction: Following Ally Champion");
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickAllyChampion) >= 100) {
                     lastClickAllyChampion = mach_absolute_time();
                     int xMove = (nearestAllyChampion->characterCenter.x - selfChamp->characterCenter.x);
@@ -423,7 +423,7 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Follow_Ally_Minion:
             {
-                NSLog(@"\t\tAction: Following Ally Minion");
+                //NSLog(@"\t\tAction: Following Ally Minion");
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickAllyMinion) >= 100) {
                     lastClickAllyMinion = mach_absolute_time();
                     int xMove = (closestAllyMinion->characterCenter.x - selfChamp->characterCenter.x);
@@ -435,7 +435,14 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Move_To_Mid:
             {
-                NSLog(@"\t\tAction: Moving to Mid");
+                //NSLog(@"\t\tAction: Moving to Mid");
+                
+                if (getTimeInMilliseconds(mach_absolute_time() - moveToLanePathSwitch) >= 1000 * 60 * 5) {
+                    //Switch to a random lane
+                    moveToLane = arc4random_uniform(3) + 1;
+                    moveToLanePathSwitch = mach_absolute_time();
+                }
+                
                 if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 500) {
                     //NSLog(@"Time to move");
                     if (mapVisible) {
@@ -443,6 +450,14 @@ void BasicAI::handleMovementAndAttacking() {
                         lastMovementClick = mach_absolute_time();
                         int x = map->center.x;
                         int y = map->center.y;
+                        if (moveToLane == 1) {
+                            x = (map->bottomRight.x - map->topLeft.x) * 0.1 + map->topLeft.x;
+                            y = (map->bottomRight.y - map->topLeft.y) * 0.1 + map->topLeft.y;
+                        }
+                        if (moveToLane == 3) {
+                            x = (map->bottomRight.x - map->topLeft.x) * 0.9 + map->topLeft.x;
+                            y = (map->bottomRight.y - map->topLeft.y) * 0.9 + map->topLeft.y;
+                        }
                         tapMouseRight(x, y);
                     } else {
                         NSLog(@"Map not visible");
@@ -452,7 +467,7 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Recall:
             {
-                NSLog(@"\t\tAction: Recalling");
+                //NSLog(@"\t\tAction: Recalling");
                 castRecall();
             }
                 break;

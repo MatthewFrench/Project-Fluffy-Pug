@@ -76,6 +76,7 @@ inline void detectExactImageToImageToRectangle(ImageData smallImage, ImageData l
 inline void combineRectangles(NSMutableArray* rectangles, CGRect newRect);
 inline NSMutableArray* getCGRectDifference(CGRect sourceRect, CGRect minusRect);
 inline CGRect fitRectangleInRectangle(CGRect smallRect, CGRect bigRect);
+inline void MyLog(NSString *format, ...);
 
 
 extern inline CGRect fitRectangleInRectangle(CGRect smallRect, CGRect bigRect) {
@@ -724,6 +725,16 @@ extern void drawRect( ImageData imageData, int left, int top, int width, int hei
         setPixel(imageData, left, i, r, g, b);
         setPixel(imageData, left+width, i, r, g, b);
     }
+}
+
+extern void MyLog(NSString *format, ...) {
+    va_list args;
+    va_start(args, format);
+    NSString *formattedString = [[NSString alloc] initWithFormat: format
+                                                       arguments: args];
+    va_end(args);
+    [[NSFileHandle fileHandleWithStandardOutput] writeData: [formattedString dataUsingEncoding: NSNEXTSTEPStringEncoding]];
+     //[formattedString release];
 }
 
 #endif /* defined(__Fluffy_Pug__Utility__) */

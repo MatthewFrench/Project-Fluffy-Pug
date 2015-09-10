@@ -28,6 +28,9 @@ class BasicAI {
     uint64_t lastSpell1Use, lastSpell2Use, lastSpell3Use, lastSpell4Use, lastSummonerSpell1Use, lastSummonerSpell2Use;
     uint64_t lastItem1Use, lastItem2Use, lastItem3Use, lastItem4Use, lastItem5Use, lastItem6Use;
     
+    int moveToLane;
+    uint64_t moveToLanePathSwitch;
+    
 public:
     BasicAI(LeagueGameState* leagueGameState);
     void processAI();

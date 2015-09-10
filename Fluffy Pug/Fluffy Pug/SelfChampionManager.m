@@ -178,9 +178,12 @@ NSMutableArray* SelfChampionManager::validateChampionBars(ImageData imageData, N
         Champion* champ = [championBars objectAtIndex:i];
         champ->health = 0;
         for (int x = 103; x >= 0; x--) {
+            if (x + champ->topLeft.x >= 0 && x + champ->topLeft.x < imageData.imageWidth &&
+                champ->topLeft.y >= 0 && champ->topLeft.y < imageData.imageHeight) {
             if ( getImageAtPixelPercentageOptimizedExact(getPixel2(imageData, champ->topLeft.x + x, champ->topLeft.y), champ->topLeft.x + x, champ->topLeft.y, imageData.imageWidth, imageData.imageHeight, healthSegmentImageData, 0.9) >=  0.9) {
                 champ->health = (float)x / 103.0 * 100;
                 break;
+            }
             }
         }
     }
@@ -218,10 +221,13 @@ NSMutableArray* SelfChampionManager::validateSelfHealthBars(ImageData imageData,
         uint8_t* healthColorPixel = getPixel2(bottomBarAverageHealthColorImageData, 0, 0);
         for (int x = healthBar->topLeft.x + 305; x >= healthBar->topLeft.x; x--) {
             for (int y = healthBar->topRight.y; y < healthBar->bottomRight.y; y++) {
+                if (x + healthBar->topLeft.x >= 0 && x + healthBar->topLeft.x < imageData.imageWidth &&
+                    y + healthBar->topLeft.y >= 0 && y + healthBar->topLeft.y < imageData.imageHeight) {
                 if (getColorPercentage(healthColorPixel, getPixel2(imageData, x, y)) >= 0.55) {
                     healthBar->health = (float)(x - healthBar->topLeft.x) / 305.0 * 100;
                     y = healthBar->bottomRight.y+1;
                     x = healthBar->topLeft.x - 1;
+                }
                 }
             }
         }
