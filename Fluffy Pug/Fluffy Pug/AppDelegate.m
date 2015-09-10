@@ -28,8 +28,10 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     uiUpdateTime = mach_absolute_time();
-    aiThread = dispatch_queue_create("AI Thread", DISPATCH_QUEUE_CONCURRENT);
-    detectionThread = dispatch_queue_create("Detection Thread", DISPATCH_QUEUE_CONCURRENT);
+    aiThread = dispatch_get_main_queue();
+    //dispatch_queue_create("AI Thread", DISPATCH_QUEUE_CONCURRENT);
+    detectionThread = dispatch_get_main_queue();
+    //dispatch_queue_create("Detection Thread", DISPATCH_QUEUE_CONCURRENT);
     GlobalSelf = self;
     saveTestScreenshot = false;
     
@@ -256,17 +258,17 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
         //NSLog(@"Found league instance: %@", info);
         float width = leagueGameState->leagueSize.size.width;
         float height = leagueGameState->leagueSize.size.height;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @autoreleasepool {
+        //dispatch_async(dispatch_get_main_queue(), ^{
+            //@autoreleasepool {
             [statusText setStringValue:[NSString stringWithFormat:@"Running on League Instance (%f, %f)", width, height]];
-            }
-        });
+            //}
+        //});
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @autoreleasepool {
+        //dispatch_async(dispatch_get_main_queue(), ^{
+        //    @autoreleasepool {
         [statusText setStringValue:@"No League Instance Found"];
-            }
-             });
+        //    }
+        //     });
     }
     }
 }
@@ -277,7 +279,7 @@ int screenLoops = 0;
 AppDelegate *GlobalSelf;
 
 - (void) logic {
-    @autoreleasepool {
+    //@autoreleasepool {
     
     GlobalSelf->leagueGameState->autoQueueActive = [GlobalSelf->autoQueueCheckbox state] == NSOnState;
     //Run auto queue logic and AI logic
@@ -294,12 +296,12 @@ AppDelegate *GlobalSelf;
         int time = getTimeInMilliseconds(mach_absolute_time() - lastTime);
         int l = loops;
         int sl = screenLoops;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @autoreleasepool {
+        //dispatch_async(dispatch_get_main_queue(), ^{
+        //    @autoreleasepool {
             [GlobalSelf->fpsText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / l, (1000.0)/(time * 1.0 / l)]];
             [GlobalSelf->screenAnalyzeText setStringValue:[NSString stringWithFormat:@"Elapsed Time: %f ms, %f fps", time * 1.0 / sl, (1000.0)/(time * 1.0 / sl)]];
-            }
-        });
+        //    }
+        //});
         lastTime = mach_absolute_time();
         loops = 0;
         screenLoops = 0;
@@ -351,8 +353,8 @@ AppDelegate *GlobalSelf;
         bool shopWindowOpen = (GlobalSelf->leagueGameState->detectionManager->getShopTopLeftCornerVisible() && GlobalSelf->leagueGameState->detectionManager->getShopBottomLeftCornerVisible());
         int buyableItems = (int)GlobalSelf->leagueGameState->detectionManager->getBuyableItems().count;
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @autoreleasepool {
+        //dispatch_async(dispatch_get_main_queue(), ^{
+        //    @autoreleasepool {
             [GlobalSelf->allyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)allyMinionCount]];
             [GlobalSelf->enemyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)enemyMinionCount]];
             [GlobalSelf->enemyChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)enemyChampCount]];
@@ -392,10 +394,10 @@ AppDelegate *GlobalSelf;
             [GlobalSelf->buyableItemsTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)buyableItems]];
             }
             //[[GlobalSelf.window contentView] setNeedsDisplay:true];
-        });
-    }
+        //});
+    //}
         
-    }
+    //}
 }
 
 void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDisplayStreamUpdateRef) =  ^(CGDisplayStreamFrameStatus status,
@@ -406,9 +408,9 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
     @autoreleasepool {
     if (status != kCGDisplayStreamFrameStatusFrameComplete) return;
     
-    dispatch_async(GlobalSelf->aiThread, ^{
+    //dispatch_async(GlobalSelf->aiThread, ^{
         screenLoops++;
-    });
+    //});
     uint32_t aseed;
     IOSurfaceLock(frameSurface, kIOSurfaceLockReadOnly, &aseed);
     uint32_t width = (uint32_t)IOSurfaceGetWidth(frameSurface);
@@ -487,11 +489,11 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
         //}
     }
     
-    dispatch_async(GlobalSelf->aiThread, ^{
-        @autoreleasepool {
+    //dispatch_async(GlobalSelf->aiThread, ^{
+    //    @autoreleasepool {
             [GlobalSelf logic];
-        }
-    });
+    //    }
+    //});
     
     
     

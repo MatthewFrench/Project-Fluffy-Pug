@@ -21,6 +21,26 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     lastPlacedWard = mach_absolute_time();
     lastRunAwayClick = mach_absolute_time();
     lastClickEnemyChamp = mach_absolute_time();
+    lastMovementClick = mach_absolute_time();
+    lastClickAllyMinion = mach_absolute_time();
+    
+    lastClickEnemyMinion = mach_absolute_time();
+    lastClickEnemyTower = mach_absolute_time();
+    lastClickAllyChampion = mach_absolute_time();
+    lastMoveMouse = mach_absolute_time();
+    lastRecallTap = mach_absolute_time();
+    lastSpell1Use = mach_absolute_time();
+    lastSpell2Use = mach_absolute_time();
+    lastSpell3Use = mach_absolute_time();
+    lastSpell4Use = mach_absolute_time();
+    lastSummonerSpell1Use = mach_absolute_time();
+    lastSummonerSpell2Use = mach_absolute_time();
+    lastItem1Use = mach_absolute_time();
+    lastItem2Use = mach_absolute_time();
+    lastItem3Use = mach_absolute_time();
+    lastItem4Use = mach_absolute_time();
+    lastItem5Use = mach_absolute_time();
+    lastItem6Use = mach_absolute_time();
 }
 void BasicAI::handleAbilityLevelUps() {
     int abilityLevelUpOrder[] = {1, 2, 3, 1, 2, 4, 3, 1, 2, 3, 4, 1, 2, 3, 1, 4, 2, 3};
@@ -32,27 +52,35 @@ void BasicAI::handleAbilityLevelUps() {
             if (preferredLevelUp == 1 && gameState->detectionManager->getSpell1LevelUpVisible()) {
                 levelUpAbility1();
                 leveledUp = true;
+                NSLog(@"Leveling Spell 1");
             } else if (preferredLevelUp == 2 && gameState->detectionManager->getSpell2LevelUpVisible()) {
                 levelUpAbility2();
                 leveledUp = true;
+                NSLog(@"Leveling Spell 2");
             } else if (preferredLevelUp == 3 && gameState->detectionManager->getSpell3LevelUpVisible()) {
                 levelUpAbility3();
                 leveledUp = true;
+                NSLog(@"Leveling Spell 3");
             } else if (preferredLevelUp == 4 && gameState->detectionManager->getSpell4LevelUpVisible()) {
                 levelUpAbility4();
                 leveledUp = true;
+                NSLog(@"Leveling Spell 4");
             } else if (gameState->detectionManager->getSpell1LevelUpVisible()) {
                 levelUpAbility1();
                 leveledUp = true;
+                NSLog(@"Leveling Spell 1");
             } else if (gameState->detectionManager->getSpell2LevelUpVisible()) {
                 levelUpAbility2();
                 leveledUp = true;
+                NSLog(@"Leveling Spell 2");
             } else if (gameState->detectionManager->getSpell3LevelUpVisible()) {
                 levelUpAbility3();
                 leveledUp = true;
+                NSLog(@"Leveling Spell 3");
             } else if (gameState->detectionManager->getSpell4LevelUpVisible()) {
                 levelUpAbility4();
                 leveledUp = true;
+                NSLog(@"Leveling Spell 4");
             }
         }
         if (leveledUp) {
@@ -67,6 +95,7 @@ void BasicAI::handleBuyingItems() {
     bool closeShop = false;
     if (getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*5) {
         if (gameState->detectionManager->getShopAvailable()) {
+            
             if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible()) {
                 lastShopBuy = mach_absolute_time();
                 //Buy items
@@ -83,24 +112,28 @@ void BasicAI::handleBuyingItems() {
                     });
                 }
                 lastShopBuying = mach_absolute_time();
+                NSLog(@"Bought items");
             } else { //Open up the shop
                 if (getTimeInMilliseconds(mach_absolute_time() - lastShopOpenTap) >= 8000) {
                     lastShopOpenTap = mach_absolute_time();
+                    tapStopMoving();
                     tapShop();
+                    NSLog(@"Opening shop for initial buy");
                 }
             }
         } else {
             if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible()) {
                 closeShop = true;
+                NSLog(@"Shop not available, closing shop");
             }
         }
     } else {
         //Close shop
         if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible() &&
-            getTimeInMilliseconds(mach_absolute_time() - lastShopBuying) >= 8000) {
+            getTimeInMilliseconds(mach_absolute_time() - lastShopBuying) >= 10000) {
             //Gave a 4 seconds to buy
             closeShop = true;
-            //NSLog(@"Closing shop because we already bought.");
+            NSLog(@"Closing shop because we already bought.");
         }
     }
     if (closeShop) {
@@ -117,6 +150,7 @@ void BasicAI::handleCameraFocus() {
             if (gameState->detectionManager->getSelfChampions().count == 0) {
                 lastCameraFocus = mach_absolute_time();
                 tapCameraLock();
+                NSLog(@"Attempting camera lock cause we don't see ourselves");
             }
         }
     }
@@ -126,31 +160,53 @@ void BasicAI::handlePlacingWard() {
         Champion* champ = [gameState->detectionManager->getSelfChampions() firstObject];
         moveMouse(champ->characterCenter.x, champ->characterCenter.y);
         useTrinket();
+        NSLog(@"Placing ward");
     }
 }
 const int ACTION_Run_Away = 0, ACTION_Attack_Enemy_Champion = 1, ACTION_Attack_Enemy_Minion = 2, ACTION_Follow_Ally_Champion = 3, ACTION_Follow_Ally_Minion = 4, ACTION_Move_To_Mid = 5, ACTION_Recall = 6, ACTION_Attack_Tower = 7, ACTION_Go_Ham = 8;
 void BasicAI::handleMovementAndAttacking() {
     //If we see our selves and the shop is closed, then lets move around
-    if ([gameState->detectionManager->getSelfChampions() count] > 0 && !gameState->detectionManager->getShopTopLeftCornerVisible()) {
-        NSMutableArray* selfChamps = gameState->detectionManager->getSelfChampions();
-        int numberOfSelfChamps = (int)selfChamps.count;
+    
+    
+    /**  ONLY GET INFO FROM DETECTION MANAGER ONCE. I CAN CHANGE NEXT GET  **/
+    
+    NSMutableArray* selfChampions = gameState->detectionManager->getSelfChampions();
+    bool shopTopLeftCornerVisible = gameState->detectionManager->getShopTopLeftCornerVisible();
+    bool mapShopVisible = gameState->detectionManager->getMapShopVisible();
+    bool mapVisible = gameState->detectionManager->getMapVisible();
+    GenericObject* map = gameState->detectionManager->getMap();
+    GenericObject* mapShop = gameState->detectionManager->getMapShop();
+    
+    
+    bool buyingItems = getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*5 && gameState->detectionManager->getShopAvailable();
+    
+    if ([selfChampions count] > 0 && !shopTopLeftCornerVisible && !buyingItems) {
+        
+        
+        int numberOfSelfChamps = (int)selfChampions.count;
         if (numberOfSelfChamps == 0) {
             NSLog(@"We have a problem");
         }
-        id firstObject = [selfChamps firstObject];
+        id firstObject = [selfChampions firstObject];
         Champion* selfChamp = firstObject;
         
-        bool enemyChampionsNear = [gameState->detectionManager->getEnemyChampions() count] > 0;
-        bool enemyMinionsNear = [gameState->detectionManager->getEnemyMinions() count] > 0;
-        bool allyMinionsNear = [gameState->detectionManager->getAllyMinions() count] > 0;
-        bool allyChampionsNear = [gameState->detectionManager->getAllyChampions() count] > 0;
-        bool enemyTowerNear = [gameState->detectionManager->getEnemyTowers() count] > 0;
+        NSMutableArray* enemyChampions = gameState->detectionManager->getEnemyChampions();
+        NSMutableArray* enemyMinions = gameState->detectionManager->getEnemyMinions();
+        NSMutableArray* allyMinions = gameState->detectionManager->getAllyMinions();
+        NSMutableArray* allyChampions = gameState->detectionManager->getAllyChampions();
+        NSMutableArray* enemyTowers = gameState->detectionManager->getEnemyTowers();
+        
+        bool enemyChampionsNear = [enemyChampions count] > 0;
+        bool enemyMinionsNear = [enemyMinions count] > 0;
+        bool allyMinionsNear = [allyMinions count] > 0;
+        bool allyChampionsNear = [allyChampions count] > 0;
+        bool enemyTowerNear = [enemyTowers count] > 0;
         bool underEnemyTower = false;
-        Champion* lowestHealthEnemyChampion = getLowestHealthChampion(gameState->detectionManager->getEnemyChampions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        Minion* lowestHealthEnemyMinion = getLowestHealthMinion(gameState->detectionManager->getEnemyMinions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        Minion* closestAllyMinion = getNearestMinion(gameState->detectionManager->getAllyMinions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        Champion* nearestAllyChampion = getNearestChampion(gameState->detectionManager->getAllyChampions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        Tower* nearestEnemyTower = getNearestTower(gameState->detectionManager->getEnemyTowers(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Champion* lowestHealthEnemyChampion = getLowestHealthChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Minion* lowestHealthEnemyMinion = getLowestHealthMinion(enemyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Minion* closestAllyMinion = getNearestMinion(allyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Champion* nearestAllyChampion = getNearestChampion(allyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Tower* nearestEnemyTower = getNearestTower(enemyTowers, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         
         if (enemyTowerNear && hypot(selfChamp->characterCenter.x - nearestEnemyTower->towerCenter.x, selfChamp->characterCenter.y - nearestEnemyTower->towerCenter.y) < 430) {
             underEnemyTower = true;
@@ -172,7 +228,7 @@ void BasicAI::handleMovementAndAttacking() {
         }
         
         //Attack enemy if see enemy but not if there are too many enemies
-        if (enemyChampionsNear && ([gameState->detectionManager->getAllyChampions() count]+2 >= [gameState->detectionManager->getEnemyChampions() count] || [gameState->detectionManager->getAllyChampions() count] >= 4 || [gameState->detectionManager->getEnemyChampions() count] == 1)) {
+        if (enemyChampionsNear && ([allyChampions count]+2 >= [enemyChampions count] || [allyChampions count] >= 4 || [enemyChampions count] == 1)) {
             //We got the upper hand, engage
             if (selfChamp->health + 10 > lowestHealthEnemyChampion->health) { //Greater health
                 action = ACTION_Attack_Enemy_Champion;
@@ -183,7 +239,7 @@ void BasicAI::handleMovementAndAttacking() {
                 //Yolo when allies are near, we can take em
                 action = ACTION_Attack_Enemy_Champion;
             }
-        } else if (enemyChampionsNear && [gameState->detectionManager->getAllyChampions() count]+2 < [gameState->detectionManager->getEnemyChampions() count]) {
+        } else if (enemyChampionsNear && [allyChampions count]+2 < [enemyChampions count]) {
             //Too many baddies, peace.
             action = ACTION_Run_Away;
         }
@@ -221,8 +277,8 @@ void BasicAI::handleMovementAndAttacking() {
         //Attack tower if allied minions under tower
         if (enemyTowerNear && (action == ACTION_Move_To_Mid || action == ACTION_Follow_Ally_Minion || action == ACTION_Follow_Ally_Champion || action == ACTION_Attack_Enemy_Minion)) {
             int minionsUnderTower = 0;
-            for (int i = 0; i < [gameState->detectionManager->getAllyMinions() count]; i++) {
-                Minion* mb = [gameState->detectionManager->getAllyMinions() objectAtIndex:i];
+            for (int i = 0; i < [allyMinions count]; i++) {
+                Minion* mb = [allyMinions objectAtIndex:i];
                 if (hypot(mb->characterCenter.x - nearestEnemyTower->towerCenter.x, mb->characterCenter.y - nearestEnemyTower->towerCenter.y) < 430) {
                     minionsUnderTower++;
                 }
@@ -235,8 +291,8 @@ void BasicAI::handleMovementAndAttacking() {
         }
         
         bool enemyChampionCloseEnough = false;
-        if ([gameState->detectionManager->getEnemyChampions() count] > 0) {
-            Champion* closeEnemyChampion = getNearestChampion(gameState->detectionManager->getEnemyChampions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        if ([enemyChampions count] > 0) {
+            Champion* closeEnemyChampion = getNearestChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
             if (hypot(closeEnemyChampion->characterCenter.x - selfChamp->characterCenter.x, closeEnemyChampion->characterCenter.y - selfChamp->characterCenter.y) < 400) {
                 enemyChampionCloseEnough = true;
             }
@@ -257,11 +313,12 @@ void BasicAI::handleMovementAndAttacking() {
         switch (action) {
             case ACTION_Run_Away:
             {
+                NSLog(@"\t\tAction: Running Away");
                 //Run back to base by right clicking on the shop on the minimap
                 //If no shop, stand still and fight.
-                if (gameState->detectionManager->getMapShopVisible()) {
+                if (mapShopVisible) {
                     if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 700) {
-                        tapMouseRight(gameState->detectionManager->getMapShop()->center.x, gameState->detectionManager->getMapShop()->center.y);
+                        tapMouseRight(mapShop->center.x, mapShop->center.y);
                         lastRunAwayClick = mach_absolute_time();
                     }
                 }
@@ -293,6 +350,7 @@ void BasicAI::handleMovementAndAttacking() {
             case ACTION_Attack_Enemy_Champion:
             case ACTION_Go_Ham:
             {
+                NSLog(@"\t\tAction: Attacking enemy champion");
                 int x = lowestHealthEnemyChampion->characterCenter.x;
                 int y = lowestHealthEnemyChampion->characterCenter.y;
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickEnemyChamp) >= 500) {
@@ -321,6 +379,7 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Attack_Enemy_Minion:
             {
+                NSLog(@"\t\tAction: Attacking Enemy Minion");
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickEnemyMinion) >= 100) {
                     lastClickEnemyMinion = mach_absolute_time();
                     tapAttackMove(lowestHealthEnemyMinion->characterCenter.x, lowestHealthEnemyMinion->characterCenter.y);
@@ -336,6 +395,7 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Attack_Tower:
             {
+                NSLog(@"\t\tAction: Attacking Tower");
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickEnemyTower) >= 100) {
                     lastClickEnemyTower = mach_absolute_time();
                     tapAttackMove(nearestEnemyTower->towerCenter.x, nearestEnemyTower->towerCenter.y);
@@ -351,6 +411,7 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Follow_Ally_Champion:
             {
+                NSLog(@"\t\tAction: Following Ally Champion");
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickAllyChampion) >= 100) {
                     lastClickAllyChampion = mach_absolute_time();
                     int xMove = (nearestAllyChampion->characterCenter.x - selfChamp->characterCenter.x);
@@ -362,6 +423,7 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Follow_Ally_Minion:
             {
+                NSLog(@"\t\tAction: Following Ally Minion");
                 if (getTimeInMilliseconds(mach_absolute_time() - lastClickAllyMinion) >= 100) {
                     lastClickAllyMinion = mach_absolute_time();
                     int xMove = (closestAllyMinion->characterCenter.x - selfChamp->characterCenter.x);
@@ -373,18 +435,24 @@ void BasicAI::handleMovementAndAttacking() {
                 break;
             case ACTION_Move_To_Mid:
             {
-                if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 100) {
-                    if (gameState->detectionManager->getMapVisible()) {
+                NSLog(@"\t\tAction: Moving to Mid");
+                if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 500) {
+                    //NSLog(@"Time to move");
+                    if (mapVisible) {
+                        //NSLog(@"Initating click");
                         lastMovementClick = mach_absolute_time();
-                        int x = gameState->detectionManager->getMap()->center.x;
-                        int y = gameState->detectionManager->getMap()->center.y;
+                        int x = map->center.x;
+                        int y = map->center.y;
                         tapMouseRight(x, y);
+                    } else {
+                        NSLog(@"Map not visible");
                     }
                 }
             }
                 break;
             case ACTION_Recall:
             {
+                NSLog(@"\t\tAction: Recalling");
                 castRecall();
             }
                 break;

@@ -150,12 +150,15 @@ NSMutableArray* AllyMinionManager::validateMinionBars(ImageData imageData, NSMut
         if (minion->health == 0) {
             for (int x = 61; x >= 0; x--) {
                 for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+                    if (x + minion->topLeft.x >= 0 && x + minion->topLeft.x < imageData.imageWidth &&
+                        y + minion->topLeft.y >= 0 && y + minion->topLeft.y < imageData.imageHeight) {
                     uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
                     uint8_t*  p = getPixel2(imageData, x + minion->topLeft.x, y + minion->topLeft.y);
                     if (getColorPercentage(healthBarColor, p) >= allyMinionHealthMatch) {
                         minion->health = (float)x / 61 * 100;
                         y = healthSegmentImageData.imageHeight + 1;
                         x = -1;
+                    }
                     }
                 }
             }

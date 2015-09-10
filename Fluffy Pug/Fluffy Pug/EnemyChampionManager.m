@@ -129,12 +129,15 @@ NSMutableArray* EnemyChampionManager::validateChampionBars(ImageData imageData, 
         champ->health = 0;
         for (int x = 103; x >= 0; x--) {
             for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
+                if (x + champ->topLeft.x >= 0 && x + champ->topLeft.x < imageData.imageWidth &&
+                    y + champ->topLeft.y >= 0 && y + champ->topLeft.y < imageData.imageHeight) {
                 uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
                 uint8_t*  p = getPixel2(imageData, x + champ->topLeft.x, y + champ->topLeft.y);
                 if (getColorPercentage(healthBarColor, p) >= 0.95) {
                     champ->health = (float)x / 103 * 100;
                     y = healthSegmentImageData.imageHeight + 1;
                     x = -1;
+                }
                 }
             }
         }

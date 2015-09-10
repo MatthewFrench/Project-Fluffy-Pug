@@ -88,10 +88,10 @@ class DetectionManager {
     dispatch_queue_t mapThread, shopThread, shopAvailableThread, usedPotionThread, trinketActiveThread, spell1ActiveThread, spell2ActiveThread, spell3ActiveThread, spell4ActiveThread, summonerSpell1ActiveThread, summonerSpell2ActiveThread, levelUpDotsThread, spell1LevelUpThread, spell2LevelUpThread, spell3LevelUpThread, spell4LevelUpThread, allyMinionThread, enemyMinionThread, enemyChampionThread, allyChampionThread, enemyTowerThread, selfChampionThread, selfHealthBarThread;
     
     //Detection thread only variables:
-    GenericObject* mapDetectionObject=nil, *shopTopLeftCornerDetectionObject=nil;
-    NSMutableArray* allyMinionsDetectionObject, *enemyMinionsDetectionObject, *selfChampionsDetectionObject, *enemyTowersDetectionObject, *allyChampionsDetectionObject, *enemyChampionsDetectionObject;
+    //GenericObject* mapDetectionObject=nil, *shopTopLeftCornerDetectionObject=nil;
+    //NSMutableArray* allyMinionsDetectionObject, *enemyMinionsDetectionObject, *selfChampionsDetectionObject, *enemyTowersDetectionObject, *allyChampionsDetectionObject, *enemyChampionsDetectionObject;
     
-    bool scanningScreen = false;
+    //bool scanningScreen = false;
     
 public:
     DetectionManager(dispatch_queue_t _aiThread, dispatch_queue_t _detectionThread);

@@ -12,7 +12,6 @@
 #import <Foundation/Foundation.h>
 #import <ApplicationServices/ApplicationServices.h>
 
-inline void stopMovement();
 inline void doubleTapMouseLeft(int x, int y);
 inline void tapShop();
 inline void tapCameraLock();
@@ -43,6 +42,7 @@ inline void tapActive5();
 inline void tapActive6();
 inline void tapActive7();
 inline void tapWard();
+inline void tapStopMoving();
 
 inline void pressSpell1();
 inline void releaseSpell1();
@@ -75,7 +75,7 @@ inline void tapAttackMove(int x, int y);
 
 
 
-extern inline void stopMovement() {
+extern inline void tapStopMoving() {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
         CGEventRef event = CGEventCreateKeyboardEvent(NULL, 1, YES); //s
         CGEventPost(kCGHIDEventTap, event);
