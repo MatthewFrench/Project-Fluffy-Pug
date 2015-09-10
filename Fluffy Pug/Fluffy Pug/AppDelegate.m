@@ -79,6 +79,8 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
                                            userInfo:nil
                                             repeats:YES];
      */
+    
+    
     timer = CreateDispatchTimer(NSEC_PER_SEC/120, //30ull * NSEC_PER_SEC
                                 0, //1ull * NSEC_PER_SEC
                                 aiThread,
