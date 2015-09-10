@@ -31,7 +31,7 @@ public:
     static ImageData topLeftImageData, bottomLeftImageData,
     bottomRightImageData, topRightImageData, healthSegmentImageData;
     EnemyTowerManager();
-    static TowerBar* detectTowerBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static Tower* detectTowerBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     static NSMutableArray* validateTowerBars(ImageData imageData, NSMutableArray* detectedTowerBars);
     //void debugDraw(ImageData imageData);
     

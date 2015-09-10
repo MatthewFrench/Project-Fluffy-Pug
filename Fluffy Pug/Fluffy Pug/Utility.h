@@ -15,6 +15,12 @@
 #include <mach/mach.h>
 #include <mach/mach_time.h>
 #include <unistd.h>
+#import "Minion.h"
+#import "Champion.h"
+#import "SelfHealth.h"
+#import "Tower.h"
+#import "GenericObject.h"
+#import "Position.hpp"
 
 struct ImageData {
     //CFDataRef rawData;
@@ -28,40 +34,9 @@ struct Pixel {
     BOOL exist;
 };
 
-struct Position {
-    int x, y;
-};
-
-struct MinionBar {
-    struct Position topLeft, topRight, bottomLeft, bottomRight, characterCenter;
-    bool detectedTopLeft = false, detectedBottomLeft = false, detectedTopRight = false, detectedBottomRight = false;
-    float health;
-};
-
-struct ChampionBar {
-    struct Position topLeft, topRight, bottomLeft, bottomRight, characterCenter;
-    bool detectedTopLeft = false, detectedBottomLeft = false, detectedTopRight = false, detectedBottomRight = false;
-    float health;
-};
-struct SelfHealthBar {
-    struct Position topLeft, topRight, bottomLeft, bottomRight;
-    bool detectedLeftSide = false, detectedRightSide = false;
-    float health;
-};
-
-struct TowerBar {
-    struct Position topLeft, topRight, bottomLeft, bottomRight, towerCenter;
-    bool detectedTopLeft = false, detectedBottomLeft = false, detectedTopRight = false, detectedBottomRight = false;
-    float health;
-};
-
-struct GenericObject {
-    struct Position topLeft, topRight, bottomLeft, bottomRight, center;
-};
-
 inline Position makePosition(int x, int y);
 inline int getRandomInteger(int minimum, int maximum);
-inline  MinionBar makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health);
+inline  Minion* makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health);
 inline  Pixel getPixel( ImageData imageData, int x, int y);
 inline  uint8_t* getPixel2( ImageData imageData, int x, int y);
 inline  uint8_t* getPixel3( uint8_t *baseAddress, int x, int y, int width);
@@ -630,10 +605,10 @@ extern int getRandomInteger(int minimum, int maximum) {
     return arc4random_uniform((maximum - minimum) + 1) + minimum;
 }
 
-extern MinionBar makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health) {
-    MinionBar mb;
-    mb.topLeft = topLeft; mb.bottomLeft = bottomLeft; mb.topRight = topRight; mb.bottomRight = bottomRight;
-    mb.health = health;
+extern Minion* makeMinionBar( Position topLeft,  Position bottomLeft,  Position topRight,  Position bottomRight, float health) {
+    Minion* mb = [Minion new];
+    mb->topLeft = topLeft; mb->bottomLeft = bottomLeft; mb->topRight = topRight; mb->bottomRight = bottomRight;
+    mb->health = health;
     return mb;
 }
 

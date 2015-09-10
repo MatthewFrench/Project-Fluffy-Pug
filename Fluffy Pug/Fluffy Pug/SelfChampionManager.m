@@ -47,13 +47,13 @@ SelfChampionManager::SelfChampionManager () {
  
  */
 const float SelfHealthBarMaxPercent = 0.75;
-SelfHealthBar* SelfChampionManager::detectSelfHealthBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
-    SelfHealthBar* healthBar = nil;
+SelfHealth* SelfChampionManager::detectSelfHealthBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    SelfHealth* healthBar = nil;
     
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomBarLeftSideImageData, SelfHealthBarMaxPercent) >=  SelfHealthBarMaxPercent) {
         int barTopLeftX = x + 15;
         int barTopLeftY = y + 2;
-        healthBar = new SelfHealthBar();
+        healthBar = [SelfHealth new];
         healthBar->topLeft.x = barTopLeftX;
         healthBar->topLeft.y = barTopLeftY;
         healthBar->bottomLeft.x = barTopLeftX;
@@ -66,7 +66,7 @@ SelfHealthBar* SelfChampionManager::detectSelfHealthBarAtPixel(ImageData imageDa
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomBarRightSideImageData, SelfHealthBarMaxPercent) >=  SelfHealthBarMaxPercent) {
         int barTopLeftX = x - 306;
         int barTopLeftY = y + 2;
-        healthBar = new SelfHealthBar();
+        healthBar = [SelfHealth new];
         healthBar->topLeft.x = barTopLeftX;
         healthBar->topLeft.y = barTopLeftY;
         healthBar->bottomLeft.x = barTopLeftX;
@@ -82,14 +82,14 @@ SelfHealthBar* SelfChampionManager::detectSelfHealthBarAtPixel(ImageData imageDa
 }
 
 
-ChampionBar* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
-    ChampionBar* champ = nil;
+Champion* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    Champion* champ = nil;
     //Look top left corner
     
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.95) >=  0.95) {
         int barTopLeftX = x + 3;
         int barTopLeftY = y + 3;
-        champ = new ChampionBar();
+        champ = [Champion new];
         champ->topLeft.x = barTopLeftX;
         champ->topLeft.y = barTopLeftY;
         champ->bottomLeft.x = barTopLeftX;
@@ -102,7 +102,7 @@ ChampionBar* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, 
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.95) >=  0.95) { // Look for bottom left corner
         int barTopLeftX = x + 3;
         int barTopLeftY = y - 8;
-        champ = new ChampionBar();
+        champ = [Champion new];
         champ->topLeft.x = barTopLeftX;
         champ->topLeft.y = barTopLeftY;
         champ->bottomLeft.x = barTopLeftX;
@@ -115,7 +115,7 @@ ChampionBar* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, 
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.95) >=  0.95) { // Look for top right corner
         int barTopLeftX = x - 101 - 2;
         int barTopLeftY = y + 3;
-        champ = new ChampionBar();
+        champ = [Champion new];
         champ->topLeft.x = barTopLeftX;
         champ->topLeft.y = barTopLeftY;
         champ->bottomLeft.x = barTopLeftX;
@@ -128,7 +128,7 @@ ChampionBar* SelfChampionManager::detectChampionBarAtPixel(ImageData imageData, 
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.95) >=  0.95) { // Look for bottom right corner
         int barTopLeftX = x - 101 - 2;
         int barTopLeftY = y - 8;
-        champ = new ChampionBar();
+        champ = [Champion new];
         champ->topLeft.x = barTopLeftX;
         champ->topLeft.y = barTopLeftY;
         champ->bottomLeft.x = barTopLeftX;
@@ -150,11 +150,11 @@ NSMutableArray* SelfChampionManager::validateChampionBars(ImageData imageData, N
     NSMutableArray* championBars = [NSMutableArray new];
     
     while ([detectedChampionBars count] > 0) {
-        ChampionBar* champ = (ChampionBar*)[[detectedChampionBars lastObject] pointerValue];
+        Champion* champ = [detectedChampionBars lastObject];
         [detectedChampionBars removeLastObject];
         int detectedCorners = 1;
         for (int i = 0; i < [detectedChampionBars count]; i++) {
-            ChampionBar * champ2 = (ChampionBar*)[[detectedChampionBars objectAtIndex:i] pointerValue];
+            Champion * champ2 = [detectedChampionBars objectAtIndex:i];
             if (champ2->topLeft.x == champ->topLeft.x && champ->topLeft.y == champ2-> topLeft.y) {
                 [detectedChampionBars removeObjectAtIndex:i];
                 i--;
@@ -167,15 +167,15 @@ NSMutableArray* SelfChampionManager::validateChampionBars(ImageData imageData, N
         }
         if (detectedCorners > 1) {
             champ->characterCenter.x = champ->topLeft.x+66; champ->characterCenter.y = champ->topLeft.y+104;
-            [championBars addObject: [NSValue valueWithPointer:champ]];
-        } else {
-            delete champ;
-        }
+            [championBars addObject: champ];
+        }// else {
+        //    delete champ;
+        //}
     }
     
     //Detect health
     for (int i = 0; i < [championBars count]; i++) {
-        ChampionBar* champ = (ChampionBar*)[[championBars objectAtIndex:i] pointerValue];
+        Champion* champ = [championBars objectAtIndex:i];
         champ->health = 0;
         for (int x = 103; x >= 0; x--) {
             if ( getImageAtPixelPercentageOptimizedExact(getPixel2(imageData, champ->topLeft.x + x, champ->topLeft.y), champ->topLeft.x + x, champ->topLeft.y, imageData.imageWidth, imageData.imageHeight, healthSegmentImageData, 0.9) >=  0.9) {
@@ -193,11 +193,11 @@ NSMutableArray* SelfChampionManager::validateSelfHealthBars(ImageData imageData,
     NSMutableArray* healthBars = [NSMutableArray new];
     
     while ([detectedHealthBars count] > 0) {
-        SelfHealthBar* healthBar = (SelfHealthBar*)[[detectedHealthBars lastObject] pointerValue];
+        SelfHealth* healthBar = [detectedHealthBars lastObject];
         [detectedHealthBars removeLastObject];
         int detectedSides = 1;
         for (int i = 0; i < [detectedHealthBars count]; i++) {
-            SelfHealthBar * healthBar2 = (SelfHealthBar*)[[detectedHealthBars objectAtIndex:i] pointerValue];
+            SelfHealth * healthBar2 = [detectedHealthBars objectAtIndex:i];
             if (healthBar2->topLeft.x == healthBar->topLeft.x && healthBar->topLeft.y == healthBar2-> topLeft.y) {
                 [detectedHealthBars removeObjectAtIndex:i];
                 i--;
@@ -207,13 +207,13 @@ NSMutableArray* SelfChampionManager::validateSelfHealthBars(ImageData imageData,
             }
         }
         //if (detectedSides > 1) {
-            [healthBars addObject: [NSValue valueWithPointer:healthBar]];
+            [healthBars addObject: healthBar];
         //}
     }
     
     //Detect health
     for (int i = 0; i < [healthBars count]; i++) {
-        SelfHealthBar* healthBar = (SelfHealthBar*)[[healthBars objectAtIndex:i] pointerValue];
+        SelfHealth* healthBar = [healthBars objectAtIndex:i];
         healthBar->health = 0;
         uint8_t* healthColorPixel = getPixel2(bottomBarAverageHealthColorImageData, 0, 0);
         for (int x = healthBar->topLeft.x + 305; x >= healthBar->topLeft.x; x--) {

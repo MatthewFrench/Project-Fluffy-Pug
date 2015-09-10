@@ -32,6 +32,11 @@
 		C95A77D11B142ACA00052F3E /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77D01B142ACA00052F3E /* ApplicationServices.framework */; };
 		C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77D41B1432A600052F3E /* LeagueGameState.m */; };
 		C981B24B1B94966400C7F5AB /* MapManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C981B24A1B94966400C7F5AB /* MapManager.m */; };
+		C981DA9D1BA14B8C00DB8A43 /* Minion.m in Sources */ = {isa = PBXBuildFile; fileRef = C981DA9C1BA14B8C00DB8A43 /* Minion.m */; };
+		C981DAA01BA14C8800DB8A43 /* Champion.m in Sources */ = {isa = PBXBuildFile; fileRef = C981DA9F1BA14C8800DB8A43 /* Champion.m */; };
+		C981DAA31BA14CC000DB8A43 /* SelfHealth.m in Sources */ = {isa = PBXBuildFile; fileRef = C981DAA21BA14CC000DB8A43 /* SelfHealth.m */; };
+		C981DAA61BA14D1400DB8A43 /* Tower.m in Sources */ = {isa = PBXBuildFile; fileRef = C981DAA51BA14D1400DB8A43 /* Tower.m */; };
+		C981DAAA1BA14D5400DB8A43 /* GenericObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C981DAA91BA14D5400DB8A43 /* GenericObject.m */; };
 		C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F461B28720600A965E6 /* SelfChampionManager.m */; };
 		C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F491B2872DC00A965E6 /* AllyChampionManager.m */; };
 		C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F4C1B28931700A965E6 /* BasicAI.m */; };
@@ -84,6 +89,16 @@
 		C95A77D41B1432A600052F3E /* LeagueGameState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeagueGameState.m; sourceTree = "<group>"; };
 		C981B24A1B94966400C7F5AB /* MapManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapManager.m; sourceTree = "<group>"; };
 		C981B24C1B94967500C7F5AB /* MapManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapManager.h; sourceTree = "<group>"; };
+		C981DA9B1BA14B8C00DB8A43 /* Minion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Minion.h; sourceTree = "<group>"; };
+		C981DA9C1BA14B8C00DB8A43 /* Minion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Minion.m; sourceTree = "<group>"; };
+		C981DA9E1BA14C8800DB8A43 /* Champion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Champion.h; sourceTree = "<group>"; };
+		C981DA9F1BA14C8800DB8A43 /* Champion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Champion.m; sourceTree = "<group>"; };
+		C981DAA11BA14CC000DB8A43 /* SelfHealth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfHealth.h; sourceTree = "<group>"; };
+		C981DAA21BA14CC000DB8A43 /* SelfHealth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelfHealth.m; sourceTree = "<group>"; };
+		C981DAA41BA14D1400DB8A43 /* Tower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tower.h; sourceTree = "<group>"; };
+		C981DAA51BA14D1400DB8A43 /* Tower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tower.m; sourceTree = "<group>"; };
+		C981DAA81BA14D5400DB8A43 /* GenericObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericObject.h; sourceTree = "<group>"; };
+		C981DAA91BA14D5400DB8A43 /* GenericObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericObject.m; sourceTree = "<group>"; };
 		C9928F451B28720600A965E6 /* SelfChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfChampionManager.h; sourceTree = "<group>"; };
 		C9928F461B28720600A965E6 /* SelfChampionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelfChampionManager.m; sourceTree = "<group>"; };
 		C9928F481B2872DC00A965E6 /* AllyChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllyChampionManager.h; sourceTree = "<group>"; };
@@ -93,6 +108,7 @@
 		C9928F4E1B28952E00A965E6 /* InteractiveEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractiveEvents.h; sourceTree = "<group>"; };
 		C9A911181B2AC6F300DC33D1 /* ShopManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShopManager.h; sourceTree = "<group>"; };
 		C9A911191B2AC6F300DC33D1 /* ShopManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShopManager.m; sourceTree = "<group>"; };
+		C9B8B2371BA1514400B59257 /* Position.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Position.hpp; sourceTree = "<group>"; };
 		C9C736021B15937F0021F10F /* AllyMinionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllyMinionManager.h; sourceTree = "<group>"; };
 		C9C736031B15937F0021F10F /* AllyMinionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AllyMinionManager.m; sourceTree = "<group>"; };
 		C9C7360C1B15A2370021F10F /* Utility.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.h; fileEncoding = 4; path = Utility.h; sourceTree = "<group>"; };
@@ -128,6 +144,7 @@
 		C92B824D1B30372200278ED5 /* Detection */ = {
 			isa = PBXGroup;
 			children = (
+				C981DA9A1BA14B7800DB8A43 /* Objects */,
 				C94607331B96483800B8F926 /* DetectionManager.h */,
 				C94607311B96482B00B8F926 /* DetectionManager.m */,
 				C91DD90E1B6B6C1400B4BB07 /* LeagueDetector.h */,
@@ -289,6 +306,24 @@
 			name = "Map Manager";
 			sourceTree = "<group>";
 		};
+		C981DA9A1BA14B7800DB8A43 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				C981DA9B1BA14B8C00DB8A43 /* Minion.h */,
+				C981DA9C1BA14B8C00DB8A43 /* Minion.m */,
+				C981DA9E1BA14C8800DB8A43 /* Champion.h */,
+				C981DA9F1BA14C8800DB8A43 /* Champion.m */,
+				C981DAA11BA14CC000DB8A43 /* SelfHealth.h */,
+				C981DAA21BA14CC000DB8A43 /* SelfHealth.m */,
+				C981DAA41BA14D1400DB8A43 /* Tower.h */,
+				C981DAA51BA14D1400DB8A43 /* Tower.m */,
+				C981DAA81BA14D5400DB8A43 /* GenericObject.h */,
+				C981DAA91BA14D5400DB8A43 /* GenericObject.m */,
+				C9B8B2371BA1514400B59257 /* Position.hpp */,
+			);
+			name = Objects;
+			sourceTree = "<group>";
+		};
 		C9DED8C51B8FC77B004DECCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -380,11 +415,14 @@
 			files = (
 				C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */,
 				C95A77B01B14063B00052F3E /* main.m in Sources */,
+				C981DA9D1BA14B8C00DB8A43 /* Minion.m in Sources */,
 				C93A4D311B2BE84400391CCE /* EnemyTowerManager.m in Sources */,
 				C91DD90F1B6B6C1400B4BB07 /* LeagueDetector.m in Sources */,
 				C92B825C1B303A9E00278ED5 /* ItemManager.m in Sources */,
 				C9C736041B15937F0021F10F /* AllyMinionManager.m in Sources */,
+				C981DAA61BA14D1400DB8A43 /* Tower.m in Sources */,
 				C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */,
+				C981DAA01BA14C8800DB8A43 /* Champion.m in Sources */,
 				C9416A931B2C560E007E0091 /* AutoQueueManager.m in Sources */,
 				C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */,
 				C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */,
@@ -393,9 +431,11 @@
 				C9A9111A1B2AC6F300DC33D1 /* ShopManager.m in Sources */,
 				C94607321B96482B00B8F926 /* DetectionManager.m in Sources */,
 				C981B24B1B94966400C7F5AB /* MapManager.m in Sources */,
+				C981DAA31BA14CC000DB8A43 /* SelfHealth.m in Sources */,
 				C9F5E6821B1C1AD10072BB9C /* EnemyMinionManager.m in Sources */,
 				C92B82591B303A7500278ED5 /* AbilityManager.m in Sources */,
 				C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */,
+				C981DAAA1BA14D5400DB8A43 /* GenericObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

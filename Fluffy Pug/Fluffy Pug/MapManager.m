@@ -27,7 +27,7 @@ MapManager::MapManager() {}
 GenericObject* MapManager::detectMap(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, mapTopLeftCornerImageData, 0.7) >=  0.7) {
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
         object->bottomLeft.x = x;
@@ -45,7 +45,7 @@ GenericObject* MapManager::detectMap(ImageData imageData, uint8_t *pixel, int x,
 GenericObject* MapManager::detectShop(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopIconImageData, 0.0) >=  0.7) {
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
         object->bottomLeft.x = x;
@@ -128,7 +128,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
             if (getSizeOfBar(bottomRightVertBar) > getSizeOfBar(chosenVertBar)) chosenVertBar = bottomRightVertBar;
             
             if (getSizeOfBar(chosenVertBar) > 5 && getSizeOfBar(horzBar) > 5) {
-                object = new GenericObject();
+                object = [GenericObject new];
                 int topLeftX = horzBar.x;
                 int topLeftY = chosenVertBar.x;
                 int width = getSizeOfBar(horzBar);
@@ -158,7 +158,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
             if (getSizeOfBar(bottomRightHorzBar) > getSizeOfBar(chosenHorzBar)) chosenHorzBar = bottomRightHorzBar;
             
             if (getSizeOfBar(chosenHorzBar) > 5 && getSizeOfBar(horzBar) > 5) {
-                object = new GenericObject();
+                object = [GenericObject new];
                 int topLeftX = chosenHorzBar.x;
                 int topLeftY = vertBar.x;
                 int width = getSizeOfBar(chosenHorzBar);
@@ -207,7 +207,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
         }
         int topLeftX = x;
         int topLeftY = y;
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = topLeftX;
         object->topLeft.y = topLeftY;
         object->bottomLeft.x = topLeftX;
@@ -236,7 +236,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
         }
         int topLeftX = x;
         int topLeftY = y - height;
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = topLeftX;
         object->topLeft.y = topLeftY;
         object->bottomLeft.x = topLeftX;
@@ -264,7 +264,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
         }
         int topLeftX = x - width;
         int topLeftY = y;
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = topLeftX;
         object->topLeft.y = topLeftY;
         object->bottomLeft.x = topLeftX;
@@ -292,7 +292,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
         }
         int topLeftX = x - width;
         int topLeftY = y - height;
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = topLeftX;
         object->topLeft.y = topLeftY;
         object->bottomLeft.x = topLeftX;
@@ -312,7 +312,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
  GenericObject* MapManager::detectShopAvailable(ImageData imageData, uint8_t *pixel, int x, int y) {
  GenericObject* object = nil;
  if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopAvailableImageData, 0.8) >=  0.8) {
- object = new GenericObject();
+ object = [GenericObject new];
  object->topLeft.x = x;
  object->topLeft.y = y;
  object->bottomLeft.x = x;
@@ -330,7 +330,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
  GenericObject* MapManager::detectShopTopLeftCorner(ImageData imageData, uint8_t *pixel, int x, int y) {
  GenericObject* object = nil;
  if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopTopLeftCornerImageData, 0.8) >=  0.8) {
- object = new GenericObject();
+ object = [GenericObject new];
  object->topLeft.x = x;
  object->topLeft.y = y;
  object->bottomLeft.x = x;
@@ -348,7 +348,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
  GenericObject* MapManager::detectShopBottomLeftCorner(ImageData imageData, uint8_t *pixel, int x, int y) {
  GenericObject* object = nil;
  if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopBottomLeftCornerImageData, 0.8) >=  0.8) {
- object = new GenericObject();
+ object = [GenericObject new];
  object->topLeft.x = x;
  object->topLeft.y = y;
  object->bottomLeft.x = x;
@@ -396,7 +396,7 @@ GenericObject* MapManager::detectLocation(ImageData imageData, uint8_t *pixel, i
  }
  if (bottomRightCorner == false) return nil;
  
- object = new GenericObject();
+ object = [GenericObject new];
  object->topLeft.x = x;
  object->topLeft.y = y;
  object->bottomLeft.x = x;

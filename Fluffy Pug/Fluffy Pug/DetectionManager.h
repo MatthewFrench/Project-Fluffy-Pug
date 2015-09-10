@@ -55,7 +55,7 @@ class DetectionManager {
     bool mapSelfLocationVisible = false;
     GenericObject* mapSelfLocation=nil;
     bool selfHealthBarVisible = false;
-    SelfHealthBar* selfHealthBar=nil;
+    SelfHealth* selfHealthBar=nil;
     
     int allyMinionScanCurrentChunkX = 0;
     int allyMinionScanCurrentChunkY = 0;
@@ -121,7 +121,7 @@ public:
     NSMutableArray* getEnemyTowers();
     NSMutableArray* getSelfChampions();
     bool getSelfHealthBarVisible();
-    SelfHealthBar* getSelfHealthBar();
+    SelfHealth* getSelfHealthBar();
     bool getSpell1LevelUpVisible();
     bool getSpell2LevelUpVisible();
     bool getSpell3LevelUpVisible();

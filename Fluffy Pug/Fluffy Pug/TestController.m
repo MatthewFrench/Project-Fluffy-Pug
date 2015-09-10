@@ -139,13 +139,13 @@ void TestController::testSelfDetection() {
     for (int x = 0; x < testImage.imageWidth; x++) {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(testImage, x, y);
-            ChampionBar* championBar = SelfChampionManager::detectChampionBarAtPixel(testImage, pixel, x, y);
+            Champion* championBar = SelfChampionManager::detectChampionBarAtPixel(testImage, pixel, x, y);
             if (championBar != nil) {
-                [championBars addObject: [NSValue valueWithPointer:championBar]];
+                [championBars addObject: championBar];
             }
-            SelfHealthBar* selfHealthBar = SelfChampionManager::detectSelfHealthBarAtPixel(testImage, pixel, x, y);
+            SelfHealth* selfHealthBar = SelfChampionManager::detectSelfHealthBarAtPixel(testImage, pixel, x, y);
             if (selfHealthBar != nil) {
-                [selfHealthBars addObject: [NSValue valueWithPointer:selfHealthBar]];
+                [selfHealthBars addObject: selfHealthBar];
             }
         }
     }
@@ -164,14 +164,14 @@ void TestController::testSelfDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in championBars) {
-                ChampionBar* champ = (ChampionBar*)[val pointerValue];
+            for (Champion* val in championBars) {
+                Champion* champ = val;
                 if (x >= champ->topLeft.x && x <= champ->bottomRight.x && y >= champ->topLeft.y && y <= champ->bottomRight.y) {
                     inChamp = true;
                 }
             }
-            for (NSValue* val in selfHealthBars) {
-                SelfHealthBar* champ = (SelfHealthBar*)[val pointerValue];
+            for (SelfHealth* val in selfHealthBars) {
+                SelfHealth* champ = val ;
                 if (x >= champ->topLeft.x && x <= champ->bottomRight.x && y >= champ->topLeft.y && y <= champ->bottomRight.y) {
                     inChamp = true;
                 }
@@ -184,18 +184,18 @@ void TestController::testSelfDetection() {
             }
         }
     }
-    for (NSValue* val in championBars) {
-        ChampionBar* champ = (ChampionBar*)[val pointerValue];
+    for (Champion* val in championBars) {
+        Champion* champ = val ;
         log([NSString stringWithFormat:@"Champion: %d, %d with health: %f", champ->topLeft.x, champ->topLeft.y, champ->health ]);
     }
-    for (NSValue* val in selfHealthBars) {
-        SelfHealthBar* champ = (SelfHealthBar*)[val pointerValue];
+    for (SelfHealth* val in selfHealthBars) {
+        SelfHealth* champ = val ;
         log([NSString stringWithFormat:@"Self Health Bar: %d, %d with health: %f", champ->topLeft.x, champ->topLeft.y, champ->health ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([championBars count] > 0) {
-        ChampionBar * champ = (ChampionBar*)[[championBars objectAtIndex:0] pointerValue];
+        Champion* champ = [championBars objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, champ->topLeft.x, champ->topLeft.y, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y)];
     }
@@ -222,9 +222,9 @@ void TestController::testAllyChampionDetection() {
     for (int x = 0; x < testImage.imageWidth; x++) {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(testImage, x, y);
-            ChampionBar* championBar = AllyChampionManager::detectChampionBarAtPixel(testImage, pixel, x, y);
+            Champion* championBar = AllyChampionManager::detectChampionBarAtPixel(testImage, pixel, x, y);
             if (championBar != nil) {
-                [championBars addObject: [NSValue valueWithPointer:championBar]];
+                [championBars addObject: championBar];
             }
         }
     }
@@ -242,8 +242,8 @@ void TestController::testAllyChampionDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in championBars) {
-                ChampionBar* champ = (ChampionBar*)[val pointerValue];
+            for (Champion* val in championBars) {
+                Champion* champ = val ;
                 if (x >= champ->topLeft.x && x <= champ->bottomRight.x && y >= champ->topLeft.y && y <= champ->bottomRight.y) {
                     inChamp = true;
                 }
@@ -256,14 +256,14 @@ void TestController::testAllyChampionDetection() {
             }
         }
     }
-    for (NSValue* val in championBars) {
-        ChampionBar* champ = (ChampionBar*)[val pointerValue];
+    for (Champion* val in championBars) {
+        Champion* champ = val ;
         log([NSString stringWithFormat:@"Ally Champion: %d, %d with health: %f", champ->topLeft.x, champ->topLeft.y, champ->health ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([championBars count] > 0) {
-        ChampionBar * champ = (ChampionBar*)[[championBars objectAtIndex:0] pointerValue];
+        Champion* champ = [championBars objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, champ->topLeft.x, champ->topLeft.y, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y)];
     }
@@ -289,9 +289,9 @@ void TestController::testEnemyChampionDetection() {
     for (int x = 0; x < testImage.imageWidth; x++) {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(testImage, x, y);
-            ChampionBar* championBar = EnemyChampionManager::detectChampionBarAtPixel(testImage, pixel, x, y);
+            Champion* championBar = EnemyChampionManager::detectChampionBarAtPixel(testImage, pixel, x, y);
             if (championBar != nil) {
-                [championBars addObject: [NSValue valueWithPointer:championBar]];
+                [championBars addObject: championBar];
             }
         }
     }
@@ -309,8 +309,8 @@ void TestController::testEnemyChampionDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in championBars) {
-                ChampionBar* champ = (ChampionBar*)[val pointerValue];
+            for (Champion* val in championBars) {
+                Champion* champ = val ;
                 if (x >= champ->topLeft.x && x <= champ->bottomRight.x && y >= champ->topLeft.y && y <= champ->bottomRight.y) {
                     inChamp = true;
                 }
@@ -323,14 +323,14 @@ void TestController::testEnemyChampionDetection() {
             }
         }
     }
-    for (NSValue* val in championBars) {
-        ChampionBar* champ = (ChampionBar*)[val pointerValue];
+    for (Champion* val in championBars) {
+        Champion* champ = val ;
         log([NSString stringWithFormat:@"Enemy Champion: %d, %d with health: %f", champ->topLeft.x, champ->topLeft.y, champ->health ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([championBars count] > 0) {
-        ChampionBar * champ = (ChampionBar*)[[championBars objectAtIndex:0] pointerValue];
+        Champion* champ = [championBars objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, champ->topLeft.x, champ->topLeft.y, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, champ->bottomRight.x - champ->topLeft.x, champ->bottomRight.y - champ->topLeft.y)];
     }
@@ -358,9 +358,9 @@ void TestController::testEnemyMinionDetection() {
     for (int x = 0; x < testImage.imageWidth; x++) {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(testImage, x, y);
-            MinionBar* minionBar = EnemyMinionManager::detectMinionBarAtPixel(testImage, pixel, x, y);
+            Minion* minionBar = EnemyMinionManager::detectMinionBarAtPixel(testImage, pixel, x, y);
             if (minionBar != nil) {
-                [minionBars addObject: [NSValue valueWithPointer:minionBar]];
+                [minionBars addObject: minionBar];
             }
         }
     }
@@ -378,8 +378,8 @@ void TestController::testEnemyMinionDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in minionBars) {
-                MinionBar* minion = (MinionBar*)[val pointerValue];
+            for (Minion* val in minionBars) {
+                Minion* minion = val ;
                 if (x >= minion->topLeft.x && x <= minion->bottomRight.x && y >= minion->topLeft.y && y <= minion->bottomRight.y) {
                     inChamp = true;
                 }
@@ -392,14 +392,14 @@ void TestController::testEnemyMinionDetection() {
             }
         }
     }
-    for (NSValue* val in minionBars) {
-        MinionBar* minion = (MinionBar*)[val pointerValue];
+    for (Minion* val in minionBars) {
+        Minion* minion = val ;
         log([NSString stringWithFormat:@"Enemy Minion: %d, %d with health: %f", minion->topLeft.x, minion->topLeft.y, minion->health ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([minionBars count] > 0) {
-        MinionBar * minion = (MinionBar*)[[minionBars objectAtIndex:0] pointerValue];
+        Minion* minion = [minionBars objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, minion->topLeft.x, minion->topLeft.y, minion->bottomRight.x - minion->topLeft.x, minion->bottomRight.y - minion->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, minion->bottomRight.x - minion->topLeft.x, minion->bottomRight.y - minion->topLeft.y)];
     }
@@ -427,9 +427,9 @@ void TestController::testAllyMinionDetection() {
     for (int x = 0; x < testImage.imageWidth; x++) {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(testImage, x, y);
-            MinionBar* minionBar = AllyMinionManager::detectMinionBarAtPixel(testImage, pixel, x, y);
+            Minion* minionBar = AllyMinionManager::detectMinionBarAtPixel(testImage, pixel, x, y);
             if (minionBar != nil) {
-                [minionBars addObject: [NSValue valueWithPointer:minionBar]];
+                [minionBars addObject: minionBar];
             }
         }
     }
@@ -447,8 +447,8 @@ void TestController::testAllyMinionDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in minionBars) {
-                MinionBar* minion = (MinionBar*)[val pointerValue];
+            for (Minion* val in minionBars) {
+                Minion* minion = val ;
                 if (x >= minion->topLeft.x && x <= minion->bottomRight.x && y >= minion->topLeft.y && y <= minion->bottomRight.y) {
                     inChamp = true;
                 }
@@ -461,14 +461,14 @@ void TestController::testAllyMinionDetection() {
             }
         }
     }
-    for (NSValue* val in minionBars) {
-        MinionBar* minion = (MinionBar*)[val pointerValue];
+    for (Minion* val in minionBars) {
+        Minion* minion = val ;
         log([NSString stringWithFormat:@"Ally Minion: %d, %d with health: %f", minion->topLeft.x, minion->topLeft.y, minion->health ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([minionBars count] > 0) {
-        MinionBar * minion = (MinionBar*)[[minionBars objectAtIndex:0] pointerValue];
+        Minion* minion = [minionBars objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, minion->topLeft.x, minion->topLeft.y, minion->bottomRight.x - minion->topLeft.x, minion->bottomRight.y - minion->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, minion->bottomRight.x - minion->topLeft.x, minion->bottomRight.y - minion->topLeft.y)];
     }
@@ -496,9 +496,9 @@ void TestController::testEnemyTowerDetection() {
     for (int x = 0; x < testImage.imageWidth; x++) {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(testImage, x, y);
-            TowerBar* towerBar = EnemyTowerManager::detectTowerBarAtPixel(testImage, pixel, x, y);
+            Tower* towerBar = EnemyTowerManager::detectTowerBarAtPixel(testImage, pixel, x, y);
             if (towerBar != nil) {
-                [towerBars addObject: [NSValue valueWithPointer:towerBar]];
+                [towerBars addObject: towerBar];
             }
         }
     }
@@ -516,8 +516,8 @@ void TestController::testEnemyTowerDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in towerBars) {
-                TowerBar* tower = (TowerBar*)[val pointerValue];
+            for (Tower* val in towerBars) {
+                Tower* tower = val ;
                 if (x >= tower->topLeft.x && x <= tower->bottomRight.x && y >= tower->topLeft.y && y <= tower->bottomRight.y) {
                     inChamp = true;
                 }
@@ -530,14 +530,14 @@ void TestController::testEnemyTowerDetection() {
             }
         }
     }
-    for (NSValue* val in towerBars) {
-        TowerBar* tower = (TowerBar*)[val pointerValue];
+    for (Tower* val in towerBars) {
+        Tower* tower = val ;
         log([NSString stringWithFormat:@"Enemy Tower: %d, %d with health: %f", tower->topLeft.x, tower->topLeft.y, tower->health ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([towerBars count] > 0) {
-        TowerBar * tower = (TowerBar*)[[towerBars objectAtIndex:0] pointerValue];
+        Tower* tower = [towerBars objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, tower->topLeft.x, tower->topLeft.y, tower->bottomRight.x - tower->topLeft.x, tower->bottomRight.y - tower->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, tower->bottomRight.x - tower->topLeft.x, tower->bottomRight.y - tower->topLeft.y)];
     }
@@ -562,7 +562,7 @@ void TestController::testLevelUpDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = AbilityManager::detectLevelUpAtPixel(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -579,8 +579,8 @@ void TestController::testLevelUpDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -593,14 +593,14 @@ void TestController::testLevelUpDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Level Up: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -625,7 +625,7 @@ void TestController::testLevelDotDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = AbilityManager::detectLevelDotAtPixel(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -642,8 +642,8 @@ void TestController::testLevelDotDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -656,14 +656,14 @@ void TestController::testLevelDotDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Level Dot: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -688,7 +688,7 @@ void TestController::testEnabledAbilityDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = AbilityManager::detectEnabledAbilityAtPixel(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -705,8 +705,8 @@ void TestController::testEnabledAbilityDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -719,14 +719,14 @@ void TestController::testEnabledAbilityDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Enabled ability: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -751,7 +751,7 @@ void TestController::testEnabledSummonerSpellDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = AbilityManager::detectEnabledSummonerSpellAtPixel(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -768,8 +768,8 @@ void TestController::testEnabledSummonerSpellDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -782,14 +782,14 @@ void TestController::testEnabledSummonerSpellDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Enabled summoner spell: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -815,7 +815,7 @@ void TestController::testTrinketActiveDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = ItemManager::detectTrinketActiveAtPixel(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -832,8 +832,8 @@ void TestController::testTrinketActiveDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -846,14 +846,14 @@ void TestController::testTrinketActiveDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Trinket active: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -878,7 +878,7 @@ void TestController::testItemActiveDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = ItemManager::detectItemActiveAtPixel(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -895,8 +895,8 @@ void TestController::testItemActiveDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -909,14 +909,14 @@ void TestController::testItemActiveDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Item active: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -941,7 +941,7 @@ void TestController::testPotionActiveDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = ItemManager::detectPotionActiveAtPixel(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -958,8 +958,8 @@ void TestController::testPotionActiveDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -972,14 +972,14 @@ void TestController::testPotionActiveDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Potion active: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -1004,7 +1004,7 @@ void TestController::testUsedPotionActiveDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = ItemManager::detectUsedPotionAtPixel(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -1021,8 +1021,8 @@ void TestController::testUsedPotionActiveDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -1035,14 +1035,14 @@ void TestController::testUsedPotionActiveDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Used potion: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -1068,7 +1068,7 @@ void TestController::testShopAvailable() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = ShopManager::detectShopAvailable(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -1085,8 +1085,8 @@ void TestController::testShopAvailable() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -1099,14 +1099,14 @@ void TestController::testShopAvailable() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Shop available: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -1131,7 +1131,7 @@ void TestController::testShopTopLeftCorner() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = ShopManager::detectShopTopLeftCorner(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -1148,8 +1148,8 @@ void TestController::testShopTopLeftCorner() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -1162,14 +1162,14 @@ void TestController::testShopTopLeftCorner() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Shop top left corner: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -1194,7 +1194,7 @@ void TestController::testShopBottomLeftCorner() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = ShopManager::detectShopBottomLeftCorner(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -1211,8 +1211,8 @@ void TestController::testShopBottomLeftCorner() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -1225,14 +1225,14 @@ void TestController::testShopBottomLeftCorner() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Shop bottom left corner: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -1257,7 +1257,7 @@ void TestController::testShopBuyableItems() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = ShopManager::detectBuyableItems(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -1274,8 +1274,8 @@ void TestController::testShopBuyableItems() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -1288,14 +1288,14 @@ void TestController::testShopBuyableItems() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Shop buyable item: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -1321,7 +1321,7 @@ void TestController::testMapDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = MapManager::detectMap(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -1338,8 +1338,8 @@ void TestController::testMapDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -1352,14 +1352,14 @@ void TestController::testMapDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Map: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -1385,7 +1385,7 @@ void TestController::testMapShopDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = MapManager::detectShop(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -1402,8 +1402,8 @@ void TestController::testMapShopDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -1416,14 +1416,14 @@ void TestController::testMapShopDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Shop: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
@@ -1448,7 +1448,7 @@ void TestController::testMapLocationDetection() {
             uint8* pixel = getPixel2(testImage, x, y);
             GenericObject* levelup = MapManager::detectLocation(testImage, pixel, x, y);
             if (levelup != nil) {
-                [levelups addObject: [NSValue valueWithPointer:levelup]];
+                [levelups addObject: levelup];
             }
         }
     }
@@ -1465,8 +1465,8 @@ void TestController::testMapLocationDetection() {
         for (int y = 0; y < testImage.imageHeight; y++) {
             uint8* pixel = getPixel2(imageData, x, y);
             BOOL inChamp = false;
-            for (NSValue* val in levelups) {
-                GenericObject* levelup = (GenericObject*)[val pointerValue];
+            for (GenericObject* val in levelups) {
+                GenericObject* levelup = val ;
                 if (x >= levelup->topLeft.x && x <= levelup->bottomRight.x && y >= levelup->topLeft.y && y <= levelup->bottomRight.y) {
                     inChamp = true;
                 }
@@ -1479,14 +1479,14 @@ void TestController::testMapLocationDetection() {
             }
         }
     }
-    for (NSValue* val in levelups) {
-        GenericObject* levelup = (GenericObject*)[val pointerValue];
+    for (GenericObject* val in levelups) {
+        GenericObject* levelup = val ;
         log([NSString stringWithFormat:@"Map Location: %d, %d", levelup->topLeft.x, levelup->topLeft.y ]);
     }
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     
     if ([levelups count] > 0) {
-        GenericObject * levelup = (GenericObject*)[[levelups objectAtIndex:0] pointerValue];
+        GenericObject * levelup = [levelups objectAtIndex:0] ;
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }

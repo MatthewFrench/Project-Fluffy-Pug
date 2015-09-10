@@ -37,7 +37,7 @@ public:
     
     EnemyMinionManager();
     
-    static MinionBar* detectMinionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static Minion* detectMinionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     static NSMutableArray* validateMinionBars(ImageData imageData, NSMutableArray* detectedChampionBars);
     //void processImage(ImageData imageData);
     //MinionBar getNearestMinion(int x, int y);

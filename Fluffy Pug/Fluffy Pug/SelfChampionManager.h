@@ -50,9 +50,9 @@ public:
     //NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     
     SelfChampionManager();
-    static ChampionBar* detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static Champion* detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     static NSMutableArray* validateChampionBars(ImageData imageData, NSMutableArray* detectedChampionBars);
-    static SelfHealthBar* detectSelfHealthBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static SelfHealth* detectSelfHealthBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     static NSMutableArray* validateSelfHealthBars(ImageData imageData, NSMutableArray* detectedHealthBars);
     //void processImage(ImageData imageData);
     //void debugDraw(ImageData imageData);

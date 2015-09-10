@@ -39,14 +39,14 @@ EnemyMinionManager::EnemyMinionManager () {
 const float coloredPixelPrecision = 0.96; //0.97
 const float overalImagePrecision = 0.96; //0.97
 const float minionHealthMatch = 0.80; //0.87
-MinionBar* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
-    MinionBar* minion = nil;
+Minion* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    Minion* minion = nil;
     if (isColor3(pixel, 0, 0, 0)) {
         //Look top left corner
         if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, coloredPixelPrecision) >=  overalImagePrecision) {
             int barTopLeftX = x + 1;
             int barTopLeftY = y + 1;
-            minion = new MinionBar();
+            minion = [Minion new];
             minion->topLeft.x = barTopLeftX;
             minion->topLeft.y = barTopLeftY;
             minion->bottomLeft.x = barTopLeftX;
@@ -61,7 +61,7 @@ MinionBar* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8
         } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, coloredPixelPrecision) >=  overalImagePrecision) { // Look for bottom left corner
             int barTopLeftX = x + 1;
             int barTopLeftY = y - 3;
-            minion = new MinionBar();
+            minion = [Minion new];
             minion->topLeft.x = barTopLeftX;
             minion->topLeft.y = barTopLeftY;
             minion->bottomLeft.x = barTopLeftX;
@@ -86,7 +86,7 @@ MinionBar* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8
       uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
       uint8_t*  p = getPixel2(imageData, x + barTopLeftX, y + barTopLeftY);
       if (getColorPercentage(healthBarColor, p) >= 0.95) {
-      minion = new MinionBar();
+      minion = [Minion new];
       minion->health = (float)x / 61 * 100;
       detectedCorner = true;
       minion->topLeft.x = barTopLeftX;
@@ -115,7 +115,7 @@ MinionBar* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8
       uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
       uint8_t*  p = getPixel2(imageData, x + barTopLeftX, y + barTopLeftY);
       if (getColorPercentage(healthBarColor, p) >= 0.95) {
-      minion = new MinionBar();
+      minion = [Minion new];
       minion->health = (float)x / 61 * 100;
       minion->topLeft.x = barTopLeftX;
       minion->topLeft.y = barTopLeftY;
@@ -143,11 +143,11 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
     NSMutableArray* minionBars = [NSMutableArray new];
     
     while ([detectedMinionBars count] > 0) {
-        MinionBar* minion = (MinionBar*)[[detectedMinionBars lastObject] pointerValue];
+        Minion* minion = [detectedMinionBars lastObject];
         [detectedMinionBars removeLastObject];
         int detectedCorners = 1;
         for (int i = 0; i < [detectedMinionBars count]; i++) {
-            MinionBar * minion2 = (MinionBar*)[[detectedMinionBars objectAtIndex:i] pointerValue];
+            Minion* minion2 = [detectedMinionBars objectAtIndex:i];
             if (minion2->topLeft.x == minion->topLeft.x && minion->topLeft.y == minion2-> topLeft.y) {
                 [detectedMinionBars removeObjectAtIndex:i];
                 i--;
@@ -161,13 +161,13 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
         }
         //if (detectedCorners > 1) {
         minion->characterCenter.x = minion->topLeft.x+30; minion->characterCenter.y = minion->topLeft.y+32;
-        [minionBars addObject: [NSValue valueWithPointer:minion]];
+        [minionBars addObject: minion];
         //}
     }
     
     //Detect health
     for (int i = 0; i < [minionBars count]; i++) {
-        MinionBar* minion = (MinionBar*)[[minionBars objectAtIndex:i] pointerValue];
+        Minion* minion = [minionBars objectAtIndex:i];
         if (minion->health == 0) {
             for (int x = 61; x >= 0; x--) {
                 for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
@@ -184,7 +184,7 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
         if (minion->health == 0) { //Not a minion
             [minionBars removeObjectAtIndex:i];
             i--;
-            delete minion;
+            //delete minion;
         }
     }
     

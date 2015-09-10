@@ -35,13 +35,13 @@ EnemyTowerManager::EnemyTowerManager () {
 }
 
 
-TowerBar* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
-    TowerBar* tower = nil;
+Tower* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    Tower* tower = nil;
     //Look top left corner
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.95) >=  0.95) {
         int barTopLeftX = x + 3;
         int barTopLeftY = y + 3;
-        tower = new TowerBar();
+        tower = [Tower new];
         tower->topLeft.x = barTopLeftX;
         tower->topLeft.y = barTopLeftY;
         tower->bottomLeft.x = barTopLeftX;
@@ -54,7 +54,7 @@ TowerBar* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t 
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.95) >=  0.95) { // Look for bottom left corner
         int barTopLeftX = x + 3;
         int barTopLeftY = y - 7;
-        tower = new TowerBar();
+        tower = [Tower new];
         tower->topLeft.x = barTopLeftX;
         tower->topLeft.y = barTopLeftY;
         tower->bottomLeft.x = barTopLeftX;
@@ -67,7 +67,7 @@ TowerBar* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t 
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.95) >=  0.95) { // Look for top right corner
         int barTopLeftX = x - 126 + 1;
         int barTopLeftY = y + 3;
-        tower = new TowerBar();
+        tower = [Tower new];
         tower->topLeft.x = barTopLeftX;
         tower->topLeft.y = barTopLeftY;
         tower->bottomLeft.x = barTopLeftX;
@@ -80,7 +80,7 @@ TowerBar* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t 
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.95) >=  0.95) { // Look for bottom right corner
         int barTopLeftX = x - 126 + 1;
         int barTopLeftY = y - 7;
-        tower = new TowerBar();
+        tower = [Tower new];
         tower->topLeft.x = barTopLeftX;
         tower->topLeft.y = barTopLeftY;
         tower->bottomLeft.x = barTopLeftX;
@@ -102,11 +102,11 @@ NSMutableArray* EnemyTowerManager::validateTowerBars(ImageData imageData, NSMuta
     NSMutableArray* TowerBars = [NSMutableArray new];
     
     while ([detectedTowerBars count] > 0) {
-        TowerBar* tower = (TowerBar*)[[detectedTowerBars lastObject] pointerValue];
+        Tower* tower = [detectedTowerBars lastObject];
         [detectedTowerBars removeLastObject];
         int detectedCorners = 1;
         for (int i = 0; i < [detectedTowerBars count]; i++) {
-            TowerBar * tower2 = (TowerBar*)[[detectedTowerBars objectAtIndex:i] pointerValue];
+            Tower * tower2 = [detectedTowerBars objectAtIndex:i] ;
             if (tower2->topLeft.x == tower->topLeft.x && tower->topLeft.y == tower2-> topLeft.y) {
                 [detectedTowerBars removeObjectAtIndex:i];
                 i--;
@@ -119,15 +119,15 @@ NSMutableArray* EnemyTowerManager::validateTowerBars(ImageData imageData, NSMuta
         }
         if (detectedCorners > 1) {
             tower->towerCenter.x = tower->topLeft.x+126/2; tower->towerCenter.y = tower->topLeft.y+200;
-            [TowerBars addObject: [NSValue valueWithPointer:tower]];
-        } else {
-            delete tower;
-        }
+            [TowerBars addObject: tower];
+        }// else {
+        //    delete tower;
+        //}
     }
     
     //Detect health
     for (int i = 0; i < [TowerBars count]; i++) {
-        TowerBar* tower = (TowerBar*)[[TowerBars objectAtIndex:i] pointerValue];
+        Tower* tower = [TowerBars objectAtIndex:i];
         tower->health = 0;
         for (int x = 125; x >= 0; x--) {
             for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {

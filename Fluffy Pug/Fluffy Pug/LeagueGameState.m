@@ -19,9 +19,9 @@ void LeagueGameState::processLogic() {
 }
 
 void LeagueGameState::processDetection(ImageData image) {
-    //if (leaguePID != -1) {
+    if (leaguePID != -1) {
         detectionManager->processDetection(image);
-    //}
+    }
 }
 void LeagueGameState::debugDraw(ImageData imageData) {
 }

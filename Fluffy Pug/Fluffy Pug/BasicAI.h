@@ -53,9 +53,9 @@ public:
     void castRecall();
 };
 
-ChampionBar* getNearestChampion(NSMutableArray* championBars, int x, int y);
-ChampionBar* getLowestHealthChampion(NSMutableArray* championBars, int x, int y);
-MinionBar* getNearestMinion(NSMutableArray* minionBars, int x, int y);
-MinionBar* getLowestHealthMinion(NSMutableArray* minionBars, int x, int y);
-TowerBar* getLowestHealthTower(NSMutableArray* towerBars, int x, int y);
-TowerBar* getNearestTower(NSMutableArray* towerBars, int x, int y);
+Champion* getNearestChampion(NSMutableArray* championBars, int x, int y);
+Champion* getLowestHealthChampion(NSMutableArray* championBars, int x, int y);
+Minion* getNearestMinion(NSMutableArray* minionBars, int x, int y);
+Minion* getLowestHealthMinion(NSMutableArray* minionBars, int x, int y);
+Tower* getLowestHealthTower(NSMutableArray* towerBars, int x, int y);
+Tower* getNearestTower(NSMutableArray* towerBars, int x, int y);

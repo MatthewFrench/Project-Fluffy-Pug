@@ -33,13 +33,13 @@ EnemyChampionManager::EnemyChampionManager () {
     //lastUpdateTime = clock();
 }
 
-ChampionBar* EnemyChampionManager::detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
-    ChampionBar* champ = nil;
+Champion* EnemyChampionManager::detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
+    Champion* champ = nil;
     //Look top left corner
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.95) >=  0.95) {
         int barTopLeftX = x + 3;
         int barTopLeftY = y + 3;
-        champ = new ChampionBar();
+        champ = [Champion new];
         champ->topLeft.x = barTopLeftX;
         champ->topLeft.y = barTopLeftY;
         champ->bottomLeft.x = barTopLeftX;
@@ -52,7 +52,7 @@ ChampionBar* EnemyChampionManager::detectChampionBarAtPixel(ImageData imageData,
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.95) >=  0.95) { // Look for bottom left corner
         int barTopLeftX = x + 3;
         int barTopLeftY = y - 8;
-        champ = new ChampionBar();
+        champ = [Champion new];
         champ->topLeft.x = barTopLeftX;
         champ->topLeft.y = barTopLeftY;
         champ->bottomLeft.x = barTopLeftX;
@@ -65,7 +65,7 @@ ChampionBar* EnemyChampionManager::detectChampionBarAtPixel(ImageData imageData,
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.95) >=  0.95) { // Look for top right corner
         int barTopLeftX = x - 101 - 2;
         int barTopLeftY = y + 3;
-        champ = new ChampionBar();
+        champ = [Champion new];
         champ->topLeft.x = barTopLeftX;
         champ->topLeft.y = barTopLeftY;
         champ->bottomLeft.x = barTopLeftX;
@@ -78,7 +78,7 @@ ChampionBar* EnemyChampionManager::detectChampionBarAtPixel(ImageData imageData,
     } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.95) >=  0.95) { // Look for bottom right corner
         int barTopLeftX = x - 101 - 2;
         int barTopLeftY = y - 8;
-        champ = new ChampionBar();
+        champ = [Champion new];
         champ->topLeft.x = barTopLeftX;
         champ->topLeft.y = barTopLeftY;
         champ->bottomLeft.x = barTopLeftX;
@@ -100,11 +100,11 @@ NSMutableArray* EnemyChampionManager::validateChampionBars(ImageData imageData, 
     NSMutableArray* championBars = [NSMutableArray new];
     
     while ([detectedChampionBars count] > 0) {
-        ChampionBar* champ = (ChampionBar*)[[detectedChampionBars lastObject] pointerValue];
+        Champion* champ = [detectedChampionBars lastObject];
         [detectedChampionBars removeLastObject];
         int detectedCorners = 1;
         for (int i = 0; i < [detectedChampionBars count]; i++) {
-            ChampionBar * champ2 = (ChampionBar*)[[detectedChampionBars objectAtIndex:i] pointerValue];
+            Champion* champ2 = [detectedChampionBars objectAtIndex:i];
             if (champ2->topLeft.x == champ->topLeft.x && champ->topLeft.y == champ2-> topLeft.y) {
                 [detectedChampionBars removeObjectAtIndex:i];
                 i--;
@@ -117,15 +117,15 @@ NSMutableArray* EnemyChampionManager::validateChampionBars(ImageData imageData, 
         }
         if (detectedCorners > 1) {
             champ->characterCenter.x = champ->topLeft.x+66; champ->characterCenter.y = champ->topLeft.y+104;
-            [championBars addObject: [NSValue valueWithPointer:champ]];
-        } else {
-            delete champ;
-        }
+            [championBars addObject: champ];
+        }// else {
+        //    delete champ;
+        //}
     }
     
     //Detect health
     for (int i = 0; i < [championBars count]; i++) {
-        ChampionBar* champ = (ChampionBar*)[[championBars objectAtIndex:i] pointerValue];
+        Champion* champ = [championBars objectAtIndex:i];
         champ->health = 0;
         for (int x = 103; x >= 0; x--) {
             for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {

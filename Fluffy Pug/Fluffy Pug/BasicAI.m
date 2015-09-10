@@ -72,7 +72,7 @@ void BasicAI::handleBuyingItems() {
                 //Buy items
                 NSMutableArray* itemsToBuy = gameState->detectionManager->getBuyableItems();
                 for (int i = 0; i < [itemsToBuy count]; i++) {
-                    GenericObject* item = (GenericObject*)[[itemsToBuy objectAtIndex:i] pointerValue];
+                    GenericObject* item = [itemsToBuy objectAtIndex:i];
                     int clickX = item->center.x;
                     int clickY = item->center.y;
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * 500), dispatch_get_main_queue(), ^{
@@ -123,7 +123,7 @@ void BasicAI::handleCameraFocus() {
 }
 void BasicAI::handlePlacingWard() {
     if ([gameState->detectionManager->getSelfChampions() count] > 0 && gameState->detectionManager->getTrinketActiveAvailable()) {
-        ChampionBar* champ = (ChampionBar*)[[gameState->detectionManager->getSelfChampions() firstObject] pointerValue];
+        Champion* champ = [gameState->detectionManager->getSelfChampions() firstObject];
         moveMouse(champ->characterCenter.x, champ->characterCenter.y);
         useTrinket();
     }
@@ -138,7 +138,7 @@ void BasicAI::handleMovementAndAttacking() {
             NSLog(@"We have a problem");
         }
         id firstObject = [selfChamps firstObject];
-        ChampionBar* selfChamp = (ChampionBar*)[firstObject pointerValue];
+        Champion* selfChamp = firstObject;
         
         bool enemyChampionsNear = [gameState->detectionManager->getEnemyChampions() count] > 0;
         bool enemyMinionsNear = [gameState->detectionManager->getEnemyMinions() count] > 0;
@@ -146,11 +146,11 @@ void BasicAI::handleMovementAndAttacking() {
         bool allyChampionsNear = [gameState->detectionManager->getAllyChampions() count] > 0;
         bool enemyTowerNear = [gameState->detectionManager->getEnemyTowers() count] > 0;
         bool underEnemyTower = false;
-        ChampionBar* lowestHealthEnemyChampion = getLowestHealthChampion(gameState->detectionManager->getEnemyChampions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        MinionBar* lowestHealthEnemyMinion = getLowestHealthMinion(gameState->detectionManager->getEnemyMinions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        MinionBar* closestAllyMinion = getNearestMinion(gameState->detectionManager->getAllyMinions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        ChampionBar* nearestAllyChampion = getNearestChampion(gameState->detectionManager->getAllyChampions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        TowerBar* nearestEnemyTower = getNearestTower(gameState->detectionManager->getEnemyTowers(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Champion* lowestHealthEnemyChampion = getLowestHealthChampion(gameState->detectionManager->getEnemyChampions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Minion* lowestHealthEnemyMinion = getLowestHealthMinion(gameState->detectionManager->getEnemyMinions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Minion* closestAllyMinion = getNearestMinion(gameState->detectionManager->getAllyMinions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Champion* nearestAllyChampion = getNearestChampion(gameState->detectionManager->getAllyChampions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Tower* nearestEnemyTower = getNearestTower(gameState->detectionManager->getEnemyTowers(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         
         if (enemyTowerNear && hypot(selfChamp->characterCenter.x - nearestEnemyTower->towerCenter.x, selfChamp->characterCenter.y - nearestEnemyTower->towerCenter.y) < 430) {
             underEnemyTower = true;
@@ -222,7 +222,7 @@ void BasicAI::handleMovementAndAttacking() {
         if (enemyTowerNear && (action == ACTION_Move_To_Mid || action == ACTION_Follow_Ally_Minion || action == ACTION_Follow_Ally_Champion || action == ACTION_Attack_Enemy_Minion)) {
             int minionsUnderTower = 0;
             for (int i = 0; i < [gameState->detectionManager->getAllyMinions() count]; i++) {
-                MinionBar* mb = (MinionBar*)[[gameState->detectionManager->getAllyMinions() objectAtIndex:i] pointerValue];
+                Minion* mb = [gameState->detectionManager->getAllyMinions() objectAtIndex:i];
                 if (hypot(mb->characterCenter.x - nearestEnemyTower->towerCenter.x, mb->characterCenter.y - nearestEnemyTower->towerCenter.y) < 430) {
                     minionsUnderTower++;
                 }
@@ -236,7 +236,7 @@ void BasicAI::handleMovementAndAttacking() {
         
         bool enemyChampionCloseEnough = false;
         if ([gameState->detectionManager->getEnemyChampions() count] > 0) {
-            ChampionBar* closeEnemyChampion = getNearestChampion(gameState->detectionManager->getEnemyChampions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+            Champion* closeEnemyChampion = getNearestChampion(gameState->detectionManager->getEnemyChampions(), selfChamp->characterCenter.x, selfChamp->characterCenter.y);
             if (hypot(closeEnemyChampion->characterCenter.x - selfChamp->characterCenter.x, closeEnemyChampion->characterCenter.y - selfChamp->characterCenter.y) < 400) {
                 enemyChampionCloseEnough = true;
             }
@@ -548,10 +548,10 @@ void BasicAI::castRecall() {
     }
 }
 
-ChampionBar* getNearestChampion(NSMutableArray* championBars, int x, int y) {
-    ChampionBar* closest = nullptr;
+Champion* getNearestChampion(NSMutableArray* championBars, int x, int y) {
+    Champion* closest = nullptr;
     for (int i = 0; i < [championBars count]; i++) {
-        ChampionBar* cb = (ChampionBar*)[[championBars objectAtIndex:i] pointerValue];
+        Champion* cb = [championBars objectAtIndex:i];
         
         if (i == 0) {
             closest = cb;
@@ -561,10 +561,10 @@ ChampionBar* getNearestChampion(NSMutableArray* championBars, int x, int y) {
     }
     return closest;
 }
-ChampionBar* getLowestHealthChampion(NSMutableArray* championBars, int x, int y) {
-    ChampionBar* closest = nullptr;
+Champion* getLowestHealthChampion(NSMutableArray* championBars, int x, int y) {
+    Champion* closest = nullptr;
     for (int i = 0; i < [championBars count]; i++) {
-        ChampionBar* cb = (ChampionBar*)[[championBars objectAtIndex:i] pointerValue];
+        Champion* cb = [championBars objectAtIndex:i];
         
         if (i == 0) {
             closest = cb;
@@ -576,10 +576,10 @@ ChampionBar* getLowestHealthChampion(NSMutableArray* championBars, int x, int y)
     }
     return closest;
 }
-MinionBar* getNearestMinion(NSMutableArray* minionBars, int x, int y) {
-    MinionBar* closest = nullptr;
+Minion* getNearestMinion(NSMutableArray* minionBars, int x, int y) {
+    Minion* closest = nullptr;
     for (int i = 0; i < [minionBars count]; i++) {
-        MinionBar* cb = (MinionBar*)[[minionBars objectAtIndex:i] pointerValue];
+        Minion* cb = [minionBars objectAtIndex:i];
         
         if (i == 0) {
             closest = cb;
@@ -589,10 +589,10 @@ MinionBar* getNearestMinion(NSMutableArray* minionBars, int x, int y) {
     }
     return closest;
 }
-MinionBar* getLowestHealthMinion(NSMutableArray* minionBars, int x, int y) {
-    MinionBar* closest = nullptr;
+Minion* getLowestHealthMinion(NSMutableArray* minionBars, int x, int y) {
+    Minion* closest = nullptr;
     for (int i = 0; i < [minionBars count]; i++) {
-        MinionBar* cb = (MinionBar*)[[minionBars objectAtIndex:i] pointerValue];
+        Minion* cb = [minionBars objectAtIndex:i];
         
         if (i == 0) {
             closest = cb;
@@ -604,10 +604,10 @@ MinionBar* getLowestHealthMinion(NSMutableArray* minionBars, int x, int y) {
     }
     return closest;
 }
-TowerBar* getLowestHealthTower(NSMutableArray* towerBars, int x, int y) {
-    TowerBar* closest = nullptr;
+Tower* getLowestHealthTower(NSMutableArray* towerBars, int x, int y) {
+    Tower* closest = nullptr;
     for (int i = 0; i < [towerBars count]; i++) {
-        TowerBar* cb = (TowerBar*)[[towerBars objectAtIndex:i] pointerValue];
+        Tower* cb = [towerBars objectAtIndex:i];
         
         if (i == 0) {
             closest = cb;
@@ -619,10 +619,10 @@ TowerBar* getLowestHealthTower(NSMutableArray* towerBars, int x, int y) {
     }
     return closest;
 }
-TowerBar* getNearestTower(NSMutableArray* towerBars, int x, int y) {
-    TowerBar* closest = nullptr;
+Tower* getNearestTower(NSMutableArray* towerBars, int x, int y) {
+    Tower* closest = nullptr;
     for (int i = 0; i < [towerBars count]; i++) {
-        TowerBar* cb = (TowerBar*)[[towerBars objectAtIndex:i] pointerValue];
+        Tower* cb = [towerBars objectAtIndex:i];
         
         if (i == 0) {
             closest = cb;

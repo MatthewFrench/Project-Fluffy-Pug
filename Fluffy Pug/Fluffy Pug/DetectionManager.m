@@ -301,7 +301,7 @@ NSMutableArray* DetectionManager::getSelfChampions() {
 bool DetectionManager::getSelfHealthBarVisible() {
     return selfHealthBarVisible;
 }
-SelfHealthBar* DetectionManager::getSelfHealthBar() {
+SelfHealth* DetectionManager::getSelfHealthBar() {
     return selfHealthBar;
 }
 bool DetectionManager::getSpell1LevelUpVisible() {
@@ -574,8 +574,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
             if (foundMap != NULL) {
                 dispatch_async(detectionThread, ^(void){
                     @autoreleasepool {
-                        if (mapDetectionObject != NULL) delete mapDetectionObject;
-                        mapDetectionObject = new GenericObject(*foundMap);
+                        //if (mapDetectionObject != NULL) delete mapDetectionObject;
+                        mapDetectionObject = foundMap;
                     }
                 });
             }
@@ -583,21 +583,21 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (foundMap != NULL) {
-                        if (map != NULL) delete map;
+                        //if (map != NULL) delete map;
                         mapVisible = true;
                         map = foundMap;
                     } else {
                         mapVisible = false;
                     }
                     if (foundLocation != NULL) {
-                        if (mapSelfLocation != NULL) delete mapSelfLocation;
+                        //if (mapSelfLocation != NULL) delete mapSelfLocation;
                         mapSelfLocationVisible = true;
                         mapSelfLocation = foundLocation;
                     } else {
                         mapSelfLocationVisible = false;
                     }
                     if (foundShop != NULL) {
-                        if (mapShop != NULL) delete mapShop;
+                        //if (mapShop != NULL) delete mapShop;
                         mapShopVisible = true;
                         mapShop = foundShop;
                     } else {
@@ -696,7 +696,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                             uint8* pixel = getPixel2(image, x, y);
                             GenericObject* item = ShopManager::detectBuyableItems(image, pixel, x, y);
                             if (item != nil) {
-                                [itemsCanBuy addObject: [NSValue valueWithPointer:item]];
+                                [itemsCanBuy addObject: item];
                             }
                         }
                     }
@@ -708,30 +708,30 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
             if (topLeftCorner != NULL) {
                 dispatch_async(detectionThread, ^(void){
                     @autoreleasepool {
-                        if (shopTopLeftCornerDetectionObject != NULL) delete shopTopLeftCornerDetectionObject;
-                        shopTopLeftCornerDetectionObject = new GenericObject(*topLeftCorner);
+                        //if (shopTopLeftCornerDetectionObject != NULL) delete shopTopLeftCornerDetectionObject;
+                        shopTopLeftCornerDetectionObject = topLeftCorner;
                     }
                 });
             }
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (topLeftCorner != NULL) {
-                        if (shopTopLeftCorner != NULL) delete shopTopLeftCorner;
+                        //if (shopTopLeftCorner != NULL) delete shopTopLeftCorner;
                         shopTopLeftCornerShown = true;
                         shopTopLeftCorner = topLeftCorner;
                     } else {
                         shopTopLeftCornerShown = false;
                     }
                     if (bottomLeftCorner != NULL) {
-                        if (shopBottomLeftCorner != NULL) delete shopBottomLeftCorner;
+                        //if (shopBottomLeftCorner != NULL) delete shopBottomLeftCorner;
                         shopBottomLeftCornerShown = true;
                         shopBottomLeftCorner = bottomLeftCorner;
                     } else {
                         shopBottomLeftCornerShown = false;
                     }
                     while (buyableItems.count > 0) {
-                        GenericObject* item = (GenericObject*)[[buyableItems lastObject] pointerValue];
-                        delete item;
+                        //GenericObject* item = [buyableItems lastObject];
+                        //delete item;
                         [buyableItems removeLastObject];
                     }
                     buyableItems = itemsCanBuy;
@@ -766,7 +766,7 @@ void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t di
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (shop != NULL) {
-                        if (shopAvailable != NULL) delete shopAvailable;
+                        //if (shopAvailable != NULL) delete shopAvailable;
                         shopAvailableShown = true;
                         shopAvailable = shop;
                     } else {
@@ -805,7 +805,7 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (potionUsed != NULL) {
-                        if (potionBeingUsed != NULL) delete potionBeingUsed;
+                        //if (potionBeingUsed != NULL) delete potionBeingUsed;
                         potionBeingUsedShown = true;
                         potionBeingUsed = potionUsed;
                     } else {
@@ -852,14 +852,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
-                        if (item1Active != NULL) delete item1Active;
+                        //if (item1Active != NULL) delete item1Active;
                         item1ActiveAvailable = true;
                         item1Active = item;
                     } else {
                         item1ActiveAvailable = false;
                     }
                     if (potion != NULL) {
-                        if (potionActive != NULL) delete potionActive;
+                        //if (potionActive != NULL) delete potionActive;
                         potionActiveAvailable = true;
                         potionActive = potion;
                         potionOnActive = 1;
@@ -896,14 +896,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
-                        if (item2Active != NULL) delete item2Active;
+                        //if (item2Active != NULL) delete item2Active;
                         item2ActiveAvailable = true;
                         item2Active = item;
                     } else {
                         item2ActiveAvailable = false;
                     }
                     if (potion != NULL) {
-                        if (potionActive != NULL) delete potionActive;
+                        //if (potionActive != NULL) delete potionActive;
                         potionActiveAvailable = true;
                         potionActive = potion;
                         potionOnActive = 2;
@@ -940,14 +940,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
-                        if (item3Active != NULL) delete item3Active;
+                        //if (item3Active != NULL) delete item3Active;
                         item3ActiveAvailable = true;
                         item3Active = item;
                     } else {
                         item3ActiveAvailable = false;
                     }
                     if (potion != NULL) {
-                        if (potionActive != NULL) delete potionActive;
+                        //if (potionActive != NULL) delete potionActive;
                         potionActiveAvailable = true;
                         potionActive = potion;
                         potionOnActive = 3;
@@ -982,14 +982,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
-                        if (item4Active != NULL) delete item4Active;
+                        //if (item4Active != NULL) delete item4Active;
                         item4ActiveAvailable = true;
                         item4Active = item;
                     } else {
                         item4ActiveAvailable = false;
                     }
                     if (potion != NULL) {
-                        if (potionActive != NULL) delete potionActive;
+                        //if (potionActive != NULL) delete potionActive;
                         potionActiveAvailable = true;
                         potionActive = potion;
                         potionOnActive = 4;
@@ -1025,14 +1025,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
-                        if (item5Active != NULL) delete item5Active;
+                        //if (item5Active != NULL) delete item5Active;
                         item5ActiveAvailable = true;
                         item5Active = item;
                     } else {
                         item5ActiveAvailable = false;
                     }
                     if (potion != NULL) {
-                        if (potionActive != NULL) delete potionActive;
+                        //if (potionActive != NULL) delete potionActive;
                         potionActiveAvailable = true;
                         potionActive = potion;
                         potionOnActive = 5;
@@ -1068,14 +1068,14 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (item != NULL) {
-                        if (item6Active != NULL) delete item6Active;
+                        //if (item6Active != NULL) delete item6Active;
                         item6ActiveAvailable = true;
                         item6Active = item;
                     } else {
                         item6ActiveAvailable = false;
                     }
                     if (potion != NULL) {
-                        if (potionActive != NULL) delete potionActive;
+                        //if (potionActive != NULL) delete potionActive;
                         potionActiveAvailable = true;
                         potionActive = potion;
                         potionOnActive = 6;
@@ -1114,7 +1114,7 @@ void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t di
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (trinket != NULL) {
-                        if (trinketActive != NULL) delete trinketActive;
+                        //if (trinketActive != NULL) delete trinketActive;
                         trinketActiveAvailable = true;
                         trinketActive = trinket;
                     } else {
@@ -1154,7 +1154,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
-                        if (spell1Active != NULL) delete spell1Active;
+                        //if (spell1Active != NULL) delete spell1Active;
                         spell1ActiveAvailable = true;
                         spell1Active = ability;
                     } else {
@@ -1186,7 +1186,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
-                        if (spell2Active != NULL) delete spell2Active;
+                        //if (spell2Active != NULL) delete spell2Active;
                         spell2ActiveAvailable = true;
                         spell2Active = ability;
                     } else {
@@ -1218,7 +1218,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
-                        if (spell3Active != NULL) delete spell3Active;
+                        //if (spell3Active != NULL) delete spell3Active;
                         spell3ActiveAvailable = true;
                         spell3Active = ability;
                     } else {
@@ -1250,7 +1250,7 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
-                        if (spell4Active != NULL) delete spell4Active;
+                        //if (spell4Active != NULL) delete spell4Active;
                         spell4ActiveAvailable = true;
                         spell4Active = ability;
                     } else {
@@ -1288,7 +1288,7 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
-                        if (summonerSpell1Active != NULL) delete summonerSpell1Active;
+                        //if (summonerSpell1Active != NULL) delete summonerSpell1Active;
                         summonerSpell1ActiveAvailable = true;
                         summonerSpell1Active = ability;
                     } else {
@@ -1316,7 +1316,7 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (ability != NULL) {
-                        if (summonerSpell2Active != NULL) delete summonerSpell2Active;
+                        //if (summonerSpell2Active != NULL) delete summonerSpell2Active;
                         summonerSpell2ActiveAvailable = true;
                         summonerSpell2Active = ability;
                     } else {
@@ -1346,7 +1346,7 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
                     uint8* pixel = getPixel2(image, x, y);
                     GenericObject* leveldot = AbilityManager::detectLevelDotAtPixel(image, pixel, x, y);
                     if (leveldot != nil) {
-                        [level1Dots addObject: [NSValue valueWithPointer:leveldot]];
+                        [level1Dots addObject: leveldot];
                         y = levelDot1Pos.y;
                         x += AbilityManager::levelDotImageData.imageWidth;
                     }
@@ -1359,7 +1359,7 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
                     uint8* pixel = getPixel2(image, x, y);
                     GenericObject* leveldot = AbilityManager::detectLevelDotAtPixel(image, pixel, x, y);
                     if (leveldot != nil) {
-                        [level2Dots addObject: [NSValue valueWithPointer:leveldot]];
+                        [level2Dots addObject: leveldot];
                         y = levelDot2Pos.y;
                         x += AbilityManager::levelDotImageData.imageWidth;
                     }
@@ -1372,7 +1372,7 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
                     uint8* pixel = getPixel2(image, x, y);
                     GenericObject* leveldot = AbilityManager::detectLevelDotAtPixel(image, pixel, x, y);
                     if (leveldot != nil) {
-                        [level3Dots addObject: [NSValue valueWithPointer:leveldot]];
+                        [level3Dots addObject: leveldot];
                         y = levelDot3Pos.y;
                         x += AbilityManager::levelDotImageData.imageWidth;
                     }
@@ -1385,7 +1385,7 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
                     uint8* pixel = getPixel2(image, x, y);
                     GenericObject* leveldot = AbilityManager::detectLevelDotAtPixel(image, pixel, x, y);
                     if (leveldot != nil) {
-                        [level4Dots addObject: [NSValue valueWithPointer:leveldot]];
+                        [level4Dots addObject: leveldot];
                         y = levelDot4Pos.y;
                         x += AbilityManager::levelDotImageData.imageWidth;
                     }
@@ -1398,23 +1398,23 @@ void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t d
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (spell1LevelDots.count > 0) {
-                        GenericObject* dot = (GenericObject*)[spell1LevelDots.lastObject pointerValue];
-                        delete dot;
+                        //GenericObject* dot = spell1LevelDots.lastObject;
+                        //delete dot;
                         [spell1LevelDots removeLastObject];
                     }
                     while (spell2LevelDots.count > 0) {
-                        GenericObject* dot = (GenericObject*)[spell2LevelDots.lastObject pointerValue];
-                        delete dot;
+                        //GenericObject* dot = spell2LevelDots.lastObject;
+                        //delete dot;
                         [spell2LevelDots removeLastObject];
                     }
                     while (spell3LevelDots.count > 0) {
-                        GenericObject* dot = (GenericObject*)[spell3LevelDots.lastObject pointerValue];
-                        delete dot;
+                        //GenericObject* dot = spell3LevelDots.lastObject;
+                        //delete dot;
                         [spell3LevelDots removeLastObject];
                     }
                     while (spell4LevelDots.count > 0) {
-                        GenericObject* dot = (GenericObject*)[spell4LevelDots.lastObject pointerValue];
-                        delete dot;
+                        //GenericObject* dot = spell4LevelDots.lastObject;
+                        //delete dot;
                         [spell4LevelDots removeLastObject];
                     }
                     spell1LevelDots = level1Dots;
@@ -1464,7 +1464,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (levelUp != NULL) {
-                        if (spell1LevelUp != NULL) delete spell1LevelUp;
+                        //if (spell1LevelUp != NULL) delete spell1LevelUp;
                         spell1LevelUpAvailable = true;
                         spell1LevelUp = levelUp;
                     } else {
@@ -1493,7 +1493,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (levelUp != NULL) {
-                        if (spell2LevelUp != NULL) delete spell2LevelUp;
+                        //if (spell2LevelUp != NULL) delete spell2LevelUp;
                         spell2LevelUpAvailable = true;
                         spell2LevelUp = levelUp;
                     } else {
@@ -1522,7 +1522,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (levelUp != NULL) {
-                        if (spell3LevelUp != NULL) delete spell3LevelUp;
+                        //if (spell3LevelUp != NULL) delete spell3LevelUp;
                         spell3LevelUpAvailable = true;
                         spell3LevelUp = levelUp;
                     } else {
@@ -1551,7 +1551,7 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if (levelUp != NULL) {
-                        if (spell4LevelUp != NULL) delete spell4LevelUp;
+                        //if (spell4LevelUp != NULL) delete spell4LevelUp;
                         spell4LevelUpAvailable = true;
                         spell4LevelUp = levelUp;
                     } else {
@@ -1598,7 +1598,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
     combineRectangles(scanRectangles, scanRect);
     //Add previous minions to scan
     for (int i = 0; i < [allyMinionsDetectionObject count]; i++) {
-        MinionBar* minion = (MinionBar*)[[allyMinionsDetectionObject objectAtIndex:i] pointerValue];
+        Minion* minion = [allyMinionsDetectionObject objectAtIndex:i];
         CGRect rect = CGRectMake(minion->topLeft.x - allyMinionFrameMove,
                                  minion->topLeft.y - allyMinionFrameMove,
                                  minion->bottomRight.x - minion->topLeft.x + allyMinionFrameMove,
@@ -1618,9 +1618,9 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
                 for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
                     for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
                         uint8* pixel = getPixel2(image, x, y);
-                        MinionBar* minionBar = AllyMinionManager::detectMinionBarAtPixel(image, pixel, x, y);
+                        Minion* minionBar = AllyMinionManager::detectMinionBarAtPixel(image, pixel, x, y);
                         if (minionBar != nil) {
-                            [minionBars addObject: [NSValue valueWithPointer:minionBar]];
+                            [minionBars addObject: minionBar];
                         }
                     }
                 }
@@ -1633,21 +1633,21 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
                     while (allyMinionsDetectionObject.count > 0) {
-                        MinionBar* minion = (MinionBar*)[allyMinionsDetectionObject.lastObject pointerValue];
-                        delete minion;
+                        //Minion* minion = allyMinionsDetectionObject.lastObject;
+                        //delete minion;
                         [allyMinionsDetectionObject removeLastObject];
                     }
                     for (int i = 0; i < minionBars.count; i++) {
-                        MinionBar* minion = (MinionBar*)[[minionBars objectAtIndex:i] pointerValue];
-                        [allyMinionsDetectionObject addObject:[NSValue valueWithPointer:new MinionBar(*minion)]];
+                        Minion* minion = [minionBars objectAtIndex:i];
+                        [allyMinionsDetectionObject addObject:minion];
                     }
                 }
             });
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (allyMinions.count > 0) {
-                        MinionBar* minion = (MinionBar*)[allyMinions.lastObject pointerValue];
-                        delete minion;
+                        //Minion* minion = allyMinions.lastObject;
+                        //delete minion;
                         [allyMinions removeLastObject];
                     }
                     [allyMinions addObjectsFromArray:minionBars];
@@ -1691,7 +1691,7 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     combineRectangles(scanRectangles, scanRect);
     //Add previous minions to scan
     for (int i = 0; i < [enemyMinionsDetectionObject count]; i++) {
-        MinionBar* minion = (MinionBar*)[[enemyMinionsDetectionObject objectAtIndex:i] pointerValue];
+        Minion* minion = [enemyMinionsDetectionObject objectAtIndex:i];
         CGRect rect = CGRectMake(minion->topLeft.x - enemyMinionFrameMove,
                                  minion->topLeft.y - enemyMinionFrameMove,
                                  minion->bottomRight.x - minion->topLeft.x + enemyMinionFrameMove,
@@ -1711,9 +1711,9 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
                 for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
                     for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
                         uint8* pixel = getPixel2(image, x, y);
-                        MinionBar* minionBar = EnemyMinionManager::detectMinionBarAtPixel(image, pixel, x, y);
+                        Minion* minionBar = EnemyMinionManager::detectMinionBarAtPixel(image, pixel, x, y);
                         if (minionBar != nil) {
-                            [minionBars addObject: [NSValue valueWithPointer:minionBar]];
+                            [minionBars addObject: minionBar];
                         }
                     }
                 }
@@ -1726,21 +1726,21 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
                     while (enemyMinionsDetectionObject.count > 0) {
-                        MinionBar* minion = (MinionBar*)[enemyMinionsDetectionObject.lastObject pointerValue];
-                        delete minion;
+                        //Minion* minion = enemyMinionsDetectionObject.lastObject;
+                        //delete minion;
                         [enemyMinionsDetectionObject removeLastObject];
                     }
                     for (int i = 0; i < minionBars.count; i++) {
-                        MinionBar* minion = (MinionBar*)[[minionBars objectAtIndex:i] pointerValue];
-                        [enemyMinionsDetectionObject addObject:[NSValue valueWithPointer:new MinionBar(*minion)]];
+                        Minion* minion = [minionBars objectAtIndex:i];
+                        [enemyMinionsDetectionObject addObject:minion];
                     }
                 }
             });
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (enemyMinions.count > 0) {
-                        MinionBar* minion = (MinionBar*)[enemyMinions.lastObject pointerValue];
-                        delete minion;
+                        //Minion* minion = enemyMinions.lastObject;
+                        //delete minion;
                         [enemyMinions removeLastObject];
                     }
                     [enemyMinions addObjectsFromArray:minionBars];
@@ -1784,7 +1784,7 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
     combineRectangles(scanRectangles, scanRect);
     //Add previous Champions to scan
     for (int i = 0; i < [enemyChampionsDetectionObject count]; i++) {
-        ChampionBar* Champion = (ChampionBar*)[[enemyChampionsDetectionObject objectAtIndex:i] pointerValue];
+        Champion* Champion = [enemyChampionsDetectionObject objectAtIndex:i];
         CGRect rect = CGRectMake(Champion->topLeft.x - enemyChampionFrameMove,
                                  Champion->topLeft.y - enemyChampionFrameMove,
                                  Champion->bottomRight.x - Champion->topLeft.x + enemyChampionFrameMove,
@@ -1804,13 +1804,13 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
                 for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
                     for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
                         uint8* pixel = getPixel2(image, x, y);
-                        ChampionBar* ChampionBar = EnemyChampionManager::detectChampionBarAtPixel(image, pixel, x, y);
+                        Champion* ChampionBar = EnemyChampionManager::detectChampionBarAtPixel(image, pixel, x, y);
                         if (ChampionBar != nil) {
                             CGRect rect = CGRectMake(ChampionBar->topLeft.x - 5, ChampionBar->topLeft.y - 5, ChampionBar->bottomRight.x - ChampionBar->topLeft.x + 10, ChampionBar->bottomRight.y - ChampionBar->topLeft.y + 10);
                             rect = CGRectIntegral(rect);
                             rect = fitRectangleInRectangle(rect, leagueWindowRect);
                             combineRectangles(scanRectangles, rect);
-                            [ChampionBars addObject: [NSValue valueWithPointer:ChampionBar]];
+                            [ChampionBars addObject: ChampionBar];
                         }
                     }
                 }
@@ -1823,21 +1823,21 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
                     while (enemyChampionsDetectionObject.count > 0) {
-                        ChampionBar* champ = (ChampionBar*)[enemyChampionsDetectionObject.lastObject pointerValue];
-                        delete champ;
+                        //Champion* champ = enemyChampionsDetectionObject.lastObject;
+                        //delete champ;
                         [enemyChampionsDetectionObject removeLastObject];
                     }
                     for (int i = 0; i < ChampionBars.count; i++) {
-                        ChampionBar* champ = (ChampionBar*)[[ChampionBars objectAtIndex:i] pointerValue];
-                        [enemyChampionsDetectionObject addObject:[NSValue valueWithPointer:new ChampionBar(*champ)]];
+                        Champion* champ = [ChampionBars objectAtIndex:i];
+                        [enemyChampionsDetectionObject addObject:champ];
                     }
                 }
             });
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (enemyChampions.count > 0) {
-                        ChampionBar* champ = (ChampionBar*)[enemyChampions.lastObject pointerValue];
-                        delete champ;
+                        //Champion* champ = (Champion*)[enemyChampions.lastObject;
+                        //delete champ;
                         [enemyChampions removeLastObject];
                     }
                     [enemyChampions addObjectsFromArray:ChampionBars];
@@ -1881,7 +1881,7 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
     combineRectangles(scanRectangles, scanRect);
     //Add previous Champions to scan
     for (int i = 0; i < [allyChampionsDetectionObject count]; i++) {
-        ChampionBar* Champion = (ChampionBar*)[[allyChampionsDetectionObject objectAtIndex:i] pointerValue];
+        Champion* Champion = [allyChampionsDetectionObject objectAtIndex:i];
         CGRect rect = CGRectMake(Champion->topLeft.x - allyChampionFrameMove,
                                  Champion->topLeft.y - allyChampionFrameMove,
                                  Champion->bottomRight.x - Champion->topLeft.x + allyChampionFrameMove,
@@ -1901,14 +1901,14 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
                 for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
                     for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
                         uint8* pixel = getPixel2(image, x, y);
-                        ChampionBar* ChampionBar = AllyChampionManager::detectChampionBarAtPixel(image, pixel, x, y);
+                        Champion* ChampionBar = AllyChampionManager::detectChampionBarAtPixel(image, pixel, x, y);
                         if (ChampionBar != nil) {
                             //Add extra rectangle to scan
                             CGRect rect = CGRectMake(ChampionBar->topLeft.x - 5, ChampionBar->topLeft.y - 5, ChampionBar->bottomRight.x - ChampionBar->topLeft.x + 10, ChampionBar->bottomRight.y - ChampionBar->topLeft.y + 10);
                             rect = CGRectIntegral(rect);
                             rect = fitRectangleInRectangle(rect, leagueWindowRect);
                             combineRectangles(scanRectangles, rect);
-                            [ChampionBars addObject: [NSValue valueWithPointer:ChampionBar]];
+                            [ChampionBars addObject: ChampionBar];
                         }
                     }
                 }
@@ -1921,21 +1921,21 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
                     while (allyChampionsDetectionObject.count > 0) {
-                        ChampionBar* champ = (ChampionBar*)[allyChampionsDetectionObject.lastObject pointerValue];
-                        delete champ;
+                        //Champion* champ = (Champion*)[allyChampionsDetectionObject.lastObject;
+                        //delete champ;
                         [allyChampionsDetectionObject removeLastObject];
                     }
                     for (int i = 0; i < ChampionBars.count; i++) {
-                        ChampionBar* champ = (ChampionBar*)[[ChampionBars objectAtIndex:i] pointerValue];
-                        [allyChampionsDetectionObject addObject:[NSValue valueWithPointer:new ChampionBar(*champ)]];
+                        Champion* champ = [ChampionBars objectAtIndex:i];
+                        [allyChampionsDetectionObject addObject:champ];
                     }
                 }
             });
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (allyChampions.count > 0) {
-                        ChampionBar* champ = (ChampionBar*)[allyChampions.lastObject pointerValue];
-                        delete champ;
+                        //Champion* champ = allyChampions.lastObject;
+                        //delete champ;
                         [allyChampions removeLastObject];
                     }
                     [allyChampions addObjectsFromArray:ChampionBars];
@@ -1979,7 +1979,7 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
     combineRectangles(scanRectangles, scanRect);
     //Add previous Towers to scan
     for (int i = 0; i < [enemyTowersDetectionObject count]; i++) {
-        TowerBar* Tower = (TowerBar*)[[enemyTowersDetectionObject objectAtIndex:i] pointerValue];
+        Tower* Tower = [enemyTowersDetectionObject objectAtIndex:i];
         CGRect rect = CGRectMake(Tower->topLeft.x - enemyTowerFrameMove,
                                  Tower->topLeft.y - enemyTowerFrameMove,
                                  Tower->bottomRight.x - Tower->topLeft.x + enemyTowerFrameMove,
@@ -1999,14 +1999,14 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
                 for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
                     for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
                         uint8* pixel = getPixel2(image, x, y);
-                        TowerBar* TowerBar = EnemyTowerManager::detectTowerBarAtPixel(image, pixel, x, y);
+                        Tower* TowerBar = EnemyTowerManager::detectTowerBarAtPixel(image, pixel, x, y);
                         if (TowerBar != nil) {
                             //Add extra rectangle to scan
                             CGRect rect = CGRectMake(TowerBar->topLeft.x - 5, TowerBar->topLeft.y - 5, TowerBar->bottomRight.x - TowerBar->topLeft.x + 10, TowerBar->bottomRight.y - TowerBar->topLeft.y + 10);
                             rect = CGRectIntegral(rect);
                             rect = fitRectangleInRectangle(rect, leagueWindowRect);
                             combineRectangles(scanRectangles, rect);
-                            [TowerBars addObject: [NSValue valueWithPointer:TowerBar]];
+                            [TowerBars addObject: TowerBar];
                         }
                     }
                 }
@@ -2019,21 +2019,21 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
                     while (enemyTowersDetectionObject.count > 0) {
-                        TowerBar* tower = (TowerBar*)[enemyTowersDetectionObject.lastObject pointerValue];
-                        delete tower;
+                        //Tower* tower = (Tower*)[enemyTowersDetectionObject.lastObject;
+                        //delete tower;
                         [enemyTowersDetectionObject removeLastObject];
                     }
                     for (int i = 0; i < TowerBars.count; i++) {
-                        TowerBar* tower = (TowerBar*)[[TowerBars objectAtIndex:i] pointerValue];
-                        [enemyTowersDetectionObject addObject:[NSValue valueWithPointer:new TowerBar(*tower)]];
+                        Tower* tower = [TowerBars objectAtIndex:i];
+                        [enemyTowersDetectionObject addObject:tower];
                     }
                 }
             });
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (enemyTowers.count > 0) {
-                        TowerBar* tower = (TowerBar*)[enemyTowers.lastObject pointerValue];
-                        delete tower;
+                        //Tower* tower = (Tower*)[enemyTowers.lastObject;
+                        //delete tower;
                         [enemyTowers removeLastObject];
                     }
                     [enemyTowers addObjectsFromArray:TowerBars];
@@ -2077,7 +2077,7 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
     combineRectangles(scanRectangles, scanRect);
     //Add previous Champions to scan
     for (int i = 0; i < [selfChampionsDetectionObject count]; i++) {
-        ChampionBar* Champion = (ChampionBar*)[[selfChampionsDetectionObject objectAtIndex:i] pointerValue];
+        Champion* Champion = [selfChampionsDetectionObject objectAtIndex:i];
         CGRect rect = CGRectMake(Champion->topLeft.x - SelfChampionFrameMove,
                                  Champion->topLeft.y - SelfChampionFrameMove,
                                  Champion->bottomRight.x - Champion->topLeft.x + SelfChampionFrameMove,
@@ -2097,14 +2097,14 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
                 for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
                     for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
                         uint8* pixel = getPixel2(image, x, y);
-                        ChampionBar* ChampionBar = SelfChampionManager::detectChampionBarAtPixel(image, pixel, x, y);
+                        Champion* ChampionBar = SelfChampionManager::detectChampionBarAtPixel(image, pixel, x, y);
                         if (ChampionBar != nil) {
                             //Add extra rectangle to scan
                             CGRect rect = CGRectMake(ChampionBar->topLeft.x-5, ChampionBar->topLeft.y-5, ChampionBar->bottomRight.x - ChampionBar->topLeft.x + 10, ChampionBar->bottomRight.y - ChampionBar->topLeft.y + 10);
                             rect = CGRectIntegral(rect);
                             rect = fitRectangleInRectangle(rect, leagueWindowRect);
                             combineRectangles(scanRectangles, rect);
-                            [ChampionBars addObject: [NSValue valueWithPointer:ChampionBar]];
+                            [ChampionBars addObject: ChampionBar];
                         }
                     }
                 }
@@ -2117,21 +2117,21 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
             dispatch_async(detectionThread, ^(void){
                 @autoreleasepool {
                     while (selfChampionsDetectionObject.count > 0) {
-                        ChampionBar* champ = (ChampionBar*)[selfChampionsDetectionObject.lastObject pointerValue];
-                        delete champ;
+                        //Champion* champ = (Champion*)[selfChampionsDetectionObject.lastObject;
+                        //delete champ;
                         [selfChampionsDetectionObject removeLastObject];
                     }
                     for (int i = 0; i < ChampionBars.count; i++) {
-                        ChampionBar* champ = (ChampionBar*)[[ChampionBars objectAtIndex:i] pointerValue];
-                        [selfChampionsDetectionObject addObject:[NSValue valueWithPointer:new ChampionBar(*champ)]];
+                        Champion* champ = [ChampionBars objectAtIndex:i];
+                        [selfChampionsDetectionObject addObject:champ];
                     }
                 }
             });
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     while (selfChampions.count > 0) {
-                        ChampionBar* champ = (ChampionBar*)[selfChampions.lastObject pointerValue];
-                        delete champ;
+                        //Champion* champ = (Champion*)[selfChampions.lastObject;
+                        //delete champ;
                         [selfChampions removeLastObject];
                     }
                     [selfChampions addObjectsFromArray:ChampionBars];
@@ -2195,7 +2195,7 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
             for (int x = searchStart.x; x < searchEnd.x; x++) {
                 for (int y = searchStart.y; y < searchEnd.y; y++) {
                     uint8* pixel = getPixel2(image, x, y);
-                    SelfHealthBar* HealthBarBar = SelfChampionManager::detectSelfHealthBarAtPixel(image, pixel, x, y);
+                    SelfHealth* HealthBarBar = SelfChampionManager::detectSelfHealthBarAtPixel(image, pixel, x, y);
                     if (HealthBarBar != nil) {
                         //NSLog(@"Found self health bar");
                         //Add extra rectangle to scan
@@ -2203,7 +2203,7 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
                         //rect = CGRectIntegral(rect);
                         //rect = fitRectangleInRectangle(rect, leagueWindowRect);
                         //combineRectangles(scanRectangles, rect);
-                        [HealthBarBars addObject: [NSValue valueWithPointer:HealthBarBar]];
+                        [HealthBarBars addObject: HealthBarBar];
                         x = searchEnd.x;
                         y = searchEnd.y;
                     }
@@ -2218,9 +2218,9 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
             dispatch_sync(aiThread, ^(void) {
                 @autoreleasepool {
                     if ([HealthBarBars count] > 0) {
-                        if (selfHealthBar != NULL) delete selfHealthBar;
+                        //if (selfHealthBar != NULL) delete selfHealthBar;
                         selfHealthBarVisible = true;
-                        selfHealthBar = (SelfHealthBar*)[[HealthBarBars firstObject] pointerValue];
+                        selfHealthBar = [HealthBarBars firstObject];
                     } else {
                         selfHealthBarVisible = false;
                     }

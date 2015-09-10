@@ -45,7 +45,7 @@ AbilityManager::AbilityManager() {
 GenericObject* AbilityManager::detectLevelUpAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpImageData, 0.25) >=  0.8) {
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
         object->bottomLeft.x = x;
@@ -64,7 +64,7 @@ GenericObject* AbilityManager::detectLevelDotAtPixel(ImageData imageData, uint8_
     GenericObject* object = nil;
     
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelDotImageData, 0.6) >=  0.8) {
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
         object->bottomLeft.x = x;
@@ -83,7 +83,7 @@ GenericObject* AbilityManager::detectEnabledAbilityAtPixel(ImageData imageData, 
     GenericObject* object = nil;
     
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, abilityEnabledImageData, 0.9) >=  0.9) {
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
         object->bottomLeft.x = x;
@@ -102,7 +102,7 @@ GenericObject* AbilityManager::detectEnabledSummonerSpellAtPixel(ImageData image
     GenericObject* object = nil;
     
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, enabledSummonerSpellImageData, 0.9) >=  0.9) {
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
         object->bottomLeft.x = x;

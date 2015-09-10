@@ -38,7 +38,7 @@ public:
     //NSMutableArray* championBars, *topRightDetect, *topLeftDetect, *bottomRightDetect, *bottomLeftDetect;
     
     AllyChampionManager();
-    static ChampionBar* detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
+    static Champion* detectChampionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     static NSMutableArray* validateChampionBars(ImageData imageData, NSMutableArray* detectedChampionBars);
     //void processImage(ImageData data);
     //ChampionBar getNearestChampion(int x, int y);

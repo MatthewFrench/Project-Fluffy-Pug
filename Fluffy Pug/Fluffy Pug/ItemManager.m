@@ -37,7 +37,7 @@ ItemManager::ItemManager() {
 GenericObject* ItemManager::detectTrinketActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, trinketItemImageData, 0.8) >=  0.8) {
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
         object->bottomLeft.x = x;
@@ -55,7 +55,7 @@ GenericObject* ItemManager::detectTrinketActiveAtPixel(ImageData imageData, uint
 GenericObject* ItemManager::detectItemActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, itemImageData, 0.725) >=  0.8) {
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
         object->bottomLeft.x = x;
@@ -73,7 +73,7 @@ GenericObject* ItemManager::detectItemActiveAtPixel(ImageData imageData, uint8_t
 GenericObject* ItemManager::detectPotionActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, potionImageData, 0.8) >=  0.8) {
-        object = new GenericObject();
+        object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
         object->bottomLeft.x = x;
@@ -95,7 +95,7 @@ GenericObject* ItemManager::detectUsedPotionAtPixel(ImageData imageData, uint8_t
         //Now test if we have at least 50% of the inside somewhat matching the inner potion
         if (getImageAtPixelPercentageOptimized(getPixel2(imageData, x+1, y+1), x+1, y+1, imageData.imageWidth, imageData.imageHeight, usedPotionInnerImageData, 0.5) >= 0.5) {
         
-            object = new GenericObject();
+            object = [GenericObject new];
             object->topLeft.x = x;
             object->topLeft.y = y;
             object->bottomLeft.x = x;
