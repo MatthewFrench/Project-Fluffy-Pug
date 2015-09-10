@@ -93,6 +93,15 @@ class DetectionManager {
     
     //bool scanningScreen = false;
     
+    uint64_t processAllyMinionLastTime;
+    uint64_t processEnemyMinionLastTime;
+    uint64_t processAllyChampionLastTime;
+    uint64_t processEnemyChampionLastTime;
+    uint64_t processEnemyTowerLastTime;
+    uint64_t processSelfChampionLastTime;
+    uint64_t processSelfHealthBarLastTime;
+    uint64_t processShopLastTime;
+    
 public:
     DetectionManager(dispatch_queue_t _aiThread, dispatch_queue_t _detectionThread);
     void processDetection(ImageData image);

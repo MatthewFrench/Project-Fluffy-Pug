@@ -68,6 +68,15 @@ DetectionManager::DetectionManager(dispatch_queue_t _aiThread, dispatch_queue_t 
     spell2LevelDots = [NSMutableArray new];
     spell3LevelDots = [NSMutableArray new];
     spell4LevelDots = [NSMutableArray new];
+    
+    processAllyMinionLastTime = mach_absolute_time();
+    processEnemyMinionLastTime = mach_absolute_time();
+    processAllyChampionLastTime = mach_absolute_time();
+    processEnemyChampionLastTime = mach_absolute_time();
+    processEnemyTowerLastTime = mach_absolute_time();
+    processSelfChampionLastTime = mach_absolute_time();
+    processSelfHealthBarLastTime = mach_absolute_time();
+    processShopLastTime = mach_absolute_time();
     /*
     allyMinionsDetectionObject = [NSMutableArray new];
     allyMinionsDetectionObject = [NSMutableArray new];
@@ -1059,8 +1068,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
         }
     });
 }
-const int shopScanChunksX = 14;
-const int shopScanChunksY = 14;
+const int shopScanChunksX = 7;
+const int shopScanChunksY = 7;
 void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGroup) {
     //First detect top left corner, but do it as a slow scan
     
@@ -1073,16 +1082,37 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
     float leagueGameHeight = image.imageHeight;
     CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
     
-    //Increase the scan chunk by 1
-    shopScanCurrentChunkX += 1;
-    if (shopScanCurrentChunkX >= shopScanChunksX) {
-        shopScanCurrentChunkX = 0;
-        shopScanCurrentChunkY++;
-    }
-    if (shopScanCurrentChunkY >= shopScanChunksY) {
-        shopScanCurrentChunkY = 0;
-    }
+    int scanStartX = 0; int scanStartY = 0;
+    int scanEndX = leagueGameWidth/2; int scanEndY = leagueGameHeight/2;
+    int scanWidth = (scanEndX - scanStartX) / shopScanChunksX;
+    int scanHeight = (scanEndY - scanStartY) / shopScanChunksX;
+    
+    int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processShopLastTime)) / 16;
+    if (framesPassed <= 0) framesPassed = 1;
+    if (framesPassed > shopScanChunksX * shopScanChunksY) framesPassed = shopScanChunksX * shopScanChunksY;
+    processShopLastTime = mach_absolute_time();
+    
     NSMutableArray* scanRectangles = [NSMutableArray new];
+    //Increase the scan chunk by 1
+    for (int i = 0; i < framesPassed; i++) {
+        shopScanCurrentChunkX += 1;
+        if (shopScanCurrentChunkX >= shopScanChunksX) {
+            shopScanCurrentChunkX = 0;
+            shopScanCurrentChunkY++;
+        }
+        if (shopScanCurrentChunkY >= shopScanChunksY) {
+            shopScanCurrentChunkY = 0;
+        }
+        //Add chunk to scan
+        CGRect scanRect = CGRectMake( scanWidth * shopScanCurrentChunkX / shopScanChunksX + scanStartX ,
+                                     scanHeight * shopScanCurrentChunkY / shopScanChunksY + scanStartY ,
+                                     scanWidth ,
+                                     scanHeight );
+        scanRect = CGRectIntegral(scanRect);
+        scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+        combineRectangles(scanRectangles, scanRect);
+    }
+    
     //If last seen, add it to the scan
     if (shopTopLeftCorner != NULL) {
         CGRect rect = CGRectMake(shopTopLeftCorner->topLeft.x - 5,
@@ -1094,14 +1124,6 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
         combineRectangles(scanRectangles, rect);
         
     }
-    //Add chunk to scan
-    CGRect scanRect = CGRectMake( leagueGameWidth * shopScanCurrentChunkX / shopScanChunksX ,
-                                 leagueGameHeight * shopScanCurrentChunkY / shopScanChunksY ,
-                                 leagueGameWidth * 1 / shopScanChunksX ,
-                                 leagueGameHeight * 1 / shopScanChunksY );
-    scanRect = CGRectIntegral(scanRect);
-    scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
-    combineRectangles(scanRectangles, scanRect);
     
     dispatch_group_async(dispatchGroup, shopThread, ^{
         @autoreleasepool {
@@ -2017,12 +2039,49 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
 
 //Make it scan a chunk each frame
 const int allyMinionScanChunksX = 8; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-const int allyMinionScanChunksY = 8;
+const int allyMinionScanChunksY = 10;
 const float allyMinionFrameMove = 80.0; //Assume minions can move 80 pixels in 1 frames
 void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_group_t dispatchGroup) {
     float leagueGameWidth = image.imageWidth;
     float leagueGameHeight = image.imageHeight;
     CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
+    
+    
+    
+    
+    
+    int scanStartX = 0; int scanStartY = 0;
+    int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
+    int scanWidth = (scanEndX - scanStartX) / allyMinionScanChunksX;
+    int scanHeight = (scanEndY - scanStartY) / allyMinionScanChunksY;
+    
+    int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processAllyMinionLastTime)) / 16;
+    if (framesPassed <= 0) framesPassed = 1;
+    if (framesPassed > allyMinionScanChunksX * allyMinionScanChunksY) framesPassed = allyMinionScanChunksX * allyMinionScanChunksY;
+    
+    NSMutableArray* scanRectangles = [NSMutableArray new];
+    //Increase the scan chunk by 1
+    for (int i = 0; i < framesPassed; i++) {
+        allyMinionScanCurrentChunkX += 1;
+        if (allyMinionScanCurrentChunkX >= allyMinionScanChunksX) {
+            allyMinionScanCurrentChunkX = 0;
+            allyMinionScanCurrentChunkY++;
+        }
+        if (allyMinionScanCurrentChunkY >= allyMinionScanChunksY) {
+            allyMinionScanCurrentChunkY = 0;
+        }
+        //Add chunk to scan
+        CGRect scanRect = CGRectMake( scanWidth * allyMinionScanCurrentChunkX / allyMinionScanChunksX + scanStartX ,
+                                     scanHeight * allyMinionScanCurrentChunkY / allyMinionScanChunksY + scanStartY ,
+                                     scanWidth ,
+                                     scanHeight );
+        scanRect = CGRectIntegral(scanRect);
+        scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+        combineRectangles(scanRectangles, scanRect);
+    }
+    
+    
+    
     
     //Why not scan certain sections in intervals?
     //I know it takes about 80 ms for a full scan.
@@ -2031,6 +2090,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
     //A full screen scan happens every 0.8longAlert66666666667 seconds
     
     //Increase the scan chunk by 1
+    /*
     allyMinionScanCurrentChunkX += 1;
     if (allyMinionScanCurrentChunkX >= allyMinionScanChunksX) {
         allyMinionScanCurrentChunkX = 0;
@@ -2040,6 +2100,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
         allyMinionScanCurrentChunkY = 0;
     }
     NSMutableArray* scanRectangles = [NSMutableArray new];
+     
     //Add chunk to scan
     CGRect scanRect = CGRectMake( leagueGameWidth * allyMinionScanCurrentChunkX / allyMinionScanChunksX ,
                                  leagueGameHeight * allyMinionScanCurrentChunkY / allyMinionScanChunksY ,
@@ -2048,6 +2109,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
     scanRect = CGRectIntegral(scanRect);
     scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
     combineRectangles(scanRectangles, scanRect);
+     */
     //Add previous minions to scan
     for (int i = 0; i < [allyMinions count]; i++) {
         Minion* minion = [allyMinions objectAtIndex:i];
@@ -2104,6 +2166,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
                         [allyMinions removeLastObject];
                     }
                     [allyMinions addObjectsFromArray:minionBars];
+                    processAllyMinionLastTime = mach_absolute_time();
                 }
             });
         }
@@ -2118,6 +2181,42 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     float leagueGameHeight = image.imageHeight;
     CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
     
+    
+    
+    
+    int scanStartX = 0; int scanStartY = 0;
+    int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
+    int scanWidth = (scanEndX - scanStartX) / enemyMinionScanChunksX;
+    int scanHeight = (scanEndY - scanStartY) / enemyMinionScanChunksY;
+    
+    int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processEnemyMinionLastTime)) / 16;
+    if (framesPassed <= 0) framesPassed = 1;
+    if (framesPassed > enemyMinionScanChunksX * enemyMinionScanChunksY) framesPassed = enemyMinionScanChunksX * enemyMinionScanChunksY;
+    
+    NSMutableArray* scanRectangles = [NSMutableArray new];
+    //Increase the scan chunk by 1
+    for (int i = 0; i < framesPassed; i++) {
+        enemyMinionScanCurrentChunkX += 1;
+        if (enemyMinionScanCurrentChunkX >= enemyMinionScanChunksX) {
+            enemyMinionScanCurrentChunkX = 0;
+            enemyMinionScanCurrentChunkY++;
+        }
+        if (enemyMinionScanCurrentChunkY >= enemyMinionScanChunksY) {
+            enemyMinionScanCurrentChunkY = 0;
+        }
+        //Add chunk to scan
+        CGRect scanRect = CGRectMake( scanWidth * enemyMinionScanCurrentChunkX / enemyMinionScanChunksX + scanStartX ,
+                                     scanHeight * enemyMinionScanCurrentChunkY / enemyMinionScanChunksY + scanStartY ,
+                                     scanWidth ,
+                                     scanHeight );
+        scanRect = CGRectIntegral(scanRect);
+        scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+        combineRectangles(scanRectangles, scanRect);
+    }
+    
+    
+    
+    
     //Why not scan certain sections in intervals?
     //I know it takes about 80 ms for a full scan.
     //I want to keep it to 1 ms scan time per frame.
@@ -2125,6 +2224,7 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     //A full screen scan happens every 0.8longAlert66666666667 seconds
     
     //Increase the scan chunk by 1
+    /*
     enemyMinionScanCurrentChunkX += 1;
     if (enemyMinionScanCurrentChunkX >= enemyMinionScanChunksX) {
         enemyMinionScanCurrentChunkX = 0;
@@ -2142,6 +2242,8 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     scanRect = CGRectIntegral(scanRect);
     scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
     combineRectangles(scanRectangles, scanRect);
+     */
+     
     //Add previous minions to scan
     for (int i = 0; i < [enemyMinions count]; i++) {
         Minion* minion = [enemyMinions objectAtIndex:i];
@@ -2197,6 +2299,7 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
                         [enemyMinions removeLastObject];
                     }
                     [enemyMinions addObjectsFromArray:minionBars];
+                    processEnemyMinionLastTime = mach_absolute_time();
                 }
             });
         }
@@ -2211,6 +2314,38 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
     float leagueGameHeight = image.imageHeight;
     CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
     
+    
+    int scanStartX = 0; int scanStartY = 0;
+    int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
+    int scanWidth = (scanEndX - scanStartX) / enemyChampionScanChunksX;
+    int scanHeight = (scanEndY - scanStartY) / enemyChampionScanChunksY;
+    
+    int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processEnemyChampionLastTime)) / 16;
+    if (framesPassed <= 0) framesPassed = 1;
+    if (framesPassed > enemyChampionScanChunksX * enemyChampionScanChunksY) framesPassed = enemyChampionScanChunksX * enemyChampionScanChunksY;
+    
+    NSMutableArray* scanRectangles = [NSMutableArray new];
+    //Increase the scan chunk by 1
+    for (int i = 0; i < framesPassed; i++) {
+        enemyChampionScanCurrentChunkX += 1;
+        if (enemyChampionScanCurrentChunkX >= enemyChampionScanChunksX) {
+            enemyChampionScanCurrentChunkX = 0;
+            enemyChampionScanCurrentChunkY++;
+        }
+        if (enemyChampionScanCurrentChunkY >= enemyChampionScanChunksY) {
+            enemyChampionScanCurrentChunkY = 0;
+        }
+        //Add chunk to scan
+        CGRect scanRect = CGRectMake( scanWidth * enemyChampionScanCurrentChunkX / enemyChampionScanChunksX + scanStartX ,
+                                     scanHeight * enemyChampionScanCurrentChunkY / enemyChampionScanChunksY + scanStartY ,
+                                     scanWidth ,
+                                     scanHeight );
+        scanRect = CGRectIntegral(scanRect);
+        scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+        combineRectangles(scanRectangles, scanRect);
+    }
+    
+    
     //Why not scan certain sections in intervals?
     //I know it takes about 80 ms for a full scan.
     //I want to keep it to 1 ms scan time per frame.
@@ -2218,6 +2353,7 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
     //A full screen scan happens every 0.81666666666667 seconds
     
     //Increase the scan chunk by 1
+   /*
     enemyChampionScanCurrentChunkX += 1;
     if (enemyChampionScanCurrentChunkX >= enemyChampionScanChunksX) {
         enemyChampionScanCurrentChunkX = 0;
@@ -2235,6 +2371,8 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
     scanRect = CGRectIntegral(scanRect);
     scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
     combineRectangles(scanRectangles, scanRect);
+    */
+    
     //Add previous Champions to scan
     for (int i = 0; i < [enemyChampions count]; i++) {
         Champion* Champion = [enemyChampions objectAtIndex:i];
@@ -2294,6 +2432,7 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
                         [enemyChampions removeLastObject];
                     }
                     [enemyChampions addObjectsFromArray:ChampionBars];
+                    processEnemyChampionLastTime = mach_absolute_time();
                 }
             });
         }
@@ -2308,6 +2447,40 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
     float leagueGameHeight = image.imageHeight;
     CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
     
+    
+    
+    int scanStartX = 0; int scanStartY = 0;
+    int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
+    int scanWidth = (scanEndX - scanStartX) / allyChampionScanChunksX;
+    int scanHeight = (scanEndY - scanStartY) / allyChampionScanChunksY;
+    
+    int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processAllyChampionLastTime)) / 16;
+    if (framesPassed <= 0) framesPassed = 1;
+    if (framesPassed > allyChampionScanChunksX * allyChampionScanChunksY) framesPassed = allyChampionScanChunksX * allyChampionScanChunksY;
+    
+    NSMutableArray* scanRectangles = [NSMutableArray new];
+    //Increase the scan chunk by 1
+    for (int i = 0; i < framesPassed; i++) {
+        allyChampionScanCurrentChunkX += 1;
+        if (allyChampionScanCurrentChunkX >= allyChampionScanChunksX) {
+            allyChampionScanCurrentChunkX = 0;
+            allyChampionScanCurrentChunkY++;
+        }
+        if (allyChampionScanCurrentChunkY >= allyChampionScanChunksY) {
+            allyChampionScanCurrentChunkY = 0;
+        }
+        //Add chunk to scan
+        CGRect scanRect = CGRectMake( scanWidth * allyChampionScanCurrentChunkX / allyChampionScanChunksX + scanStartX ,
+                                     scanHeight * allyChampionScanCurrentChunkY / allyChampionScanChunksY + scanStartY ,
+                                     scanWidth ,
+                                     scanHeight );
+        scanRect = CGRectIntegral(scanRect);
+        scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+        combineRectangles(scanRectangles, scanRect);
+    }
+    
+    
+    
     //Why not scan certain sections in intervals?
     //I know it takes about 80 ms for a full scan.
     //I want to keep it to 1 ms scan time per frame.
@@ -2315,6 +2488,7 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
     //A full screen scan happens every 0.81666666666667 seconds
     
     //Increase the scan chunk by 1
+    /*
     allyChampionScanCurrentChunkX += 1;
     if (allyChampionScanCurrentChunkX >= allyChampionScanChunksX) {
         allyChampionScanCurrentChunkX = 0;
@@ -2332,6 +2506,9 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
     scanRect = CGRectIntegral(scanRect);
     scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
     combineRectangles(scanRectangles, scanRect);
+     
+     */
+    
     //Add previous Champions to scan
     for (int i = 0; i < [allyChampions count]; i++) {
         Champion* Champion = [allyChampions objectAtIndex:i];
@@ -2392,6 +2569,7 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
                         [allyChampions removeLastObject];
                     }
                     [allyChampions addObjectsFromArray:ChampionBars];
+                    processAllyChampionLastTime = mach_absolute_time();
                 }
             });
         }
@@ -2406,6 +2584,41 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
     float leagueGameHeight = image.imageHeight;
     CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
     
+    
+    
+    
+    int scanStartX = 0; int scanStartY = 0;
+    int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
+    int scanWidth = (scanEndX - scanStartX) / enemyTowerScanChunksX;
+    int scanHeight = (scanEndY - scanStartY) / enemyTowerScanChunksY;
+    
+    int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processEnemyTowerLastTime)) / 16;
+    if (framesPassed <= 0) framesPassed = 1;
+    if (framesPassed > enemyTowerScanChunksX * enemyTowerScanChunksY) framesPassed = enemyTowerScanChunksX * enemyTowerScanChunksY;
+    
+    NSMutableArray* scanRectangles = [NSMutableArray new];
+    //Increase the scan chunk by 1
+    for (int i = 0; i < framesPassed; i++) {
+        enemyTowerScanCurrentChunkX += 1;
+        if (enemyTowerScanCurrentChunkX >= enemyTowerScanChunksX) {
+            enemyTowerScanCurrentChunkX = 0;
+            enemyTowerScanCurrentChunkY++;
+        }
+        if (enemyTowerScanCurrentChunkY >= enemyTowerScanChunksY) {
+            enemyTowerScanCurrentChunkY = 0;
+        }
+        //Add chunk to scan
+        CGRect scanRect = CGRectMake( scanWidth * enemyTowerScanCurrentChunkX / enemyTowerScanChunksX + scanStartX ,
+                                     scanHeight * enemyTowerScanCurrentChunkY / enemyTowerScanChunksY + scanStartY ,
+                                     scanWidth ,
+                                     scanHeight );
+        scanRect = CGRectIntegral(scanRect);
+        scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+        combineRectangles(scanRectangles, scanRect);
+    }
+    
+    
+    
     //Why not scan certain sections in intervals?
     //I know it takes about 80 ms for a full scan.
     //I want to keep it to 1 ms scan time per frame.
@@ -2413,6 +2626,7 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
     //A full screen scan happens every 0.81666666666667 seconds
     
     //Increase the scan chunk by 1
+    /*
     enemyTowerScanCurrentChunkX += 1;
     if (enemyTowerScanCurrentChunkX >= enemyTowerScanChunksX) {
         enemyTowerScanCurrentChunkX = 0;
@@ -2430,6 +2644,7 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
     scanRect = CGRectIntegral(scanRect);
     scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
     combineRectangles(scanRectangles, scanRect);
+     */
     //Add previous Towers to scan
     for (int i = 0; i < [enemyTowers count]; i++) {
         Tower* Tower = [enemyTowers objectAtIndex:i];
@@ -2490,19 +2705,56 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
                         [enemyTowers removeLastObject];
                     }
                     [enemyTowers addObjectsFromArray:TowerBars];
+                    processEnemyTowerLastTime = mach_absolute_time();
                 }
             });
         }
     });
 }
 
-const int SelfChampionScanChunksX = 5; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-const int SelfChampionScanChunksY = 24;
+const int selfChampionScanChunksX = 5; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+const int selfChampionScanChunksY = 24;
 const float SelfChampionFrameMove = 80.0; //Assume Champions can move 80 pixels in 1 frames
 void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_group_t dispatchGroup) {
     float leagueGameWidth = image.imageWidth;
     float leagueGameHeight = image.imageHeight;
     CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
+    
+    
+    
+    
+    int scanStartX = 0; int scanStartY = 0;
+    int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
+    int scanWidth = (scanEndX - scanStartX) / selfChampionScanChunksX;
+    int scanHeight = (scanEndY - scanStartY) / selfChampionScanChunksY;
+    
+    int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processSelfChampionLastTime)) / 16;
+    if (framesPassed <= 0) framesPassed = 1;
+    if (framesPassed > selfChampionScanChunksX * selfChampionScanChunksY) framesPassed = selfChampionScanChunksX * selfChampionScanChunksY;
+    
+    NSMutableArray* scanRectangles = [NSMutableArray new];
+    //Increase the scan chunk by 1
+    for (int i = 0; i < framesPassed; i++) {
+        selfChampionScanCurrentChunkX += 1;
+        if (selfChampionScanCurrentChunkX >= selfChampionScanChunksX) {
+            selfChampionScanCurrentChunkX = 0;
+            selfChampionScanCurrentChunkY++;
+        }
+        if (selfChampionScanCurrentChunkY >= selfChampionScanChunksY) {
+            selfChampionScanCurrentChunkY = 0;
+        }
+        //Add chunk to scan
+        CGRect scanRect = CGRectMake( scanWidth * selfChampionScanCurrentChunkX / selfChampionScanChunksX + scanStartX ,
+                                     scanHeight * selfChampionScanCurrentChunkY / selfChampionScanChunksY + scanStartY ,
+                                     scanWidth ,
+                                     scanHeight );
+        scanRect = CGRectIntegral(scanRect);
+        scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+        combineRectangles(scanRectangles, scanRect);
+    }
+    
+    
+    
     
     //Why not scan certain sections in intervals?
     //I know it takes about 80 ms for a full scan.
@@ -2511,6 +2763,7 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
     //A full screen scan happens every 0.81666666666667 seconds
     
     //Increase the scan chunk by 1
+    /*
     selfChampionScanCurrentChunkX += 1;
     if (selfChampionScanCurrentChunkX >= SelfChampionScanChunksX) {
         selfChampionScanCurrentChunkX = 0;
@@ -2528,6 +2781,7 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
     scanRect = CGRectIntegral(scanRect);
     scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
     combineRectangles(scanRectangles, scanRect);
+     */
     //Add previous Champions to scan
     for (int i = 0; i < [selfChampions count]; i++) {
         Champion* Champion = [selfChampions objectAtIndex:i];
@@ -2596,6 +2850,7 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
                         [selfChampions removeLastObject];
                     }
                     [selfChampions addObjectsFromArray:ChampionBars];
+                    processSelfChampionLastTime = mach_absolute_time();
                 }
             });
         }
