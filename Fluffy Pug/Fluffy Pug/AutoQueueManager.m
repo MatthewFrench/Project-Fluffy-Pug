@@ -298,10 +298,11 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             int xEnd = data.imageWidth - 400;
             int yEnd = 250;
             CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
-            size_t intersectRectsNum;
-            CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
+            //size_t intersectRectsNum;
+            //CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
             
-            detectExactImageToImageToRectangles(step1_PlayButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+            detectExactImageToImageToRectangle(step1_PlayButton, data, search, returnPercentage, returnPosition, 0.83, true);
+            //detectExactImageToImageToRectangles(step1_PlayButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
             
             ////NSLog(@"Play button percentage: %f", returnPercentage);
             
