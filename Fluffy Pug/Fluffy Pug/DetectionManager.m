@@ -1581,8 +1581,8 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
 }
 void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t dispatchGroup) {
     
-    int searchWidth = 6; int searchHeight = 6;
-    CGPoint trinketPos = CGPointMake(873, 702);
+    int searchWidth = 10; int searchHeight = 10;
+    CGPoint trinketPos = CGPointMake(870, 700);
     //Search for trinket to use
     dispatch_group_async(dispatchGroup, trinketActiveThread, ^{
         @autoreleasepool {

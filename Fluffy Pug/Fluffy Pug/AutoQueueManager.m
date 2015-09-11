@@ -182,11 +182,13 @@ void AutoQueueManager::processLogic() {
                 clickLocation(endGameButtonLocation.x, endGameButtonLocation.y);
                 currentStep = STEP_12;
                 scanForHomeButton = true;
+                foundHomeButton = false;
                 actionClick = mach_absolute_time();
                 NSLog(@"Finished step 11, moving to step 12.");
             }
         }break;
         case STEP_12: {
+            NSLog(@"Waiting on step 12");
             if (foundHomeButton) {
                 NSLog(@"Clicking home button");
                 clickLocation(homeButtonLocation.x, homeButtonLocation.y);
@@ -533,7 +535,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
         });
     }
     if (scanForHomeButton) {
-        foundHomeButton = false;
+        //foundHomeButton = false;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             

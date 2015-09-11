@@ -203,7 +203,7 @@ void BasicAI::handleMovementAndAttacking() {
     GenericObject* mapShop = gameState->detectionManager->getMapShop();
     
     
-    bool buyingItems = getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*5 && gameState->detectionManager->getShopAvailable();
+    bool buyingItems = getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*8 && gameState->detectionManager->getShopAvailable();
     
     if ([selfChampions count] > 0 && !shopTopLeftCornerVisible && !buyingItems) {
         
@@ -214,6 +214,9 @@ void BasicAI::handleMovementAndAttacking() {
         }
         id firstObject = [selfChampions firstObject];
         Champion* selfChamp = firstObject;
+        if (gameState->detectionManager->getSelfHealthBar() != nil) {
+            selfChamp->health = gameState->detectionManager->getSelfHealthBar()->health;
+        }
         
         NSMutableArray* enemyChampions = gameState->detectionManager->getEnemyChampions();
         NSMutableArray* enemyMinions = gameState->detectionManager->getEnemyMinions();

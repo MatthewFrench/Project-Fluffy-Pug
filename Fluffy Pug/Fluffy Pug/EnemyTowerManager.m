@@ -38,7 +38,7 @@ EnemyTowerManager::EnemyTowerManager () {
 Tower* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     Tower* tower = nil;
     //Look top left corner
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.9) >=  0.9) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topLeftImageData, 0.8) >=  0.8) {
         int barTopLeftX = x + 3;
         int barTopLeftY = y + 3;
         tower = [Tower new];
@@ -51,7 +51,7 @@ Tower* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t *pi
         tower->bottomRight.x = barTopLeftX + 126;
         tower->bottomRight.y = barTopLeftY + 8;
         tower->detectedTopLeft = true;
-    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.9) >=  0.9) { // Look for bottom left corner
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomLeftImageData, 0.8) >=  0.8) { // Look for bottom left corner
         int barTopLeftX = x + 3;
         int barTopLeftY = y - 7;
         tower = [Tower new];
@@ -64,7 +64,7 @@ Tower* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t *pi
         tower->bottomRight.x = barTopLeftX + 126;
         tower->bottomRight.y = barTopLeftY + 8;
         tower->detectedBottomLeft = true;
-    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.9) >=  0.9) { // Look for top right corner
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, topRightImageData, 0.8) >=  0.8) { // Look for top right corner
         int barTopLeftX = x - 126 + 1;
         int barTopLeftY = y + 3;
         tower = [Tower new];
@@ -77,7 +77,7 @@ Tower* EnemyTowerManager::detectTowerBarAtPixel(ImageData imageData, uint8_t *pi
         tower->bottomRight.x = barTopLeftX + 126;
         tower->bottomRight.y = barTopLeftY + 8;
         tower->detectedTopRight = true;
-    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.9) >=  0.9) { // Look for bottom right corner
+    } else if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, bottomRightImageData, 0.8) >=  0.8) { // Look for bottom right corner
         int barTopLeftX = x - 126 + 1;
         int barTopLeftY = y - 7;
         tower = [Tower new];

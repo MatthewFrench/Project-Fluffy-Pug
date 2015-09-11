@@ -36,7 +36,7 @@ ItemManager::ItemManager() {
 }
 GenericObject* ItemManager::detectTrinketActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, trinketItemImageData, 0.8) >=  0.8) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, trinketItemImageData, 0.7) >=  0.7) {
         object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
@@ -54,7 +54,7 @@ GenericObject* ItemManager::detectTrinketActiveAtPixel(ImageData imageData, uint
 }
 GenericObject* ItemManager::detectItemActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, itemImageData, 0.725) >=  0.8) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, itemImageData, 0.7) >=  0.75) {
         object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
@@ -72,7 +72,7 @@ GenericObject* ItemManager::detectItemActiveAtPixel(ImageData imageData, uint8_t
 }
 GenericObject* ItemManager::detectPotionActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, potionImageData, 0.8) >=  0.8) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, potionImageData, 0.7) >=  0.7) {
         object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
