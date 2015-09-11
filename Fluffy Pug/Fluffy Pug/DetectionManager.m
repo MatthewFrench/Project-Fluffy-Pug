@@ -1076,6 +1076,9 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                         mapShop = foundShop;
                     } else {
                         mapShopVisible = false;
+                        if (mapShop == NULL) {
+                            mapShop = mapSelfLocation;
+                        }
                     }
                 }
             });

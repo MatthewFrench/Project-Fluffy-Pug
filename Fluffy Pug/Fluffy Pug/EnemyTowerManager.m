@@ -135,7 +135,7 @@ NSMutableArray* EnemyTowerManager::validateTowerBars(ImageData imageData, NSMuta
                     y + tower->topLeft.y >= 0 && y + tower->topLeft.y < imageData.imageHeight) {
                 uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
                 uint8_t*  p = getPixel2(imageData, x + tower->topLeft.x, y + tower->topLeft.y);
-                if (getColorPercentage(healthBarColor, p) >= 0.7) {
+                if (getColorPercentage(healthBarColor, p) >= 0.85) {
                     tower->health = (float)x / 125 * 100;
                     y = healthSegmentImageData.imageHeight + 1;
                     x = -1;

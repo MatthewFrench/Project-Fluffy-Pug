@@ -206,7 +206,7 @@ void BasicAI::handleMovementAndAttacking() {
     
     NSMutableArray* selfChampions = gameState->detectionManager->getSelfChampions();
     bool shopTopLeftCornerVisible = gameState->detectionManager->getShopTopLeftCornerVisible();
-    bool mapShopVisible = gameState->detectionManager->getMapShopVisible();
+    //bool mapShopVisible = gameState->detectionManager->getMapShopVisible();
     bool mapVisible = gameState->detectionManager->getMapVisible();
     GenericObject* map = gameState->detectionManager->getMap();
     GenericObject* mapShop = gameState->detectionManager->getMapShop();
@@ -242,6 +242,7 @@ void BasicAI::handleMovementAndAttacking() {
         bool inEarlyGame = getTimeInMilliseconds(mach_absolute_time() - gameCurrentTime) <= 1000*60*8; //Plays safe for first 8 minutes
         
         Champion* lowestHealthEnemyChampion = getLowestHealthChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Champion* closestEnemyChampion = getNearestChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Minion* lowestHealthEnemyMinion = getLowestHealthMinion(enemyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Minion* closestAllyMinion = getNearestMinion(allyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Champion* nearestAllyChampion = getNearestChampion(allyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
@@ -282,6 +283,11 @@ void BasicAI::handleMovementAndAttacking() {
             //Too many baddies, peace.
             action = ACTION_Run_Away;
         }
+        
+        if (inEarlyGame && hypot(closestEnemyChampion->characterCenter.x - selfChamp->characterCenter.x, closestEnemyChampion->characterCenter.y - selfChamp->characterCenter.y) < 600) {
+            action = ACTION_Run_Away;
+        }
+        
         //Now some more attack logic
         if (action == ACTION_Attack_Enemy_Champion && enemyTowerNear) {
             //If enemy is under tower, ignore
@@ -355,7 +361,7 @@ void BasicAI::handleMovementAndAttacking() {
                 //NSLog(@"\t\tAction: Running Away");
                 //Run back to base by right clicking on the shop on the minimap
                 //If no shop, stand still and fight.
-                if (mapShopVisible) {
+                if (mapShop != nil) {
                     if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 700) {
                         tapMouseRight(mapShop->center.x, mapShop->center.y);
                         lastRunAwayClick = mach_absolute_time();
