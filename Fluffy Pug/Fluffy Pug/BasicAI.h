@@ -32,6 +32,7 @@ class BasicAI {
     uint64_t moveToLanePathSwitch;
     
     bool boughtStarterItems;
+    NSMutableArray* boughtItems;
     
 public:
     BasicAI(LeagueGameState* leagueGameState);

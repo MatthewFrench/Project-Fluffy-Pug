@@ -47,9 +47,12 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     moveToLanePathSwitch = mach_absolute_time();
     
     boughtStarterItems = false;
+    
+    boughtItems = [NSMutableArray new];
 }
 void BasicAI::resetAI() {
     boughtStarterItems = false;
+    [boughtItems removeAllObjects];
 }
 void BasicAI::handleAbilityLevelUps() {
     int abilityLevelUpOrder[] = {1, 2, 3, 1, 2, 4, 3, 1, 2, 3, 4, 1, 2, 3, 1, 4, 2, 3};
@@ -98,7 +101,7 @@ void BasicAI::handleBuyingItems() {
     //    NSLog(@"Shop bottom left visible");
     //}
     bool closeShop = false;
-    if (getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*5) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*8) {
         if (gameState->detectionManager->getShopAvailable()) {
             
             if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible()) {
@@ -112,12 +115,25 @@ void BasicAI::handleBuyingItems() {
                     if (boughtStarterItems && clickY > 100 && clickY < 200) {
                         continue; //Skip buying this item because we already bought starter items. No troll build.
                     }
+                    //Skip buying this item if we already bought it once
+                    bool skipBuying = false;
+                    for (GenericObject *boughtItem in boughtItems) {
+                        if (abs(boughtItem->topLeft.y - item->topLeft.y) <= 50 &&
+                            abs(boughtItem->topLeft.x - item->topLeft.x) <= 50) {
+                            skipBuying = true;
+                            break;
+                        }
+                    }
+                    if (skipBuying) {
+                        continue;
+                    }
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * 500), dispatch_get_main_queue(), ^{
                         moveMouse(clickX, clickY);
                     });
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+250)), dispatch_get_main_queue(), ^{
                         doubleTapMouseLeft(clickX, clickY);
                     });
+                    [boughtItems addObject:item];
                 }
                 if ([itemsToBuy count] > 0 && !boughtStarterItems) {
                     boughtStarterItems = true;
@@ -167,7 +183,8 @@ void BasicAI::handleCameraFocus() {
     }
 }
 void BasicAI::handlePlacingWard() {
-    if ([gameState->detectionManager->getSelfChampions() count] > 0 && gameState->detectionManager->getTrinketActiveAvailable()) {
+    if ([gameState->detectionManager->getSelfChampions() count] > 0 && gameState->detectionManager->getTrinketActiveAvailable() &&
+        getTimeInMilliseconds(mach_absolute_time() - lastPlacedWard) >= 500) {
         Champion* champ = [gameState->detectionManager->getSelfChampions() firstObject];
         moveMouse(champ->characterCenter.x, champ->characterCenter.y);
         useTrinket();
@@ -565,6 +582,7 @@ void BasicAI::useTrinket() {
         if (gameState->detectionManager->getTrinketActiveAvailable()) {
             tapWard();
             lastPlacedWard = mach_absolute_time();
+            NSLog(@"Placed Ward");
         }
     }
 }

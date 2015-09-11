@@ -183,6 +183,7 @@ void AutoQueueManager::processLogic() {
                 currentStep = STEP_12;
                 scanForHomeButton = true;
                 actionClick = mach_absolute_time();
+                NSLog(@"Finished step 11, moving to step 12.");
             }
         }break;
         case STEP_12: {

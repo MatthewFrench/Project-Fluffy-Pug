@@ -1175,9 +1175,26 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                     }
                 }
             }
-            if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 //NSLog(@"Process shop Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
+            //}
+            
+            //Sort buyable items based on Y value
+            
+            for (int i = 0; i < itemsCanBuy.count; i++) {
+                GenericObject* item = [itemsCanBuy objectAtIndex:i];
+                int placeAtIndex = 0;
+                for (int i2 = 0; i2 < itemsCanBuy.count; i2++) {
+                    GenericObject* item2 = [itemsCanBuy objectAtIndex:i2];
+                    placeAtIndex = i2;
+                    if (item2->topLeft.y > item->topLeft.y) {
+                        break;
+                    }
+                    [itemsCanBuy removeObject:item];
+                    [itemsCanBuy insertObject:item atIndex:placeAtIndex];
+                }
             }
+            
             /*
             if (topLeftCorner != NULL) {
                 dispatch_async(detectionThread, ^(void){

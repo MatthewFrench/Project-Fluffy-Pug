@@ -268,6 +268,7 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
             //}
         //});
     } else {
+        leagueGameState->leaguePID = -1;
         //dispatch_async(dispatch_get_main_queue(), ^{
         //    @autoreleasepool {
         [statusText setStringValue:@"No League Instance Found"];
