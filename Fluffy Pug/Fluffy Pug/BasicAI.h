@@ -36,7 +36,7 @@ class BasicAI {
 public:
     BasicAI(LeagueGameState* leagueGameState);
     void processAI();
-    void BasicAI::resetAI();
+    void resetAI();
     void handleAbilityLevelUps();
     void handleBuyingItems();
     void handleCameraFocus();
