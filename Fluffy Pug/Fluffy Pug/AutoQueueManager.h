@@ -45,5 +45,5 @@ public:
     void processLogic();
     void reset(bool keepPlayButton);
     void clickLocation(int x, int y);
-    //void checkForEndGame(ImageData data);
+    void processEndGameDetection(ImageData data);
 };

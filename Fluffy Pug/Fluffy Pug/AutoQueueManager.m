@@ -52,6 +52,10 @@ void AutoQueueManager::processLogic() {
         reset(true);
     }
     
+    if (leagueGameState->leaguePID != -1) {
+        currentStep = STEP_11;
+    }
+    
     switch (currentStep) {
         case STEP_1: {
             if (foundPlayButton)  {
@@ -102,14 +106,17 @@ void AutoQueueManager::processLogic() {
             }
         }break;
         case STEP_8: {
+            
             if (foundAcceptButton) {
                 //Wait for accept button to disappear
+                NSLog(@"Clicking accept button");
                 clickLocation(acceptButtonLocation.x, acceptButtonLocation.y);
                 break;
             }
             if (foundRandomChampionButton) {
                 //Click random champion button
                 currentStep = STEP_9;
+                NSLog(@"Clicking random champion button %d, %d", randomChampionButtonLocation.x, randomChampionButtonLocation.y);
                 clickLocation(randomChampionButtonLocation.x, randomChampionButtonLocation.y);
                 scanForRandomChampionButton = false;
                 scanForLockInButton = true;
@@ -144,11 +151,18 @@ void AutoQueueManager::processLogic() {
                 clickLocation(chooseSkinButtonLocation.x, chooseSkinButtonLocation.y);
             } else {
                 //Entering Game
-                currentStep = STEP_12;
+                currentStep = STEP_11;
                 scanForChooseSkinButton = false;
                 scanForLockInButton = false;
                 scanForAcceptButton = false;
                 scanForHomeButton = true;
+            }
+        }break;
+    
+        case STEP_11: {
+            if (foundEndGameButton) {
+                clickLocation(endGameButtonLocation.x, endGameButtonLocation.y);
+                currentStep = STEP_12;
             }
         }break;
         case STEP_12: {
@@ -169,53 +183,76 @@ void AutoQueueManager::clickLocation(int x, int y) {
         moveMouse(0, 0);
     });
 }
-
+void AutoQueueManager::processEndGameDetection(ImageData data) {
+    foundEndGameButton = false;
+    //if (scanForEndGameButton) {
+            
+            float returnPercentage = 0.0;
+            Position returnPosition;
+            int xStart = data.imageWidth/2 - 150;
+            int yStart = data.imageHeight * 0.68125 - 100;
+            int xEnd = data.imageWidth/2 + 150;
+            int yEnd = data.imageHeight * 0.68125 + 100;
+            detectExactImageToImage(step11_EndGameContinueButton, data, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.65, true);
+            if (returnPercentage >= 0.65) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    foundEndGameButton = true;
+                    endGameButtonLocation = returnPosition;
+                });
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    foundEndGameButton = false;
+                });
+            }
+        
+    //}
+}
 bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, size_t num_rects) {
     /*
-    dispatch_group_t dispatchGroup = dispatch_group_create();
-    
-    
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
-    float returnPercentage3 = 0.0;
-    Position returnPosition3;
-    int xStart2 = 0;
-    int yStart2 = 0;
-    int xEnd2 = data.imageWidth;
-    int yEnd2 = data.imageHeight;
-    CGRect search2 = CGRectMake(xStart2, yStart2, xEnd2 - xStart2, yEnd2-yStart2);
-    size_t intersectRectsNum2;
-    CGRect* intersectSearch2 = getIntersectionRectangles(search2, rects, num_rects, intersectRectsNum2);
-
-    detectExactImageToImageToRectangles(testImage1, data, intersectSearch2, intersectRectsNum2, returnPercentage3, returnPosition3, 0.9, true);
-    
-    if (returnPercentage3 > 0.9) {
-        clickLocation(returnPosition3.x, returnPosition3.y);
-    }
-    });
-    
-    queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_group_async(dispatchGroup, queue, ^{
+     dispatch_group_t dispatchGroup = dispatch_group_create();
+     
+     
+     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+     dispatch_group_async(dispatchGroup, queue, ^{
      float returnPercentage3 = 0.0;
-        Position returnPosition3;
+     Position returnPosition3;
      int xStart2 = 0;
      int yStart2 = 0;
      int xEnd2 = data.imageWidth;
      int yEnd2 = data.imageHeight;
      CGRect search2 = CGRectMake(xStart2, yStart2, xEnd2 - xStart2, yEnd2-yStart2);
-size_t intersectRectsNum2;
-    CGRect* intersectSearch2 = getIntersectionRectangles(search2, rects, num_rects, intersectRectsNum2);
-    
-    detectExactImageToImageToRectangles(testImage2, data, intersectSearch2, intersectRectsNum2, returnPercentage3, returnPosition3, 0.9, true);
-    //NSLog(@"Test image 1: %f", returnPercentage3);
-    if (returnPercentage3 > 0.9) {
-        clickLocation(returnPosition3.x, returnPosition3.y);
-    }
+     size_t intersectRectsNum2;
+     CGRect* intersectSearch2 = getIntersectionRectangles(search2, rects, num_rects, intersectRectsNum2);
+     
+     detectExactImageToImageToRectangles(testImage1, data, intersectSearch2, intersectRectsNum2, returnPercentage3, returnPosition3, 0.9, true);
+     
+     if (returnPercentage3 > 0.9) {
+     clickLocation(returnPosition3.x, returnPosition3.y);
+     }
      });
-    dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
-    //To speed up the search we will use the CGRectIntersection function, cut down on the search area
-    //We will also make each detection run on a separate thread for extra speeds
-    */
+     
+     queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+     dispatch_group_async(dispatchGroup, queue, ^{
+     float returnPercentage3 = 0.0;
+     Position returnPosition3;
+     int xStart2 = 0;
+     int yStart2 = 0;
+     int xEnd2 = data.imageWidth;
+     int yEnd2 = data.imageHeight;
+     CGRect search2 = CGRectMake(xStart2, yStart2, xEnd2 - xStart2, yEnd2-yStart2);
+     size_t intersectRectsNum2;
+     CGRect* intersectSearch2 = getIntersectionRectangles(search2, rects, num_rects, intersectRectsNum2);
+     
+     detectExactImageToImageToRectangles(testImage2, data, intersectSearch2, intersectRectsNum2, returnPercentage3, returnPosition3, 0.9, true);
+     //NSLog(@"Test image 1: %f", returnPercentage3);
+     if (returnPercentage3 > 0.9) {
+     clickLocation(returnPosition3.x, returnPosition3.y);
+     }
+     });
+     dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER);
+     //To speed up the search we will use the CGRectIntersection function, cut down on the search area
+     //We will also make each detection run on a separate thread for extra speeds
+     */
     
     
     __block volatile bool fireLogic = false;
@@ -258,37 +295,69 @@ size_t intersectRectsNum2;
     }
     if (scanForAcceptButton) {
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        foundAcceptButton = false;
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            float returnPercentage = 0.0;
-            Position returnPosition;
-            int xStart = detectionPlayButtonReferenceLocation.x-100;
-            int yStart = detectionPlayButtonReferenceLocation.y+100;
-            int xEnd = detectionPlayButtonReferenceLocation.x+100;
-            int yEnd = detectionPlayButtonReferenceLocation.y+450;
+            //int xStart = detectionPlayButtonReferenceLocation.x-120;
+            //int yStart = detectionPlayButtonReferenceLocation.y+120;
+            //int xEnd = detectionPlayButtonReferenceLocation.x+120;
+            //int yEnd = detectionPlayButtonReferenceLocation.y+470;
+            int xStart = 0;
+            int yStart = 0;
+            int xEnd = data.imageWidth;
+            int yEnd = data.imageHeight;
             
-            
-            CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
-            size_t intersectRectsNum;
-            CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
-            
-            detectExactImageToImageToRectangles(step7_AcceptButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
-            
-            if (returnPercentage >= 0.3) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    foundAcceptButton = true;
-                    acceptButtonLocation = returnPosition;
-                });
-                fireLogic = true;
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    foundAcceptButton = false;
-                });
+            for (int x = xStart; x < xEnd; x++) {
+                for (int y = yStart; y < yEnd; y++) {
+                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step7_AcceptButton, 0.9) >=  0.9) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            foundAcceptButton = true;
+                            acceptButtonLocation.x = x;
+                            acceptButtonLocation.y = y;
+                            NSLog(@"Found accept button at %d, %d", x, y);
+                        });
+                        fireLogic = true;
+                        x = xEnd;
+                        y = yEnd;
+                    }
+                }
             }
             
         });
     }
     if (scanForRandomChampionButton) {
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        foundRandomChampionButton = false;
+        dispatch_group_async(dispatchGroup, queue, ^{
+            
+            int xStart = detectionPlayButtonReferenceLocation.x-120;
+            int yStart = detectionPlayButtonReferenceLocation.y+120;
+            int xEnd = detectionPlayButtonReferenceLocation.x+120;
+            int yEnd = detectionPlayButtonReferenceLocation.y+470;
+            //int xStart = 0;
+            //int yStart = 0;
+            //int xEnd = data.imageWidth;
+            //int yEnd = data.imageHeight;
+            
+            for (int x = xStart; x < xEnd; x++) {
+                for (int y = yStart; y < yEnd; y++) {
+                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step8_RandomChampionButton, 0.8) >=  0.8) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            foundRandomChampionButton = true;
+                            randomChampionButtonLocation.x = x;
+                            randomChampionButtonLocation.y = y;
+                            NSLog(@"Found random button at %d, %d", x, y);
+                        });
+                        fireLogic = true;
+                        x = xEnd;
+                        y = yEnd;
+                    }
+                }
+            }
+            
+        });
+        /*
+        
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
@@ -318,7 +387,7 @@ size_t intersectRectsNum2;
                 });
             }
             
-        });
+        });*/
     }
     if (scanForLockInButton) {
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
@@ -457,95 +526,70 @@ size_t intersectRectsNum2;
             
         });
     }
-    if (scanForEndGameButton) {
-        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-        dispatch_group_async(dispatchGroup, queue, ^{
-            
-            float returnPercentage = 0.0;
-            Position returnPosition;
-            int xStart = data.imageWidth/2 - 150;
-            int yStart = data.imageHeight * 0.68125 - 100;
-            int xEnd = data.imageWidth/2 + 150;
-            int yEnd = data.imageHeight * 0.68125 + 100;
-            detectExactImageToImage(step11_EndGameContinueButton, data, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.65, true);
-            if (returnPercentage >= 0.65) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    foundEndGameButton = true;
-                    endGameButtonLocation = returnPosition;
-                });
-                fireLogic = true;
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    foundEndGameButton = false;
-                });
-            }
-            
-        });
-    }
     if (scanForNormalBlindPick) {
         /*
-        const int scanChunksX = 5; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-        const int scanChunksY = 24;
-        
-        float leagueGameWidth = data.imageWidth;
-        float leagueGameHeight = data.imageHeight;
-        CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
-        
-        
-        
-        int scanStartX = 0; int scanStartY = 0;
-        int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
-        int scanWidth = (scanEndX - scanStartX) / scanChunksX;
-        int scanHeight = (scanEndY - scanStartY) / scanChunksY;
-        
-        int framesPassed = 1;//(getTimeInMilliseconds(mach_absolute_time() - processAllyChampionLastTime)) / 16;
-        //if (framesPassed <= 0) framesPassed = 1;
-        //if (framesPassed > allyChampionScanChunksX * allyChampionScanChunksY) framesPassed = allyChampionScanChunksX * allyChampionScanChunksY;
-        
-        NSMutableArray* scanRectangles = [NSMutableArray new];
-        //Increase the scan chunk by 1
-        for (int i = 0; i < framesPassed; i++) {
-            step5ScanCurrentChunkX += 1;
-            if (step5ScanCurrentChunkX >= scanChunksX) {
-                step5ScanCurrentChunkX = 0;
-                step5ScanCurrentChunkY++;
-            }
-            if (step5ScanCurrentChunkY >= scanChunksY) {
-                step5ScanCurrentChunkY = 0;
-            }
-            //Add chunk to scan
-            CGRect scanRect = CGRectMake( scanWidth * step5ScanCurrentChunkX + scanStartX ,
-                                         scanHeight * step5ScanCurrentChunkY + scanStartY ,
-                                         scanWidth ,
-                                         scanHeight );
-            scanRect = CGRectIntegral(scanRect);
-            scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
-            combineRectangles(scanRectangles, scanRect);
-        }
-        */
+         const int scanChunksX = 5; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+         const int scanChunksY = 24;
+         
+         float leagueGameWidth = data.imageWidth;
+         float leagueGameHeight = data.imageHeight;
+         CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
+         
+         
+         
+         int scanStartX = 0; int scanStartY = 0;
+         int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
+         int scanWidth = (scanEndX - scanStartX) / scanChunksX;
+         int scanHeight = (scanEndY - scanStartY) / scanChunksY;
+         
+         int framesPassed = 1;//(getTimeInMilliseconds(mach_absolute_time() - processAllyChampionLastTime)) / 16;
+         //if (framesPassed <= 0) framesPassed = 1;
+         //if (framesPassed > allyChampionScanChunksX * allyChampionScanChunksY) framesPassed = allyChampionScanChunksX * allyChampionScanChunksY;
+         
+         NSMutableArray* scanRectangles = [NSMutableArray new];
+         //Increase the scan chunk by 1
+         for (int i = 0; i < framesPassed; i++) {
+         step5ScanCurrentChunkX += 1;
+         if (step5ScanCurrentChunkX >= scanChunksX) {
+         step5ScanCurrentChunkX = 0;
+         step5ScanCurrentChunkY++;
+         }
+         if (step5ScanCurrentChunkY >= scanChunksY) {
+         step5ScanCurrentChunkY = 0;
+         }
+         //Add chunk to scan
+         CGRect scanRect = CGRectMake( scanWidth * step5ScanCurrentChunkX + scanStartX ,
+         scanHeight * step5ScanCurrentChunkY + scanStartY ,
+         scanWidth ,
+         scanHeight );
+         scanRect = CGRectIntegral(scanRect);
+         scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+         combineRectangles(scanRectangles, scanRect);
+         }
+         */
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
             //Loop through scan chunks
             //for (int i = 0; i < [scanRectangles count]; i++) {
-                //CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
+            //CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
             CGRect rect = CGRectMake(0, 0, data.imageWidth, data.imageHeight);
-                for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
-                    for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
-                        uint8* pixel = getPixel2(data, x, y);
-                        if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, data.imageWidth, data.imageHeight, step5_BlindPickMode, 0.6) >=  0.6) {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                foundNormalBlindPickButton = true;
-                                normalBlindPickLocation.x = x;
-                                normalBlindPickLocation.y = y;
-                            });
-                            fireLogic = true;
-                            x = rect.origin.x + rect.size.width;
-                            y = rect.origin.y + rect.size.height;
-                            //i = (int)[scanRectangles count];
-                        }
+            for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
+                for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
+                    uint8* pixel = getPixel2(data, x, y);
+                    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, data.imageWidth, data.imageHeight, step5_BlindPickMode, 0.6) >=  0.6) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            foundNormalBlindPickButton = true;
+                            normalBlindPickLocation.x = x;
+                            normalBlindPickLocation.y = y;
+                        });
+                        fireLogic = true;
+                        x = rect.origin.x + rect.size.width;
+                        y = rect.origin.y + rect.size.height;
+                        //i = (int)[scanRectangles count];
                     }
                 }
+            }
             //}
         });
     }
@@ -554,7 +598,7 @@ size_t intersectRectsNum2;
     
     return fireLogic;
     
-     
+    
     /*
      ImageData imageData = data;
      if ((clock() - lastScreenScan)/CLOCKS_PER_SEC >= 0.5) {

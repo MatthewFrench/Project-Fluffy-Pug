@@ -286,7 +286,7 @@ AppDelegate *GlobalSelf;
     if ([GlobalSelf->aiActiveCheckbox state] == NSOnState && GlobalSelf->leagueGameState->leaguePID != -1) {
         basicAI->processAI();
     }
-    if (runAutoQueue && leagueGameState->leaguePID == -1) {
+    if (runAutoQueue) { // && leagueGameState->leaguePID == -1
         autoQueueManager->processLogic();
     }
     
@@ -487,6 +487,8 @@ void (^handleStream)(CGDisplayStreamFrameStatus, uint64_t, IOSurfaceRef, CGDispl
                 //[GlobalSelf->timer fire];
         //    });
         //}
+    } else if (GlobalSelf->runAutoQueue && GlobalSelf->leagueGameState->leaguePID != -1) {
+        GlobalSelf->autoQueueManager->processEndGameDetection(imageData);
     }
     
     //dispatch_async(GlobalSelf->aiThread, ^{
