@@ -284,8 +284,10 @@ void BasicAI::handleMovementAndAttacking() {
             action = ACTION_Run_Away;
         }
         
+        if (closestEnemyChampion != nil) {
         if (inEarlyGame && hypot(closestEnemyChampion->characterCenter.x - selfChamp->characterCenter.x, closestEnemyChampion->characterCenter.y - selfChamp->characterCenter.y) < 600) {
             action = ACTION_Run_Away;
+        }
         }
         
         //Now some more attack logic

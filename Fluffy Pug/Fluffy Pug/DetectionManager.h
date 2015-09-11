@@ -84,8 +84,8 @@ class DetectionManager {
     dispatch_queue_t aiThread;
     dispatch_queue_t detectionThread;
     
-    bool surrenderAvailable;
-    GenericObject* surrenderActive;
+    bool surrenderAvailable = false;
+    GenericObject* surrenderActive = nil;
     
     dispatch_queue_t itemActive1Thread, itemActive2Thread, itemActive3Thread, itemActive4Thread, itemActive5Thread, itemActive6Thread;
     dispatch_queue_t mapThread, shopThread, shopAvailableThread, usedPotionThread, trinketActiveThread, spell1ActiveThread, spell2ActiveThread, spell3ActiveThread, spell4ActiveThread, summonerSpell1ActiveThread, summonerSpell2ActiveThread, levelUpDotsThread, spell1LevelUpThread, spell2LevelUpThread, spell3LevelUpThread, spell4LevelUpThread, allyMinionThread, enemyMinionThread, enemyChampionThread, allyChampionThread, enemyTowerThread, selfChampionThread, selfHealthBarThread, surrenderThread;
