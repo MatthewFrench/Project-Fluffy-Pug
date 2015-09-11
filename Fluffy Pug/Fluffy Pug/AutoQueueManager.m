@@ -45,6 +45,9 @@ void AutoQueueManager::reset(bool keepPlayButton) {
     scanForPlayButton = true;
     step5ScanCurrentChunkX = 0;
     step5ScanCurrentChunkY = 0;
+    
+    //currentStep = STEP_12;
+    //scanForHomeButton = true;
 }
 void AutoQueueManager::processLogic() {
     
@@ -163,6 +166,7 @@ void AutoQueueManager::processLogic() {
             if (foundEndGameButton) {
                 clickLocation(endGameButtonLocation.x, endGameButtonLocation.y);
                 currentStep = STEP_12;
+                scanForHomeButton = true;
             }
         }break;
         case STEP_12: {
@@ -186,16 +190,18 @@ void AutoQueueManager::clickLocation(int x, int y) {
 void AutoQueueManager::processEndGameDetection(ImageData data) {
     foundEndGameButton = false;
     //if (scanForEndGameButton) {
-            
+    //NSLog(@"Searching for end game");
             float returnPercentage = 0.0;
             Position returnPosition;
-            int xStart = data.imageWidth/2 - 150;
-            int yStart = data.imageHeight * 0.68125 - 100;
-            int xEnd = data.imageWidth/2 + 150;
-            int yEnd = data.imageHeight * 0.68125 + 100;
-            detectExactImageToImage(step11_EndGameContinueButton, data, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.65, true);
-            if (returnPercentage >= 0.65) {
+            int xStart = data.imageWidth/2 - 200;
+            int yStart = data.imageHeight * 0.68125 - 200;
+            int xEnd = data.imageWidth/2 + 200;
+            int yEnd = data.imageHeight * 0.68125 + 200;
+            detectExactImageToImage(step11_EndGameContinueButton, data, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.5, true);
+    //NSLog(@"percentage returned: %f", returnPercentage);
+            if (returnPercentage >= 0.6) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    //NSLog(@"Found end game");
                     foundEndGameButton = true;
                     endGameButtonLocation = returnPosition;
                 });
@@ -309,11 +315,11 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             
             for (int x = xStart; x < xEnd; x++) {
                 for (int y = yStart; y < yEnd; y++) {
-                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step7_AcceptButton, 0.9) >=  0.9) {
+                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step7_AcceptButton, 0.45) >=  0.45) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             foundAcceptButton = true;
-                            acceptButtonLocation.x = x;
-                            acceptButtonLocation.y = y;
+                            acceptButtonLocation.x = x+50;
+                            acceptButtonLocation.y = y+10;
                             NSLog(@"Found accept button at %d, %d", x, y);
                         });
                         fireLogic = true;
@@ -330,21 +336,21 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
         foundRandomChampionButton = false;
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            int xStart = detectionPlayButtonReferenceLocation.x-120;
-            int yStart = detectionPlayButtonReferenceLocation.y+120;
-            int xEnd = detectionPlayButtonReferenceLocation.x+120;
-            int yEnd = detectionPlayButtonReferenceLocation.y+470;
-            //int xStart = 0;
-            //int yStart = 0;
-            //int xEnd = data.imageWidth;
-            //int yEnd = data.imageHeight;
+            //int xStart = detectionPlayButtonReferenceLocation.x-120;
+            //int yStart = detectionPlayButtonReferenceLocation.y+120;
+            //int xEnd = detectionPlayButtonReferenceLocation.x+120;
+            //int yEnd = detectionPlayButtonReferenceLocation.y+470;
+            int xStart = 0;
+            int yStart = 0;
+            int xEnd = data.imageWidth;
+            int yEnd = data.imageHeight;
             
             for (int x = xStart; x < xEnd; x++) {
                 for (int y = yStart; y < yEnd; y++) {
-                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step8_RandomChampionButton, 0.8) >=  0.8) {
+                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step8_RandomChampionButton, 0.7) >=  0.7) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             foundRandomChampionButton = true;
-                            randomChampionButtonLocation.x = x;
+                            randomChampionButtonLocation.x = x+15;
                             randomChampionButtonLocation.y = y;
                             NSLog(@"Found random button at %d, %d", x, y);
                         });
@@ -390,9 +396,30 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
         });*/
     }
     if (scanForLockInButton) {
+        foundLockInButton = false;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
+            int xStart = 0;
+            int yStart = 0;
+            int xEnd = data.imageWidth;
+            int yEnd = data.imageHeight;
             
+            for (int x = xStart; x < xEnd; x++) {
+                for (int y = yStart; y < yEnd; y++) {
+                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step9_LockInButton, 0.45) >=  0.45) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            foundLockInButton = true;
+                            lockInButtonLocation.x = x;
+                            lockInButtonLocation.y = y;
+                            NSLog(@"Found lock in button at %d, %d", x, y);
+                        });
+                        fireLogic = true;
+                        x = xEnd;
+                        y = yEnd;
+                    }
+                }
+            }
+            /*
             float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = detectionPlayButtonReferenceLocation.x-400;
@@ -417,7 +444,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
                 dispatch_async(dispatch_get_main_queue(), ^{
                     foundLockInButton = false;
                 });
-            }
+            }*/
             
         });
     }
@@ -509,7 +536,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
             
             detectExactImageToImageToRectangles(step12_HomeButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
-            
+            //NSLog(@"Home button: %f", returnPercentage);
             free(intersectSearch);
             
             if (returnPercentage >= 0.3) {
@@ -577,7 +604,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
                 for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
                     uint8* pixel = getPixel2(data, x, y);
-                    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, data.imageWidth, data.imageHeight, step5_BlindPickMode, 0.6) >=  0.6) {
+                    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, data.imageWidth, data.imageHeight, step5_BlindPickMode, 0.8) >=  0.8) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             foundNormalBlindPickButton = true;
                             normalBlindPickLocation.x = x;
