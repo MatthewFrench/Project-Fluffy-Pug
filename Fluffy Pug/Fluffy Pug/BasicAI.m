@@ -49,10 +49,15 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     boughtStarterItems = false;
     
     boughtItems = [NSMutableArray new];
+    gameCurrentTime = mach_absolute_time();
+    
+    lastSurrender = mach_absolute_time();
 }
 void BasicAI::resetAI() {
     boughtStarterItems = false;
     [boughtItems removeAllObjects];
+    gameCurrentTime = mach_absolute_time();
+    lastSurrender = mach_absolute_time();
 }
 void BasicAI::handleAbilityLevelUps() {
     int abilityLevelUpOrder[] = {1, 2, 3, 1, 2, 4, 3, 1, 2, 3, 4, 1, 2, 3, 1, 4, 2, 3};
@@ -234,6 +239,8 @@ void BasicAI::handleMovementAndAttacking() {
         bool allyChampionsNear = [allyChampions count] > 0;
         bool enemyTowerNear = [enemyTowers count] > 0;
         bool underEnemyTower = false;
+        bool inEarlyGame = getTimeInMilliseconds(mach_absolute_time() - gameCurrentTime) <= 1000*60*8; //Plays safe for first 8 minutes
+        
         Champion* lowestHealthEnemyChampion = getLowestHealthChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Minion* lowestHealthEnemyMinion = getLowestHealthMinion(enemyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Minion* closestAllyMinion = getNearestMinion(allyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
@@ -260,14 +267,14 @@ void BasicAI::handleMovementAndAttacking() {
         }
         
         //Attack enemy if see enemy but not if there are too many enemies
-        if (enemyChampionsNear && ([allyChampions count]+2 >= [enemyChampions count] || [allyChampions count] >= 4 || [enemyChampions count] == 1)) {
+        if (enemyChampionsNear && ([allyChampions count]+2 >= [enemyChampions count] || [allyChampions count] >= 4 || [enemyChampions count] == 1) ) {
             //We got the upper hand, engage
-            if (selfChamp->health + 10 > lowestHealthEnemyChampion->health) { //Greater health
+            if (selfChamp->health + 10 > lowestHealthEnemyChampion->health && !inEarlyGame) { //Greater health
                 action = ACTION_Attack_Enemy_Champion;
             } else if (selfChamp->health < 40 && !allyChampionsNear && lowestHealthEnemyChampion->health > selfChamp->health) {
                 //Lesser health and no allies, bye
                 action = ACTION_Run_Away;
-            } else if (allyChampionsNear || lowestHealthEnemyChampion->health < selfChamp->health) {
+            } else if ((allyChampionsNear || lowestHealthEnemyChampion->health < selfChamp->health) && !inEarlyGame) {
                 //Yolo when allies are near, we can take em
                 action = ACTION_Attack_Enemy_Champion;
             }
@@ -550,6 +557,12 @@ void BasicAI::processAI() {
     handleCameraFocus();
     handlePlacingWard();
     handleMovementAndAttacking();
+    
+    if (getTimeInMilliseconds(mach_absolute_time() - lastSurrender) >= 1000 && gameState->detectionManager->getSurrenderAvailable()) {
+        lastSurrender = mach_absolute_time();
+        GenericObject* surrender = gameState->detectionManager->getSurrender();
+        tapMouseLeft(surrender->center.x, surrender->center.y);
+    }
 }
 
 void BasicAI::castSpell1() {

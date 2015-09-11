@@ -17,6 +17,7 @@
 #import "ItemManager.h"
 #import "ShopManager.h"
 #import "MapManager.h"
+#import "SurrenderManager.h"
 
 const int longAlert = 13;
 
@@ -55,6 +56,7 @@ DetectionManager::DetectionManager(dispatch_queue_t _aiThread, dispatch_queue_t 
     enemyTowerThread = dispatch_queue_create("Enemy Tower Thread", DISPATCH_QUEUE_CONCURRENT);
     selfChampionThread = dispatch_queue_create("Self Champion Thread", DISPATCH_QUEUE_CONCURRENT);
     selfHealthBarThread = dispatch_queue_create("Self Health Bar Thread", DISPATCH_QUEUE_CONCURRENT);
+    surrenderThread = dispatch_queue_create("Surrender Thread", DISPATCH_QUEUE_CONCURRENT);
     
     
     allyMinions = [NSMutableArray new];
@@ -77,6 +79,9 @@ DetectionManager::DetectionManager(dispatch_queue_t _aiThread, dispatch_queue_t 
     processSelfChampionLastTime = mach_absolute_time();
     processSelfHealthBarLastTime = mach_absolute_time();
     processShopLastTime = mach_absolute_time();
+    
+    surrenderAvailable = false;
+    surrenderActive = nil;
     /*
     allyMinionsDetectionObject = [NSMutableArray new];
     allyMinionsDetectionObject = [NSMutableArray new];
@@ -278,6 +283,8 @@ void DetectionManager::processDetection(ImageData image) {
         processMap(image, dispatchGroup);
         
         processTrinketActive(image, dispatchGroup);
+        
+        processSurrender(image, dispatchGroup);
         
         dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
@@ -741,7 +748,12 @@ GenericObject* DetectionManager::getMapLocation() {
     });
     return returnVar;
 }*/
-
+bool DetectionManager::getSurrenderAvailable() {
+    return surrenderAvailable;
+}
+GenericObject* DetectionManager::getSurrender() {
+    return surrenderActive;
+}
 NSMutableArray* DetectionManager::getAllyMinions() {
     return allyMinions;
 }
@@ -1129,7 +1141,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
     
     dispatch_group_async(dispatchGroup, shopThread, ^{
         @autoreleasepool {
-            uint64_t startTime = mach_absolute_time();
+            //uint64_t startTime = mach_absolute_time();
             
             
             GenericObject* topLeftCorner = nullptr;
@@ -1578,6 +1590,38 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
             //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
             ////NSLog(@"Processing item actives 6 detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             //}
+        }
+    });
+}
+void DetectionManager::processSurrender(ImageData image, dispatch_group_t dispatchGroup) {
+    
+    int searchWidth = 30; int searchHeight = 30;
+    CGPoint surrenderPos = CGPointMake(image.imageWidth - 210, image.imageHeight - 370);
+    //Search for trinket to use
+    dispatch_group_async(dispatchGroup, surrenderThread, ^{
+        @autoreleasepool {
+            
+            GenericObject* surrender = nullptr;
+            for (int x = surrenderPos.x; x < surrenderPos.x + searchWidth; x++) {
+                for (int y = surrenderPos.y; y < surrenderPos.y + searchHeight; y++) {
+                    uint8* pixel = getPixel2(image, x, y);
+                    surrender = SurrenderManager::detectSurrenderAtPixel(image, pixel, x, y);
+                    if (surrender != nil) {
+                        x = image.imageWidth;
+                        y = image.imageHeight;
+                    }
+                }
+            }
+            dispatch_async(detectionThread, ^(void) {
+                @autoreleasepool {
+                    if (surrender != NULL) {
+                        surrenderAvailable = true;
+                        surrenderActive = surrender;
+                    } else {
+                        surrenderAvailable = false;
+                    }
+                }
+            });
         }
     });
 }
@@ -2937,7 +2981,7 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
     
     dispatch_group_async(dispatchGroup, selfHealthBarThread, ^{
         @autoreleasepool {
-            uint64_t startTime = mach_absolute_time();
+            //uint64_t startTime = mach_absolute_time();
             NSMutableArray* HealthBarBars = [NSMutableArray new];
             //Loop through scan chunks
             //for (int i = 0; i < [scanRectangles count]; i++) {

@@ -33,6 +33,7 @@ class BasicAI {
     
     bool boughtStarterItems;
     NSMutableArray* boughtItems;
+    uint64_t gameCurrentTime, lastSurrender;
     
 public:
     BasicAI(LeagueGameState* leagueGameState);

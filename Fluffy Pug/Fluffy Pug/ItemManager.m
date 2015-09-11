@@ -54,7 +54,7 @@ GenericObject* ItemManager::detectTrinketActiveAtPixel(ImageData imageData, uint
 }
 GenericObject* ItemManager::detectItemActiveAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, itemImageData, 0.7) >=  0.75) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, itemImageData, 0.65) >=  0.65) {
         object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;

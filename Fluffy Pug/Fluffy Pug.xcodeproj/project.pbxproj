@@ -37,6 +37,7 @@
 		C981DAA31BA14CC000DB8A43 /* SelfHealth.m in Sources */ = {isa = PBXBuildFile; fileRef = C981DAA21BA14CC000DB8A43 /* SelfHealth.m */; };
 		C981DAA61BA14D1400DB8A43 /* Tower.m in Sources */ = {isa = PBXBuildFile; fileRef = C981DAA51BA14D1400DB8A43 /* Tower.m */; };
 		C981DAAA1BA14D5400DB8A43 /* GenericObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C981DAA91BA14D5400DB8A43 /* GenericObject.m */; };
+		C987BBE51BA36B7900DA0110 /* SurrenderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C987BBE41BA36B7900DA0110 /* SurrenderManager.m */; };
 		C9928F471B28720600A965E6 /* SelfChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F461B28720600A965E6 /* SelfChampionManager.m */; };
 		C9928F4A1B2872DC00A965E6 /* AllyChampionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F491B2872DC00A965E6 /* AllyChampionManager.m */; };
 		C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F4C1B28931700A965E6 /* BasicAI.m */; };
@@ -99,6 +100,8 @@
 		C981DAA51BA14D1400DB8A43 /* Tower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tower.m; sourceTree = "<group>"; };
 		C981DAA81BA14D5400DB8A43 /* GenericObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericObject.h; sourceTree = "<group>"; };
 		C981DAA91BA14D5400DB8A43 /* GenericObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenericObject.m; sourceTree = "<group>"; };
+		C987BBE31BA36B6800DA0110 /* SurrenderManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SurrenderManager.h; sourceTree = "<group>"; };
+		C987BBE41BA36B7900DA0110 /* SurrenderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SurrenderManager.m; sourceTree = "<group>"; };
 		C9928F451B28720600A965E6 /* SelfChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfChampionManager.h; sourceTree = "<group>"; };
 		C9928F461B28720600A965E6 /* SelfChampionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelfChampionManager.m; sourceTree = "<group>"; };
 		C9928F481B2872DC00A965E6 /* AllyChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllyChampionManager.h; sourceTree = "<group>"; };
@@ -144,6 +147,7 @@
 		C92B824D1B30372200278ED5 /* Detection */ = {
 			isa = PBXGroup;
 			children = (
+				C987BBE21BA36B5900DA0110 /* Surrender Manager */,
 				C981DA9A1BA14B7800DB8A43 /* Objects */,
 				C94607331B96483800B8F926 /* DetectionManager.h */,
 				C94607311B96482B00B8F926 /* DetectionManager.m */,
@@ -324,6 +328,15 @@
 			name = Objects;
 			sourceTree = "<group>";
 		};
+		C987BBE21BA36B5900DA0110 /* Surrender Manager */ = {
+			isa = PBXGroup;
+			children = (
+				C987BBE31BA36B6800DA0110 /* SurrenderManager.h */,
+				C987BBE41BA36B7900DA0110 /* SurrenderManager.m */,
+			);
+			name = "Surrender Manager";
+			sourceTree = "<group>";
+		};
 		C9DED8C51B8FC77B004DECCB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -414,6 +427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */,
+				C987BBE51BA36B7900DA0110 /* SurrenderManager.m in Sources */,
 				C95A77B01B14063B00052F3E /* main.m in Sources */,
 				C981DA9D1BA14B8C00DB8A43 /* Minion.m in Sources */,
 				C93A4D311B2BE84400391CCE /* EnemyTowerManager.m in Sources */,

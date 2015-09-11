@@ -32,6 +32,7 @@ AutoQueueManager::AutoQueueManager(LeagueGameState* gameState) {
     //lastEndGameScan = clock();
     
     actionClick = mach_absolute_time();
+    lastHomeButtonClick = mach_absolute_time();
     
     reset(false);
 }
@@ -48,6 +49,7 @@ void AutoQueueManager::reset(bool keepPlayButton) {
     step5ScanCurrentChunkX = 0;
     step5ScanCurrentChunkY = 0;
     actionClick = mach_absolute_time();
+    lastHomeButtonClick = mach_absolute_time();
 }
 void AutoQueueManager::processLogic() {
     
@@ -189,9 +191,11 @@ void AutoQueueManager::processLogic() {
         }break;
         case STEP_12: {
             //NSLog(@"Waiting on step 12");
-            if (foundHomeButton) {
+            if (foundHomeButton && getTimeInMilliseconds(mach_absolute_time() - lastHomeButtonClick) >= 2000) {
+                lastHomeButtonClick = mach_absolute_time();
                 //NSLog(@"Clicking home button");
-                clickLocation(homeButtonLocation.x, homeButtonLocation.y);
+                //clickLocation(homeButtonLocation.x, homeButtonLocation.y);
+                tapMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
                 reset(false);
             }
         }break;
@@ -520,6 +524,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             
             detectExactImageToImageToRectangles(step13_ReconnectButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
             
+            free(intersectSearch);
             
             if (returnPercentage >= 0.3) {
                 dispatch_async(dispatch_get_main_queue(), ^{

@@ -84,8 +84,11 @@ class DetectionManager {
     dispatch_queue_t aiThread;
     dispatch_queue_t detectionThread;
     
+    bool surrenderAvailable;
+    GenericObject* surrenderActive;
+    
     dispatch_queue_t itemActive1Thread, itemActive2Thread, itemActive3Thread, itemActive4Thread, itemActive5Thread, itemActive6Thread;
-    dispatch_queue_t mapThread, shopThread, shopAvailableThread, usedPotionThread, trinketActiveThread, spell1ActiveThread, spell2ActiveThread, spell3ActiveThread, spell4ActiveThread, summonerSpell1ActiveThread, summonerSpell2ActiveThread, levelUpDotsThread, spell1LevelUpThread, spell2LevelUpThread, spell3LevelUpThread, spell4LevelUpThread, allyMinionThread, enemyMinionThread, enemyChampionThread, allyChampionThread, enemyTowerThread, selfChampionThread, selfHealthBarThread;
+    dispatch_queue_t mapThread, shopThread, shopAvailableThread, usedPotionThread, trinketActiveThread, spell1ActiveThread, spell2ActiveThread, spell3ActiveThread, spell4ActiveThread, summonerSpell1ActiveThread, summonerSpell2ActiveThread, levelUpDotsThread, spell1LevelUpThread, spell2LevelUpThread, spell3LevelUpThread, spell4LevelUpThread, allyMinionThread, enemyMinionThread, enemyChampionThread, allyChampionThread, enemyTowerThread, selfChampionThread, selfHealthBarThread, surrenderThread;
     
     //Detection thread only variables:
     //GenericObject* mapDetectionObject=nil, *shopTopLeftCornerDetectionObject=nil;
@@ -117,6 +120,7 @@ public:
     void processSpellActives(ImageData image, dispatch_group_t dispatchGroup);
     void processSummonerSpellActives(ImageData image, dispatch_group_t dispatchGroup);
     void processTrinketActive(ImageData image, dispatch_group_t dispatchGroup);
+    void processSurrender(ImageData image, dispatch_group_t dispatchGroup);
     void processItemActives(ImageData image, dispatch_group_t dispatchGroup);
     void processUsedPotion(ImageData image, dispatch_group_t dispatchGroup);
     void processShopAvailable(ImageData image, dispatch_group_t dispatchGroup);
@@ -187,4 +191,6 @@ public:
     GenericObject* getMapShop();
     bool getMapLocationVisible();
     GenericObject* getMapLocation();
+    bool getSurrenderAvailable();
+    GenericObject* getSurrender();
 };
