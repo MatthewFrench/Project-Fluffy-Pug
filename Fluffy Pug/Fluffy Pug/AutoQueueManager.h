@@ -22,11 +22,11 @@ class AutoQueueManager {
     
     //Variables shared between logic and detection theads
     //Tells detection what to look for when the screen changes
-    volatile Boolean scanForPlayButton, scanForAcceptButton, scanForRandomChampionButton, scanForLockInButton, scanForChooseSkinButton, scanForReconnectButton, scanForHomeButton, scanForEndGameButton;
+    volatile Boolean scanForPlayButton, scanForAcceptButton, scanForRandomChampionButton, scanForLockInButton, scanForChooseSkinButton, scanForReconnectButton, scanForHomeButton, scanForEndGameButton, scanForNormalBlindPick;
     
     //When the detection finds the button, it tells the Logic using these Logic thread variables
-    Position playButtonLocation, acceptButtonLocation, randomChampionButtonLocation, lockInButtonLocation, chooseSkinButtonLocation, reconnectButtonLocation, homeButtonLocation, endGameButtonLocation;
-    Boolean foundPlayButton, foundAcceptButton, foundRandomChampionButton, foundLockInButton, foundChooseSkinButton, foundReconnectButton, foundHomeButton, foundEndGameButton;
+    Position playButtonLocation, acceptButtonLocation, randomChampionButtonLocation, lockInButtonLocation, chooseSkinButtonLocation, reconnectButtonLocation, homeButtonLocation, endGameButtonLocation, normalBlindPickLocation;
+    Boolean foundPlayButton, foundAcceptButton, foundRandomChampionButton, foundLockInButton, foundChooseSkinButton, foundReconnectButton, foundHomeButton, foundEndGameButton, foundNormalBlindPickButton;
     
     //This is the current step the logic is on
     int currentStep;
@@ -36,7 +36,7 @@ class AutoQueueManager {
     
     //double lastScreenScan, lastEndGameScan;
     //Position playButtonLocation;
-    
+    int step5ScanCurrentChunkX, step5ScanCurrentChunkY;
 
 public:
     

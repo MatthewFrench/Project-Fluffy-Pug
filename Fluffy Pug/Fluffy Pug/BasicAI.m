@@ -112,19 +112,19 @@ void BasicAI::handleBuyingItems() {
                     });
                 }
                 lastShopBuying = mach_absolute_time();
-                NSLog(@"Bought items");
+                //NSLog(@"Bought items");
             } else { //Open up the shop
                 if (getTimeInMilliseconds(mach_absolute_time() - lastShopOpenTap) >= 8000) {
                     lastShopOpenTap = mach_absolute_time();
                     tapStopMoving();
                     tapShop();
-                    NSLog(@"Opening shop for initial buy");
+                    //NSLog(@"Opening shop for initial buy");
                 }
             }
         } else {
             if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible()) {
                 closeShop = true;
-                NSLog(@"Shop not available, closing shop");
+                //NSLog(@"Shop not available, closing shop");
             }
         }
     } else {
@@ -133,7 +133,7 @@ void BasicAI::handleBuyingItems() {
             getTimeInMilliseconds(mach_absolute_time() - lastShopBuying) >= 10000) {
             //Gave a 4 seconds to buy
             closeShop = true;
-            NSLog(@"Closing shop because we already bought.");
+            //NSLog(@"Closing shop because we already bought.");
         }
     }
     if (closeShop) {
@@ -150,7 +150,7 @@ void BasicAI::handleCameraFocus() {
             if (gameState->detectionManager->getSelfChampions().count == 0) {
                 lastCameraFocus = mach_absolute_time();
                 tapCameraLock();
-                NSLog(@"Attempting camera lock cause we don't see ourselves");
+                //NSLog(@"Attempting camera lock cause we don't see ourselves");
             }
         }
     }
@@ -160,15 +160,12 @@ void BasicAI::handlePlacingWard() {
         Champion* champ = [gameState->detectionManager->getSelfChampions() firstObject];
         moveMouse(champ->characterCenter.x, champ->characterCenter.y);
         useTrinket();
-        NSLog(@"Placing ward");
+        //NSLog(@"Placing ward");
     }
 }
 const int ACTION_Run_Away = 0, ACTION_Attack_Enemy_Champion = 1, ACTION_Attack_Enemy_Minion = 2, ACTION_Follow_Ally_Champion = 3, ACTION_Follow_Ally_Minion = 4, ACTION_Move_To_Mid = 5, ACTION_Recall = 6, ACTION_Attack_Tower = 7, ACTION_Go_Ham = 8;
 void BasicAI::handleMovementAndAttacking() {
     //If we see our selves and the shop is closed, then lets move around
-    
-    
-    /**  ONLY GET INFO FROM DETECTION MANAGER ONCE. I CAN CHANGE NEXT GET  **/
     
     NSMutableArray* selfChampions = gameState->detectionManager->getSelfChampions();
     bool shopTopLeftCornerVisible = gameState->detectionManager->getShopTopLeftCornerVisible();

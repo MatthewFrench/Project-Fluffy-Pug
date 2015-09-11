@@ -38,11 +38,13 @@ void AutoQueueManager::reset(bool keepPlayButton) {
         foundPlayButton = false;
         detectionPlayButtonReferenceLocation.x = -1;
     }
-    foundAcceptButton = false, foundRandomChampionButton = false, foundLockInButton = false, foundChooseSkinButton = false, foundReconnectButton = false, foundHomeButton = false, foundEndGameButton = false;
-    scanForPlayButton = false, scanForAcceptButton = false, scanForRandomChampionButton = false, scanForLockInButton = false, scanForChooseSkinButton = false, scanForReconnectButton = false, scanForHomeButton = false, scanForEndGameButton = false;
+    foundAcceptButton = false, foundRandomChampionButton = false, foundLockInButton = false, foundChooseSkinButton = false, foundReconnectButton = false, foundHomeButton = false, foundEndGameButton = false, foundNormalBlindPickButton = false;
+    scanForPlayButton = false, scanForAcceptButton = false, scanForRandomChampionButton = false, scanForLockInButton = false, scanForChooseSkinButton = false, scanForReconnectButton = false, scanForHomeButton = false, scanForEndGameButton = false, scanForNormalBlindPick = false;
     
     currentStep = STEP_1;
     scanForPlayButton = true;
+    step5ScanCurrentChunkX = 0;
+    step5ScanCurrentChunkY = 0;
 }
 void AutoQueueManager::processLogic() {
     
@@ -73,11 +75,17 @@ void AutoQueueManager::processLogic() {
             //Click Summoner's Rift mode
             currentStep = STEP_5;
             clickLocation(playButtonLocation.x +100, playButtonLocation.y +110);
+            scanForNormalBlindPick = true;
+            foundNormalBlindPickButton = false;
         }break;
         case STEP_5: {
             //Click Blind Pick mode
-            currentStep = STEP_6;
-            clickLocation(playButtonLocation.x +300, playButtonLocation.y +180);
+            if (foundNormalBlindPickButton) {
+                clickLocation(normalBlindPickLocation.x + 5, normalBlindPickLocation.y + 5);
+                scanForNormalBlindPick = false;
+                currentStep = STEP_6;
+            }
+            //clickLocation(playButtonLocation.x +300, playButtonLocation.y +180);
         }break;
         case STEP_6: {
             //Click Solo Button
@@ -472,6 +480,73 @@ size_t intersectRectsNum2;
                 });
             }
             
+        });
+    }
+    if (scanForNormalBlindPick) {
+        /*
+        const int scanChunksX = 5; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+        const int scanChunksY = 24;
+        
+        float leagueGameWidth = data.imageWidth;
+        float leagueGameHeight = data.imageHeight;
+        CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
+        
+        
+        
+        int scanStartX = 0; int scanStartY = 0;
+        int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
+        int scanWidth = (scanEndX - scanStartX) / scanChunksX;
+        int scanHeight = (scanEndY - scanStartY) / scanChunksY;
+        
+        int framesPassed = 1;//(getTimeInMilliseconds(mach_absolute_time() - processAllyChampionLastTime)) / 16;
+        //if (framesPassed <= 0) framesPassed = 1;
+        //if (framesPassed > allyChampionScanChunksX * allyChampionScanChunksY) framesPassed = allyChampionScanChunksX * allyChampionScanChunksY;
+        
+        NSMutableArray* scanRectangles = [NSMutableArray new];
+        //Increase the scan chunk by 1
+        for (int i = 0; i < framesPassed; i++) {
+            step5ScanCurrentChunkX += 1;
+            if (step5ScanCurrentChunkX >= scanChunksX) {
+                step5ScanCurrentChunkX = 0;
+                step5ScanCurrentChunkY++;
+            }
+            if (step5ScanCurrentChunkY >= scanChunksY) {
+                step5ScanCurrentChunkY = 0;
+            }
+            //Add chunk to scan
+            CGRect scanRect = CGRectMake( scanWidth * step5ScanCurrentChunkX + scanStartX ,
+                                         scanHeight * step5ScanCurrentChunkY + scanStartY ,
+                                         scanWidth ,
+                                         scanHeight );
+            scanRect = CGRectIntegral(scanRect);
+            scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+            combineRectangles(scanRectangles, scanRect);
+        }
+        */
+        dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+        dispatch_group_async(dispatchGroup, queue, ^{
+            
+            //Loop through scan chunks
+            //for (int i = 0; i < [scanRectangles count]; i++) {
+                //CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
+            CGRect rect = CGRectMake(0, 0, data.imageWidth, data.imageHeight);
+                for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
+                    for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
+                        uint8* pixel = getPixel2(data, x, y);
+                        if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, data.imageWidth, data.imageHeight, step5_BlindPickMode, 0.6) >=  0.6) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                foundNormalBlindPickButton = true;
+                                normalBlindPickLocation.x = x;
+                                normalBlindPickLocation.y = y;
+                            });
+                            fireLogic = true;
+                            x = rect.origin.x + rect.size.width;
+                            y = rect.origin.y + rect.size.height;
+                            //i = (int)[scanRectangles count];
+                        }
+                    }
+                }
+            //}
         });
     }
     
