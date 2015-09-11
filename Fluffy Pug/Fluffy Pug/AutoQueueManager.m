@@ -122,7 +122,7 @@ void AutoQueueManager::processLogic() {
             
             if (foundAcceptButton) {
                 //Wait for accept button to disappear
-                NSLog(@"Clicking accept button");
+                //NSLog(@"Clicking accept button");
                 clickLocation(acceptButtonLocation.x, acceptButtonLocation.y);
                 actionClick = mach_absolute_time();
                 break;
@@ -130,7 +130,7 @@ void AutoQueueManager::processLogic() {
             if (foundRandomChampionButton) {
                 //Click random champion button
                 currentStep = STEP_9;
-                NSLog(@"Clicking random champion button %d, %d", randomChampionButtonLocation.x, randomChampionButtonLocation.y);
+                //NSLog(@"Clicking random champion button %d, %d", randomChampionButtonLocation.x, randomChampionButtonLocation.y);
                 clickLocation(randomChampionButtonLocation.x, randomChampionButtonLocation.y);
                 scanForRandomChampionButton = false;
                 scanForLockInButton = true;
@@ -184,13 +184,13 @@ void AutoQueueManager::processLogic() {
                 scanForHomeButton = true;
                 foundHomeButton = false;
                 actionClick = mach_absolute_time();
-                NSLog(@"Finished step 11, moving to step 12.");
+                //NSLog(@"Finished step 11, moving to step 12.");
             }
         }break;
         case STEP_12: {
-            NSLog(@"Waiting on step 12");
+            //NSLog(@"Waiting on step 12");
             if (foundHomeButton) {
-                NSLog(@"Clicking home button");
+                //NSLog(@"Clicking home button");
                 clickLocation(homeButtonLocation.x, homeButtonLocation.y);
                 reset(false);
             }
@@ -211,7 +211,7 @@ void AutoQueueManager::clickLocation(int x, int y) {
 void AutoQueueManager::processEndGameDetection(ImageData data) {
     foundEndGameButton = false;
     //if (scanForEndGameButton) {
-    //NSLog(@"Searching for end game");
+    ////NSLog(@"Searching for end game");
             float returnPercentage = 0.0;
             Position returnPosition;
             int xStart = data.imageWidth/2 - 200;
@@ -219,10 +219,10 @@ void AutoQueueManager::processEndGameDetection(ImageData data) {
             int xEnd = data.imageWidth/2 + 200;
             int yEnd = data.imageHeight * 0.68125 + 200;
             detectExactImageToImage(step11_EndGameContinueButton, data, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.5, true);
-    //NSLog(@"percentage returned: %f", returnPercentage);
+    ////NSLog(@"percentage returned: %f", returnPercentage);
             if (returnPercentage >= 0.6) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    //NSLog(@"Found end game");
+                    ////NSLog(@"Found end game");
                     foundEndGameButton = true;
                     endGameButtonLocation = returnPosition;
                 });
@@ -271,7 +271,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      CGRect* intersectSearch2 = getIntersectionRectangles(search2, rects, num_rects, intersectRectsNum2);
      
      detectExactImageToImageToRectangles(testImage2, data, intersectSearch2, intersectRectsNum2, returnPercentage3, returnPosition3, 0.9, true);
-     //NSLog(@"Test image 1: %f", returnPercentage3);
+     ////NSLog(@"Test image 1: %f", returnPercentage3);
      if (returnPercentage3 > 0.9) {
      clickLocation(returnPosition3.x, returnPosition3.y);
      }
@@ -303,7 +303,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             
             detectExactImageToImageToRectangles(step1_PlayButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
             
-            //NSLog(@"Play button percentage: %f", returnPercentage);
+            ////NSLog(@"Play button percentage: %f", returnPercentage);
             
             if (returnPercentage >= 0.3) {
                 detectionPlayButtonReferenceLocation = returnPosition;
@@ -341,7 +341,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
                             foundAcceptButton = true;
                             acceptButtonLocation.x = x+50;
                             acceptButtonLocation.y = y+10;
-                            NSLog(@"Found accept button at %d, %d", x, y);
+                            //NSLog(@"Found accept button at %d, %d", x, y);
                         });
                         fireLogic = true;
                         x = xEnd;
@@ -373,7 +373,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
                             foundRandomChampionButton = true;
                             randomChampionButtonLocation.x = x+15;
                             randomChampionButtonLocation.y = y;
-                            NSLog(@"Found random button at %d, %d", x, y);
+                            //NSLog(@"Found random button at %d, %d", x, y);
                         });
                         fireLogic = true;
                         x = xEnd;
@@ -432,7 +432,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
                             foundLockInButton = true;
                             lockInButtonLocation.x = x;
                             lockInButtonLocation.y = y;
-                            NSLog(@"Found lock in button at %d, %d", x, y);
+                            //NSLog(@"Found lock in button at %d, %d", x, y);
                         });
                         fireLogic = true;
                         x = xEnd;
@@ -539,7 +539,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            NSLog(@"Searching for home button");
+            //NSLog(@"Searching for home button");
             
             //float returnPercentage = 0.0;
             //Position returnPosition;
@@ -566,7 +566,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
                             foundHomeButton = true;
                             homeButtonLocation.x = x;
                             homeButtonLocation.y = y;
-                            NSLog(@"Found home button at %d, %d", x, y);
+                            //NSLog(@"Found home button at %d, %d", x, y);
                         });
                         fireLogic = true;
                         x = xEnd;
@@ -580,12 +580,12 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
             */
             //detectExactImageToImageToRectangles(step12_HomeButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.4, true);
-            //NSLog(@"Home button: %f", returnPercentage);
+            ////NSLog(@"Home button: %f", returnPercentage);
             //free(intersectSearch);
             /*
             if (returnPercentage >= 0.4) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"Found home button at %d, %d", returnPosition.x, returnPosition.y);
+                    //NSLog(@"Found home button at %d, %d", returnPosition.x, returnPosition.y);
                     foundHomeButton = true;
                     homeButtonLocation = returnPosition;
                 });
@@ -682,21 +682,21 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      int yStart = 0;
      int xEnd = imageData.imageWidth - 400;
      int yEnd = 250;
-     NSLog(@"%d %d", imageData.imageWidth, imageData.imageHeight);
-     //NSLog(@"%d,%d to %d, %d", xStart, yStart, xEnd, yEnd);
+     //NSLog(@"%d %d", imageData.imageWidth, imageData.imageHeight);
+     ////NSLog(@"%d,%d to %d, %d", xStart, yStart, xEnd, yEnd);
      float returnPercentage = 0.0;
      Position returnPosition;
      
      detectExactImageToImage(step1_PlayButton, imageData, xStart, yStart, xEnd, yEnd, returnPercentage, returnPosition, 0.83, true);
      
      if (returnPercentage >= 0.3) {
-     NSLog(@"Found play button");
+     //NSLog(@"Found play button");
      playButtonLocation = returnPosition;
      clickLocation = playButtonLocation;
      match = true;
      currentStep = STEP_1;
      } else {
-     NSLog(@"Did not find play button");
+     //NSLog(@"Did not find play button");
      }
      
      xStart = 0;
@@ -708,7 +708,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      case STEP_1: {
      if (match)  {
      currentStep = STEP_2;
-     NSLog(@"Clicked play button");
+     //NSLog(@"Clicked play button");
      }
      }break;
      case STEP_2: {
@@ -718,8 +718,8 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      match = true;
      currentStep = STEP_3;
      if (match) {
-     NSLog(@"Clicked PVP mode");
-     } else {NSLog(@"PVP not detected, switching to next");}
+     //NSLog(@"Clicked PVP mode");
+     } else {//NSLog(@"PVP not detected, switching to next");}
      
      // match = detectRelativeImageInImage(step2_PVPMode, data, location, 0.65);
      // location.x += 191; location.y += 76;
@@ -732,7 +732,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      //match = detectRelativeImageInImage(step3_ClassicMode, data, location, 0.65);
      //location.x += 352; location.y += 114;
      currentStep = STEP_4;
-     if (match) {NSLog(@"Clicked classic mode");} else {NSLog(@"Classic not detected,switching to next");}
+     if (match) {//NSLog(@"Clicked classic mode");} else {//NSLog(@"Classic not detected,switching to next");}
      }break;
      case STEP_4: {
      clickLocation.x = playButtonLocation.x +100;
@@ -741,7 +741,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      //match = detectRelativeImageInImage(step4_SummonersRiftMode, data, location, 0.7);
      //location.x += 510; location.y += 116;
      currentStep = STEP_5;
-     if (match) {NSLog(@"Clicked Summoners Rift Mode");} else {NSLog(@"Rift mode not detected, switching to next");}
+     if (match) {//NSLog(@"Clicked Summoners Rift Mode");} else {//NSLog(@"Rift mode not detected, switching to next");}
      }break;
      case STEP_5: {
      clickLocation.x = playButtonLocation.x +300;
@@ -750,7 +750,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      //match = detectRelativeImageInImage(step5_BlindPickMode, data, location, 0.7);
      //location.x += 675; location.y += 114;
      currentStep = STEP_6;
-     if (match) {NSLog(@"Clicked blind pick");} else {NSLog(@"Blind pick not detected, switching to next");}
+     if (match) {//NSLog(@"Clicked blind pick");} else {//NSLog(@"Blind pick not detected, switching to next");}
      }break;
      case STEP_6: {
      clickLocation.x = playButtonLocation.x +100;
@@ -759,7 +759,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      //match = detectRelativeImageInImage(step6_SoloButton, data, location, 0.85);
      //location.x += 19; location.y += 76;
      if (match) currentStep = STEP_7;
-     if (match) {NSLog(@"Clicked solo button");}
+     if (match) {//NSLog(@"Clicked solo button");}
      }break;
      case STEP_7: {
      detectExactImageToImage(step7_AcceptButton, imageData, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450, returnPercentage, returnPosition, 0.83, TRUE);
@@ -768,7 +768,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      clickLocation = returnPosition;
      }
      if (match) currentStep = STEP_8;
-     if (match) {NSLog(@"Clicked accept button");}
+     if (match) {//NSLog(@"Clicked accept button");}
      }break;
      case STEP_8: {
      xStart = playButtonLocation.x-400;
@@ -782,7 +782,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      }
      if (match) {
      currentStep = STEP_9;
-     if (match) {NSLog(@"Clicked random champion");}
+     if (match) {//NSLog(@"Clicked random champion");}
      } else {
      detectExactImageToImage(step7_AcceptButton, imageData, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450, returnPercentage, returnPosition, 0.83, true);
      if (returnPercentage >= 0.3) {
@@ -790,7 +790,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      match = true;
      clickLocation = returnPosition;
      currentStep = STEP_8;
-     if (match) {NSLog(@"Clicked accept button");}
+     if (match) {//NSLog(@"Clicked accept button");}
      }
      }
      }break;
@@ -806,7 +806,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      }
      if (match) {
      currentStep = STEP_10;
-     if (match) {NSLog(@"Clicked lock in button");}
+     if (match) {//NSLog(@"Clicked lock in button");}
      } else {
      detectExactImageToImage(step7_AcceptButton, imageData, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450, returnPercentage, returnPosition, 0.83, true);
      if (returnPercentage >= 0.3) {
@@ -814,7 +814,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      match = true;
      clickLocation = returnPosition;
      currentStep = STEP_8;
-     if (match) {NSLog(@"Clicked accept button");}
+     if (match) {//NSLog(@"Clicked accept button");}
      }
      }
      }break;
@@ -829,7 +829,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      clickLocation = returnPosition;
      match = true;
      }
-     if (match) {NSLog(@"Clicked skin change button");}
+     if (match) {//NSLog(@"Clicked skin change button");}
      if (!match) currentStep = STEP_12;
      //Check for accept button
      detectExactImageToImage(step7_AcceptButton, imageData, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+100, playButtonLocation.y+450, returnPercentage, returnPosition, 0.83, true);
@@ -838,7 +838,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      match = true;
      clickLocation = returnPosition;
      currentStep = STEP_8;
-     if (match) {NSLog(@"Clicked accept button");}
+     if (match) {//NSLog(@"Clicked accept button");}
      } else {
      //Check for reconnect button
      detectExactImageToImage(step13_ReconnectButton, imageData, playButtonLocation.x-100, playButtonLocation.y+100, playButtonLocation.x+200, playButtonLocation.y+450, returnPercentage, returnPosition, 0.83, true);
@@ -846,7 +846,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      match = true;
      clickLocation = returnPosition;
      //Reconnecting screen
-     if (match) {NSLog(@"Clicked reconnect button");}
+     if (match) {//NSLog(@"Clicked reconnect button");}
      }
      }
      }break;
@@ -867,11 +867,11 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
      match = true;
      }
      if (match) currentStep = STEP_1;
-     if (match) {NSLog(@"Clicked home button");}
+     if (match) {//NSLog(@"Clicked home button");}
      }break;
      }
      if (match) {
-     NSLog(@"Clicked location %d %d", clickLocation.x + 10, clickLocation.y+10);
+     //NSLog(@"Clicked location %d %d", clickLocation.x + 10, clickLocation.y+10);
      floatTapMouseLeft(clickLocation.x + 10, clickLocation.y+10);
      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60.0), dispatch_get_main_queue(), ^{ // one
      floatTapMouseLeft(clickLocation.x + 10, clickLocation.y+10);
@@ -889,7 +889,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
  imageData = data;
  
  if ((clock() - lastEndGameScan)/CLOCKS_PER_SEC >= 1.0) {
- NSLog(@"Checking for end game button");
+ //NSLog(@"Checking for end game button");
  lastEndGameScan = clock();
  
  int xStart = imageData.imageWidth/2 - 150;
@@ -905,7 +905,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60.0), dispatch_get_main_queue(), ^{ // one
  floatTapMouseLeft(returnPosition.x + 5, returnPosition.y+5);
  });
- NSLog(@"Clicked end game button");
+ //NSLog(@"Clicked end game button");
  }
  currentStep = STEP_12;
  }

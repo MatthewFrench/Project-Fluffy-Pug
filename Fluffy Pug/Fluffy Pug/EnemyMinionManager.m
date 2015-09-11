@@ -197,11 +197,11 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
         Minion* minion = [minionBars objectAtIndex:i];
         bool isWard = false;
         for (int x = 61; x >= 0; x--) {
-            for (int yOffset = -3; yOffset <= 3; yOffset++) {
+            for (int yOffset = -3; yOffset <= 1; yOffset++) {
                 if (x + minion->topLeft.x >= 0 && x + minion->topLeft.x < imageData.imageWidth &&
                     yOffset + minion->topLeft.y >= 0 && yOffset + minion->topLeft.y < imageData.imageHeight) {
                     uint8_t*  p = getPixel2(imageData, x + minion->topLeft.x, yOffset + minion->topLeft.y);
-                    if (isColor(p, 193, 193, 193, 15)) {
+                    if (isColor(p, 220, 220, 220, 45)) {
                         isWard = true;
                         x = -1;
                         yOffset = 4;

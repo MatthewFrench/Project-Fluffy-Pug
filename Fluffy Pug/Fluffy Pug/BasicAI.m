@@ -107,6 +107,7 @@ void BasicAI::handleBuyingItems() {
             if (gameState->detectionManager->getShopTopLeftCornerVisible() && gameState->detectionManager->getShopBottomLeftCornerVisible()) {
                 lastShopBuy = mach_absolute_time();
                 //Buy items
+                int bought = 0;
                 NSMutableArray* itemsToBuy = gameState->detectionManager->getBuyableItems();
                 for (int i = 0; i < [itemsToBuy count]; i++) {
                     GenericObject* item = [itemsToBuy objectAtIndex:i];
@@ -133,7 +134,10 @@ void BasicAI::handleBuyingItems() {
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+250)), dispatch_get_main_queue(), ^{
                         doubleTapMouseLeft(clickX, clickY);
                     });
-                    [boughtItems addObject:item];
+                    if (bought < 2) {
+                        bought++;
+                        [boughtItems addObject:item];
+                    }
                 }
                 if ([itemsToBuy count] > 0 && !boughtStarterItems) {
                     boughtStarterItems = true;
@@ -585,7 +589,7 @@ void BasicAI::useTrinket() {
         if (gameState->detectionManager->getTrinketActiveAvailable()) {
             tapWard();
             lastPlacedWard = mach_absolute_time();
-            NSLog(@"Placed Ward");
+            //NSLog(@"Placed Ward");
         }
     }
 }
