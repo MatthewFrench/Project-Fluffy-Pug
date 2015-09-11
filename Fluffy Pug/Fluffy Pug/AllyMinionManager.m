@@ -175,15 +175,17 @@ NSMutableArray* AllyMinionManager::validateMinionBars(ImageData imageData, NSMut
     for (int i = 0; i < [minionBars count]; i++) {
         Minion* minion = [minionBars objectAtIndex:i];
         bool isWard = false;
-        int yOffset = 2;
         for (int x = 61; x >= 0; x--) {
+            for (int yOffset = -3; yOffset <= 3; yOffset++) {
                 if (x + minion->topLeft.x >= 0 && x + minion->topLeft.x < imageData.imageWidth &&
                     yOffset + minion->topLeft.y >= 0 && yOffset + minion->topLeft.y < imageData.imageHeight) {
                     uint8_t*  p = getPixel2(imageData, x + minion->topLeft.x, yOffset + minion->topLeft.y);
-                    if (isColor(p, 193, 193, 193, 5)) {
+                    if (isColor(p, 193, 193, 193, 15)) {
                         isWard = true;
                         x = -1;
+                        yOffset = 4;
                 }
+            }
             }
         }
         if (isWard) {

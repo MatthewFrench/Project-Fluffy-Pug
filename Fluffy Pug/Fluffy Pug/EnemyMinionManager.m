@@ -173,13 +173,13 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
                 for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
                     if (x + minion->topLeft.x >= 0 && x + minion->topLeft.x < imageData.imageWidth &&
                         y + minion->topLeft.y >= 0 && y + minion->topLeft.y < imageData.imageHeight) {
-                    uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
-                    uint8_t*  p = getPixel2(imageData, x + minion->topLeft.x, y + minion->topLeft.y);
-                    if (getColorPercentage(healthBarColor, p) >= minionHealthMatch) {
-                        minion->health = (float)x / 61 * 100;
-                        y = healthSegmentImageData.imageHeight + 1;
-                        x = -1;
-                    }
+                        uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
+                        uint8_t*  p = getPixel2(imageData, x + minion->topLeft.x, y + minion->topLeft.y);
+                        if (getColorPercentage(healthBarColor, p) >= minionHealthMatch) {
+                            minion->health = (float)x / 61 * 100;
+                            y = healthSegmentImageData.imageHeight + 1;
+                            x = -1;
+                        }
                     }
                 }
             }
@@ -196,14 +196,16 @@ NSMutableArray* EnemyMinionManager::validateMinionBars(ImageData imageData, NSMu
     for (int i = 0; i < [minionBars count]; i++) {
         Minion* minion = [minionBars objectAtIndex:i];
         bool isWard = false;
-        int yOffset = 2;
         for (int x = 61; x >= 0; x--) {
-            if (x + minion->topLeft.x >= 0 && x + minion->topLeft.x < imageData.imageWidth &&
-                yOffset + minion->topLeft.y >= 0 && yOffset + minion->topLeft.y < imageData.imageHeight) {
-                uint8_t*  p = getPixel2(imageData, x + minion->topLeft.x, yOffset + minion->topLeft.y);
-                if (isColor(p, 193, 193, 193, 5)) {
-                    isWard = true;
-                    x = -1;
+            for (int yOffset = -3; yOffset <= 3; yOffset++) {
+                if (x + minion->topLeft.x >= 0 && x + minion->topLeft.x < imageData.imageWidth &&
+                    yOffset + minion->topLeft.y >= 0 && yOffset + minion->topLeft.y < imageData.imageHeight) {
+                    uint8_t*  p = getPixel2(imageData, x + minion->topLeft.x, yOffset + minion->topLeft.y);
+                    if (isColor(p, 193, 193, 193, 15)) {
+                        isWard = true;
+                        x = -1;
+                        yOffset = 4;
+                    }
                 }
             }
         }

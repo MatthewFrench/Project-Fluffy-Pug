@@ -277,6 +277,8 @@ void DetectionManager::processDetection(ImageData image) {
         
         processMap(image, dispatchGroup);
         
+        processTrinketActive(image, dispatchGroup);
+        
         dispatch_group_wait(dispatchGroup, DISPATCH_TIME_FOREVER); //We wait for all detection to finish
         //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
         //    //NSLog(@"processMap detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
@@ -2960,9 +2962,9 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
             //}
             ////NSLog(@"health bars: %lu", (unsigned long)HealthBarBars.count);
             HealthBarBars = SelfChampionManager::validateSelfHealthBars(image, HealthBarBars);
-            if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
+            //if (getTimeInMilliseconds(mach_absolute_time() - startTime) > longAlert) {
                 //NSLog(@"Process self health bar Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
-            }
+            //}
             dispatch_async(detectionThread, ^(void) {
                 @autoreleasepool {
                     if ([HealthBarBars count] > 0) {

@@ -57,7 +57,7 @@ void AutoQueueManager::processLogic() {
     
     if (leagueGameState->leaguePID != -1) {
         currentStep = STEP_11;
-    }
+    } else if (currentStep == STEP_11) currentStep = STEP_12;
     
     if (getTimeInMilliseconds(mach_absolute_time() - actionClick) >= 1000) {
         
