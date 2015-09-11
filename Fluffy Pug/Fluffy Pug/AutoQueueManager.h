@@ -37,6 +37,8 @@ class AutoQueueManager {
     //double lastScreenScan, lastEndGameScan;
     //Position playButtonLocation;
     int step5ScanCurrentChunkX, step5ScanCurrentChunkY;
+    
+    uint64_t actionClick;
 
 public:
     

@@ -31,6 +31,8 @@ AutoQueueManager::AutoQueueManager(LeagueGameState* gameState) {
     //lastScreenScan = clock();
     //lastEndGameScan = clock();
     
+    actionClick = mach_absolute_time();
+    
     reset(false);
 }
 void AutoQueueManager::reset(bool keepPlayButton) {
@@ -45,9 +47,7 @@ void AutoQueueManager::reset(bool keepPlayButton) {
     scanForPlayButton = true;
     step5ScanCurrentChunkX = 0;
     step5ScanCurrentChunkY = 0;
-    
-    //currentStep = STEP_12;
-    //scanForHomeButton = true;
+    actionClick = mach_absolute_time();
 }
 void AutoQueueManager::processLogic() {
     
@@ -59,11 +59,15 @@ void AutoQueueManager::processLogic() {
         currentStep = STEP_11;
     }
     
+    if (getTimeInMilliseconds(mach_absolute_time() - actionClick) >= 1000) {
+        
+    
     switch (currentStep) {
         case STEP_1: {
             if (foundPlayButton)  {
                 currentStep = STEP_2;
                 clickLocation(playButtonLocation.x, playButtonLocation.y);
+                actionClick = mach_absolute_time();
             }
         }break;
         case STEP_2: {
@@ -71,12 +75,14 @@ void AutoQueueManager::processLogic() {
             if (!foundPlayButton) { //Do next step cause no play button visible
                 currentStep = STEP_3;
                 clickLocation(playButtonLocation.x -230, playButtonLocation.y +75);
+                actionClick = mach_absolute_time();
             }
         }break;
         case STEP_3: {
             //Click Classic mode
             currentStep = STEP_4;
             clickLocation(playButtonLocation.x -70, playButtonLocation.y +105);
+            actionClick = mach_absolute_time();
         }break;
         case STEP_4: {
             //Click Summoner's Rift mode
@@ -84,6 +90,7 @@ void AutoQueueManager::processLogic() {
             clickLocation(playButtonLocation.x +100, playButtonLocation.y +110);
             scanForNormalBlindPick = true;
             foundNormalBlindPickButton = false;
+            actionClick = mach_absolute_time();
         }break;
         case STEP_5: {
             //Click Blind Pick mode
@@ -91,6 +98,7 @@ void AutoQueueManager::processLogic() {
                 clickLocation(normalBlindPickLocation.x + 5, normalBlindPickLocation.y + 5);
                 scanForNormalBlindPick = false;
                 currentStep = STEP_6;
+                actionClick = mach_absolute_time();
             }
             //clickLocation(playButtonLocation.x +300, playButtonLocation.y +180);
         }break;
@@ -99,6 +107,7 @@ void AutoQueueManager::processLogic() {
             currentStep = STEP_7;
             clickLocation(playButtonLocation.x +100, playButtonLocation.y +550);
             scanForAcceptButton = true;
+            actionClick = mach_absolute_time();
         }break;
         case STEP_7: {
             if (foundAcceptButton) {
@@ -106,6 +115,7 @@ void AutoQueueManager::processLogic() {
                 currentStep = STEP_8;
                 clickLocation(acceptButtonLocation.x, acceptButtonLocation.y);
                 scanForRandomChampionButton = true;
+                actionClick = mach_absolute_time();
             }
         }break;
         case STEP_8: {
@@ -114,6 +124,7 @@ void AutoQueueManager::processLogic() {
                 //Wait for accept button to disappear
                 NSLog(@"Clicking accept button");
                 clickLocation(acceptButtonLocation.x, acceptButtonLocation.y);
+                actionClick = mach_absolute_time();
                 break;
             }
             if (foundRandomChampionButton) {
@@ -123,6 +134,7 @@ void AutoQueueManager::processLogic() {
                 clickLocation(randomChampionButtonLocation.x, randomChampionButtonLocation.y);
                 scanForRandomChampionButton = false;
                 scanForLockInButton = true;
+                actionClick = mach_absolute_time();
             }
         }break;
         case STEP_9: {
@@ -138,6 +150,7 @@ void AutoQueueManager::processLogic() {
                 scanForReconnectButton = true;
                 scanForChooseSkinButton = true;
                 scanForLockInButton = false;
+                actionClick = mach_absolute_time();
             }
         }break;
         case STEP_10: {
@@ -148,10 +161,12 @@ void AutoQueueManager::processLogic() {
             }
             if (foundReconnectButton) {
                 clickLocation(reconnectButtonLocation.x, reconnectButtonLocation.y);
+                actionClick = mach_absolute_time();
                 break;
             }
             if (foundChooseSkinButton) {
                 clickLocation(chooseSkinButtonLocation.x, chooseSkinButtonLocation.y);
+                actionClick = mach_absolute_time();
             } else {
                 //Entering Game
                 currentStep = STEP_11;
@@ -167,14 +182,17 @@ void AutoQueueManager::processLogic() {
                 clickLocation(endGameButtonLocation.x, endGameButtonLocation.y);
                 currentStep = STEP_12;
                 scanForHomeButton = true;
+                actionClick = mach_absolute_time();
             }
         }break;
         case STEP_12: {
             if (foundHomeButton) {
+                NSLog(@"Clicking home button");
                 clickLocation(homeButtonLocation.x, homeButtonLocation.y);
                 reset(false);
             }
         }break;
+    }
     }
 }
 void AutoQueueManager::clickLocation(int x, int y) {
@@ -315,7 +333,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             
             for (int x = xStart; x < xEnd; x++) {
                 for (int y = yStart; y < yEnd; y++) {
-                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step7_AcceptButton, 0.45) >=  0.45) {
+                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step7_AcceptButton, 0.45) >=  0.8) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             foundAcceptButton = true;
                             acceptButtonLocation.x = x+50;
@@ -514,33 +532,57 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
         });
     }
     if (scanForHomeButton) {
+        foundHomeButton = false;
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            float returnPercentage = 0.0;
-            Position returnPosition;
-            int xStart = detectionPlayButtonReferenceLocation.x;
-            int yStart = detectionPlayButtonReferenceLocation.y+450;
-            int xEnd = detectionPlayButtonReferenceLocation.x+500;
-            int yEnd = detectionPlayButtonReferenceLocation.y+625;
-            if (detectionPlayButtonReferenceLocation.x == -1) {
-                xStart = 0;
-                yStart = 0;
-                xEnd = data.imageWidth;
-                yEnd = data.imageHeight;
+            NSLog(@"Searching for home button");
+            
+            //float returnPercentage = 0.0;
+            //Position returnPosition;
+            //int xStart = detectionPlayButtonReferenceLocation.x;
+            //int yStart = detectionPlayButtonReferenceLocation.y+450;
+            //int xEnd = detectionPlayButtonReferenceLocation.x+500;
+            //int yEnd = detectionPlayButtonReferenceLocation.y+625;
+            int xStart = 0;
+            int yStart = 0;
+            int xEnd = data.imageWidth;
+            int yEnd = data.imageHeight;
+            //if (detectionPlayButtonReferenceLocation.x == -1) {
+            //    xStart = 0;
+            //    yStart = 0;
+            //    xEnd = data.imageWidth;
+            //    yEnd = data.imageHeight;
+            //}
+            
+            
+            for (int x = xStart; x < xEnd; x++) {
+                for (int y = yStart; y < yEnd; y++) {
+                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step12_HomeButton, 0.45) >=  0.45) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            foundHomeButton = true;
+                            homeButtonLocation.x = x;
+                            homeButtonLocation.y = y;
+                            NSLog(@"Found home button at %d, %d", x, y);
+                        });
+                        fireLogic = true;
+                        x = xEnd;
+                        y = yEnd;
+                    }
+                }
             }
-            
-            
+            /*
             CGRect search = CGRectMake(xStart, yStart, xEnd - xStart, yEnd-yStart);
             size_t intersectRectsNum;
             CGRect* intersectSearch = getIntersectionRectangles(search, rects, num_rects, intersectRectsNum);
-            
-            detectExactImageToImageToRectangles(step12_HomeButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.83, true);
+            */
+            //detectExactImageToImageToRectangles(step12_HomeButton, data, intersectSearch, intersectRectsNum, returnPercentage, returnPosition, 0.4, true);
             //NSLog(@"Home button: %f", returnPercentage);
-            free(intersectSearch);
-            
-            if (returnPercentage >= 0.3) {
+            //free(intersectSearch);
+            /*
+            if (returnPercentage >= 0.4) {
                 dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"Found home button at %d, %d", returnPosition.x, returnPosition.y);
                     foundHomeButton = true;
                     homeButtonLocation = returnPosition;
                 });
@@ -550,7 +592,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
                     foundHomeButton = false;
                 });
             }
-            
+            */
         });
     }
     if (scanForNormalBlindPick) {

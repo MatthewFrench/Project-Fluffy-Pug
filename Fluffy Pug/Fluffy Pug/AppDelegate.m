@@ -250,8 +250,12 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
 }
 - (void) updateLeagueWindowStatus {
     @autoreleasepool {
+        bool leagueExists = leagueDetector->leaguePID != -1;
     leagueDetector->detectLeagueWindow();
     if (leagueDetector->leaguePID != -1) {
+        if (!leagueExists) {
+            basicAI->resetAI();
+        }
         leagueGameState->leagueSize = CGRectMake(leagueDetector->xOrigin, leagueDetector->yOrigin, leagueDetector->width, leagueDetector->height);
         leagueGameState->leaguePID = leagueDetector->leaguePID;
         //NSLog(@"Width: %f, height: %f", [width floatValue], [height floatValue]);

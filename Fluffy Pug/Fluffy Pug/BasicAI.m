@@ -45,6 +45,11 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     moveToLane = arc4random_uniform(3) + 1;
     NSLog(@"Chose lane %d", moveToLane);
     moveToLanePathSwitch = mach_absolute_time();
+    
+    boughtStarterItems = false;
+}
+void BasicAI::resetAI() {
+    boughtStarterItems = false;
 }
 void BasicAI::handleAbilityLevelUps() {
     int abilityLevelUpOrder[] = {1, 2, 3, 1, 2, 4, 3, 1, 2, 3, 4, 1, 2, 3, 1, 4, 2, 3};
@@ -104,12 +109,18 @@ void BasicAI::handleBuyingItems() {
                     GenericObject* item = [itemsToBuy objectAtIndex:i];
                     int clickX = item->center.x;
                     int clickY = item->center.y;
+                    if (boughtStarterItems && clickY > 100 && clickY < 200) {
+                        continue; //Skip buying this item because we already bought starter items. No troll build.
+                    }
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * 500), dispatch_get_main_queue(), ^{
                         moveMouse(clickX, clickY);
                     });
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+250)), dispatch_get_main_queue(), ^{
                         doubleTapMouseLeft(clickX, clickY);
                     });
+                }
+                if ([itemsToBuy count] > 0 && !boughtStarterItems) {
+                    boughtStarterItems = true;
                 }
                 lastShopBuying = mach_absolute_time();
                 //NSLog(@"Bought items");
@@ -456,9 +467,9 @@ void BasicAI::handleMovementAndAttacking() {
                             y = (map->bottomRight.y - map->topLeft.y) * 0.9 + map->topLeft.y;
                         }
                         tapMouseRight(x, y);
-                    } else {
-                        NSLog(@"Map not visible");
-                    }
+                    }// else {
+                    //    NSLog(@"Map not visible");
+                    //}
                 }
             }
                 break;

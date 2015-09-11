@@ -31,9 +31,12 @@ class BasicAI {
     int moveToLane;
     uint64_t moveToLanePathSwitch;
     
+    bool boughtStarterItems;
+    
 public:
     BasicAI(LeagueGameState* leagueGameState);
     void processAI();
+    void BasicAI::resetAI();
     void handleAbilityLevelUps();
     void handleBuyingItems();
     void handleCameraFocus();
