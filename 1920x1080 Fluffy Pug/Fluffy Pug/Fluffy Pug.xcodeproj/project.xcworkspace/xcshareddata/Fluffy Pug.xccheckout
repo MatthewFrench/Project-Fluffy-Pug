@@ -14,11 +14,11 @@
 		<string>https://github.com/MatthewFrench/Project-Fluffy-Pug.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Fluffy Pug/Fluffy Pug.xcodeproj</string>
+	<string>1920x1080 Fluffy Pug/Fluffy Pug/Fluffy Pug.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>6DCBD89773B28E9368E7A645019A90A26F03985A</key>
-		<string>../../..</string>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/MatthewFrench/Project-Fluffy-Pug.git</string>
