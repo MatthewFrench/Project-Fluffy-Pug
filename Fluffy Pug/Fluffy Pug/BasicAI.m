@@ -58,6 +58,47 @@ void BasicAI::resetAI() {
     [boughtItems removeAllObjects];
     gameCurrentTime = mach_absolute_time();
     lastSurrender = mach_absolute_time();
+    
+    lastLevelUp = mach_absolute_time();
+    lastShopBuy = 0;
+    lastShopOpenTap = 0;
+    lastShopCloseTap = 0;
+    lastShopBuying = mach_absolute_time();
+    lastCameraFocus = mach_absolute_time();
+    lastPlacedWard = mach_absolute_time();
+    lastRunAwayClick = mach_absolute_time();
+    lastClickEnemyChamp = mach_absolute_time();
+    lastMovementClick = mach_absolute_time();
+    lastClickAllyMinion = mach_absolute_time();
+    
+    lastClickEnemyMinion = mach_absolute_time();
+    lastClickEnemyTower = mach_absolute_time();
+    lastClickAllyChampion = mach_absolute_time();
+    lastMoveMouse = mach_absolute_time();
+    lastRecallTap = mach_absolute_time();
+    lastSpell1Use = mach_absolute_time();
+    lastSpell2Use = mach_absolute_time();
+    lastSpell3Use = mach_absolute_time();
+    lastSpell4Use = mach_absolute_time();
+    lastSummonerSpell1Use = mach_absolute_time();
+    lastSummonerSpell2Use = mach_absolute_time();
+    lastItem1Use = mach_absolute_time();
+    lastItem2Use = mach_absolute_time();
+    lastItem3Use = mach_absolute_time();
+    lastItem4Use = mach_absolute_time();
+    lastItem5Use = mach_absolute_time();
+    lastItem6Use = mach_absolute_time();
+    
+    moveToLane = arc4random_uniform(3) + 1;
+    NSLog(@"Chose lane %d", moveToLane);
+    moveToLanePathSwitch = mach_absolute_time();
+    
+    boughtStarterItems = false;
+    
+    boughtItems = [NSMutableArray new];
+    gameCurrentTime = mach_absolute_time();
+    
+    lastSurrender = mach_absolute_time();
 }
 void BasicAI::handleAbilityLevelUps() {
     int abilityLevelUpOrder[] = {1, 2, 3, 1, 2, 4, 3, 1, 2, 3, 4, 1, 2, 3, 1, 4, 2, 3};

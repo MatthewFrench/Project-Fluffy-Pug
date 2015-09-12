@@ -341,7 +341,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             
             for (int x = xStart; x < xEnd; x++) {
                 for (int y = yStart; y < yEnd; y++) {
-                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step7_AcceptButton, 0.45) >=  0.8) {
+                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step7_AcceptButton, 0.40) >=  0.7) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             foundAcceptButton = true;
                             acceptButtonLocation.x = x+50;
