@@ -94,7 +94,7 @@ GenericObject* ShopManager::detectShopBottomLeftCorner(ImageData imageData, uint
     return object;
 }
 GenericObject* ShopManager::detectBuyableItems(ImageData imageData, uint8_t *pixel, int x, int y) {
-    float precision = 0.90;
+    float precision = 0.83;
     GenericObject* object = nil;
     if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, shopBuyableItemTopLeftCornerImageData, precision) >=  precision) {
         /*

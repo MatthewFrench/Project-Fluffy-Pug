@@ -951,8 +951,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
     //First we do an immediate map location search
     //If the map is found them we search for shop and self location
     
-    CGPoint searchStart = CGPointMake(image.imageWidth - 275, image.imageHeight - 275);
-    CGPoint searchEnd = CGPointMake(image.imageWidth - 290, image.imageHeight - 290);
+    CGPoint searchStart = CGPointMake(image.imageWidth - 290, image.imageHeight - 290);
+    CGPoint searchEnd = CGPointMake(image.imageWidth - 270, image.imageHeight - 270);
     
     int oldMapX = -1;
     int oldMapY = -1;
@@ -1196,7 +1196,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                         for (int i2 = 0; i2 < [itemsCanBuy count]; i2++) {
                             if (i != i2) {
                                 GenericObject* item2 = [itemsCanBuy objectAtIndex:i2];
-                                if (std::abs(item2->topLeft.x - item->topLeft.x) <= 3.0 && std::abs(item2->topLeft.y - item->topLeft.y) <= 3.0) {
+                                if (std::abs(item2->topLeft.x - item->topLeft.x) <= 8.0 && std::abs(item2->topLeft.y - item->topLeft.y) <= 8.0) {
                                     [itemsCanBuy removeObjectAtIndex:i];
                                     i--;
                                     break;
@@ -1613,7 +1613,7 @@ void DetectionManager::processItemActives(ImageData image, dispatch_group_t disp
 void DetectionManager::processSurrender(ImageData image, dispatch_group_t dispatchGroup) {
     
     int searchWidth = 30; int searchHeight = 30;
-    CGPoint surrenderPos = CGPointMake(image.imageWidth - 210, image.imageHeight - 370);
+    CGPoint surrenderPos = CGPointMake(image.imageWidth - 254, image.imageHeight - 478);
     //Search for trinket to use
     dispatch_group_async(dispatchGroup, surrenderThread, ^{
         @autoreleasepool {
@@ -1644,8 +1644,8 @@ void DetectionManager::processSurrender(ImageData image, dispatch_group_t dispat
 }
 void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t dispatchGroup) {
     
-    int searchWidth = 10; int searchHeight = 10;
-    CGPoint trinketPos = CGPointMake(1277, 951);
+    int searchWidth = 15; int searchHeight = 15;
+    CGPoint trinketPos = CGPointMake(1275, 945);
     //Search for trinket to use
     dispatch_group_async(dispatchGroup, trinketActiveThread, ^{
         @autoreleasepool {
@@ -1990,11 +1990,11 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
     //515, 660
     //565, 660
     //615, 660
-    int searchWidth = 10; int searchHeight = 5;
-    CGPoint levelUp1Pos = CGPointMake(732, 894);
-    CGPoint levelUp2Pos = CGPointMake(799, 894);
-    CGPoint levelUp3Pos = CGPointMake(866, 894);
-    CGPoint levelUp4Pos = CGPointMake(932, 894);
+    int searchWidth = 12; int searchHeight = 6;
+    CGPoint levelUp1Pos = CGPointMake(731, 893);
+    CGPoint levelUp2Pos = CGPointMake(798, 893);
+    CGPoint levelUp3Pos = CGPointMake(864, 893);
+    CGPoint levelUp4Pos = CGPointMake(931, 893);
     
     //Search for first level up
     dispatch_group_async(dispatchGroup, spell1LevelUpThread, ^{
@@ -2961,40 +2961,11 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
     //float leagueGameWidth = image.imageWidth;
     //float leagueGameHeight =image.imageHeight;
     //CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
-    CGPoint searchStart = CGPointMake(410, 750);
-    CGPoint searchEnd = CGPointMake(430, 770);
+    CGPoint searchStart1 = CGPointMake(658, 1024);
+    CGPoint searchEnd1 = CGPointMake(672, 1034);
     
-    //Increase the scan chunk by 1
-    /*
-     selfHealthBarScanCurrentChunkX += 1;
-     if (selfHealthBarScanCurrentChunkX >= selfHealthBarScanChunksX) {
-     selfHealthBarScanCurrentChunkX = 0;
-     selfHealthBarScanCurrentChunkY++;
-     }
-     if (selfHealthBarScanCurrentChunkY >= selfHealthBarScanChunksY) {
-     selfHealthBarScanCurrentChunkY = 0;
-     }*/
-    /*
-     NSMutableArray* scanRectangles = [NSMutableArray new];
-     //Add chunk to scan
-     CGRect scanRect = CGRectMake( leagueGameWidth * selfHealthBarScanCurrentChunkX / selfHealthBarScanChunksX ,
-     leagueGameHeight * selfHealthBarScanCurrentChunkY / selfHealthBarScanChunksY ,
-     leagueGameWidth * 1 / selfHealthBarScanChunksX ,
-     leagueGameHeight * 1 / selfHealthBarScanChunksY );
-     scanRect = CGRectIntegral(scanRect);
-     scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
-     combineRectangles(scanRectangles, scanRect);
-     //Add previous HealthBars to scan
-     if (selfHealthBar != NULL) {
-     ////NSLog(@"Health bar exists at %d, %d", selfHealthBar->topLeft.x, selfHealthBar->topLeft.y);
-     CGRect rect = CGRectMake(selfHealthBar->topLeft.x - 20,
-     selfHealthBar->topLeft.y - 20,
-     selfHealthBar->bottomRight.x - selfHealthBar->topLeft.x + 20,
-     selfHealthBar->bottomRight.y - selfHealthBar->topLeft.y + 20);
-     rect = CGRectIntegral(rect);
-     rect = fitRectangleInRectangle(rect, leagueWindowRect);
-     combineRectangles(scanRectangles, rect);
-     }*/
+    CGPoint searchStart2 = CGPointMake(1089, 1024);
+    CGPoint searchEnd2 = CGPointMake(1099, 1033);
     
     dispatch_group_async(dispatchGroup, selfHealthBarThread, ^{
         @autoreleasepool {
@@ -3003,8 +2974,8 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
             //Loop through scan chunks
             //for (int i = 0; i < [scanRectangles count]; i++) {
             //    CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
-            for (int x = searchStart.x; x < searchEnd.x; x++) {
-                for (int y = searchStart.y; y < searchEnd.y; y++) {
+            for (int x = searchStart1.x; x < searchEnd1.x; x++) {
+                for (int y = searchStart1.y; y < searchEnd1.y; y++) {
                     uint8* pixel = getPixel2(image, x, y);
                     SelfHealth* HealthBarBar = SelfChampionManager::detectSelfHealthBarAtPixel(image, pixel, x, y);
                     if (HealthBarBar != nil) {
@@ -3015,8 +2986,26 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
                         //rect = fitRectangleInRectangle(rect, leagueWindowRect);
                         //combineRectangles(scanRectangles, rect);
                         [HealthBarBars addObject: HealthBarBar];
-                        x = searchEnd.x;
-                        y = searchEnd.y;
+                        x = searchEnd1.x;
+                        y = searchEnd1.y;
+                    }
+                }
+            }
+            
+            for (int x = searchStart2.x; x < searchEnd2.x; x++) {
+                for (int y = searchStart2.y; y < searchEnd2.y; y++) {
+                    uint8* pixel = getPixel2(image, x, y);
+                    SelfHealth* HealthBarBar = SelfChampionManager::detectSelfHealthBarAtPixel(image, pixel, x, y);
+                    if (HealthBarBar != nil) {
+                        ////NSLog(@"Found self health bar");
+                        //Add extra rectangle to scan
+                        //CGRect rect = CGRectMake(HealthBarBar->topLeft.x-5, HealthBarBar->topLeft.y-5, HealthBarBar->bottomRight.x - HealthBarBar->topLeft.x + 10, HealthBarBar->bottomRight.y - HealthBarBar->topLeft.y + 10);
+                        //rect = CGRectIntegral(rect);
+                        //rect = fitRectangleInRectangle(rect, leagueWindowRect);
+                        //combineRectangles(scanRectangles, rect);
+                        [HealthBarBars addObject: HealthBarBar];
+                        x = searchEnd2.x;
+                        y = searchEnd2.y;
                     }
                 }
             }

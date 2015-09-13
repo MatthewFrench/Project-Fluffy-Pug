@@ -44,7 +44,7 @@ AbilityManager::AbilityManager() {
 }
 GenericObject* AbilityManager::detectLevelUpAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpImageData, 0.25) >=  0.8) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelUpImageData, 0.2) >=  0.75) {
         object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
