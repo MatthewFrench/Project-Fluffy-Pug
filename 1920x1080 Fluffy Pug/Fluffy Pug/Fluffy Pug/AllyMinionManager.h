@@ -34,7 +34,7 @@ public:
     AllyMinionManager();
     
     static ImageData topLeftImageData, bottomLeftImageData,
-    bottomRightImageData, topRightImageData, healthSegmentImageData,  ward, pinkWard;
+    bottomRightImageData, topRightImageData, healthSegmentImageData;
     
     static Minion* detectMinionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);
     

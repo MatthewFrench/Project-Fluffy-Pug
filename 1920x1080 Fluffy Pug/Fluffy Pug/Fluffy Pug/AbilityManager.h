@@ -39,7 +39,7 @@ class AbilityManager {
      const double minionSpeed = 2000; //100 pixels per second
      */
 public:
-    static ImageData levelUpImageData, levelDotImageData, levelUpDisabledImageData, abilityEnabledImageData, abilityDisabledImageData, enabledSummonerSpellImageData;
+    static ImageData levelUpImageData, levelDotImageData, abilityEnabledImageData, enabledSummonerSpellImageData;
     AbilityManager();
     
     static GenericObject* detectLevelUpAtPixel(ImageData imageData, uint8_t *pixel, int x, int y);

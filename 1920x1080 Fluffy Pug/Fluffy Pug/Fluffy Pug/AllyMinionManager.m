@@ -10,9 +10,6 @@
 
 //static int Debug_Draw_Red = 0, Debug_Draw_Green = 255, Debug_Draw_Blue = 0;
 //static int Health_Bar_Width = 62, Health_Bar_Height = 4;
-ImageData AllyMinionManager::ward = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ward/Ward" ofType:@"png"]);
-
-ImageData AllyMinionManager::pinkWard = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ward/Pink Ward" ofType:@"png"]);
 
 ImageData AllyMinionManager::topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Minion Health Bar/Top Left Corner" ofType:@"png"]);
 

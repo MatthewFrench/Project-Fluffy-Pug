@@ -951,8 +951,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
     //First we do an immediate map location search
     //If the map is found them we search for shop and self location
     
-    CGPoint searchStart = CGPointMake(image.imageWidth - 210, image.imageHeight - 210);
-    CGPoint searchEnd = CGPointMake(image.imageWidth - 200, image.imageHeight - 200);
+    CGPoint searchStart = CGPointMake(image.imageWidth - 275, image.imageHeight - 275);
+    CGPoint searchEnd = CGPointMake(image.imageWidth - 290, image.imageHeight - 290);
     
     int oldMapX = -1;
     int oldMapY = -1;
@@ -1013,8 +1013,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                 
                 startTime = mach_absolute_time();
                 //Search for shop at the bottom left
-                searchStart = CGPointMake(image.imageWidth - 200, image.imageHeight - 34);
-                searchEnd = CGPointMake(image.imageWidth - 196, image.imageHeight - 30);
+                searchStart = CGPointMake(image.imageWidth - 270, image.imageHeight - 45);
+                searchEnd = CGPointMake(image.imageWidth - 255, image.imageHeight - 30);
                 for (int x = searchStart.x; x < searchEnd.x; x++) {
                     for (int y = searchStart.y; y < searchEnd.y; y++) {
                         uint8* pixel = getPixel2(image, x, y);
@@ -1027,8 +1027,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                 }
                 if (foundShop == NULL) {
                     //Search for shop at top right
-                    searchStart = CGPointMake(image.imageWidth - 34, image.imageHeight - 200);
-                    searchEnd = CGPointMake(image.imageWidth - 30, image.imageHeight - 196);
+                    searchStart = CGPointMake(image.imageWidth - 50, image.imageHeight - 273);
+                    searchEnd = CGPointMake(image.imageWidth - 10, image.imageHeight - 250);
                     for (int x = searchStart.x; x < searchEnd.x; x++) {
                         for (int y = searchStart.y; y < searchEnd.y; y++) {
                             uint8* pixel = getPixel2(image, x, y);
@@ -1168,7 +1168,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
             if (topLeftCorner != NULL) {
                 //Scan immediately for bottom left corner
                 for (int x = topLeftCorner->topLeft.x - 5; x < topLeftCorner->topLeft.x + 5; x++) {
-                    for (int y = topLeftCorner->topLeft.y + 500; y < leagueGameHeight; y++) {
+                    for (int y = topLeftCorner->topLeft.y + 700; y < leagueGameHeight; y++) {
                         uint8* pixel = getPixel2(image, x, y);
                         bottomLeftCorner = ShopManager::detectShopBottomLeftCorner(image, pixel, x, y);
                         if (bottomLeftCorner != nil) {
@@ -1187,6 +1187,20 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                             GenericObject* item = ShopManager::detectBuyableItems(image, pixel, x, y);
                             if (item != nil) {
                                 [itemsCanBuy addObject: item];
+                            }
+                        }
+                    }
+                    //Remove duplicate items
+                    for (int i = 0; i < [itemsCanBuy count]; i++) {
+                        GenericObject* item = [itemsCanBuy objectAtIndex:i];
+                        for (int i2 = 0; i2 < [itemsCanBuy count]; i2++) {
+                            if (i != i2) {
+                                GenericObject* item2 = [itemsCanBuy objectAtIndex:i2];
+                                if (std::abs(item2->topLeft.x - item->topLeft.x) <= 3.0 && std::abs(item2->topLeft.y - item->topLeft.y) <= 3.0) {
+                                    [itemsCanBuy removeObjectAtIndex:i];
+                                    i--;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -1249,8 +1263,8 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
     });
 }
 void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t dispatchGroup) {
-    CGPoint searchStart = CGPointMake(760, 765);
-    CGPoint searchEnd = CGPointMake(770, 780);
+    CGPoint searchStart = CGPointMake(1118, 1038);
+    CGPoint searchEnd = CGPointMake(1118+20, 1038+20);
     dispatch_group_async(dispatchGroup, shopAvailableThread, ^{
         @autoreleasepool {
             uint64_t startTime = mach_absolute_time();
@@ -1289,8 +1303,8 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
     //Potion being used
     //from 400, 620
     //to 560, 660
-    CGPoint searchStart = CGPointMake(400, 620);
-    CGPoint searchEnd = CGPointMake(560, 660);
+    CGPoint searchStart = CGPointMake(640, 800);
+    CGPoint searchEnd = CGPointMake(830, 900);
     
     dispatch_group_async(dispatchGroup, usedPotionThread, ^{
         @autoreleasepool {
@@ -1327,12 +1341,12 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
 
 void DetectionManager::processItemActives(ImageData image, dispatch_group_t dispatchGroup) {
     int searchWidth = 6; int searchHeight = 6;
-    CGPoint item1Pos = CGPointMake(764, 700);
-    CGPoint item2Pos = CGPointMake(800, 700);
-    CGPoint item3Pos = CGPointMake(836, 700);
-    CGPoint item4Pos = CGPointMake(764, 734);
-    CGPoint item5Pos = CGPointMake(800, 734);
-    CGPoint item6Pos = CGPointMake(836, 734);
+    CGPoint item1Pos = CGPointMake(1126, 944);
+    CGPoint item2Pos = CGPointMake(1177, 944);
+    CGPoint item3Pos = CGPointMake(1226, 944);
+    CGPoint item4Pos = CGPointMake(1126, 992);
+    CGPoint item5Pos = CGPointMake(1177, 992);
+    CGPoint item6Pos = CGPointMake(1226, 992);
     
     potionActiveAvailable = false;
     
@@ -1631,7 +1645,7 @@ void DetectionManager::processSurrender(ImageData image, dispatch_group_t dispat
 void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t dispatchGroup) {
     
     int searchWidth = 10; int searchHeight = 10;
-    CGPoint trinketPos = CGPointMake(870, 700);
+    CGPoint trinketPos = CGPointMake(1277, 951);
     //Search for trinket to use
     dispatch_group_async(dispatchGroup, trinketActiveThread, ^{
         @autoreleasepool {
@@ -1666,11 +1680,11 @@ void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t di
     });
 }
 void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dispatchGroup) {
-    int searchWidth = 6; int searchHeight = 6;
-    CGPoint level1Pos = CGPointMake(466, 700);
-    CGPoint level2Pos = CGPointMake(515, 700);
-    CGPoint level3Pos = CGPointMake(565, 700);
-    CGPoint level4Pos = CGPointMake(614, 700);
+    int searchWidth = 8; int searchHeight = 8;
+    CGPoint level1Pos = CGPointMake(728, 946);
+    CGPoint level2Pos = CGPointMake(794, 946);
+    CGPoint level3Pos = CGPointMake(860, 946);
+    CGPoint level4Pos = CGPointMake(927, 946);
     
     //Search for first level up
     dispatch_group_async(dispatchGroup, spell1ActiveThread, ^{
@@ -1804,8 +1818,8 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
 
 void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_group_t dispatchGroup) {
     int searchWidth = 6; int searchHeight = 6;
-    CGPoint spell1Pos = CGPointMake(670, 700);
-    CGPoint spell2Pos = CGPointMake(708, 700);
+    CGPoint spell1Pos = CGPointMake(1003, 946);
+    CGPoint spell2Pos = CGPointMake(1052, 946);
     
     //Search for first summoner spell
     dispatch_group_async(dispatchGroup, summonerSpell1ActiveThread, ^{
@@ -1870,11 +1884,11 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
 }
 
 void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t dispatchGroup) {
-    int searchWidth = 40; int searchHeight = 5;
-    CGPoint levelDot1Pos = CGPointMake(470, 750);
-    CGPoint levelDot2Pos = CGPointMake(522, 750);
-    CGPoint levelDot3Pos = CGPointMake(572, 750);
-    CGPoint levelDot4Pos = CGPointMake(620, 750);
+    int searchWidth = 50; int searchHeight = 5;
+    CGPoint levelDot1Pos = CGPointMake(733, 1011);
+    CGPoint levelDot2Pos = CGPointMake(802, 1011);
+    CGPoint levelDot3Pos = CGPointMake(867, 1011);
+    CGPoint levelDot4Pos = CGPointMake(944, 1011);
     
     //Search for level up dots
     dispatch_group_async(dispatchGroup, levelUpDotsThread, ^{
@@ -1977,10 +1991,10 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
     //565, 660
     //615, 660
     int searchWidth = 10; int searchHeight = 5;
-    CGPoint levelUp1Pos = CGPointMake(465, 660);
-    CGPoint levelUp2Pos = CGPointMake(515, 660);
-    CGPoint levelUp3Pos = CGPointMake(565, 660);
-    CGPoint levelUp4Pos = CGPointMake(615, 660);
+    CGPoint levelUp1Pos = CGPointMake(732, 894);
+    CGPoint levelUp2Pos = CGPointMake(799, 894);
+    CGPoint levelUp3Pos = CGPointMake(866, 894);
+    CGPoint levelUp4Pos = CGPointMake(932, 894);
     
     //Search for first level up
     dispatch_group_async(dispatchGroup, spell1LevelUpThread, ^{
