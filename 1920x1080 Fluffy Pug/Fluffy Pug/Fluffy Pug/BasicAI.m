@@ -177,7 +177,10 @@ void BasicAI::handleBuyingItems() {
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * 500), dispatch_get_main_queue(), ^{
                         moveMouse(clickX, clickY);
                     });
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+250)), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+200)), dispatch_get_main_queue(), ^{
+                        tapMouseLeft(clickX, clickY);
+                    });
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+400)), dispatch_get_main_queue(), ^{
                         doubleTapMouseLeft(clickX, clickY);
                     });
                     if (bought < 2) {
