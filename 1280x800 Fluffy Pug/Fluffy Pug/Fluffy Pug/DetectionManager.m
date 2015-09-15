@@ -748,6 +748,9 @@ GenericObject* DetectionManager::getMapLocation() {
     });
     return returnVar;
 }*/
+int DetectionManager::getPotionActiveItemSlot() {
+    return potionOnActive;
+}
 bool DetectionManager::getSurrenderAvailable() {
     return surrenderAvailable;
 }

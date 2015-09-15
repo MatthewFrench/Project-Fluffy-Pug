@@ -193,4 +193,5 @@ public:
     GenericObject* getMapLocation();
     bool getSurrenderAvailable();
     GenericObject* getSurrender();
+    int getPotionActiveItemSlot();
 };

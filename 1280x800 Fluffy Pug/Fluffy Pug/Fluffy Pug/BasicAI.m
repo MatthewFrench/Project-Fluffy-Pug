@@ -261,6 +261,8 @@ void BasicAI::handleMovementAndAttacking() {
     GenericObject* map = gameState->detectionManager->getMap();
     //GenericObject* mapShop = gameState->detectionManager->getMapShop();
     
+    bool earlyGame = getTimeInMilliseconds(mach_absolute_time() - gameCurrentTime) < 1000 * 60 * 8;
+    
     CGPoint tempBaseLocation;
     if (baseLocation.x == -1 && mapVisible) {
         //Set base location to blue side by default
@@ -343,11 +345,13 @@ void BasicAI::handleMovementAndAttacking() {
         }
         
         //Attack enemy if there are more allies than enemies
-        if (enemyChampionsNear && ([allyChampions count] > [enemyChampions count] || ([allyChampions count] == [enemyChampions count] || [enemyChampions count] > 2)) ) {
+        if (enemyChampionsNear && ([allyChampions count] > [enemyChampions count] || ([allyChampions count] == [enemyChampions count] || [enemyChampions count] > 2)) && !earlyGame) {
             
             //Only attack if allies are close
-            if (hypot(nearestAllyChampion->characterCenter.x - selfChamp->characterCenter.x, nearestAllyChampion->characterCenter.y - selfChamp->characterCenter.y) < 400) {
+            if (hypot(nearestAllyChampion->characterCenter.x - selfChamp->characterCenter.x, nearestAllyChampion->characterCenter.y - selfChamp->characterCenter.y) < 400 ) {
                 action = ACTION_Attack_Enemy_Champion;
+            } else {
+                action = ACTION_Run_Away;
             }
         } else if (enemyChampionsNear) {
             //Too many baddies, peace.
@@ -358,23 +362,25 @@ void BasicAI::handleMovementAndAttacking() {
         if (action == ACTION_Attack_Enemy_Champion && enemyTowerNear) {
             //If enemy is under tower, ignore
             if (hypot(lowestHealthEnemyChampion->characterCenter.x - nearestEnemyTower->towerCenter.x, lowestHealthEnemyChampion->characterCenter.y - nearestEnemyTower->towerCenter.y) < 430 && lowestHealthEnemyChampion->health > 20) {
-                action = ACTION_Move_To_Mid;
-                
-                if (allyMinionsNear) {
-                    action = ACTION_Follow_Ally_Minion;
-                }
-                if (allyChampionsNear) {
-                    action = ACTION_Follow_Ally_Champion;
-                }
-                if (enemyMinionsNear) {
-                    action = ACTION_Attack_Enemy_Minion;
-                }
+                action = ACTION_Run_Away;
+                /*
+                 action = ACTION_Move_To_Mid;
+                 
+                 if (allyMinionsNear) {
+                 action = ACTION_Follow_Ally_Minion;
+                 }
+                 if (allyChampionsNear) {
+                 action = ACTION_Follow_Ally_Champion;
+                 }
+                 if (enemyMinionsNear) {
+                 action = ACTION_Attack_Enemy_Minion;
+                 }*/
             }
         }
         
         if (action == ACTION_Attack_Enemy_Minion && enemyTowerNear) {
             if (hypot(lowestHealthEnemyMinion->characterCenter.x - nearestEnemyTower->towerCenter.x, lowestHealthEnemyMinion->characterCenter.y - nearestEnemyTower->towerCenter.y) < 430) {
-                action = ACTION_Move_To_Mid;
+                action = ACTION_Run_Away;
                 
                 if (allyMinionsNear) {
                     action = ACTION_Follow_Ally_Minion;
@@ -411,11 +417,25 @@ void BasicAI::handleMovementAndAttacking() {
         if (selfChamp->health < 35 && (enemyChampionCloseEnough || enemyMinionsNear || underEnemyTower)) {
             action = ACTION_Run_Away;
         } else if (selfChamp->health < 35 && !enemyChampionsNear && !underEnemyTower) {
-            action = ACTION_Recall;
+            if (selfChamp->health > 25) {
+                action = ACTION_Recall;
+            } else {
+                action = ACTION_Run_Away;
+            }
+        } else if (selfChamp->health < 35) {
+            action = ACTION_Run_Away;
+        }
+        if (gameState->detectionManager->getPotionActiveAvailable() && selfChamp->health < 75) {
+            if (gameState->detectionManager->getPotionActiveItemSlot() == 1) useItem1();
+            if (gameState->detectionManager->getPotionActiveItemSlot() == 2) useItem2();
+            if (gameState->detectionManager->getPotionActiveItemSlot() == 3) useItem3();
+            if (gameState->detectionManager->getPotionActiveItemSlot() == 4) useItem4();
+            if (gameState->detectionManager->getPotionActiveItemSlot() == 5) useItem5();
+            if (gameState->detectionManager->getPotionActiveItemSlot() == 6) useItem6();
         }
         
         //Go ham
-        if (enemyChampionsNear && lowestHealthEnemyChampion->health < 5) {
+        if (enemyChampionsNear && lowestHealthEnemyChampion->health < 5 && !earlyGame) {
             action = ACTION_Go_Ham;
         }
         
@@ -425,10 +445,10 @@ void BasicAI::handleMovementAndAttacking() {
             case ACTION_Run_Away:
             {
                 //NSLog(@"\t\tAction: Running Away");
-                    if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 700) {
-                        tapMouseRight(baseLocation.x, baseLocation.y);
-                        lastRunAwayClick = mach_absolute_time();
-                    }
+                if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 700) {
+                    tapMouseRight(baseLocation.x, baseLocation.y);
+                    lastRunAwayClick = mach_absolute_time();
+                }
                 
                 if (selfChamp->health < 15) {
                     int enemyX = selfChamp->characterCenter.x;
