@@ -345,7 +345,8 @@ void BasicAI::handleMovementAndAttacking() {
         }
         
         //Attack enemy if there are more allies than enemies
-        if (enemyChampionsNear && ([allyChampions count] > [enemyChampions count] || ([allyChampions count] == [enemyChampions count] || [enemyChampions count] > 2)) && !earlyGame) {
+        if (enemyChampionsNear &&
+            ([allyChampions count] > [enemyChampions count] || ([allyChampions count] == [enemyChampions count] && [allyChampions count] > 2)) && !earlyGame && [allyChampions count] > 0) {
             
             //Only attack if allies are close
             if (hypot(nearestAllyChampion->characterCenter.x - selfChamp->characterCenter.x, nearestAllyChampion->characterCenter.y - selfChamp->characterCenter.y) < 400 ) {
@@ -437,6 +438,10 @@ void BasicAI::handleMovementAndAttacking() {
         //Go ham
         if (enemyChampionsNear && lowestHealthEnemyChampion->health < 5 && !earlyGame) {
             action = ACTION_Go_Ham;
+        }
+        
+        if (action == ACTION_Attack_Enemy_Minion && [allyMinions count]-2 < [enemyMinions count]) {
+            action = ACTION_Run_Away;
         }
         
         //int actionSpeed = 0.25;
@@ -717,50 +722,51 @@ void BasicAI::castSummonerSpell2() {
 }
 void BasicAI::useItem1() {
     if (getTimeInMilliseconds(mach_absolute_time() - lastItem1Use) >= 80) {
-        if (gameState->detectionManager->getItem1ActiveAvailable()) {
+        //if (gameState->detectionManager->getItem1ActiveAvailable()) {
             tapActive1();
             lastItem1Use = mach_absolute_time();
-        }
+        //}
     }
+    
 }
 void BasicAI::useItem2() {
     if (getTimeInMilliseconds(mach_absolute_time() - lastItem2Use) >= 80) {
-        if (gameState->detectionManager->getItem2ActiveAvailable()) {
+        //if (gameState->detectionManager->getItem2ActiveAvailable()) {
             tapActive2();
             lastItem2Use = mach_absolute_time();
-        }
+        //}
     }
 }
 void BasicAI::useItem3() {
     if (getTimeInMilliseconds(mach_absolute_time() - lastItem3Use) >= 80) {
-        if (gameState->detectionManager->getItem3ActiveAvailable()) {
+        //if (gameState->detectionManager->getItem3ActiveAvailable()) {
             tapActive3();
             lastItem3Use = mach_absolute_time();
-        }
+        //}
     }
 }
 void BasicAI::useItem4() {
     if (getTimeInMilliseconds(mach_absolute_time() - lastItem4Use) >= 80) {
-        if (gameState->detectionManager->getItem4ActiveAvailable()) {
+        //if (gameState->detectionManager->getItem4ActiveAvailable()) {
             tapActive5();
             lastItem4Use = mach_absolute_time();
-        }
+        //}
     }
 }
 void BasicAI::useItem5() {
     if (getTimeInMilliseconds(mach_absolute_time() - lastItem5Use) >= 80) {
-        if (gameState->detectionManager->getItem5ActiveAvailable()) {
+        //if (gameState->detectionManager->getItem5ActiveAvailable()) {
             tapActive6();
             lastItem5Use = mach_absolute_time();
-        }
+        //}
     }
 }
 void BasicAI::useItem6() {
     if (getTimeInMilliseconds(mach_absolute_time() - lastItem6Use) >= 80) {
-        if (gameState->detectionManager->getItem6ActiveAvailable()) {
+        //if (gameState->detectionManager->getItem6ActiveAvailable()) {
             tapActive7();
             lastItem6Use = mach_absolute_time();
-        }
+        //}
     }
 }
 void BasicAI::castRecall() {

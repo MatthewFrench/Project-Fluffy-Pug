@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>791CB2EE-E328-46C3-9D0E-FB63E3D6F89B</string>
 	<key>IDESourceControlProjectName</key>
-	<string>Fluffy Pug</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>6DCBD89773B28E9368E7A645019A90A26F03985A</key>
 		<string>https://github.com/MatthewFrench/Project-Fluffy-Pug.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>1920x1080 Fluffy Pug/Fluffy Pug/Fluffy Pug.xcodeproj</string>
+	<string>1920x1080 Fluffy Pug/Fluffy Pug/Fluffy Pug.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>6DCBD89773B28E9368E7A645019A90A26F03985A</key>
