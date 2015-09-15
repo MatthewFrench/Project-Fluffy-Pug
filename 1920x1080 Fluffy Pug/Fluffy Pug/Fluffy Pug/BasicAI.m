@@ -165,7 +165,7 @@ void BasicAI::handleBuyingItems() {
                     GenericObject* item = [itemsToBuy objectAtIndex:i];
                     int clickX = item->center.x;
                     int clickY = item->center.y;
-                    if (boughtStarterItems && clickY > 100 && clickY < 200) {
+                    if (boughtStarterItems && clickY > 100 && clickY < 270) {
                         continue; //Skip buying this item because we already bought starter items. No troll build.
                     }
                     //Skip buying this item if we already bought it once

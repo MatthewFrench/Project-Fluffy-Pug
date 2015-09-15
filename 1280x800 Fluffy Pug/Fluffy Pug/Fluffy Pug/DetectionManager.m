@@ -1199,7 +1199,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                         for (int i2 = 0; i2 < [itemsCanBuy count]; i2++) {
                             if (i != i2) {
                                 GenericObject* item2 = [itemsCanBuy objectAtIndex:i2];
-                                if (std::abs(item2->topLeft.x - item->topLeft.x) <= 8.0 && std::abs(item2->topLeft.y - item->topLeft.y) <= 8.0) {
+                                if (std::abs(item2->topLeft.x - item->topLeft.x) <= 15.0 && std::abs(item2->topLeft.y - item->topLeft.y) <= 15.0) {
                                     [itemsCanBuy removeObjectAtIndex:i];
                                     i--;
                                     break;
