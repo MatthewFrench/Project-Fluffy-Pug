@@ -2138,6 +2138,7 @@ void DetectionManager::processAllyMinionDetection(ImageData image, dispatch_grou
     int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processAllyMinionLastTime)) / 16;
     if (framesPassed <= 0) framesPassed = 1;
     if (framesPassed > allyMinionScanChunksX * allyMinionScanChunksY) framesPassed = allyMinionScanChunksX * allyMinionScanChunksY;
+    if (framesPassed > 24) framesPassed = 24;
     
     NSMutableArray* scanRectangles = [NSMutableArray new];
     //Increase the scan chunk by 1
@@ -2272,6 +2273,7 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processEnemyMinionLastTime)) / 16;
     if (framesPassed <= 0) framesPassed = 1;
     if (framesPassed > enemyMinionScanChunksX * enemyMinionScanChunksY) framesPassed = enemyMinionScanChunksX * enemyMinionScanChunksY;
+    if (framesPassed > 24) framesPassed = 24;
     
     NSMutableArray* scanRectangles = [NSMutableArray new];
     //Increase the scan chunk by 1
@@ -2417,6 +2419,7 @@ void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_g
     int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processEnemyChampionLastTime)) / 16;
     if (framesPassed <= 0) framesPassed = 1;
     if (framesPassed > enemyChampionScanChunksX * enemyChampionScanChunksY) framesPassed = enemyChampionScanChunksX * enemyChampionScanChunksY;
+    if (framesPassed > 24) framesPassed = 24;
     
     NSMutableArray* scanRectangles = [NSMutableArray new];
     //Increase the scan chunk by 1
@@ -2551,6 +2554,7 @@ void DetectionManager::processAllyChampionDetection(ImageData image, dispatch_gr
     int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processAllyChampionLastTime)) / 16;
     if (framesPassed <= 0) framesPassed = 1;
     if (framesPassed > allyChampionScanChunksX * allyChampionScanChunksY) framesPassed = allyChampionScanChunksX * allyChampionScanChunksY;
+    if (framesPassed > 24) framesPassed = 24;
     
     NSMutableArray* scanRectangles = [NSMutableArray new];
     //Increase the scan chunk by 1
@@ -2689,6 +2693,7 @@ void DetectionManager::processEnemyTowerDetection(ImageData image, dispatch_grou
     int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processEnemyTowerLastTime)) / 16;
     if (framesPassed <= 0) framesPassed = 1;
     if (framesPassed > enemyTowerScanChunksX * enemyTowerScanChunksY) framesPassed = enemyTowerScanChunksX * enemyTowerScanChunksY;
+    if (framesPassed > 24) framesPassed = 24;
     
     NSMutableArray* scanRectangles = [NSMutableArray new];
     //Increase the scan chunk by 1
@@ -2825,6 +2830,7 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
     int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - processSelfChampionLastTime)) / 16;
     if (framesPassed <= 0) framesPassed = 1;
     if (framesPassed > selfChampionScanChunksX * selfChampionScanChunksY) framesPassed = selfChampionScanChunksX * selfChampionScanChunksY;
+    if (framesPassed > 24) framesPassed = 24;
     
     NSMutableArray* scanRectangles = [NSMutableArray new];
     //Increase the scan chunk by 1

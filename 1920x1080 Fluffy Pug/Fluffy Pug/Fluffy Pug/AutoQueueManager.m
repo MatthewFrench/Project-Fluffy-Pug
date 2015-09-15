@@ -47,10 +47,11 @@ void AutoQueueManager::reset(bool keepPlayButton) {
     
     currentStep = STEP_1;
     scanForPlayButton = true;
-    step5ScanCurrentChunkX = 0;
-    step5ScanCurrentChunkY = 0;
+    reportedScanCurrentChunkX = 0;
+    reportedScanCurrentChunkY = 0;
     actionClick = mach_absolute_time();
     lastHomeButtonClick = mach_absolute_time();
+    scanReportedLastTime = mach_absolute_time();
 }
 void AutoQueueManager::processLogic() {
     
@@ -64,8 +65,9 @@ void AutoQueueManager::processLogic() {
     
     if (getTimeInMilliseconds(mach_absolute_time() - actionClick) >= 1000) {
         if (foundReportedButton) {
-            clickLocation(reportedButtonLocation.x, reportedButtonLocation.y);
+            tapMouseLeft(reportedButtonLocation.x+10, reportedButtonLocation.y+10);
             actionClick = mach_absolute_time();
+            foundReportedButton = false;
         }
         
         switch (currentStep) {
@@ -335,32 +337,76 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
     
     
     
-    if (scanForReportedButton) {
+    if (scanForReportedButton && !foundReportedButton) {
+        int scanChunksX = 30;
+        int scanChunksY = 30;
+        float leagueGameWidth = data.imageWidth;
+        float leagueGameHeight = data.imageHeight;
+        CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
+        
+        int scanStartX = 0; int scanStartY = 0;
+        int scanEndX = leagueGameWidth; int scanEndY = leagueGameHeight;
+        int scanWidth = (scanEndX - scanStartX) / scanChunksX;
+        int scanHeight = (scanEndY - scanStartY) / scanChunksY;
+        
+        int framesPassed = (getTimeInMilliseconds(mach_absolute_time() - scanReportedLastTime)) / 16;
+        if (framesPassed <= 0) framesPassed = 1;
+        if (framesPassed > scanChunksX * scanChunksY) framesPassed = scanChunksX * scanChunksY;
+        if (framesPassed > 15) framesPassed = 15;
+        
+        NSMutableArray* scanRectangles = [NSMutableArray new];
+        //Increase the scan chunk by 1
+        for (int i = 0; i < framesPassed; i++) {
+            reportedScanCurrentChunkX += 1;
+            if (reportedScanCurrentChunkX >= scanChunksX) {
+                reportedScanCurrentChunkX = 0;
+                reportedScanCurrentChunkY++;
+            }
+            if (reportedScanCurrentChunkY >= scanChunksY) {
+                reportedScanCurrentChunkY = 0;
+            }
+            //Add chunk to scan
+            CGRect scanRect = CGRectMake( scanWidth * reportedScanCurrentChunkX + scanStartX ,
+                                         scanHeight * reportedScanCurrentChunkY + scanStartY ,
+                                         scanWidth ,
+                                         scanHeight );
+            scanRect = CGRectIntegral(scanRect);
+            scanRect = fitRectangleInRectangle(scanRect, leagueWindowRect);
+            combineRectangles(scanRectangles, scanRect);
+        }
+        
         dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
         foundReportedButton = false;
         dispatch_group_async(dispatchGroup, queue, ^{
             
             //int xStart = detectionPlayButtonReferenceLocation.x-120;
-            //int yStart = detectionPlayButtonReferenceLocation.y+120;
-            //int xEnd = detectionPlayButtonReferenceLocation.x+120;
-            //int yEnd = detectionPlayButtonReferenceLocation.y+470;
-            int xStart = 0;
-            int yStart = 0;
-            int xEnd = data.imageWidth;
-            int yEnd = data.imageHeight;
+            //int yStart = detectionPlayButtonReferenceLocation.y+300;
+            //int xEnd = detectionPlayButtonReferenceLocation.x+180;
+            //int yEnd = detectionPlayButtonReferenceLocation.y+450;
+            //int xStart = 0;
+            //int yStart = 0;
+            //int xEnd = data.imageWidth;
+            //int yEnd = data.imageHeight;
             
-            for (int x = xStart; x < xEnd; x++) {
-                for (int y = yStart; y < yEnd; y++) {
-                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, reportedButton, 0.40) >=  0.7) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            foundReportedButton = true;
-                            reportedButtonLocation.x = x+50;
-                            reportedButtonLocation.y = y+10;
-                            //NSLog(@"Found accept button at %d, %d", x, y);
-                        });
-                        fireLogic = true;
-                        x = xEnd;
-                        y = yEnd;
+            //Loop through scan chunks
+            for (int i = 0; i < [scanRectangles count]; i++) {
+                CGRect rect = [[scanRectangles objectAtIndex:i] rectValue];
+                for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
+                    for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
+                        if (x + reportedButton.imageWidth < data.imageWidth && y + reportedButton.imageHeight < data.imageHeight &&
+                            x + reportedButton.imageWidth >= 0 && y + reportedButton.imageHeight >= 0) {
+                            if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, reportedButton, 0.40) >=  0.7) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    foundReportedButton = true;
+                                    reportedButtonLocation.x = x+50;
+                                    reportedButtonLocation.y = y+10;
+                                });
+                                fireLogic = true;
+                                x = rect.origin.x + rect.size.width;
+                                y = rect.origin.y + rect.size.height;
+                                i = (int)[scanRectangles count];
+                            }
+                        }
                     }
                 }
             }
@@ -376,27 +422,31 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
         foundAcceptButton = false;
         dispatch_group_async(dispatchGroup, queue, ^{
             
-            //int xStart = detectionPlayButtonReferenceLocation.x-120;
-            //int yStart = detectionPlayButtonReferenceLocation.y+120;
-            //int xEnd = detectionPlayButtonReferenceLocation.x+120;
-            //int yEnd = detectionPlayButtonReferenceLocation.y+470;
-            int xStart = 0;
-            int yStart = 0;
-            int xEnd = data.imageWidth;
-            int yEnd = data.imageHeight;
+            int padding = 150;
             
+            int xStart = detectionPlayButtonReferenceLocation.x-130 - padding;
+            int yStart = detectionPlayButtonReferenceLocation.y+330 - padding;
+            int xEnd = detectionPlayButtonReferenceLocation.x-120 + padding;
+            int yEnd = detectionPlayButtonReferenceLocation.y+340 + padding;
+            //int xStart = 0;
+            //int yStart = 0;
+            //int xEnd = data.imageWidth;
+            //int yEnd = data.imageHeight;
+            float p = 0.0;
             for (int x = xStart; x < xEnd; x++) {
                 for (int y = yStart; y < yEnd; y++) {
-                    if (getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step7_AcceptButton, 0.40) >=  0.7) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            foundAcceptButton = true;
-                            acceptButtonLocation.x = x+50;
-                            acceptButtonLocation.y = y+10;
-                            //NSLog(@"Found accept button at %d, %d", x, y);
-                        });
-                        fireLogic = true;
-                        x = xEnd;
-                        y = yEnd;
+                    if (x + step7_AcceptButton.imageWidth < data.imageWidth && y + step7_AcceptButton.imageHeight < data.imageHeight &&
+                        x + step7_AcceptButton.imageWidth >= 0 && y + step7_AcceptButton.imageHeight >= 0) {
+                        if ((p=getImageAtPixelPercentageOptimizedExact(getPixel2(data, x, y), x, y, data.imageWidth, data.imageHeight, step7_AcceptButton, 0.30)) >=  0.8) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                foundAcceptButton = true;
+                                acceptButtonLocation.x = x+50;
+                                acceptButtonLocation.y = y+10;
+                            });
+                            fireLogic = true;
+                            x = xEnd;
+                            y = yEnd;
+                        }
                     }
                 }
             }
