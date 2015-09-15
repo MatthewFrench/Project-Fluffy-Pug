@@ -1180,13 +1180,27 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                 if (bottomLeftCorner != NULL) {
                     //Scan immediately for items
                     CGPoint searchStart = CGPointMake(topLeftCorner->topLeft.x + 15, topLeftCorner->topLeft.y + 75);
-                    CGPoint searchEnd = CGPointMake(topLeftCorner->topLeft.x + 400, bottomLeftCorner->topLeft.y - 25);
+                    CGPoint searchEnd = CGPointMake(topLeftCorner->topLeft.x + 400, bottomLeftCorner->topLeft.y - 25 - 60);
                     for (int x = searchStart.x; x < searchEnd.x; x++) {
                         for (int y = searchStart.y; y < searchEnd.y; y++) {
                             uint8* pixel = getPixel2(image, x, y);
                             GenericObject* item = ShopManager::detectBuyableItems(image, pixel, x, y);
                             if (item != nil) {
                                 [itemsCanBuy addObject: item];
+                            }
+                        }
+                    }
+                    //Remove duplicate items
+                    for (int i = 0; i < [itemsCanBuy count]; i++) {
+                        GenericObject* item = [itemsCanBuy objectAtIndex:i];
+                        for (int i2 = 0; i2 < [itemsCanBuy count]; i2++) {
+                            if (i != i2) {
+                                GenericObject* item2 = [itemsCanBuy objectAtIndex:i2];
+                                if (std::abs(item2->topLeft.x - item->topLeft.x) <= 8.0 && std::abs(item2->topLeft.y - item->topLeft.y) <= 8.0) {
+                                    [itemsCanBuy removeObjectAtIndex:i];
+                                    i--;
+                                    break;
+                                }
                             }
                         }
                     }

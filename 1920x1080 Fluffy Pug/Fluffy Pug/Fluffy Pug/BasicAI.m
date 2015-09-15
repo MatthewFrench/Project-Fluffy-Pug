@@ -42,6 +42,8 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     lastItem5Use = mach_absolute_time();
     lastItem6Use = mach_absolute_time();
     
+    activeAutoUseTime = mach_absolute_time();
+    
     moveToLane = arc4random_uniform(3) + 1;
     NSLog(@"Chose lane %d", moveToLane);
     moveToLanePathSwitch = mach_absolute_time();
@@ -54,6 +56,8 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     lastSurrender = mach_absolute_time();
 }
 void BasicAI::resetAI() {
+    baseLocation = CGPointMake(-1, -1);
+    
     boughtStarterItems = false;
     [boughtItems removeAllObjects];
     gameCurrentTime = mach_absolute_time();
@@ -88,6 +92,8 @@ void BasicAI::resetAI() {
     lastItem4Use = mach_absolute_time();
     lastItem5Use = mach_absolute_time();
     lastItem6Use = mach_absolute_time();
+    
+    activeAutoUseTime = mach_absolute_time();
     
     moveToLane = arc4random_uniform(3) + 1;
     NSLog(@"Chose lane %d", moveToLane);
@@ -253,7 +259,26 @@ void BasicAI::handleMovementAndAttacking() {
     //bool mapShopVisible = gameState->detectionManager->getMapShopVisible();
     bool mapVisible = gameState->detectionManager->getMapVisible();
     GenericObject* map = gameState->detectionManager->getMap();
-    GenericObject* mapShop = gameState->detectionManager->getMapShop();
+    //GenericObject* mapShop = gameState->detectionManager->getMapShop();
+    
+    CGPoint tempBaseLocation;
+    if (baseLocation.x == -1 && mapVisible) {
+        //Set base location to blue side by default
+        tempBaseLocation.x = (map->topLeft.x - map->bottomRight.x) * 0.1 + map->topLeft.x;
+        tempBaseLocation.y = (map->topLeft.y - map->bottomRight.y) * 0.9 + map->topLeft.x;
+    }
+    if (baseLocation.x == -1) { // Try to set base location
+        if (gameState->detectionManager->getMapLocationVisible()) {
+            baseLocation.x = gameState->detectionManager->getMapLocation()->center.x;
+            baseLocation.y = gameState->detectionManager->getMapLocation()->center.y;
+        } else if (gameState->detectionManager->getMapShopVisible()) {
+            baseLocation.x = gameState->detectionManager->getMapShop()->center.x;
+            baseLocation.y = gameState->detectionManager->getMapShop()->center.y;
+        }
+    }
+    if (baseLocation.x != -1) {
+        tempBaseLocation = baseLocation;
+    }
     
     
     bool buyingItems = getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*8 && gameState->detectionManager->getShopAvailable();
@@ -283,10 +308,10 @@ void BasicAI::handleMovementAndAttacking() {
         bool allyChampionsNear = [allyChampions count] > 0;
         bool enemyTowerNear = [enemyTowers count] > 0;
         bool underEnemyTower = false;
-        bool inEarlyGame = getTimeInMilliseconds(mach_absolute_time() - gameCurrentTime) <= 1000*60*8; //Plays safe for first 8 minutes
+        //bool inEarlyGame = getTimeInMilliseconds(mach_absolute_time() - gameCurrentTime) <= 1000*60*8; //Plays safe for first 8 minutes
         
         Champion* lowestHealthEnemyChampion = getLowestHealthChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        Champion* closestEnemyChampion = getNearestChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        //Champion* closestEnemyChampion = getNearestChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Minion* lowestHealthEnemyMinion = getLowestHealthMinion(enemyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Minion* closestAllyMinion = getNearestMinion(allyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Champion* nearestAllyChampion = getNearestChampion(allyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
@@ -304,34 +329,29 @@ void BasicAI::handleMovementAndAttacking() {
         }
         //Even better, lets follow an ally champion, see if we can help out
         if (allyChampionsNear) {
-            action = ACTION_Follow_Ally_Champion;
+            //Only follow ally champions if we're not in base
+            if (gameState->detectionManager->getMapLocation() != nil) {
+                CGPoint mapLoc = CGPointMake(gameState->detectionManager->getMapLocation()->center.x, gameState->detectionManager->getMapLocation()->center.y);
+                if (hypot(mapLoc.x - baseLocation.x, mapLoc.y - baseLocation.y) > 60) {
+                    action = ACTION_Follow_Ally_Champion;
+                }
+            }
         }
         //Oh look free gold, lets get that
         if (enemyMinionsNear) {
             action = ACTION_Attack_Enemy_Minion;
         }
         
-        //Attack enemy if see enemy but not if there are too many enemies
-        if (enemyChampionsNear && ([allyChampions count]+2 >= [enemyChampions count] || [allyChampions count] >= 4 || [enemyChampions count] == 1) ) {
-            //We got the upper hand, engage
-            if (selfChamp->health + 10 > lowestHealthEnemyChampion->health && !inEarlyGame) { //Greater health
-                action = ACTION_Attack_Enemy_Champion;
-            } else if (selfChamp->health < 40 && !allyChampionsNear && lowestHealthEnemyChampion->health > selfChamp->health) {
-                //Lesser health and no allies, bye
-                action = ACTION_Run_Away;
-            } else if ((allyChampionsNear || lowestHealthEnemyChampion->health < selfChamp->health) && !inEarlyGame) {
-                //Yolo when allies are near, we can take em
+        //Attack enemy if there are more allies than enemies
+        if (enemyChampionsNear && ([allyChampions count] > [enemyChampions count] || ([allyChampions count] == [enemyChampions count] || [enemyChampions count] > 2)) ) {
+            
+            //Only attack if allies are close
+            if (hypot(nearestAllyChampion->characterCenter.x - selfChamp->characterCenter.x, nearestAllyChampion->characterCenter.y - selfChamp->characterCenter.y) < 400) {
                 action = ACTION_Attack_Enemy_Champion;
             }
-        } else if (enemyChampionsNear && [allyChampions count]+2 < [enemyChampions count]) {
+        } else if (enemyChampionsNear) {
             //Too many baddies, peace.
             action = ACTION_Run_Away;
-        }
-        
-        if (closestEnemyChampion != nil) {
-        if (inEarlyGame && hypot(closestEnemyChampion->characterCenter.x - selfChamp->characterCenter.x, closestEnemyChampion->characterCenter.y - selfChamp->characterCenter.y) < 600) {
-            action = ACTION_Run_Away;
-        }
         }
         
         //Now some more attack logic
@@ -395,7 +415,7 @@ void BasicAI::handleMovementAndAttacking() {
         }
         
         //Go ham
-        if (enemyChampionsNear && lowestHealthEnemyChampion->health < 15) {
+        if (enemyChampionsNear && lowestHealthEnemyChampion->health < 5) {
             action = ACTION_Go_Ham;
         }
         
@@ -405,13 +425,9 @@ void BasicAI::handleMovementAndAttacking() {
             case ACTION_Run_Away:
             {
                 //NSLog(@"\t\tAction: Running Away");
-                //Run back to base by right clicking on the shop on the minimap
-                //If no shop, stand still and fight.
-                if (mapShop != nil) {
-                    if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 700) {
-                        tapMouseRight(mapShop->center.x, mapShop->center.y);
-                        lastRunAwayClick = mach_absolute_time();
-                    }
+                if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 700) {
+                    tapMouseRight(baseLocation.x, baseLocation.y);
+                    lastRunAwayClick = mach_absolute_time();
                 }
                 
                 if (selfChamp->health < 15) {
@@ -566,40 +582,45 @@ void BasicAI::handleMovementAndAttacking() {
             default:
                 break;
         }
+        if (getTimeInMilliseconds(mach_absolute_time() - activeAutoUseTime) >= 1000 * 60 * 5) {
+            activeAutoUseTime = mach_absolute_time();
+            moveMouse(selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+            //Use all actives
+            useItem1();
+            useItem2();
+            useItem3();
+            useItem4();
+            useItem5();
+            useItem6();
+            useTrinket();
+        }
+    } else if (mapVisible && !shopTopLeftCornerVisible && !buyingItems) {
+        if (getTimeInMilliseconds(mach_absolute_time() - moveToLanePathSwitch) >= 1000 * 60 * 5) {
+            //Switch to a random lane
+            moveToLane = arc4random_uniform(3) + 1;
+            moveToLanePathSwitch = mach_absolute_time();
+        }
         
-        //lastAction = action;
-        
-        /*
-         if ((clock() - lastMovementClick)/CLOCKS_PER_SEC >= 3.0) {
-         lastMovementClick = clock(); //Move every 3 seconds, less if enemies near
-         
-         
-         if ([gameState->enemyChampionManager->championBars count] > 0) { //Attack enemy champion
-         ChampionBar enemyChamp = gameState->enemyChampionManager->getLowestHealthChampion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
-         tapMouseRightAttackMove(enemyChamp.characterCenter.x, enemyChamp.characterCenter.y);
-         lastMovementClick -= CLOCKS_PER_SEC*2.5;
-         } else if ([gameState->enemyMinionManager->minionBars count] > 0) { //Attack enemy minion
-         MinionBar enemyMinion = gameState->enemyMinionManager->getLowestHealthMinion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
-         tapMouseRightAttackMove(enemyMinion.characterCenter.x, enemyMinion.characterCenter.y);
-         lastMovementClick -= CLOCKS_PER_SEC*2.5;
-         } else if ([gameState->allyMinionManager->minionBars count] > 0) { //Follow ally minion
-         MinionBar allyMinion = gameState->allyMinionManager->getNearestMinion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
-         tapMouseRight(allyMinion.characterCenter.x, allyMinion.characterCenter.y);
-         lastMovementClick -= CLOCKS_PER_SEC*2.5;
-         } else if ([gameState->allyChampionManager->championBars count] > 0) { //Follow ally champion
-         ChampionBar allyChamp = gameState->allyChampionManager->getNearestChampion(selfChamp.characterCenter.x, selfChamp.characterCenter.y);
-         tapMouseRight(allyChamp.characterCenter.x, allyChamp.characterCenter.y);
-         lastMovementClick -= CLOCKS_PER_SEC*2.5;
-         } else {
-         //srand((unsigned int)time(NULL));
-         //int x = (rand() % (int)(gameState->leagueSize.size.width-100)) + 50;
-         //int y = (rand() % (int)(gameState->leagueSize.size.width-200)) + 100;
-         //Go to mid lane
-         int x = gameState->leagueSize.size.width - 116;
-         int y = gameState->leagueSize.size.height - 92;
-         tapMouseRight(x, y);
-         }
-         }*/
+        if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 500) {
+            //NSLog(@"Time to move");
+            if (mapVisible) {
+                //NSLog(@"Initating click");
+                lastMovementClick = mach_absolute_time();
+                int x = map->center.x;
+                int y = map->center.y;
+                if (moveToLane == 1) {
+                    x = (map->bottomRight.x - map->topLeft.x) * 0.1 + map->topLeft.x;
+                    y = (map->bottomRight.y - map->topLeft.y) * 0.1 + map->topLeft.y;
+                }
+                if (moveToLane == 3) {
+                    x = (map->bottomRight.x - map->topLeft.x) * 0.9 + map->topLeft.x;
+                    y = (map->bottomRight.y - map->topLeft.y) * 0.9 + map->topLeft.y;
+                }
+                tapMouseRight(x, y);
+            }// else {
+            //    NSLog(@"Map not visible");
+            //}
+        }
     }
 }
 

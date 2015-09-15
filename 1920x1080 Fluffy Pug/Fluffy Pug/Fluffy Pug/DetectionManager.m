@@ -1180,7 +1180,7 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                 if (bottomLeftCorner != NULL) {
                     //Scan immediately for items
                     CGPoint searchStart = CGPointMake(topLeftCorner->topLeft.x + 15, topLeftCorner->topLeft.y + 75);
-                    CGPoint searchEnd = CGPointMake(topLeftCorner->topLeft.x + 400, bottomLeftCorner->topLeft.y - 25);
+                    CGPoint searchEnd = CGPointMake(topLeftCorner->topLeft.x + 400, bottomLeftCorner->topLeft.y - 25  - 100);
                     for (int x = searchStart.x; x < searchEnd.x; x++) {
                         for (int y = searchStart.y; y < searchEnd.y; y++) {
                             uint8* pixel = getPixel2(image, x, y);
@@ -2888,10 +2888,10 @@ void DetectionManager::processSelfChampionDetection(ImageData image, dispatch_gr
         combineRectangles(scanRectangles, rect);
     }
     //Scan middle of the screen
-    CGRect rect = CGRectMake(image.imageWidth / 2 - 150,
-                             image.imageHeight / 2 - 230,
-                             220,
-                             120);
+    CGRect rect = CGRectMake(image.imageWidth / 2 - 200,
+                             image.imageHeight / 2 - 280,
+                             320,
+                             220);
     rect = CGRectIntegral(rect);
     rect = fitRectangleInRectangle(rect, leagueWindowRect);
     combineRectangles(scanRectangles, rect);

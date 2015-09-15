@@ -18,15 +18,15 @@ class AutoQueueManager {
     LeagueGameState* leagueGameState;
     
     //Image data to scan for
-    ImageData step1_PlayButton, step2_PVPMode, step3_ClassicMode, step4_SummonersRiftMode, step5_BlindPickMode, step6_SoloButton, step7_AcceptButton, step8_RandomChampionButton, step9_LockInButton, step10_ChooseSkinButton, step11_EndGameContinueButton, step12_HomeButton, step13_ReconnectButton;//, testImage1, testImage2;
+    ImageData step1_PlayButton, step2_PVPMode, step3_ClassicMode, step4_SummonersRiftMode, step5_BlindPickMode, step6_SoloButton, step7_AcceptButton, step8_RandomChampionButton, step9_LockInButton, step10_ChooseSkinButton, step11_EndGameContinueButton, step12_HomeButton, step13_ReconnectButton, reportedButton;
     
     //Variables shared between logic and detection theads
     //Tells detection what to look for when the screen changes
-    volatile Boolean scanForPlayButton, scanForAcceptButton, scanForRandomChampionButton, scanForLockInButton, scanForChooseSkinButton, scanForReconnectButton, scanForHomeButton, scanForEndGameButton, scanForNormalBlindPick;
+    volatile Boolean scanForPlayButton, scanForAcceptButton, scanForRandomChampionButton, scanForLockInButton, scanForChooseSkinButton, scanForReconnectButton, scanForHomeButton, scanForEndGameButton, scanForNormalBlindPick, scanForReportedButton;
     
     //When the detection finds the button, it tells the Logic using these Logic thread variables
-    Position playButtonLocation, acceptButtonLocation, randomChampionButtonLocation, lockInButtonLocation, chooseSkinButtonLocation, reconnectButtonLocation, homeButtonLocation, endGameButtonLocation, normalBlindPickLocation;
-    Boolean foundPlayButton, foundAcceptButton, foundRandomChampionButton, foundLockInButton, foundChooseSkinButton, foundReconnectButton, foundHomeButton, foundEndGameButton, foundNormalBlindPickButton;
+    Position playButtonLocation, acceptButtonLocation, randomChampionButtonLocation, lockInButtonLocation, chooseSkinButtonLocation, reconnectButtonLocation, homeButtonLocation, endGameButtonLocation, normalBlindPickLocation, reportedButtonLocation;
+    Boolean foundPlayButton, foundAcceptButton, foundRandomChampionButton, foundLockInButton, foundChooseSkinButton, foundReconnectButton, foundHomeButton, foundEndGameButton, foundNormalBlindPickButton, foundReportedButton;
     
     //This is the current step the logic is on
     int currentStep;
@@ -39,7 +39,7 @@ class AutoQueueManager {
     int step5ScanCurrentChunkX, step5ScanCurrentChunkY;
     
     uint64_t actionClick, lastHomeButtonClick;
-
+    
 public:
     
     AutoQueueManager(LeagueGameState* gameState);
