@@ -421,7 +421,7 @@ void BasicAI::handleMovementAndAttacking() {
             action = ACTION_Go_Ham;
         }
         
-        if (action == ACTION_Attack_Enemy_Minion && [allyMinions count]-2 < [enemyMinions count]) {
+        if (action == ACTION_Attack_Enemy_Minion && [allyMinions count] < 2) {
             action = ACTION_Run_Away;
         }
         
