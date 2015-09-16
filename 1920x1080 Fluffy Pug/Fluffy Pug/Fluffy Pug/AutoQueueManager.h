@@ -42,6 +42,14 @@ class AutoQueueManager {
     
 public:
     
+    int awakeTime = 1000 * 60 * 60 * 17; //Stay awake for 12 hours
+    int sleepTime = 1000 * 60 * 60 * 7; //Sleep for 7 hours
+    int playTime = 1000 * 60 * 60 * 3; //Play for 3 hours in a row
+    int breakTime = 1000 * 60 * 60 * 1; //1 hour break
+    
+    uint64_t currentAwakeTime, currentSleepTime, currentPlayTime, currentBreakTime;
+    bool busySleeping = false, busyTakingBreak = false;
+    
     AutoQueueManager(LeagueGameState* gameState);
     bool processDetection(ImageData data, const CGRect* rects, size_t num_rects);
     void processLogic();

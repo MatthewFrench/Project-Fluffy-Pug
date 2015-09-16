@@ -311,6 +311,26 @@ AppDelegate *GlobalSelf;
         loops = 0;
         screenLoops = 0;
         [GlobalSelf updateLeagueWindowStatus];
+        
+        //Set the auto queue status
+        NSString* text = @"";
+        text = [NSString stringWithFormat:@"%@\nAuto Queue Status: ", text];
+        text = [NSString stringWithFormat:@"%@\nTaking Break: %@", text, autoQueueManager->busyTakingBreak?@"True":@"False"];
+        text = [NSString stringWithFormat:@"%@\nSleeping: %@", text, autoQueueManager->busySleeping?@"True":@"False"];
+        text = [NSString stringWithFormat:@"%@\nSet Sleep Time: %d minutes", text, autoQueueManager->sleepTime / 1000 / 60];
+        text = [NSString stringWithFormat:@"%@\nSet Awake Time: %d minutes", text, autoQueueManager->awakeTime / 1000 / 60];
+        text = [NSString stringWithFormat:@"%@\nSet Break Time: %d minutes", text, autoQueueManager->breakTime / 1000 / 60];
+        text = [NSString stringWithFormat:@"%@\nSet Play Time: %d minutes", text, autoQueueManager->playTime / 1000 / 60];
+        if (autoQueueManager->busySleeping) {
+            text = [NSString stringWithFormat:@"%@\nSleep time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentSleepTime)-autoQueueManager->sleepTime) / 1000 / 60];
+        } else if (autoQueueManager->busyTakingBreak) {
+            text = [NSString stringWithFormat:@"%@\nBreak time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentBreakTime)-autoQueueManager->breakTime) / 1000 / 60];
+            text = [NSString stringWithFormat:@"%@\nAwake time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentAwakeTime)-autoQueueManager->awakeTime) / 1000 / 60];
+        } else {
+            text = [NSString stringWithFormat:@"%@\nPlay time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentPlayTime)-autoQueueManager->playTime) / 1000 / 60];
+            text = [NSString stringWithFormat:@"%@\nAwake time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentAwakeTime)-autoQueueManager->awakeTime) / 1000 / 60];
+        }
+        [autoQueueStatus setString:text];
     }
     else
     {

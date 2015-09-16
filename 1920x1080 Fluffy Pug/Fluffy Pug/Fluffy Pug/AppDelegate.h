@@ -31,7 +31,7 @@
     //AVCaptureScreenInput *input;
     
     //AVCaptureSession *mSession;
-    
+    IBOutlet NSTextView* autoQueueStatus;
     IBOutlet NSImageView* imageView;
     IBOutlet NSButton* debugCheckbox;
     @public IBOutlet NSButton* autoQueueCheckbox, *recordScreenCheckbox, *aiActiveCheckbox;

@@ -18,6 +18,7 @@
                 <outlet property="allyChampsTxt" destination="yxS-0r-xHR" id="nJS-WP-WJY"/>
                 <outlet property="allyMinionsTxt" destination="qu7-6e-UA8" id="sgs-Ex-ZhK"/>
                 <outlet property="autoQueueCheckbox" destination="s2D-5n-UuO" id="ASI-EE-eew"/>
+                <outlet property="autoQueueStatus" destination="tAM-X8-yuj" id="jdy-CN-qs7"/>
                 <outlet property="buyableItemsTxt" destination="MQ4-9g-gmq" id="n4s-W6-M1V"/>
                 <outlet property="debugCheckbox" destination="hCP-l2-ffx" id="T47-5N-KAp"/>
                 <outlet property="enemyChampsTxt" destination="ae8-KQ-8Ix" id="6Ds-n9-zXu"/>
@@ -788,6 +789,50 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
+                                        <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="zkx-Gu-Lwe">
+                                            <rect key="frame" x="17" y="17" width="492" height="192"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <clipView key="contentView" id="ONx-r2-itG">
+                                                <rect key="frame" x="1" y="1" width="490" height="190"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textView editable="NO" importsGraphics="NO" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" usesFontPanel="YES" verticallyResizable="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" smartInsertDelete="YES" id="tAM-X8-yuj">
+                                                        <rect key="frame" x="0.0" y="0.0" width="490" height="190"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                        <animations/>
+                                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                        <size key="minSize" width="490" height="190"/>
+                                                        <size key="maxSize" width="510" height="10000000"/>
+                                                        <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <size key="minSize" width="490" height="190"/>
+                                                        <size key="maxSize" width="510" height="10000000"/>
+                                                    </textView>
+                                                </subviews>
+                                                <animations/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            </clipView>
+                                            <animations/>
+                                            <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="Sxq-Ww-20z">
+                                                <rect key="frame" x="-100" y="-100" width="87" height="18"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <animations/>
+                                            </scroller>
+                                            <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="WcR-3d-FEc">
+                                                <rect key="frame" x="475" y="1" width="16" height="190"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <animations/>
+                                            </scroller>
+                                        </scrollView>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="P48-T9-1VJ">
+                                            <rect key="frame" x="15" y="217" width="255" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <animations/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Auto Queue Auto Sleep and Break Status:" id="vv9-XU-Wdk">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                     <animations/>
                                 </view>

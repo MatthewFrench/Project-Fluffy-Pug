@@ -35,6 +35,13 @@ AutoQueueManager::AutoQueueManager(LeagueGameState* gameState) {
     actionClick = mach_absolute_time();
     lastHomeButtonClick = mach_absolute_time();
     
+    currentAwakeTime = mach_absolute_time();
+    currentSleepTime  = mach_absolute_time();
+    currentPlayTime  = mach_absolute_time();
+    currentBreakTime  = mach_absolute_time();
+    busySleeping = false;
+    busyTakingBreak = false;
+    
     reset(false);
 }
 void AutoQueueManager::reset(bool keepPlayButton) {
@@ -55,6 +62,51 @@ void AutoQueueManager::reset(bool keepPlayButton) {
 }
 void AutoQueueManager::processLogic() {
     
+    
+    /*
+     currentAwakeTime = mach_absolute_time();
+     currentSleepTime  = mach_absolute_time();
+     currentPlayTime  = mach_absolute_time();
+     currentBreakTime  = mach_absolute_time();
+     busySleeping = false;
+     busyTakingBreak = false;
+     */
+    if (!busySleeping) {
+        if (getTimeInMilliseconds(mach_absolute_time() - currentAwakeTime) >= awakeTime) {
+            //We've been away for too long, tired, need to sleep
+            busySleeping = true;
+            currentSleepTime = mach_absolute_time();
+        }
+        if (!busyTakingBreak && getTimeInMilliseconds(mach_absolute_time() - currentPlayTime >= playTime)) {
+            //We've played for too long, time to take a break, pee
+            busyTakingBreak = true;
+            currentBreakTime = mach_absolute_time();
+        }
+        if (busyTakingBreak && getTimeInMilliseconds(mach_absolute_time() - currentBreakTime) >= breakTime) {
+            //Done with break, lets get back to playing
+            busyTakingBreak = false;
+            currentPlayTime = mach_absolute_time();
+        }
+    } else {
+        if (getTimeInMilliseconds(mach_absolute_time() - currentSleepTime) >= sleepTime) {
+            //Refreshed, lets play again
+            currentAwakeTime = mach_absolute_time();
+            currentSleepTime  = mach_absolute_time();
+            currentPlayTime  = mach_absolute_time();
+            currentBreakTime  = mach_absolute_time();
+            busySleeping = false;
+            busyTakingBreak = false;
+        }
+    }
+    
+    if (leagueGameState->leaguePID == -1 && (busySleeping || busyTakingBreak) && (currentStep == STEP_1 || currentStep == STEP_2 || currentStep == STEP_3 || currentStep == STEP_4 || currentStep == STEP_5)) {
+        //Sleep or take a break
+        return;
+    }
+    
+    
+    
+    
     if (foundPlayButton && currentStep != STEP_1 && currentStep != STEP_2) {
         reset(true);
     }
@@ -69,6 +121,7 @@ void AutoQueueManager::processLogic() {
             actionClick = mach_absolute_time();
             foundReportedButton = false;
         }
+        
         
         switch (currentStep) {
             case STEP_1: {
@@ -247,6 +300,12 @@ void AutoQueueManager::processEndGameDetection(ImageData data) {
     //}
 }
 bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, size_t num_rects) {
+    
+    if (leagueGameState->leaguePID == -1 && (busySleeping || busyTakingBreak) && (currentStep == STEP_1 || currentStep == STEP_2 || currentStep == STEP_3 || currentStep == STEP_4 || currentStep == STEP_5)) {
+        //Sleep or take a break
+        return false;
+    }
+    
     /*
      dispatch_group_t dispatchGroup = dispatch_group_create();
      

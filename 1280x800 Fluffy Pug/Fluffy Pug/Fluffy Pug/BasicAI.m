@@ -243,7 +243,7 @@ void BasicAI::handleCameraFocus() {
 }
 void BasicAI::handlePlacingWard() {
     if ([gameState->detectionManager->getSelfChampions() count] > 0 && gameState->detectionManager->getTrinketActiveAvailable() &&
-        getTimeInMilliseconds(mach_absolute_time() - lastPlacedWard) >= 500) {
+        getTimeInMilliseconds(mach_absolute_time() - lastPlacedWard) >= 1500) {
         Champion* champ = [gameState->detectionManager->getSelfChampions() firstObject];
         moveMouse(champ->characterCenter.x, champ->characterCenter.y);
         useTrinket();
@@ -313,7 +313,7 @@ void BasicAI::handleMovementAndAttacking() {
         //bool inEarlyGame = getTimeInMilliseconds(mach_absolute_time() - gameCurrentTime) <= 1000*60*8; //Plays safe for first 8 minutes
         
         Champion* lowestHealthEnemyChampion = getLowestHealthChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
-        //Champion* closestEnemyChampion = getNearestChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
+        Champion* closestEnemyChampion = getNearestChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Minion* lowestHealthEnemyMinion = getLowestHealthMinion(enemyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Minion* closestAllyMinion = getNearestMinion(allyMinions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
         Champion* nearestAllyChampion = getNearestChampion(allyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
@@ -345,6 +345,7 @@ void BasicAI::handleMovementAndAttacking() {
         }
         
         //Attack enemy if there are more allies than enemies
+        /*
         if (enemyChampionsNear &&
             ([allyChampions count] > [enemyChampions count] || ([allyChampions count] == [enemyChampions count] && [allyChampions count] > 2)) && !earlyGame && [allyChampions count] > 0) {
             
@@ -354,29 +355,9 @@ void BasicAI::handleMovementAndAttacking() {
             } else {
                 action = ACTION_Run_Away;
             }
-        } else if (enemyChampionsNear) {
+        } else */if (enemyChampionsNear) {
             //Too many baddies, peace.
             action = ACTION_Run_Away;
-        }
-        
-        //Now some more attack logic
-        if (action == ACTION_Attack_Enemy_Champion && enemyTowerNear) {
-            //If enemy is under tower, ignore
-            if (hypot(lowestHealthEnemyChampion->characterCenter.x - nearestEnemyTower->towerCenter.x, lowestHealthEnemyChampion->characterCenter.y - nearestEnemyTower->towerCenter.y) < 430 && lowestHealthEnemyChampion->health > 20) {
-                action = ACTION_Run_Away;
-                /*
-                 action = ACTION_Move_To_Mid;
-                 
-                 if (allyMinionsNear) {
-                 action = ACTION_Follow_Ally_Minion;
-                 }
-                 if (allyChampionsNear) {
-                 action = ACTION_Follow_Ally_Champion;
-                 }
-                 if (enemyMinionsNear) {
-                 action = ACTION_Attack_Enemy_Minion;
-                 }*/
-            }
         }
         
         if (action == ACTION_Attack_Enemy_Minion && enemyTowerNear) {
@@ -407,26 +388,26 @@ void BasicAI::handleMovementAndAttacking() {
                 action = ACTION_Run_Away;
             }
         }
-        
+        /*
         bool enemyChampionCloseEnough = false;
         if ([enemyChampions count] > 0) {
             Champion* closeEnemyChampion = getNearestChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
             if (hypot(closeEnemyChampion->characterCenter.x - selfChamp->characterCenter.x, closeEnemyChampion->characterCenter.y - selfChamp->characterCenter.y) < 600) {
                 enemyChampionCloseEnough = true;
             }
-        }
-        if (selfChamp->health < 35 && (enemyChampionCloseEnough || enemyMinionsNear || underEnemyTower)) {
+        }*/
+        if (selfChamp->health < 50 && (enemyMinionsNear || underEnemyTower || enemyChampionsNear)) {
             action = ACTION_Run_Away;
-        } else if (selfChamp->health < 35 && !enemyChampionsNear && !underEnemyTower) {
-            if (selfChamp->health > 25) {
+        } else if (selfChamp->health < 50 && !enemyChampionsNear && !underEnemyTower) {
+            if (selfChamp->health > 35) {
                 action = ACTION_Recall;
             } else {
                 action = ACTION_Run_Away;
             }
-        } else if (selfChamp->health < 35) {
+        } else if (selfChamp->health <= 35) {
             action = ACTION_Run_Away;
         }
-        if (gameState->detectionManager->getPotionActiveAvailable() && selfChamp->health < 75) {
+        if (gameState->detectionManager->getPotionActiveAvailable() && selfChamp->health < 80) {
             if (gameState->detectionManager->getPotionActiveItemSlot() == 1) useItem1();
             if (gameState->detectionManager->getPotionActiveItemSlot() == 2) useItem2();
             if (gameState->detectionManager->getPotionActiveItemSlot() == 3) useItem3();
@@ -455,27 +436,29 @@ void BasicAI::handleMovementAndAttacking() {
                     lastRunAwayClick = mach_absolute_time();
                 }
                 
-                if (selfChamp->health < 15) {
-                    int enemyX = selfChamp->characterCenter.x;
-                    int enemyY = selfChamp->characterCenter.y;
+                if (selfChamp->health < 40 && enemyChampionsNear) {
+                    int enemyX = (closestEnemyChampion->characterCenter.x - selfChamp->characterCenter.x);
+                    int enemyY = (closestEnemyChampion->characterCenter.y - selfChamp->characterCenter.y);
+                    normalizePoint(enemyX, enemyY, 300);
+                    //enemyX = -enemyX;
+                    //enemyY = -enemyY;
                     //Panic
-                    if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 17) {
+                    if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 50) {
                         lastMoveMouse = mach_absolute_time();
                         moveMouse(enemyX, enemyY);
+                        castSpell4();
+                        castSpell2();
+                        useTrinket();
+                        moveMouse(-enemyX, -enemyY);
+                        castSummonerSpell1();
+                        castSummonerSpell2();
+                        useItem1();
+                        useItem2();
+                        useItem3();
+                        useItem4();
+                        useItem5();
+                        useItem6();
                     }
-                    castSpell4();
-                    castSpell3();
-                    castSpell2();
-                    castSpell1();
-                    castSummonerSpell1();
-                    castSummonerSpell2();
-                    useItem1();
-                    useItem2();
-                    useItem3();
-                    useItem4();
-                    useItem5();
-                    useItem6();
-                    useTrinket();
                 }
             }
                 break;
@@ -489,7 +472,7 @@ void BasicAI::handleMovementAndAttacking() {
                     lastClickEnemyChamp = mach_absolute_time();
                     tapAttackMove(lowestHealthEnemyChampion->characterCenter.x, lowestHealthEnemyChampion->characterCenter.y);
                 }
-                if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 17) {
+                if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 50) {
                     lastMoveMouse = mach_absolute_time();
                     moveMouse(x, y);
                 }
@@ -516,7 +499,7 @@ void BasicAI::handleMovementAndAttacking() {
                     lastClickEnemyMinion = mach_absolute_time();
                     tapAttackMove(lowestHealthEnemyMinion->characterCenter.x, lowestHealthEnemyMinion->characterCenter.y);
                 }
-                if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 17) {
+                if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 50) {
                     lastMoveMouse = mach_absolute_time();
                     moveMouse(lowestHealthEnemyMinion->characterCenter.x, lowestHealthEnemyMinion->characterCenter.y);
                 }
@@ -532,7 +515,7 @@ void BasicAI::handleMovementAndAttacking() {
                     lastClickEnemyTower = mach_absolute_time();
                     tapAttackMove(nearestEnemyTower->towerCenter.x, nearestEnemyTower->towerCenter.y);
                 }
-                if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 17) {
+                if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 50) {
                     lastMoveMouse = mach_absolute_time();
                     moveMouse(nearestEnemyTower->towerCenter.x, nearestEnemyTower->towerCenter.y);
                 }
@@ -620,7 +603,7 @@ void BasicAI::handleMovementAndAttacking() {
             useTrinket();
         }
     } else if (mapVisible && !shopTopLeftCornerVisible && !buyingItems) {
-        if (getTimeInMilliseconds(mach_absolute_time() - moveToLanePathSwitch) >= 1000 * 60 * 5) {
+        if (getTimeInMilliseconds(mach_absolute_time() - moveToLanePathSwitch) >= 1000 * 60 * 2) {
             //Switch to a random lane
             moveToLane = arc4random_uniform(3) + 1;
             moveToLanePathSwitch = mach_absolute_time();
@@ -705,7 +688,7 @@ void BasicAI::useTrinket() {
     }
 }
 void BasicAI::castSummonerSpell1() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastSummonerSpell1Use) >= 80) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastSummonerSpell1Use) >= 200) {
         if (gameState->detectionManager->getSummonerSpell1Available()) {
             tapSummonerSpell1();
             lastSummonerSpell1Use = mach_absolute_time();
@@ -713,7 +696,7 @@ void BasicAI::castSummonerSpell1() {
     }
 }
 void BasicAI::castSummonerSpell2() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastSummonerSpell2Use) >= 80) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastSummonerSpell2Use) >= 200) {
         if (gameState->detectionManager->getSummonerSpell2Available()) {
             tapSummonerSpell2();
             lastSummonerSpell2Use = mach_absolute_time();
@@ -721,7 +704,7 @@ void BasicAI::castSummonerSpell2() {
     }
 }
 void BasicAI::useItem1() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastItem1Use) >= 80) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastItem1Use) >= 200) {
         //if (gameState->detectionManager->getItem1ActiveAvailable()) {
         tapActive1();
         lastItem1Use = mach_absolute_time();
@@ -730,7 +713,7 @@ void BasicAI::useItem1() {
     
 }
 void BasicAI::useItem2() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastItem2Use) >= 80) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastItem2Use) >= 200) {
         //if (gameState->detectionManager->getItem2ActiveAvailable()) {
         tapActive2();
         lastItem2Use = mach_absolute_time();
@@ -738,7 +721,7 @@ void BasicAI::useItem2() {
     }
 }
 void BasicAI::useItem3() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastItem3Use) >= 80) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastItem3Use) >= 200) {
         //if (gameState->detectionManager->getItem3ActiveAvailable()) {
         tapActive3();
         lastItem3Use = mach_absolute_time();
@@ -746,7 +729,7 @@ void BasicAI::useItem3() {
     }
 }
 void BasicAI::useItem4() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastItem4Use) >= 80) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastItem4Use) >= 200) {
         //if (gameState->detectionManager->getItem4ActiveAvailable()) {
         tapActive5();
         lastItem4Use = mach_absolute_time();
@@ -754,7 +737,7 @@ void BasicAI::useItem4() {
     }
 }
 void BasicAI::useItem5() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastItem5Use) >= 80) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastItem5Use) >= 200) {
         //if (gameState->detectionManager->getItem5ActiveAvailable()) {
         tapActive6();
         lastItem5Use = mach_absolute_time();
@@ -762,7 +745,7 @@ void BasicAI::useItem5() {
     }
 }
 void BasicAI::useItem6() {
-    if (getTimeInMilliseconds(mach_absolute_time() - lastItem6Use) >= 80) {
+    if (getTimeInMilliseconds(mach_absolute_time() - lastItem6Use) >= 200) {
         //if (gameState->detectionManager->getItem6ActiveAvailable()) {
         tapActive7();
         lastItem6Use = mach_absolute_time();
