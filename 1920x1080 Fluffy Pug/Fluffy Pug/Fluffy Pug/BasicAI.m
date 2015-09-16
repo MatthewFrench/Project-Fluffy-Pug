@@ -165,7 +165,7 @@ void BasicAI::handleBuyingItems() {
                     GenericObject* item = [itemsToBuy objectAtIndex:i];
                     int clickX = item->center.x;
                     int clickY = item->center.y;
-                    if (boughtStarterItems && clickY > 100 && clickY < 200) {
+                    if (boughtStarterItems && clickY < gameState->detectionManager->getShopTopLeftCorner()->topLeft.y  + 240) {
                         continue; //Skip buying this item because we already bought starter items. No troll build.
                     }
                     //Skip buying this item if we already bought it once
@@ -558,7 +558,7 @@ void BasicAI::handleMovementAndAttacking() {
                     moveToLanePathSwitch = mach_absolute_time();
                 }
                 
-                if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 500) {
+                if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 1500) {
                     //NSLog(@"Time to move");
                     if (mapVisible) {
                         //NSLog(@"Initating click");
@@ -566,12 +566,12 @@ void BasicAI::handleMovementAndAttacking() {
                         int x = map->center.x;
                         int y = map->center.y;
                         if (moveToLane == 1) {
-                            x = (map->bottomRight.x - map->topLeft.x) * 0.1 + map->topLeft.x;
-                            y = (map->bottomRight.y - map->topLeft.y) * 0.1 + map->topLeft.y;
+                            x = (map->bottomRight.x - map->topLeft.x) * 0.2 + map->topLeft.x;
+                            y = (map->bottomRight.y - map->topLeft.y) * 0.2 + map->topLeft.y;
                         }
                         if (moveToLane == 3) {
-                            x = (map->bottomRight.x - map->topLeft.x) * 0.9 + map->topLeft.x;
-                            y = (map->bottomRight.y - map->topLeft.y) * 0.9 + map->topLeft.y;
+                            x = (map->bottomRight.x - map->topLeft.x) * 0.8 + map->topLeft.x;
+                            y = (map->bottomRight.y - map->topLeft.y) * 0.8 + map->topLeft.y;
                         }
                         tapMouseRight(x, y);
                     }// else {
@@ -609,7 +609,7 @@ void BasicAI::handleMovementAndAttacking() {
             moveToLanePathSwitch = mach_absolute_time();
         }
         
-        if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 500) {
+        if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 1500) {
             //NSLog(@"Time to move");
             if (mapVisible) {
                 //NSLog(@"Initating click");
@@ -617,12 +617,12 @@ void BasicAI::handleMovementAndAttacking() {
                 int x = map->center.x;
                 int y = map->center.y;
                 if (moveToLane == 1) {
-                    x = (map->bottomRight.x - map->topLeft.x) * 0.1 + map->topLeft.x;
-                    y = (map->bottomRight.y - map->topLeft.y) * 0.1 + map->topLeft.y;
+                    x = (map->bottomRight.x - map->topLeft.x) * 0.2 + map->topLeft.x;
+                    y = (map->bottomRight.y - map->topLeft.y) * 0.2 + map->topLeft.y;
                 }
                 if (moveToLane == 3) {
-                    x = (map->bottomRight.x - map->topLeft.x) * 0.9 + map->topLeft.x;
-                    y = (map->bottomRight.y - map->topLeft.y) * 0.9 + map->topLeft.y;
+                    x = (map->bottomRight.x - map->topLeft.x) * 0.8 + map->topLeft.x;
+                    y = (map->bottomRight.y - map->topLeft.y) * 0.8 + map->topLeft.y;
                 }
                 tapMouseRight(x, y);
             }// else {
