@@ -165,7 +165,7 @@ void BasicAI::handleBuyingItems() {
                     GenericObject* item = [itemsToBuy objectAtIndex:i];
                     int clickX = item->center.x;
                     int clickY = item->center.y;
-                    if (boughtStarterItems && clickY > 100 && clickY < 200) {
+                    if (boughtStarterItems && clickY < gameState->detectionManager->getShopTopLeftCorner()->topLeft.y + 200) {
                         continue; //Skip buying this item because we already bought starter items. No troll build.
                     }
                     //Skip buying this item if we already bought it once
@@ -334,7 +334,7 @@ void BasicAI::handleMovementAndAttacking() {
             //Only follow ally champions if we're not in base
             if (gameState->detectionManager->getMapLocation() != nil) {
                 CGPoint mapLoc = CGPointMake(gameState->detectionManager->getMapLocation()->center.x, gameState->detectionManager->getMapLocation()->center.y);
-                if (hypot(mapLoc.x - baseLocation.x, mapLoc.y - baseLocation.y) > 60) {
+                if (hypot(mapLoc.x - tempBaseLocation.x, mapLoc.y - tempBaseLocation.y) > 60) {
                     action = ACTION_Follow_Ally_Champion;
                 }
             }

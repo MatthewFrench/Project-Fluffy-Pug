@@ -334,7 +334,7 @@ void BasicAI::handleMovementAndAttacking() {
             //Only follow ally champions if we're not in base
             if (gameState->detectionManager->getMapLocation() != nil) {
                 CGPoint mapLoc = CGPointMake(gameState->detectionManager->getMapLocation()->center.x, gameState->detectionManager->getMapLocation()->center.y);
-                if (hypot(mapLoc.x - baseLocation.x, mapLoc.y - baseLocation.y) > 60) {
+                if (hypot(mapLoc.x - tempBaseLocation.x, mapLoc.y - tempBaseLocation.y) > 60) {
                     action = ACTION_Follow_Ally_Champion;
                 }
             }
