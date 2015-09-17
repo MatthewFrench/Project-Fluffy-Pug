@@ -322,13 +322,13 @@ AppDelegate *GlobalSelf;
         text = [NSString stringWithFormat:@"%@\nSet Break Time: %d minutes", text, autoQueueManager->breakTime / 1000 / 60];
         text = [NSString stringWithFormat:@"%@\nSet Play Time: %d minutes", text, autoQueueManager->playTime / 1000 / 60];
         if (autoQueueManager->busySleeping) {
-            text = [NSString stringWithFormat:@"%@\nSleep time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentSleepTime)-autoQueueManager->sleepTime) / 1000 / 60];
+            text = [NSString stringWithFormat:@"%@\nSleep time left: %f minutes", text, (autoQueueManager->sleepTime-getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentSleepTime)) / 1000 / 60.0];
         } else if (autoQueueManager->busyTakingBreak) {
-            text = [NSString stringWithFormat:@"%@\nBreak time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentBreakTime)-autoQueueManager->breakTime) / 1000 / 60];
-            text = [NSString stringWithFormat:@"%@\nAwake time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentAwakeTime)-autoQueueManager->awakeTime) / 1000 / 60];
+            text = [NSString stringWithFormat:@"%@\nBreak time left: %f minutes", text, (autoQueueManager->breakTime-getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentBreakTime)) / 1000 / 60.0];
+            text = [NSString stringWithFormat:@"%@\nAwake time left: %f minutes", text, (autoQueueManager->awakeTime-getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentAwakeTime)) / 1000 / 60.0];
         } else {
-            text = [NSString stringWithFormat:@"%@\nPlay time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentPlayTime)-autoQueueManager->playTime) / 1000 / 60];
-            text = [NSString stringWithFormat:@"%@\nAwake time left: %d minutes", text, (getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentAwakeTime)-autoQueueManager->awakeTime) / 1000 / 60];
+            text = [NSString stringWithFormat:@"%@\nPlay time left: %f minutes", text, (autoQueueManager->playTime-getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentPlayTime)) / 1000 / 60.0];
+            text = [NSString stringWithFormat:@"%@\nAwake time left: %f minutes", text, (autoQueueManager->awakeTime-getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentAwakeTime)) / 1000 / 60.0];
         }
         [autoQueueStatus setString:text];
     }

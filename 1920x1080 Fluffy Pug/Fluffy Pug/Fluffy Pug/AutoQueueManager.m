@@ -70,7 +70,7 @@ void AutoQueueManager::processLogic() {
             busySleeping = true;
             currentSleepTime = mach_absolute_time();
         }
-        if (!busyTakingBreak && getTimeInMilliseconds(mach_absolute_time() - currentPlayTime >= playTime)) {
+        if (!busyTakingBreak && getTimeInMilliseconds(mach_absolute_time() - currentPlayTime) >= playTime) {
             //We've played for too long, time to take a break, pee
             busyTakingBreak = true;
             currentBreakTime = mach_absolute_time();
