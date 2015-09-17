@@ -482,11 +482,11 @@ void BasicAI::handleMovementAndAttacking() {
                     //Panic
                     if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 50) {
                         lastMoveMouse = mach_absolute_time();
-                        moveMouse(enemyX, enemyY);
+                        moveMouse(enemyX+selfChamp->characterCenter.x, enemyY+selfChamp->characterCenter.y);
                         castSpell4();
                         castSpell2();
                         useTrinket();
-                        moveMouse(-enemyX, -enemyY);
+                        moveMouse(selfChamp->characterCenter.x-enemyX, selfChamp->characterCenter.y-enemyY);
                         castSummonerSpell1();
                         castSummonerSpell2();
                         useItem1();
