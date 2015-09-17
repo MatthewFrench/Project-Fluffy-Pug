@@ -37,6 +37,15 @@ class BasicAI {
     
     CGPoint baseLocation;
     
+    float healthGainedPerSecond;
+    uint64_t healthGainedTime;
+    float lastHealthAmount;
+    uint64_t lastHealthtimePassed;
+    
+    uint64_t standStillTime;
+    
+    uint64_t lastTimeSawEnemyChamp;
+    
 public:
     BasicAI(LeagueGameState* leagueGameState);
     void processAI();

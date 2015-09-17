@@ -2405,8 +2405,8 @@ void DetectionManager::processEnemyMinionDetection(ImageData image, dispatch_gro
     });
 }
 
-const int enemyChampionScanChunksX = 4; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
-const int enemyChampionScanChunksY = 8;
+const int enemyChampionScanChunksX = 2; //36 frames until full scan. Full scan at 60fps is 0.6 seconds.
+const int enemyChampionScanChunksY = 4;
 const float enemyChampionFrameMove = 80.0; //Assume Champions can move 80 pixels in 1 frames
 void DetectionManager::processEnemyChampionDetection(ImageData image, dispatch_group_t dispatchGroup) {
     float leagueGameWidth = image.imageWidth;

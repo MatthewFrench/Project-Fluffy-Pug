@@ -105,6 +105,15 @@ void BasicAI::resetAI() {
     gameCurrentTime = mach_absolute_time();
     
     lastSurrender = mach_absolute_time();
+    
+    healthGainedPerSecond = 0;
+    healthGainedTime = mach_absolute_time();
+    lastHealthtimePassed = mach_absolute_time();
+    lastHealthAmount = 0.0;
+    
+    standStillTime = mach_absolute_time();
+    
+    lastTimeSawEnemyChamp = mach_absolute_time();
 }
 void BasicAI::handleAbilityLevelUps() {
     int abilityLevelUpOrder[] = {1, 2, 3, 1, 2, 4, 3, 1, 2, 3, 4, 1, 2, 3, 1, 4, 2, 3};
@@ -250,7 +259,7 @@ void BasicAI::handlePlacingWard() {
         //NSLog(@"Placing ward");
     }
 }
-const int ACTION_Run_Away = 0, ACTION_Attack_Enemy_Champion = 1, ACTION_Attack_Enemy_Minion = 2, ACTION_Follow_Ally_Champion = 3, ACTION_Follow_Ally_Minion = 4, ACTION_Move_To_Mid = 5, ACTION_Recall = 6, ACTION_Attack_Tower = 7, ACTION_Go_Ham = 8;
+const int ACTION_Run_Away = 0, ACTION_Attack_Enemy_Champion = 1, ACTION_Attack_Enemy_Minion = 2, ACTION_Follow_Ally_Champion = 3, ACTION_Follow_Ally_Minion = 4, ACTION_Move_To_Mid = 5, ACTION_Recall = 6, ACTION_Attack_Tower = 7, ACTION_Go_Ham = 8, ACTION_Stand_Still = 9;
 void BasicAI::handleMovementAndAttacking() {
     //If we see our selves and the shop is closed, then lets move around
     
@@ -282,6 +291,17 @@ void BasicAI::handleMovementAndAttacking() {
         tempBaseLocation = baseLocation;
     }
     
+    //Calculate health gained per second
+    //float healthGainedPerSecond;
+    //uint64_t healthGainedTime;
+    if (gameState->detectionManager->getSelfHealthBarVisible()) {
+        float currentHealth = gameState->detectionManager->getSelfHealthBar()->health;
+        float gainedHealthInFrame = lastHealthAmount - currentHealth;
+        lastHealthAmount = currentHealth;
+        healthGainedPerSecond += gainedHealthInFrame * getTimeInMilliseconds(mach_absolute_time() - lastHealthtimePassed)/1000.0;
+        lastHealthtimePassed = mach_absolute_time();
+    }
+    
     
     bool buyingItems = getTimeInMilliseconds(mach_absolute_time() - lastShopBuy) >= 1000*60*8 && gameState->detectionManager->getShopAvailable();
     
@@ -305,11 +325,17 @@ void BasicAI::handleMovementAndAttacking() {
         NSMutableArray* enemyTowers = gameState->detectionManager->getEnemyTowers();
         
         bool enemyChampionsNear = [enemyChampions count] > 0;
+        
+        if (enemyChampionsNear) {
+            lastTimeSawEnemyChamp = mach_absolute_time();
+        }
+        
         bool enemyMinionsNear = [enemyMinions count] > 0;
         bool allyMinionsNear = [allyMinions count] > 0;
         bool allyChampionsNear = [allyChampions count] > 0;
         bool enemyTowerNear = [enemyTowers count] > 0;
         bool underEnemyTower = false;
+        bool enemyChampionWasNear = getTimeInMilliseconds(mach_absolute_time() - lastTimeSawEnemyChamp) <= 1000*10; //Ten seconds
         //bool inEarlyGame = getTimeInMilliseconds(mach_absolute_time() - gameCurrentTime) <= 1000*60*8; //Plays safe for first 8 minutes
         
         Champion* lowestHealthEnemyChampion = getLowestHealthChampion(enemyChampions, selfChamp->characterCenter.x, selfChamp->characterCenter.y);
@@ -342,6 +368,14 @@ void BasicAI::handleMovementAndAttacking() {
         //Oh look free gold, lets get that
         if (enemyMinionsNear) {
             action = ACTION_Attack_Enemy_Minion;
+        }
+        
+        //If on pad stand still
+        if (healthGainedPerSecond >= 3.0) { //Gaining 3% health per second
+            action = ACTION_Stand_Still;
+        }
+        if (healthGainedPerSecond <= -5.0) { //Losing health rapidly
+            action = ACTION_Run_Away;
         }
         
         //Attack enemy if there are more allies than enemies
@@ -396,10 +430,10 @@ void BasicAI::handleMovementAndAttacking() {
                 enemyChampionCloseEnough = true;
             }
         }*/
-        if (selfChamp->health < 50 && (enemyMinionsNear || underEnemyTower || enemyChampionsNear)) {
+        if (selfChamp->health < 50 && (enemyMinionsNear || underEnemyTower || enemyChampionsNear || enemyChampionWasNear)) {
             action = ACTION_Run_Away;
         } else if (selfChamp->health < 50 && !enemyChampionsNear && !underEnemyTower) {
-            if (selfChamp->health > 35) {
+            if (selfChamp->health > 35 && !enemyChampionWasNear) {
                 action = ACTION_Recall;
             } else {
                 action = ACTION_Run_Away;
@@ -586,6 +620,13 @@ void BasicAI::handleMovementAndAttacking() {
                 castRecall();
             }
                 break;
+            case ACTION_Stand_Still:
+            {
+                if (getTimeInMilliseconds(mach_absolute_time() - standStillTime) >= 500) {
+                    standStillTime = mach_absolute_time();
+                    tapStopMoving();
+                }
+            }
                 
             default:
                 break;
@@ -629,6 +670,10 @@ void BasicAI::handleMovementAndAttacking() {
             //    NSLog(@"Map not visible");
             //}
         }
+    }
+    if (getTimeInMilliseconds(mach_absolute_time() - healthGainedTime) >= 1000) {
+        healthGainedPerSecond = 0.1;
+        healthGainedTime = mach_absolute_time();
     }
 }
 
