@@ -385,10 +385,10 @@ void BasicAI::handleMovementAndAttacking() {
         }
         
         //If on pad stand still
-        if (healthGainedPerSecond >= 3.0) { //Gaining 3% health per second
+        if (healthGainedPerSecond >= 1.0) { //Gaining 1% health per second
             action = ACTION_Stand_Still;
         }
-        if (healthGainedPerSecond <= -5.0) { //Losing health rapidly
+        if (healthGainedPerSecond <= -1.0) { //Losing health rapidly
             action = ACTION_Run_Away;
         }
         
