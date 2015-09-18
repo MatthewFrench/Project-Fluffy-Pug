@@ -677,8 +677,8 @@ void BasicAI::handleMovementAndAttacking() {
                 int x = map->center.x;
                 int y = map->center.y;
                 if (moveToLane == 1) {
-                    x = (map->bottomRight.x - map->topLeft.x) * 0.1 + map->topLeft.x;
-                    y = (map->bottomRight.y - map->topLeft.y) * 0.1 + map->topLeft.y;
+                    x = (map->bottomRight.x - map->topLeft.x) * 0.2 + map->topLeft.x;
+                    y = (map->bottomRight.y - map->topLeft.y) * 0.2 + map->topLeft.y;
                 }
                 if (moveToLane == 3) {
                     x = (map->bottomRight.x - map->topLeft.x) * 0.9 + map->topLeft.x;

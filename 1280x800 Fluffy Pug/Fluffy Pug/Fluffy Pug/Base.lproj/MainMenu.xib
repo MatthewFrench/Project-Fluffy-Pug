@@ -17,6 +17,7 @@
                 <outlet property="aiActiveCheckbox" destination="Gxv-74-hKm" id="RbW-1I-9AM"/>
                 <outlet property="allyChampsTxt" destination="yxS-0r-xHR" id="nJS-WP-WJY"/>
                 <outlet property="allyMinionsTxt" destination="qu7-6e-UA8" id="sgs-Ex-ZhK"/>
+                <outlet property="artificalIntelligenceDecision" destination="g3N-Jv-ZG6" id="bY3-o7-MOl"/>
                 <outlet property="autoQueueCheckbox" destination="s2D-5n-UuO" id="ASI-EE-eew"/>
                 <outlet property="autoQueueStatus" destination="tAM-X8-yuj" id="jdy-CN-qs7"/>
                 <outlet property="buyableItemsTxt" destination="MQ4-9g-gmq" id="n4s-W6-M1V"/>

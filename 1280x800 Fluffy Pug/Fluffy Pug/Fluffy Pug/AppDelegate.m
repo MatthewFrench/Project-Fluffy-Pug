@@ -290,9 +290,6 @@ AppDelegate *GlobalSelf;
     //Run auto queue logic and AI logic
     if ([GlobalSelf->aiActiveCheckbox state] == NSOnState && GlobalSelf->leagueGameState->leaguePID != -1) {
         basicAI->processAI();
-    }
-    if (runAutoQueue) { // && leagueGameState->leaguePID == -1
-        autoQueueManager->processLogic();
         //Set the AI info
         if (basicAI->lastDecision != processedDecision) {
             processedDecision = basicAI->lastDecision;
@@ -329,6 +326,10 @@ AppDelegate *GlobalSelf;
                 [artificalIntelligenceDecision setStringValue:@"Standing Still"];
             }
         }
+    }
+    if (runAutoQueue) { // && leagueGameState->leaguePID == -1
+        autoQueueManager->processLogic();
+        
     }
     
     //Profile code
