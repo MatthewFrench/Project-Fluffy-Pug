@@ -275,8 +275,8 @@ void BasicAI::handleMovementAndAttacking() {
     CGPoint tempBaseLocation;
     if (baseLocation.x == -1 && mapVisible) {
         //Set base location to blue side by default
-        tempBaseLocation.x = (map->topLeft.x - map->bottomRight.x) * 0.1 + map->topLeft.x;
-        tempBaseLocation.y = (map->topLeft.y - map->bottomRight.y) * 0.9 + map->topLeft.y;
+        tempBaseLocation.x = (map->bottomRight.x-map->topLeft.x) * 0.1 + map->topLeft.x;
+        tempBaseLocation.y = (map->bottomRight.y-map->topLeft.y) * 0.9 + map->topLeft.y;
     }
     if (baseLocation.x == -1) { // Try to set base location
         if (gameState->detectionManager->getMapLocationVisible()) {
@@ -287,10 +287,10 @@ void BasicAI::handleMovementAndAttacking() {
             baseLocation.y = gameState->detectionManager->getMapShop()->center.y;
         }
         if (baseLocation.x != -1) {
-            int blueSideX = (map->topLeft.x - map->bottomRight.x) * 0.1 + map->topLeft.x;
-            int blueSideY = (map->topLeft.y - map->bottomRight.y) * 0.9 + map->topLeft.y;
-            int redSideX = (map->topLeft.x - map->bottomRight.x) * 0.9 + map->topLeft.x;
-            int redSideY = (map->topLeft.y - map->bottomRight.y) * 0.1 + map->topLeft.y;
+            int blueSideX = (map->bottomRight.x-map->topLeft.x) * 0.1 + map->topLeft.x;
+            int blueSideY = (map->bottomRight.y-map->topLeft.y) * 0.9 + map->topLeft.y;
+            int redSideX = (map->bottomRight.x-map->topLeft.x) * 0.9 + map->topLeft.x;
+            int redSideY = (map->bottomRight.y-map->topLeft.y) * 0.1 + map->topLeft.y;
             //Move blue side closer if at blue side, otherwise move to red side if closer
             if (hypot(blueSideX - baseLocation.x, blueSideY - baseLocation.y) < hypot(redSideX - baseLocation.x, redSideY - baseLocation.y)) {
                 baseLocation.x = blueSideX;
