@@ -286,6 +286,20 @@ void BasicAI::handleMovementAndAttacking() {
             baseLocation.x = gameState->detectionManager->getMapShop()->center.x;
             baseLocation.y = gameState->detectionManager->getMapShop()->center.y;
         }
+        if (baseLocation.x != -1) {
+            int blueSideX = (map->topLeft.x - map->bottomRight.x) * 0.1 + map->topLeft.x;
+            int blueSideY = (map->topLeft.y - map->bottomRight.y) * 0.9 + map->topLeft.y;
+            int redSideX = (map->topLeft.x - map->bottomRight.x) * 0.9 + map->topLeft.x;
+            int redSideY = (map->topLeft.y - map->bottomRight.y) * 0.1 + map->topLeft.y;
+            //Move blue side closer if at blue side, otherwise move to red side if closer
+            if (hypot(blueSideX - baseLocation.x, blueSideY - baseLocation.y) < hypot(redSideX - baseLocation.x, redSideY - baseLocation.y)) {
+                baseLocation.x = blueSideX;
+                baseLocation.y = blueSideY;
+            } else {
+                baseLocation.x = redSideX;
+                baseLocation.y = redSideY;
+            }
+        }
     }
     if (baseLocation.x != -1) {
         tempBaseLocation = baseLocation;
