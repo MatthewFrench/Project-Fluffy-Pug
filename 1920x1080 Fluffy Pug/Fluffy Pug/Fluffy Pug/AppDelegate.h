@@ -24,6 +24,7 @@
     @public IBOutlet NSTextField *fpsText, *screenAnalyzeText;
     
 @public IBOutlet NSTextField *selfCurrentLvlTxt, *enemyTowersTxt, *allyMinionsTxt, *enemyMinionsTxt, *allyChampsTxt, *enemyChampsTxt, *selfChampsTxt, *selfHealthTxt, *mapTxt, *mapLocTxt, *mapShopTxt, *item1Txt, *item2Txt, *item3Txt, *item4Txt, *item5Txt, *item6Txt, *summonerSpell1Txt, *summonerSpell2Txt, *trinketTxt, *usedPotionTxt, *potionActiveTxt, *spell1Txt, *spell2Txt, *spell3Txt, *spell4Txt, *spell1LvlUpTxt, *spell2LvlUpTxt, *spell3LvlUpTxt, *spell4LvlUpTxt, *spell1LvlTxt, *spell2LvlTxt, *spell3LvlTxt, *spell4LvlTxt, *shopAvailableTxt, *shopWindowOpenTxt, *buyableItemsTxt, *statusText;
+    IBOutlet NSTextField* artificalIntelligenceDecision;
     
     //NSTimer* timer;
     @public LeagueGameState* leagueGameState;
@@ -55,6 +56,8 @@
     @public uint64_t uiUpdateTime;
     
     @public dispatch_queue_t aiThread, detectionThread;
+    
+    int processedDecision;
     
 }
 @property (strong) id activity;

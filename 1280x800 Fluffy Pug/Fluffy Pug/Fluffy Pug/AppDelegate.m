@@ -293,6 +293,42 @@ AppDelegate *GlobalSelf;
     }
     if (runAutoQueue) { // && leagueGameState->leaguePID == -1
         autoQueueManager->processLogic();
+        //Set the AI info
+        if (basicAI->lastDecision != processedDecision) {
+            processedDecision = basicAI->lastDecision;
+            //Set the ai decision
+            [artificalIntelligenceDecision setStringValue:@"None"];
+            if (basicAI->lastDecision == basicAI->ACTION_Attack_Enemy_Champion) {
+                [artificalIntelligenceDecision setStringValue:@"Attacking Enemy Champion"];
+            }
+            if (basicAI->lastDecision == basicAI->ACTION_Attack_Enemy_Minion) {
+                [artificalIntelligenceDecision setStringValue:@"Attacking Enemy Minion"];
+            }
+            if (basicAI->lastDecision == basicAI->ACTION_Attack_Tower) {
+                [artificalIntelligenceDecision setStringValue:@"Attacking Enemy Tower"];
+            }
+            if (basicAI->lastDecision == basicAI->ACTION_Follow_Ally_Champion) {
+                [artificalIntelligenceDecision setStringValue:@"Following Ally Champion"];
+            }
+            if (basicAI->lastDecision == basicAI->ACTION_Follow_Ally_Minion) {
+                [artificalIntelligenceDecision setStringValue:@"Following Ally Minion"];
+            }
+            if (basicAI->lastDecision == basicAI->ACTION_Go_Ham) {
+                [artificalIntelligenceDecision setStringValue:@"Going Ham"];
+            }
+            if (basicAI->lastDecision == basicAI->ACTION_Move_To_Mid) {
+                [artificalIntelligenceDecision setStringValue:@"Moving To Lane"];
+            }
+            if (basicAI->lastDecision == basicAI->ACTION_Recall) {
+                [artificalIntelligenceDecision setStringValue:@"Recalling"];
+            }
+            if (basicAI->lastDecision == basicAI->ACTION_Run_Away) {
+                [artificalIntelligenceDecision setStringValue:@"Running Away"];
+            }
+            if (basicAI->lastDecision == basicAI->ACTION_Stand_Still) {
+                [artificalIntelligenceDecision setStringValue:@"Standing Still"];
+            }
+        }
     }
     
     //Profile code

@@ -46,7 +46,11 @@ class BasicAI {
     
     uint64_t lastTimeSawEnemyChamp;
     
+    
 public:
+    static const int ACTION_Run_Away = 0, ACTION_Attack_Enemy_Champion = 1, ACTION_Attack_Enemy_Minion = 2, ACTION_Follow_Ally_Champion = 3, ACTION_Follow_Ally_Minion = 4, ACTION_Move_To_Mid = 5, ACTION_Recall = 6, ACTION_Attack_Tower = 7, ACTION_Go_Ham = 8, ACTION_Stand_Still = 9;
+    int lastDecision;
+    
     BasicAI(LeagueGameState* leagueGameState);
     void processAI();
     void resetAI();
