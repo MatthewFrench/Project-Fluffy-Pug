@@ -17,6 +17,7 @@ ImageData AllyMinionManager::bottomLeftImageData = makeImageDataFrom([[NSBundle 
 ImageData AllyMinionManager::bottomRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Minion Health Bar/Bottom Right Corner" ofType:@"png"]);
 ImageData AllyMinionManager::topRightImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Minion Health Bar/Top Right Corner" ofType:@"png"]);
 ImageData AllyMinionManager::healthSegmentImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Minion Health Bar/Health Segment" ofType:@"png"]);
+ImageData AllyMinionManager::wardImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ward/Pink Ward" ofType:@"png"]);
 
 AllyMinionManager::AllyMinionManager () {
     /*
@@ -184,6 +185,10 @@ NSMutableArray* AllyMinionManager::validateMinionBars(ImageData imageData, NSMut
                 }
             }
             }
+        }
+        //Detect if pink ward
+        if (getImageAtPixelPercentageOptimizedExact(getPixel2(imageData, minion->topLeft.x-1, minion->topLeft.y-1), minion->topLeft.x-1, minion->topLeft.y-1, imageData.imageWidth, imageData.imageHeight, wardImageData, coloredPixelPrecision) >=  overalImagePrecision) {
+            isWard = true;
         }
         if (isWard) {
             [minionBars removeObjectAtIndex:i];

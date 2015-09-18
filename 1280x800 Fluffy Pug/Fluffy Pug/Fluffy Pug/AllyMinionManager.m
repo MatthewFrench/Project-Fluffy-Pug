@@ -10,9 +10,7 @@
 
 //static int Debug_Draw_Red = 0, Debug_Draw_Green = 255, Debug_Draw_Blue = 0;
 //static int Health_Bar_Width = 62, Health_Bar_Height = 4;
-ImageData AllyMinionManager::ward = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ward/Ward" ofType:@"png"]);
-
-ImageData AllyMinionManager::pinkWard = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ward/Pink Ward" ofType:@"png"]);
+ImageData AllyMinionManager::wardImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ward/Pink Ward" ofType:@"png"]);
 
 ImageData AllyMinionManager::topLeftImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Ally Minion Health Bar/Top Left Corner" ofType:@"png"]);
 
@@ -152,13 +150,13 @@ NSMutableArray* AllyMinionManager::validateMinionBars(ImageData imageData, NSMut
                 for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
                     if (x + minion->topLeft.x >= 0 && x + minion->topLeft.x < imageData.imageWidth &&
                         y + minion->topLeft.y >= 0 && y + minion->topLeft.y < imageData.imageHeight) {
-                    uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
-                    uint8_t*  p = getPixel2(imageData, x + minion->topLeft.x, y + minion->topLeft.y);
-                    if (getColorPercentage(healthBarColor, p) >= allyMinionHealthMatch) {
-                        minion->health = (float)x / 61 * 100;
-                        y = healthSegmentImageData.imageHeight + 1;
-                        x = -1;
-                    }
+                        uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
+                        uint8_t* p = getPixel2(imageData, x + minion->topLeft.x, y + minion->topLeft.y);
+                        if (getColorPercentage(healthBarColor, p) >= allyMinionHealthMatch) {
+                            minion->health = (float)x / 61 * 100;
+                            y = healthSegmentImageData.imageHeight + 1;
+                            x = -1;
+                        }
                     }
                 }
             }
@@ -187,6 +185,10 @@ NSMutableArray* AllyMinionManager::validateMinionBars(ImageData imageData, NSMut
                 }
             }
             }
+        }
+        //Detect if pink ward
+        if (getImageAtPixelPercentageOptimizedExact(getPixel2(imageData, minion->topLeft.x-1, minion->topLeft.y-1), minion->topLeft.x-1, minion->topLeft.y-1, imageData.imageWidth, imageData.imageHeight, wardImageData, coloredPixelPrecision) >=  overalImagePrecision) {
+            isWard = true;
         }
         if (isWard) {
             [minionBars removeObjectAtIndex:i];
