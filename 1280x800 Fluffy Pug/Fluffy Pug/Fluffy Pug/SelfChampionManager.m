@@ -186,6 +186,12 @@ NSMutableArray* SelfChampionManager::validateChampionBars(ImageData imageData, N
                 }
             }
         }
+        
+        
+        if (champ->health == 0) {
+            [championBars removeObjectAtIndex: i];
+            i--;
+        }
     }
     
     return championBars;

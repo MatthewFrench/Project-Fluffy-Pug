@@ -117,7 +117,7 @@ NSMutableArray* AllyChampionManager::validateChampionBars(ImageData imageData, N
         if (detectedCorners > 1) {
             champ->characterCenter.x = champ->topLeft.x+66; champ->characterCenter.y = champ->topLeft.y+104;
             [championBars addObject: champ];
-        }// else {
+        }// else {a
         //    delete champ;
         //}
     }
@@ -130,15 +130,19 @@ NSMutableArray* AllyChampionManager::validateChampionBars(ImageData imageData, N
             for (int y = 0; y < healthSegmentImageData.imageHeight; y++) {
                 if (x + champ->topLeft.x >= 0 && x + champ->topLeft.x < imageData.imageWidth &&
                     y + champ->topLeft.y >= 0 && y + champ->topLeft.y < imageData.imageHeight) {
-                uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
-                uint8_t*  p = getPixel2(imageData, x + champ->topLeft.x, y + champ->topLeft.y);
-                if (getColorPercentage(healthBarColor, p) >= 0.55) {
-                    champ->health = (float)x / 103.0 * 100;
-                    y = healthSegmentImageData.imageHeight + 1;
-                    x = -1;
-                }
+                    uint8_t* healthBarColor = getPixel2(healthSegmentImageData, 0, y);
+                    uint8_t*  p = getPixel2(imageData, x + champ->topLeft.x, y + champ->topLeft.y);
+                    if (getColorPercentage(healthBarColor, p) >= 0.55) {
+                        champ->health = (float)x / 103.0 * 100;
+                        y = healthSegmentImageData.imageHeight + 1;
+                        x = -1;
+                    }
                 }
             }
+        }
+        if (champ->health == 0) {
+            [championBars removeObjectAtIndex: i];
+            i--;
         }
     }
     
