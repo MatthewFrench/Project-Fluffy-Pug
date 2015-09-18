@@ -469,7 +469,7 @@ void BasicAI::handleMovementAndAttacking() {
             action = ACTION_Go_Ham;
         }
         
-        if (action == ACTION_Attack_Enemy_Minion && [allyMinions count] < 2) {
+        if (action == ACTION_Attack_Enemy_Minion && [allyMinions count]+[allyChampions count] < 2 && [enemyMinions count] > 2) {
             action = ACTION_Run_Away;
         }
         
@@ -483,8 +483,12 @@ void BasicAI::handleMovementAndAttacking() {
                     tapMouseRight(baseLocation.x, baseLocation.y);
                     lastRunAwayClick = mach_absolute_time();
                 }
+                bool enemyChampWayTooClose = false;
+                if (closestEnemyChampion != nil) {
+                    enemyChampWayTooClose = (hypot(selfChamp->characterCenter.x - closestEnemyChampion->characterCenter.x, selfChamp->characterCenter.y - closestEnemyChampion->characterCenter.y) < 200);
+                }
                 
-                if (selfChamp->health < 40 && enemyChampionsNear) {
+                if ((selfChamp->health < 40 && enemyChampionsNear) || enemyChampWayTooClose) {
                     int enemyX = (closestEnemyChampion->characterCenter.x - selfChamp->characterCenter.x);
                     int enemyY = (closestEnemyChampion->characterCenter.y - selfChamp->characterCenter.y);
                     normalizePoint(enemyX, enemyY, 300);
@@ -497,15 +501,17 @@ void BasicAI::handleMovementAndAttacking() {
                         castSpell4();
                         castSpell2();
                         useTrinket();
-                        moveMouse(selfChamp->characterCenter.x-enemyX, selfChamp->characterCenter.y-enemyY);
-                        castSummonerSpell1();
-                        castSummonerSpell2();
-                        useItem1();
-                        useItem2();
-                        useItem3();
-                        useItem4();
-                        useItem5();
-                        useItem6();
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * 50), dispatch_get_main_queue(), ^{
+                            moveMouse(selfChamp->characterCenter.x-enemyX, selfChamp->characterCenter.y-enemyY);
+                            castSummonerSpell1();
+                            castSummonerSpell2();
+                            useItem1();
+                            useItem2();
+                            useItem3();
+                            useItem4();
+                            useItem5();
+                            useItem6();
+                        });
                     }
                 }
             }
