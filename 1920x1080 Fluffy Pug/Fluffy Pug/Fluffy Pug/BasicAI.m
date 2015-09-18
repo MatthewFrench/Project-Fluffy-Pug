@@ -482,7 +482,7 @@ void BasicAI::handleMovementAndAttacking() {
             case ACTION_Run_Away:
             {
                 //NSLog(@"\t\tAction: Running Away");
-                if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 700) {
+                if (getTimeInMilliseconds(mach_absolute_time() - lastRunAwayClick) >= 400) {
                     tapMouseRight(baseLocation.x, baseLocation.y);
                     lastRunAwayClick = mach_absolute_time();
                 }
@@ -498,7 +498,7 @@ void BasicAI::handleMovementAndAttacking() {
                     //enemyX = -enemyX;
                     //enemyY = -enemyY;
                     //Panic
-                    if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 50) {
+                    if (getTimeInMilliseconds(mach_absolute_time() - lastMoveMouse) >= 1000) {
                         lastMoveMouse = mach_absolute_time();
                         moveMouse(enemyX+selfChamp->characterCenter.x, enemyY+selfChamp->characterCenter.y);
                         castSpell4();
