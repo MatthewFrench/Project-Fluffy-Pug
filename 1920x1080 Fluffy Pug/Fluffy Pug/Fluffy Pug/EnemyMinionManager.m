@@ -38,7 +38,7 @@ EnemyMinionManager::EnemyMinionManager () {
 }
 const float coloredPixelPrecision = 0.97; //0.97
 const float overalImagePrecision = 0.97; //0.97
-const float minionHealthMatch = 0.90; //0.87
+const float minionHealthMatch = 0.99; //0.87
 Minion* EnemyMinionManager::detectMinionBarAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     Minion* minion = nil;
     if (isColor3(pixel, 0, 0, 0)) {
