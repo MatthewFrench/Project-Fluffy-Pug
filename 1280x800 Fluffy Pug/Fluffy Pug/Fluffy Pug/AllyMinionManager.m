@@ -187,8 +187,11 @@ NSMutableArray* AllyMinionManager::validateMinionBars(ImageData imageData, NSMut
             }
         }
         //Detect if pink ward
+        if (minion->topLeft.x-1 >= 0 && minion->topLeft.x-1 + wardImageData.imageWidth < imageData.imageWidth &&
+            minion->topLeft.y-1 >= 0 && minion->topLeft.y-1 + wardImageData.imageHeight < imageData.imageHeight) {
         if (getImageAtPixelPercentageOptimizedExact(getPixel2(imageData, minion->topLeft.x-1, minion->topLeft.y-1), minion->topLeft.x-1, minion->topLeft.y-1, imageData.imageWidth, imageData.imageHeight, wardImageData, coloredPixelPrecision) >=  overalImagePrecision) {
             isWard = true;
+        }
         }
         if (isWard) {
             [minionBars removeObjectAtIndex:i];

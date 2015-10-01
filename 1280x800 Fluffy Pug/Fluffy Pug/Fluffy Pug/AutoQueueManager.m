@@ -810,7 +810,7 @@ bool AutoQueueManager::processDetection(ImageData data, const CGRect* rects, siz
             for (int x = rect.origin.x; x < rect.origin.x + rect.size.width; x++) {
                 for (int y = rect.origin.y; y < rect.origin.y + rect.size.height; y++) {
                     uint8* pixel = getPixel2(data, x, y);
-                    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, data.imageWidth, data.imageHeight, step5_BlindPickMode, 0.8) >=  0.8) {
+                    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, data.imageWidth, data.imageHeight, step5_BlindPickMode, 0.7) >=  0.7) {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             foundNormalBlindPickButton = true;
                             normalBlindPickLocation.x = x;

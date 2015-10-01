@@ -189,14 +189,17 @@ void BasicAI::handleBuyingItems() {
                     if (skipBuying) {
                         continue;
                     }
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * 500), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * i * 500), dispatch_get_main_queue(), ^{
                         moveMouse(clickX, clickY);
                     });
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+200)), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * (i*500+200)), dispatch_get_main_queue(), ^{
                         tapMouseLeft(clickX, clickY);
                     });
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, i * NSEC_PER_SEC / 1000 * (500+400)), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * (i*500+350)), dispatch_get_main_queue(), ^{
                         doubleTapMouseLeft(clickX, clickY);
+                    });
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * (i*500+450)), dispatch_get_main_queue(), ^{
+                        moveMouse(0, 0);
                     });
                     if (bought < 2) {
                         bought++;
@@ -619,8 +622,8 @@ void BasicAI::handleMovementAndAttacking() {
                         int x = map->center.x;
                         int y = map->center.y;
                         if (moveToLane == 1) {
-                            x = (map->bottomRight.x - map->topLeft.x) * 0.1 + map->topLeft.x;
-                            y = (map->bottomRight.y - map->topLeft.y) * 0.1 + map->topLeft.y;
+                            x = (map->bottomRight.x - map->topLeft.x) * 0.2 + map->topLeft.x;
+                            y = (map->bottomRight.y - map->topLeft.y) * 0.2 + map->topLeft.y;
                         }
                         if (moveToLane == 3) {
                             x = (map->bottomRight.x - map->topLeft.x) * 0.9 + map->topLeft.x;
