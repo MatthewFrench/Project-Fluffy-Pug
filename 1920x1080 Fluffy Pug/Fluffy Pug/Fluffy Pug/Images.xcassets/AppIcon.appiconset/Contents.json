@@ -3,55 +3,61 @@
     {
       "size" : "16x16",
       "idiom" : "mac",
-      "filename" : "robo pug.png",
+      "filename" : "16 pixel.png",
       "scale" : "1x"
     },
     {
       "size" : "16x16",
       "idiom" : "mac",
-      "filename" : "robo pug-1.png",
+      "filename" : "32 pixel-1.png",
       "scale" : "2x"
     },
     {
       "size" : "32x32",
       "idiom" : "mac",
-      "filename" : "robo pug-2.png",
+      "filename" : "32 pixel.png",
       "scale" : "1x"
     },
     {
       "size" : "32x32",
       "idiom" : "mac",
-      "filename" : "robo pug 2.png",
+      "filename" : "64 pixel.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "mac",
       "size" : "128x128",
+      "idiom" : "mac",
+      "filename" : "45496d61479b002b8dd394fdea44c72856c8b839_s2_n2.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "mac",
       "size" : "128x128",
+      "idiom" : "mac",
+      "filename" : "a4d438dfaca62658b2c14594906ef413a3ca869a_s2_n2-1.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "mac",
       "size" : "256x256",
+      "idiom" : "mac",
+      "filename" : "a4d438dfaca62658b2c14594906ef413a3ca869a_s2_n2.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "mac",
       "size" : "256x256",
+      "idiom" : "mac",
+      "filename" : "f99822ee759252652382d69a5db7b8d1d79aaa8b_s2_n2.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "mac",
       "size" : "512x512",
+      "idiom" : "mac",
+      "filename" : "f99822ee759252652382d69a5db7b8d1d79aaa8b_s2_n2-1.png",
       "scale" : "1x"
     },
     {
-      "idiom" : "mac",
       "size" : "512x512",
+      "idiom" : "mac",
+      "filename" : "7d70efa824266fcd07662f02f1d8a301d7b1acc2_s2_n2.png",
       "scale" : "2x"
     }
   ],
