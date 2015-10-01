@@ -201,7 +201,7 @@ extern inline void tapMouseLeft(int x, int y) {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
         moveMouse(x, y);
         pressMouseLeft(x, y);
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 120), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one fiftieth of a second
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one fiftieth of a second
             releaseMouseLeft(x, y);
         });
     });
@@ -210,7 +210,7 @@ extern inline void tapMouseRight(int x, int y) {
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^(void){
         moveMouse(x, y);
         pressMouseRight(x, y);
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 120), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one fiftieth of a second
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one fiftieth of a second
             releaseMouseRight(x, y);
         });
     });
