@@ -189,16 +189,16 @@ void BasicAI::handleBuyingItems() {
                     if (skipBuying) {
                         continue;
                     }
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * i * 500), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * i * 1000), dispatch_get_main_queue(), ^{
                         moveMouse(clickX, clickY);
                     });
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * (i*500+200)), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * (i*1000+200)), dispatch_get_main_queue(), ^{
                         tapMouseLeft(clickX, clickY);
                     });
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * (i*500+350)), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * (i*1000+450)), dispatch_get_main_queue(), ^{
                         doubleTapMouseLeft(clickX, clickY);
                     });
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * (i*500+450)), dispatch_get_main_queue(), ^{
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC / 1000 * (i*1000+700)), dispatch_get_main_queue(), ^{
                         moveMouse(0, 0);
                     });
                     if (bought < 2) {
