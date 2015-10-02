@@ -256,13 +256,13 @@ void AutoQueueManager::processLogic() {
                             //Wait one second
                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
                                 //Hold down left button
-                                pressMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
+                                tapMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
                                 //Wait half second
-                                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one second
+                                //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one second
                                     //Release mouse button
-                                    releaseMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
+                                    //releaseMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
                                     //reset(false);
-                                });
+                                //});
                             });
                         });
                     });
