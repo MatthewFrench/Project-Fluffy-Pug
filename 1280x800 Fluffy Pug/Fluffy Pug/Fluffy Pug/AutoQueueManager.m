@@ -291,8 +291,8 @@ void AutoQueueManager::clickLocation(int x, int y) {
     //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
     //    floatTapMouseLeft(x + 10, y+10);
     //});
-    //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2000.0), dispatch_get_main_queue(), ^{ // one
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 60.0), dispatch_get_main_queue(), ^{ // one
+    //dispatch_async(dispatch_get_main_queue(), ^{
         moveMouse(0, 0);
     });
 }
