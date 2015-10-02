@@ -63,7 +63,6 @@ void AutoQueueManager::reset(bool keepPlayButton) {
 }
 void AutoQueueManager::processLogic() {
     
-    
     if (!busySleeping) {
         if (getTimeInMilliseconds(mach_absolute_time() - currentAwakeTime) >= awakeTime) {
             //We've been away for too long, tired, need to sleep
@@ -243,15 +242,30 @@ void AutoQueueManager::processLogic() {
             }break;
             case STEP_12: {
                 //NSLog(@"Waiting on step 12");
-                if (foundHomeButton && getTimeInMilliseconds(mach_absolute_time() - lastHomeButtonClick) >= 2000) {
+                //Wait 10 seconds
+                if (foundHomeButton && getTimeInMilliseconds(mach_absolute_time() - lastHomeButtonClick) >= 10000) {
                     lastHomeButtonClick = mach_absolute_time();
-                    //NSLog(@"Clicking home button");
-                    //clickLocation(homeButtonLocation.x, homeButtonLocation.y);
-                    moveMouse(homeButtonLocation.x + 10, homeButtonLocation.y+10);
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one second
-                            tapMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
+                    //Wait 2 seconds initially
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC * 2), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                        //Move mouse to button
+                        moveMouse(homeButtonLocation.x + 10, homeButtonLocation.y+10);
+                        //Wait one second
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                            //Move mous e slightly to highlight button
+                            moveMouse(homeButtonLocation.x + 15, homeButtonLocation.y+15);
+                            //Wait one second
+                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+                                //Hold down left button
+                                pressMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
+                                //Wait half second
+                                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one second
+                                    //Release mouse button
+                                    releaseMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
+                                    //reset(false);
+                                });
+                            });
                         });
-                    reset(false);
+                    });
                 }
             }break;
         }
