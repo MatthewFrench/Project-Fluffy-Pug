@@ -130,9 +130,9 @@ void AutoQueueManager::processLogic() {
                 }
             }break;
             case STEP_3: {
-                //Click Classic mode
+                //Click Classic mode - Now it's One for ALl mode
                 currentStep = STEP_4;
-                clickLocation(playButtonLocation.x -70, playButtonLocation.y +105);
+                clickLocation(playButtonLocation.x -70, playButtonLocation.y +105 + 20 * 3);
                 actionClick = mach_absolute_time();
             }break;
             case STEP_4: {
@@ -144,13 +144,20 @@ void AutoQueueManager::processLogic() {
                 actionClick = mach_absolute_time();
             }break;
             case STEP_5: {
+                scanForNormalBlindPick = false;
+                currentStep = STEP_6;
+                clickLocation(playButtonLocation.x +100 + 150, playButtonLocation.y +110);
+                actionClick = mach_absolute_time();
+                
+                
                 //Click Blind Pick mode
-                if (foundNormalBlindPickButton) {
-                    clickLocation(normalBlindPickLocation.x + 5, normalBlindPickLocation.y + 5);
-                    scanForNormalBlindPick = false;
-                    currentStep = STEP_6;
-                    actionClick = mach_absolute_time();
-                }
+                /*
+                 if (foundNormalBlindPickButton) {
+                 clickLocation(normalBlindPickLocation.x + 5, normalBlindPickLocation.y + 5);
+                 scanForNormalBlindPick = false;
+                 currentStep = STEP_6;
+                 actionClick = mach_absolute_time();
+                 }*/
                 //clickLocation(playButtonLocation.x +300, playButtonLocation.y +180);
             }break;
             case STEP_6: {
