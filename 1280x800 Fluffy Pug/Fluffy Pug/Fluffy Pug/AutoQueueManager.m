@@ -277,10 +277,11 @@ void AutoQueueManager::processLogic() {
                                 //Hold down left button
                                 tapMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
                                 //Wait half second
-                                //dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC / 2), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one second
+                                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{ // one second
+                                    moveMouse(0,0);
                                     //Release mouse button
                                 //    releaseMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
-                                //});
+                                });
                             });
                             //tapMouseLeft(homeButtonLocation.x + 10, homeButtonLocation.y+10);
                             //NSLog(@"Clicked home button");
