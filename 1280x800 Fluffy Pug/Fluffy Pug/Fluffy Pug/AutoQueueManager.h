@@ -41,10 +41,12 @@ class AutoQueueManager {
     uint64_t actionClick, lastHomeButtonClick, scanReportedLastTime;
 
 public:
-    int awakeTime = 1000 * 60 * 60 * 24; //Stay awake for 18 hours
-    int sleepTime = 1000 * 60 * 60 * 1; //Sleep for 6 hours
-    int playTime = 1000 * 60 * 60 * 5; //Play for 3 hours in a row
-    int breakTime = 1000 * 60 * 60 * 0; //1 hour break
+    int awakeTime = 1000 * 60 * 60 * 18; //Stay awake for 18 hours
+    int sleepTime = 1000 * 60 * 60 * 6; //Sleep for 6 hours
+    int playTime = 1000 * 60 * 60 * 3; //Play for 3 hours in a row
+    int breakTime = 1000 * 60 * 60 * 1; //1 hour break
+    bool takeBreaks = true;
+    bool oneForAllActive = false;
     
     uint64_t currentAwakeTime, currentSleepTime, currentPlayTime, currentBreakTime;
     bool busySleeping = false, busyTakingBreak = false;

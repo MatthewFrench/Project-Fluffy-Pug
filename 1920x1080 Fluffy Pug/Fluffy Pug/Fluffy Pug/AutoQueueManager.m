@@ -62,7 +62,7 @@ void AutoQueueManager::reset(bool keepPlayButton) {
     scanReportedLastTime = mach_absolute_time();
 }
 void AutoQueueManager::processLogic() {
-    
+    if (takeBreaks) {
     if (!busySleeping) {
         if (getTimeInMilliseconds(mach_absolute_time() - currentAwakeTime) >= awakeTime) {
             //We've been away for too long, tired, need to sleep
@@ -89,6 +89,14 @@ void AutoQueueManager::processLogic() {
             busySleeping = false;
             busyTakingBreak = false;
         }
+    }
+    }else {
+        currentAwakeTime = mach_absolute_time();
+        currentSleepTime  = mach_absolute_time();
+        currentPlayTime  = mach_absolute_time();
+        currentBreakTime  = mach_absolute_time();
+        busySleeping = false;
+        busyTakingBreak = false;
     }
     
     if (leagueGameState->leaguePID == -1 && (busySleeping || busyTakingBreak) && (currentStep == STEP_1 || currentStep == STEP_2 || currentStep == STEP_3 || currentStep == STEP_4 || currentStep == STEP_5)) {
@@ -132,7 +140,11 @@ void AutoQueueManager::processLogic() {
             case STEP_3: {
                 //Click Classic mode - Now it's One for ALl mode
                 currentStep = STEP_4;
+                if (oneForAllActive) {
                 clickLocation(playButtonLocation.x -70, playButtonLocation.y +105 + 20 * 3);
+                } else {
+                    clickLocation(playButtonLocation.x -70, playButtonLocation.y +105);
+                }
                 actionClick = mach_absolute_time();
             }break;
             case STEP_4: {
@@ -144,10 +156,19 @@ void AutoQueueManager::processLogic() {
                 actionClick = mach_absolute_time();
             }break;
             case STEP_5: {
-                scanForNormalBlindPick = false;
-                currentStep = STEP_6;
-                clickLocation(playButtonLocation.x +100 + 150, playButtonLocation.y +110);
-                actionClick = mach_absolute_time();
+                if (oneForAllActive) {
+                    scanForNormalBlindPick = false;
+                    currentStep = STEP_6;
+                    clickLocation(playButtonLocation.x +100 + 150, playButtonLocation.y +110);
+                    actionClick = mach_absolute_time();
+                } else {
+                    if (foundNormalBlindPickButton) {
+                        clickLocation(normalBlindPickLocation.x + 5, normalBlindPickLocation.y + 5);
+                        scanForNormalBlindPick = false;
+                        currentStep = STEP_6;
+                        actionClick = mach_absolute_time();
+                    }
+                }
                 
                 
                 //Click Blind Pick mode

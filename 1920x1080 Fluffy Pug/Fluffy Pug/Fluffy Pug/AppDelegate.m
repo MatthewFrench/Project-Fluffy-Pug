@@ -328,6 +328,8 @@ AppDelegate *GlobalSelf;
         }
     }
     if (runAutoQueue) { // && leagueGameState->leaguePID == -1
+        autoQueueManager->takeBreaks = [GlobalSelf->takeBreaksCheckbox state] == NSOnState;
+        autoQueueManager->oneForAllActive = [GlobalSelf->oneForAllCheckbox state] == NSOnState;
         autoQueueManager->processLogic();
     }
     
@@ -350,6 +352,7 @@ AppDelegate *GlobalSelf;
         
         //Set the auto queue status
         NSString* text = @"";
+        if (autoQueueManager->takeBreaks) {
         text = [NSString stringWithFormat:@"%@\nAuto Queue Status: ", text];
         text = [NSString stringWithFormat:@"%@\nTaking Break: %@", text, autoQueueManager->busyTakingBreak?@"True":@"False"];
         text = [NSString stringWithFormat:@"%@\nSleeping: %@", text, autoQueueManager->busySleeping?@"True":@"False"];
@@ -365,6 +368,9 @@ AppDelegate *GlobalSelf;
         } else {
             text = [NSString stringWithFormat:@"%@\nPlay time left: %f minutes", text, (autoQueueManager->playTime-getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentPlayTime)) / 1000 / 60.0];
             text = [NSString stringWithFormat:@"%@\nAwake time left: %f minutes", text, (autoQueueManager->awakeTime-getTimeInMilliseconds(mach_absolute_time()-autoQueueManager->currentAwakeTime)) / 1000 / 60.0];
+        }
+        } else {
+            text = [NSString stringWithFormat:@"\nAuto Queue Status: Running"];
         }
         [autoQueueStatus setString:text];
     }

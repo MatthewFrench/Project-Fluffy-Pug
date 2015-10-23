@@ -35,7 +35,7 @@
     IBOutlet NSTextView* autoQueueStatus;
     IBOutlet NSImageView* imageView;
     IBOutlet NSButton* debugCheckbox;
-    @public IBOutlet NSButton* autoQueueCheckbox, *recordScreenCheckbox, *aiActiveCheckbox;
+    @public IBOutlet NSButton* autoQueueCheckbox, *recordScreenCheckbox, *aiActiveCheckbox, *takeBreaksCheckbox, *oneForAllCheckbox;
     //IBOutlet NSTextField* fpsTextField;
     //int chosenFPS;
     
