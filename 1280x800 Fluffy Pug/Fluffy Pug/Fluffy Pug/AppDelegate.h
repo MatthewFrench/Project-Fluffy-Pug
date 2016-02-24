@@ -37,7 +37,8 @@
     IBOutlet NSTextView* autoQueueStatus;
     IBOutlet NSImageView* imageView;
     IBOutlet NSButton* debugCheckbox;
-    @public IBOutlet NSButton* autoQueueCheckbox, *recordScreenCheckbox, *aiActiveCheckbox, *takeBreaksCheckbox, *oneForAllCheckbox;
+    @public IBOutlet NSButton* autoQueueCheckbox, *recordScreenCheckbox, *aiActiveCheckbox, *takeBreaksCheckbox, *oneForAllCheckbox, *randomPickLaneAtStartCheckbox, *midLaneCheckbox, *topLaneCheckbox, *bottomLaneCheckbox;
+@public bool pickRandomLaneAtStart;
     //IBOutlet NSTextField* fpsTextField;
     //int chosenFPS;
     
@@ -63,6 +64,11 @@
 }
 @property (strong) id activity;
 @property (weak) IBOutlet NSWindow *window, *window2;
+
+- (IBAction) randomPickLaneAtStartCheckboxChanged:(id)sender;
+- (IBAction) midLaneCheckboxChanged:(id)sender;
+- (IBAction) topLaneCheckboxChanged:(id)sender;
+- (IBAction) bottomLaneCheckboxChanged:(id)sender;
 
 - (IBAction) openViewWindow:(id)sender;
 - (IBAction) getScreenshot:(id)sender;

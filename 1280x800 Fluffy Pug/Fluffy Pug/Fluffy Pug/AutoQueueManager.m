@@ -7,6 +7,8 @@
 //
 
 #import "AutoQueueManager.h"
+#import "AppDelegate.h"
+#import <Cocoa/Cocoa.h>
 
 AutoQueueManager::AutoQueueManager(LeagueGameState* gameState) {
     leagueGameState = gameState;
@@ -138,6 +140,25 @@ void AutoQueueManager::processLogic() {
                     currentStep = STEP_2;
                     clickLocation(playButtonLocation.x, playButtonLocation.y);
                     actionClick = mach_absolute_time();
+                    
+                    //Choose lane
+                    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                    if (appDelegate->pickRandomLaneAtStart) {
+                        appDelegate->basicAI->moveToLane = arc4random_uniform(3) + 1;
+                        if (appDelegate->basicAI->moveToLane == 1) {
+                            [appDelegate->topLaneCheckbox setState: NSOnState];
+                            [appDelegate->midLaneCheckbox setState: NSOffState];
+                            [appDelegate->bottomLaneCheckbox setState: NSOffState];
+                        } else if (appDelegate->basicAI->moveToLane == 2) {
+                            [appDelegate->topLaneCheckbox setState: NSOffState];
+                            [appDelegate->midLaneCheckbox setState: NSOnState];
+                            [appDelegate->bottomLaneCheckbox setState: NSOffState];
+                        } else if (appDelegate->basicAI->moveToLane == 3) {
+                            [appDelegate->topLaneCheckbox setState: NSOffState];
+                            [appDelegate->midLaneCheckbox setState: NSOffState];
+                            [appDelegate->bottomLaneCheckbox setState: NSOnState];
+                        }
+                    }
                 }
             }break;
             case STEP_2: {
@@ -265,6 +286,18 @@ void AutoQueueManager::processLogic() {
                     scanForAcceptButton = false;
                     scanForHomeButton = true;
                     scanForReportedButton = false;
+                    
+                    //Call lane
+                    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                    if (appDelegate->basicAI->moveToLane == 1) {
+                        
+                    }
+                    if (appDelegate->basicAI->moveToLane == 2) {
+                        
+                    }
+                    if (appDelegate->basicAI->moveToLane == 3) {
+                        
+                    }
                 }
             }break;
                 

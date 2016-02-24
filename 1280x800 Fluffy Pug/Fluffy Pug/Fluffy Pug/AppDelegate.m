@@ -27,6 +27,8 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+    pickRandomLaneAtStart = false;
+    
     uiUpdateTime = mach_absolute_time();
     aiThread = dispatch_get_main_queue();
     //dispatch_queue_create("AI Thread", DISPATCH_QUEUE_CONCURRENT);
@@ -163,6 +165,43 @@ dispatch_source_t CreateDispatchTimer(uint64_t intervalNanoseconds,
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication {
     return YES;
 }
+- (IBAction) randomPickLaneAtStartCheckboxChanged:(id)sender {
+    pickRandomLaneAtStart = [randomPickLaneAtStartCheckbox state] == NSOnState;
+}
+- (IBAction) midLaneCheckboxChanged:(id)sender {
+    if ([midLaneCheckbox state] == NSOnState) {
+        basicAI->moveToLane = 2;
+        [topLaneCheckbox setState: NSOffState];
+        [bottomLaneCheckbox setState: NSOffState];
+    } else {
+        basicAI->moveToLane = 1;
+        [topLaneCheckbox setState: NSOnState];
+        [bottomLaneCheckbox setState: NSOffState];
+    }
+}
+- (IBAction) topLaneCheckboxChanged:(id)sender {
+    if ([topLaneCheckbox state] == NSOnState) {
+        basicAI->moveToLane = 1;
+        [midLaneCheckbox setState: NSOffState];
+        [bottomLaneCheckbox setState: NSOffState];
+    } else {
+        basicAI->moveToLane = 2;
+        [midLaneCheckbox setState: NSOnState];
+        [bottomLaneCheckbox setState: NSOffState];
+    }
+}
+- (IBAction) bottomLaneCheckboxChanged:(id)sender {
+    if ([bottomLaneCheckbox state] == NSOnState) {
+        basicAI->moveToLane = 3;
+        [topLaneCheckbox setState: NSOffState];
+        [midLaneCheckbox setState: NSOffState];
+    } else {
+        basicAI->moveToLane = 1;
+        [topLaneCheckbox setState: NSOnState];
+        [midLaneCheckbox setState: NSOffState];
+    }
+}
+
 - (IBAction) openViewWindow:(id)sender {
     [_window2 orderFront: nil];
 }
@@ -333,6 +372,7 @@ AppDelegate *GlobalSelf;
         autoQueueManager->processLogic();
         
     }
+    
     
     //Profile code
     if (getTimeInMilliseconds(mach_absolute_time() - lastTime) >= 500)

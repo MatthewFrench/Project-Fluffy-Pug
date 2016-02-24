@@ -8,6 +8,8 @@
 
 #import "BasicAI.h"
 #import "LeagueGameState.h"
+#import "AppDelegate.h"
+#import <Cocoa/Cocoa.h>
 
 BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     gameState = leagueGameState;
@@ -44,8 +46,10 @@ BasicAI::BasicAI(LeagueGameState* leagueGameState) {
     
     activeAutoUseTime = mach_absolute_time();
     
+    /*
     moveToLane = arc4random_uniform(3) + 1;
     NSLog(@"Chose lane %d", moveToLane);
+     */
     moveToLanePathSwitch = mach_absolute_time();
     
     boughtStarterItems = false;
@@ -95,9 +99,13 @@ void BasicAI::resetAI() {
     
     activeAutoUseTime = mach_absolute_time();
     
+    /*
     moveToLane = arc4random_uniform(3) + 1;
     NSLog(@"Chose lane %d", moveToLane);
+     */
+    moveToLane = 1; //Top lane
     moveToLanePathSwitch = mach_absolute_time();
+     
     
     boughtStarterItems = false;
     
@@ -608,10 +616,24 @@ void BasicAI::handleMovementAndAttacking() {
             {
                 //NSLog(@"\t\tAction: Moving to Mid");
                 
-                if (getTimeInMilliseconds(mach_absolute_time() - moveToLanePathSwitch) >= 1000 * 60 * 5) {
-                    //Switch to a random lane
+                if (getTimeInMilliseconds(mach_absolute_time() - moveToLanePathSwitch) >= 1000 * 60 * 20) {
+                    //Switch to a random lane after 20 min
                     moveToLane = arc4random_uniform(3) + 1;
                     moveToLanePathSwitch = mach_absolute_time();
+                    AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+                    if (appDelegate->basicAI->moveToLane == 1) {
+                        [appDelegate->topLaneCheckbox setState: NSOnState];
+                        [appDelegate->midLaneCheckbox setState: NSOffState];
+                        [appDelegate->bottomLaneCheckbox setState: NSOffState];
+                    } else if (appDelegate->basicAI->moveToLane == 2) {
+                        [appDelegate->topLaneCheckbox setState: NSOffState];
+                        [appDelegate->midLaneCheckbox setState: NSOnState];
+                        [appDelegate->bottomLaneCheckbox setState: NSOffState];
+                    } else if (appDelegate->basicAI->moveToLane == 3) {
+                        [appDelegate->topLaneCheckbox setState: NSOffState];
+                        [appDelegate->midLaneCheckbox setState: NSOffState];
+                        [appDelegate->bottomLaneCheckbox setState: NSOnState];
+                    }
                 }
                 
                 if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 500) {
@@ -666,10 +688,24 @@ void BasicAI::handleMovementAndAttacking() {
             useTrinket();
         }
     } else if (mapVisible && !shopTopLeftCornerVisible && !buyingItems) {
-        if (getTimeInMilliseconds(mach_absolute_time() - moveToLanePathSwitch) >= 1000 * 60 * 2) {
-            //Switch to a random lane
+        if (getTimeInMilliseconds(mach_absolute_time() - moveToLanePathSwitch) >= 1000 * 60 * 20) {
+            //Switch to a random lane after 20 min
             moveToLane = arc4random_uniform(3) + 1;
             moveToLanePathSwitch = mach_absolute_time();
+            AppDelegate *appDelegate = (AppDelegate *)[[NSApplication sharedApplication] delegate];
+            if (appDelegate->basicAI->moveToLane == 1) {
+                [appDelegate->topLaneCheckbox setState: NSOnState];
+                [appDelegate->midLaneCheckbox setState: NSOffState];
+                [appDelegate->bottomLaneCheckbox setState: NSOffState];
+            } else if (appDelegate->basicAI->moveToLane == 2) {
+                [appDelegate->topLaneCheckbox setState: NSOffState];
+                [appDelegate->midLaneCheckbox setState: NSOnState];
+                [appDelegate->bottomLaneCheckbox setState: NSOffState];
+            } else if (appDelegate->basicAI->moveToLane == 3) {
+                [appDelegate->topLaneCheckbox setState: NSOffState];
+                [appDelegate->midLaneCheckbox setState: NSOffState];
+                [appDelegate->bottomLaneCheckbox setState: NSOnState];
+            }
         }
         
         if (getTimeInMilliseconds(mach_absolute_time() - lastMovementClick) >= 500) {
