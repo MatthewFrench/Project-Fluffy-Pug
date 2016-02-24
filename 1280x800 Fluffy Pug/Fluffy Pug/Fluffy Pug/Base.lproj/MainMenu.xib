@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<<<<<<< HEAD
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="9532" systemVersion="15E49a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9532"/>
+=======
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8191"/>
+>>>>>>> origin/master
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -801,10 +808,10 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="490" height="190"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <size key="minSize" width="490" height="190"/>
+                                                        <size key="minSize" width="475" height="190"/>
                                                         <size key="maxSize" width="510" height="10000000"/>
                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="minSize" width="490" height="190"/>
+                                                        <size key="minSize" width="475" height="190"/>
                                                         <size key="maxSize" width="510" height="10000000"/>
                                                     </textView>
                                                 </subviews>
@@ -815,7 +822,7 @@
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                             <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="WcR-3d-FEc">
-                                                <rect key="frame" x="475" y="1" width="16" height="190"/>
+                                                <rect key="frame" x="476" y="1" width="15" height="190"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                             </scroller>
                                         </scrollView>
@@ -946,10 +953,10 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="488" height="123"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <size key="minSize" width="488" height="123"/>
+                                                        <size key="minSize" width="473" height="123"/>
                                                         <size key="maxSize" width="493" height="10000000"/>
                                                         <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                        <size key="minSize" width="488" height="123"/>
+                                                        <size key="minSize" width="473" height="123"/>
                                                         <size key="maxSize" width="493" height="10000000"/>
                                                     </textView>
                                                 </subviews>
