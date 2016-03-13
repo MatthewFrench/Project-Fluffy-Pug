@@ -408,7 +408,7 @@ void BasicAI::handleMovementAndAttacking() {
          } else {
          action = ACTION_Run_Away;
          }
-         } else */if (enemyChampionsNear) {
+         } else */if (enemyChampionsNear && selfChamp->health < 0.6) {
              //Too many baddies, peace.
              action = ACTION_Run_Away;
          }
