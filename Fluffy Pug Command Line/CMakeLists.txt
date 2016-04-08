@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.5.1)
+project (artificialIntelligenceBenchmark)
+add_executable(artificialIntelligenceBenchmark main.cpp hellofunc.cpp)
+TARGET_LINK_LIBRARIES(artificialIntelligenceBenchmark png16)
