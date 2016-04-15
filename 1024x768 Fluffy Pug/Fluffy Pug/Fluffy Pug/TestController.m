@@ -20,19 +20,18 @@ TestController::TestController(NSImageView* processedImageView, NSImageView *unp
     //testGame1 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/TestGame1" ofType:@"png"]);
     //testGame2 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/TestGame2" ofType:@"png"]);
     
-    testAbilitiesActive1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Abilities Active 1280x800" ofType:@"png"]);
-    testInGameDetection1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test In-Game Detection 1280x800" ofType:@"png"]);
-    testItemActives1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Item Actives 1280x800" ofType:@"png"]);
-    testLevelUp1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Level Up 1280x800" ofType:@"png"]);
-    testShopAvailable1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Available 1280x800" ofType:@"png"]);
-    testShopItems1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Items 1280x800" ofType:@"png"]);
-    testShopOpen1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Open 1280x800" ofType:@"png"]);
-    testEnemyTower1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Enemy Tower Detection 1280x800" ofType:@"png"]);
-    testLevelUpDot1280x800Image = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Level Up Dot 1280x800" ofType:@"png"]);
-    testUsedPotion1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Used Potion 1280x800" ofType:@"png"]);
-    testOutsideImage1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Outside Image 1280x800" ofType:@"png"]);
-    testHextechGunblade1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Hextech Gunblade 1280x800" ofType:@"png"]);
-    testSelfChampion1280x800 = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Self Champion 1280x800" ofType:@"png"]);
+    testAbilitiesActiveImage = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Abilities Active" ofType:@"png"]);
+    testInGameDetectionImage = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test In-Game Detection" ofType:@"png"]);
+    testItemActivesImage = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Item Actives" ofType:@"png"]);
+    testLevelUpImage = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Level Up" ofType:@"png"]);
+    testShopAvailableImage = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Available" ofType:@"png"]);
+    testShopItemsImage = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Items" ofType:@"png"]);
+    testShopOpenImage = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Shop Open" ofType:@"png"]);
+    testEnemyTowerImage = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Enemy Tower Detection" ofType:@"png"]);
+    testLevelUpDotImage = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Level Up Dot" ofType:@"png"]);
+    testUsedPotion = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Used Potion" ofType:@"png"]);
+    testHextechGunblade = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Hextech Gunblade" ofType:@"png"]);
+    testSelfChampion = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Test Images/Test Self Champion" ofType:@"png"]);
     
     //[targetImageView setImage:getImageFromBGRABuffer(testGame1.imageData, testGame1.imageWidth, testGame1.imageHeight)];
 }
@@ -48,12 +47,15 @@ void TestController::copyScreenShot(uint8 *baseAddress, int bufferWidth, int buf
     displayPreprocessedScreenShot();
 }
 void TestController::displayPreprocessedScreenShot() {
+    if (testImage.imageData != NULL) {
     NSImage* image = getImageFromBGRABuffer(testImage.imageData, testImage.imageWidth, testImage.imageHeight);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: image];
     });
+    }
 }
 void TestController::testPlayButton() {
+    if (testImage.imageData != NULL) {
     [targetImageView setImage:getImageFromBGRABuffer(playButton.imageData, playButton.imageWidth, playButton.imageHeight)];
     log(@"Testing Play Button Detection...");
     uint64 startTime = mach_absolute_time();
@@ -83,6 +85,7 @@ void TestController::testPlayButton() {
     [processedImageView setImage: getImageFromBGRABuffer(imageData.imageData, imageData.imageWidth, imageData.imageHeight)];
     uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, playLocation.x, playLocation.y, playButton.imageWidth, playButton.imageHeight);
     [foundImageView setImage: getImageFromBGRABuffer(image2, playButton.imageWidth, playButton.imageHeight)];
+    }
 }
 /*
 void TestController::testGameImage1() {
@@ -120,7 +123,7 @@ void TestController::testGameImage1() {
 */
 
 void TestController::testSelfDetection() {
-    testImage = testSelfChampion1280x800;
+    testImage = testSelfChampion;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -204,7 +207,7 @@ void TestController::testSelfDetection() {
 
 
 void TestController::testAllyChampionDetection() {
-    testImage = testShopAvailable1280x800Image;
+    testImage = testShopAvailableImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -271,7 +274,7 @@ void TestController::testAllyChampionDetection() {
 }
 
 void TestController::testEnemyChampionDetection() {
-    testImage = testItemActives1280x800Image;
+    testImage = testInGameDetectionImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -340,7 +343,7 @@ void TestController::testEnemyChampionDetection() {
 }
 
 void TestController::testEnemyMinionDetection() {
-    testImage = testInGameDetection1280x800Image;
+    testImage = testInGameDetectionImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -409,7 +412,7 @@ void TestController::testEnemyMinionDetection() {
 }
 
 void TestController::testAllyMinionDetection() {
-    testImage = testInGameDetection1280x800Image;
+    testImage = testInGameDetectionImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -478,7 +481,7 @@ void TestController::testAllyMinionDetection() {
 }
 
 void TestController::testEnemyTowerDetection() {
-    testImage = testEnemyTower1280x800Image;
+    testImage = testEnemyTowerImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -546,7 +549,7 @@ void TestController::testEnemyTowerDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(EnemyTowerManager::healthSegmentImageData.imageData, EnemyTowerManager::healthSegmentImageData.imageWidth, EnemyTowerManager::healthSegmentImageData.imageHeight)];
 }
 void TestController::testLevelUpDetection() {
-    testImage = testShopAvailable1280x800Image;
+    testImage = testShopAvailableImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -609,7 +612,7 @@ void TestController::testLevelUpDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::levelUpImageData.imageData, AbilityManager::levelUpImageData.imageWidth, AbilityManager::levelUpImageData.imageHeight)];
 }
 void TestController::testLevelDotDetection() {
-    testImage = testLevelUpDot1280x800Image;
+    testImage = testLevelUpDotImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -672,7 +675,7 @@ void TestController::testLevelDotDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::levelDotImageData.imageData, AbilityManager::levelDotImageData.imageWidth, AbilityManager::levelDotImageData.imageHeight)];
 }
 void TestController::testEnabledAbilityDetection() {
-    testImage = testAbilitiesActive1280x800Image;
+    testImage = testItemActivesImage;//testAbilitiesActiveImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -735,7 +738,7 @@ void TestController::testEnabledAbilityDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(AbilityManager::abilityEnabledImageData.imageData, AbilityManager::abilityEnabledImageData.imageWidth, AbilityManager::abilityEnabledImageData.imageHeight)];
 }
 void TestController::testEnabledSummonerSpellDetection() {
-    testImage = testAbilitiesActive1280x800Image;
+    testImage = testAbilitiesActiveImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -799,7 +802,7 @@ void TestController::testEnabledSummonerSpellDetection() {
 }
 
 void TestController::testTrinketActiveDetection() {
-    testImage = testAbilitiesActive1280x800Image;
+    testImage = testAbilitiesActiveImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -862,7 +865,7 @@ void TestController::testTrinketActiveDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(ItemManager::trinketItemImageData.imageData, ItemManager::trinketItemImageData.imageWidth, ItemManager::trinketItemImageData.imageHeight)];
 }
 void TestController::testItemActiveDetection() {
-    testImage = testHextechGunblade1280x800;
+    testImage = testHextechGunblade;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -925,7 +928,7 @@ void TestController::testItemActiveDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(ItemManager::itemImageData.imageData, ItemManager::itemImageData.imageWidth, ItemManager::itemImageData.imageHeight)];
 }
 void TestController::testPotionActiveDetection() {
-    testImage = testItemActives1280x800Image;
+    testImage = testItemActivesImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -988,7 +991,7 @@ void TestController::testPotionActiveDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(ItemManager::potionImageData.imageData, ItemManager::potionImageData.imageWidth, ItemManager::potionImageData.imageHeight)];
 }
 void TestController::testUsedPotionActiveDetection() {
-    testImage = testUsedPotion1280x800;
+    testImage = testUsedPotion;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -1052,7 +1055,7 @@ void TestController::testUsedPotionActiveDetection() {
 }
 
 void TestController::testShopAvailable() {
-    testImage = testShopAvailable1280x800Image;
+    testImage = testShopAvailableImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -1115,7 +1118,7 @@ void TestController::testShopAvailable() {
     [targetImageView setImage:getImageFromBGRABuffer(ShopManager::shopAvailableImageData.imageData, ShopManager::shopAvailableImageData.imageWidth, ShopManager::shopAvailableImageData.imageHeight)];
 }
 void TestController::testShopTopLeftCorner() {
-    testImage = testShopOpen1280x800Image;
+    testImage = testShopOpenImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -1178,7 +1181,7 @@ void TestController::testShopTopLeftCorner() {
     [targetImageView setImage:getImageFromBGRABuffer(ShopManager::shopTopLeftCornerImageData.imageData, ShopManager::shopTopLeftCornerImageData.imageWidth, ShopManager::shopTopLeftCornerImageData.imageHeight)];
 }
 void TestController::testShopBottomLeftCorner() {
-    testImage = testShopOpen1280x800Image;
+    testImage = testShopOpenImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -1241,7 +1244,7 @@ void TestController::testShopBottomLeftCorner() {
     [targetImageView setImage:getImageFromBGRABuffer(ShopManager::shopBottomLeftCornerImageData.imageData, ShopManager::shopBottomLeftCornerImageData.imageWidth, ShopManager::shopBottomLeftCornerImageData.imageHeight)];
 }
 void TestController::testShopBuyableItems() {
-    testImage = testShopItems1280x800Image;
+    testImage = testShopItemsImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -1305,7 +1308,7 @@ void TestController::testShopBuyableItems() {
 }
 
 void TestController::testMapDetection() {
-    testImage = testInGameDetection1280x800Image;
+    testImage = testInGameDetectionImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -1368,7 +1371,7 @@ void TestController::testMapDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(MapManager::mapTopLeftCornerImageData.imageData, MapManager::mapTopLeftCornerImageData.imageWidth, MapManager::mapTopLeftCornerImageData.imageHeight)];
 }
 void TestController::testMapShopDetection() {
-    testImage = testInGameDetection1280x800Image;
+    testImage = testInGameDetectionImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
@@ -1432,14 +1435,15 @@ void TestController::testMapShopDetection() {
     [targetImageView setImage:getImageFromBGRABuffer(MapManager::shopIconImageData.imageData, MapManager::shopIconImageData.imageWidth, MapManager::shopIconImageData.imageHeight)];
 }
 void TestController::testMapLocationDetection() {
-    testImage = testInGameDetection1280x800Image;
+    testImage = testInGameDetectionImage;
     NSImage* nsimage = getImageFromBGRABufferImageData(&testImage);
     dispatch_async(dispatch_get_main_queue(), ^{
         [unprocessedImageView setImage: nsimage];
     });
     
-    
+    /*
     [targetImageView setImage:getImageFromBGRABuffer(MapManager::locationTopLeftCornerImageData.imageData, MapManager::locationTopLeftCornerImageData.imageWidth, MapManager::locationTopLeftCornerImageData.imageHeight)];
+     */
     log(@"Testing Map Location Detection...");
     NSMutableArray* levelups = [NSMutableArray new];
     uint64 startTime = mach_absolute_time();
@@ -1491,8 +1495,8 @@ void TestController::testMapLocationDetection() {
         uint8* image2 = copyImageBufferSection(testImage.imageData, testImage.imageWidth, testImage.imageHeight, levelup->topLeft.x, levelup->topLeft.y, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y);
         [foundImageView setImage: getImageFromBGRABuffer(image2, levelup->bottomRight.x - levelup->topLeft.x, levelup->bottomRight.y - levelup->topLeft.y)];
     }
-    
-    [targetImageView setImage:getImageFromBGRABuffer(MapManager::locationTopLeftCornerImageData.imageData, MapManager::locationTopLeftCornerImageData.imageWidth, MapManager::locationTopLeftCornerImageData.imageHeight)];
+    /*
+    [targetImageView setImage:getImageFromBGRABuffer(MapManager::locationTopLeftCornerImageData.imageData, MapManager::locationTopLeftCornerImageData.imageWidth, MapManager::locationTopLeftCornerImageData.imageHeight)];*/
 }
 
 

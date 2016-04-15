@@ -468,42 +468,207 @@ AppDelegate *GlobalSelf;
         //dispatch_async(dispatch_get_main_queue(), ^{
         //    @autoreleasepool {
             [GlobalSelf->allyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)allyMinionCount]];
-            [GlobalSelf->enemyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)enemyMinionCount]];
-            [GlobalSelf->enemyChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)enemyChampCount]];
-            [GlobalSelf->allyChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)allyChampCount]];
-            [GlobalSelf->selfChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)selfChampCount]];
-            [GlobalSelf->selfCurrentLvlTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)currentLevel]];
-            [GlobalSelf->enemyTowersTxt setStringValue:[NSString stringWithFormat:@"%lu towers", (unsigned long)enemyTowerCount]];
-            [GlobalSelf->selfHealthTxt setStringValue:[NSString stringWithFormat:@"%@", selfHealth?@"true":@"false"]];
-            [GlobalSelf->mapTxt setStringValue:[NSString stringWithFormat:@"%@", mapShown?@"true":@"false"]];
+        if (allyMinionCount > 0) {
+            [GlobalSelf->allyMinionsTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->allyMinionsTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->enemyMinionsTxt setStringValue:[NSString stringWithFormat:@"%lu minions", (unsigned long)enemyMinionCount]];
+        if (enemyMinionCount > 0) {
+            [GlobalSelf->enemyMinionsTxt setTextColor:[NSColor redColor]];
+        } else {
+            [GlobalSelf->enemyMinionsTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->enemyChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)enemyChampCount]];
+        if (enemyChampCount > 0) {
+            [GlobalSelf->enemyChampsTxt setTextColor:[NSColor redColor]];
+        } else {
+            [GlobalSelf->enemyChampsTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->allyChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)allyChampCount]];
+        if (allyChampCount > 0) {
+            [GlobalSelf->allyChampsTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->allyChampsTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->selfChampsTxt setStringValue:[NSString stringWithFormat:@"%lu champs", (unsigned long)selfChampCount]];
+        if (selfChampCount > 0) {
+            [GlobalSelf->selfChampsTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->selfChampsTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->selfCurrentLvlTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)currentLevel]];
+        if (currentLevel > 0) {
+            [GlobalSelf->selfCurrentLvlTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->selfCurrentLvlTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->enemyTowersTxt setStringValue:[NSString stringWithFormat:@"%lu towers", (unsigned long)enemyTowerCount]];
+        if (enemyTowerCount > 0) {
+            [GlobalSelf->enemyTowersTxt setTextColor:[NSColor redColor]];
+        } else {
+            [GlobalSelf->enemyTowersTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->selfHealthTxt setStringValue:[NSString stringWithFormat:@"%@", selfHealth?@"true":@"false"]];
+        if (selfHealth) {
+            [GlobalSelf->selfHealthTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->selfHealthTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->mapTxt setStringValue:[NSString stringWithFormat:@"%@", mapShown?@"true":@"false"]];
+        if (mapShown) {
+            [GlobalSelf->mapTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->mapTxt setTextColor:[NSColor blackColor]];
+        }
             [GlobalSelf->mapLocTxt setStringValue:[NSString stringWithFormat:@"%@", mapLocationShown?@"true":@"false"]];
-            [GlobalSelf->mapShopTxt setStringValue:[NSString stringWithFormat:@"%@", mapShopShown?@"true":@"false"]];
-            [GlobalSelf->item1Txt setStringValue:[NSString stringWithFormat:@"%@", item1Shown?@"true":@"false"]];
-            [GlobalSelf->item2Txt setStringValue:[NSString stringWithFormat:@"%@", item2Shown?@"true":@"false"]];
-            [GlobalSelf->item3Txt setStringValue:[NSString stringWithFormat:@"%@", item3Shown?@"true":@"false"]];
-            [GlobalSelf->item4Txt setStringValue:[NSString stringWithFormat:@"%@", item4Shown?@"true":@"false"]];
-            [GlobalSelf->item5Txt setStringValue:[NSString stringWithFormat:@"%@", item5Shown?@"true":@"false"]];
-            [GlobalSelf->item6Txt setStringValue:[NSString stringWithFormat:@"%@", item6Shown?@"true":@"false"]];
-            [GlobalSelf->summonerSpell1Txt setStringValue:[NSString stringWithFormat:@"%@", summoner1Shown?@"true":@"false"]];
-            [GlobalSelf->summonerSpell2Txt setStringValue:[NSString stringWithFormat:@"%@", summoner2Shown?@"true":@"false"]];
-            [GlobalSelf->trinketTxt setStringValue:[NSString stringWithFormat:@"%@", trinketShown?@"true":@"false"]];
-            [GlobalSelf->usedPotionTxt setStringValue:[NSString stringWithFormat:@"%@", potionUsed?@"true":@"false"]];
-            [GlobalSelf->potionActiveTxt setStringValue:[NSString stringWithFormat:@"%@", potionShown?@"true":@"false"]];
-            [GlobalSelf->spell1Txt setStringValue:[NSString stringWithFormat:@"%@", spell1Shown?@"true":@"false"]];
-            [GlobalSelf->spell2Txt setStringValue:[NSString stringWithFormat:@"%@", spell2Shown?@"true":@"false"]];
-            [GlobalSelf->spell3Txt setStringValue:[NSString stringWithFormat:@"%@", spell3Shown?@"true":@"false"]];
-            [GlobalSelf->spell4Txt setStringValue:[NSString stringWithFormat:@"%@", spell4Shown?@"true":@"false"]];
-            [GlobalSelf->spell1LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", spell1LvlUp?@"true":@"false"]];
-            [GlobalSelf->spell2LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", spell2LvlUp?@"true":@"false"]];
-            [GlobalSelf->spell3LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", spell3LvlUp?@"true":@"false"]];
-            [GlobalSelf->spell4LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", spell4LvlUp?@"true":@"false"]];
+        if (mapLocationShown) {
+            [GlobalSelf->mapLocTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->mapLocTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->mapShopTxt setStringValue:[NSString stringWithFormat:@"%@", mapShopShown?@"true":@"false"]];
+        if (mapShopShown) {
+            [GlobalSelf->mapShopTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->mapShopTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->item1Txt setStringValue:[NSString stringWithFormat:@"%@", item1Shown?@"true":@"false"]];
+        if (item1Shown) {
+            [GlobalSelf->item1Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->item1Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->item2Txt setStringValue:[NSString stringWithFormat:@"%@", item2Shown?@"true":@"false"]];
+        if (item2Shown) {
+            [GlobalSelf->item2Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->item2Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->item3Txt setStringValue:[NSString stringWithFormat:@"%@", item3Shown?@"true":@"false"]];
+        if (item3Shown) {
+            [GlobalSelf->item3Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->item3Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->item4Txt setStringValue:[NSString stringWithFormat:@"%@", item4Shown?@"true":@"false"]];
+        if (item4Shown) {
+            [GlobalSelf->item4Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->item4Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->item5Txt setStringValue:[NSString stringWithFormat:@"%@", item5Shown?@"true":@"false"]];
+        if (item5Shown) {
+            [GlobalSelf->item5Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->item5Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->item6Txt setStringValue:[NSString stringWithFormat:@"%@", item6Shown?@"true":@"false"]];
+        if (item6Shown) {
+            [GlobalSelf->item6Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->item6Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->summonerSpell1Txt setStringValue:[NSString stringWithFormat:@"%@", summoner1Shown?@"true":@"false"]];
+        if (summoner1Shown) {
+            [GlobalSelf->summonerSpell1Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->summonerSpell1Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->summonerSpell2Txt setStringValue:[NSString stringWithFormat:@"%@", summoner2Shown?@"true":@"false"]];
+        if (summoner2Shown) {
+            [GlobalSelf->summonerSpell2Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->summonerSpell2Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->trinketTxt setStringValue:[NSString stringWithFormat:@"%@", trinketShown?@"true":@"false"]];
+        if (trinketShown) {
+            [GlobalSelf->trinketTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->trinketTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->usedPotionTxt setStringValue:[NSString stringWithFormat:@"%@", potionUsed?@"true":@"false"]];
+        if (potionUsed) {
+            [GlobalSelf->usedPotionTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->usedPotionTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->potionActiveTxt setStringValue:[NSString stringWithFormat:@"%@", potionShown?@"true":@"false"]];
+        if (potionShown) {
+            [GlobalSelf->potionActiveTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->potionActiveTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->spell1Txt setStringValue:[NSString stringWithFormat:@"%@", spell1Shown?@"true":@"false"]];
+        if (spell1Shown) {
+            [GlobalSelf->spell1Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->spell1Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->spell2Txt setStringValue:[NSString stringWithFormat:@"%@", spell2Shown?@"true":@"false"]];
+        if (spell2Shown) {
+            [GlobalSelf->spell2Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->spell2Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->spell3Txt setStringValue:[NSString stringWithFormat:@"%@", spell3Shown?@"true":@"false"]];
+        if (spell3Shown) {
+            [GlobalSelf->spell3Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->spell3Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->spell4Txt setStringValue:[NSString stringWithFormat:@"%@", spell4Shown?@"true":@"false"]];
+        if (spell4Shown) {
+            [GlobalSelf->spell4Txt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->spell4Txt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->spell1LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", spell1LvlUp?@"true":@"false"]];
+        if (spell1LvlUp) {
+            [GlobalSelf->spell1LvlUpTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->spell1LvlUpTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->spell2LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", spell2LvlUp?@"true":@"false"]];
+        if (spell2LvlUp) {
+            [GlobalSelf->spell2LvlUpTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->spell2LvlUpTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->spell3LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", spell3LvlUp?@"true":@"false"]];
+        if (spell3LvlUp) {
+            [GlobalSelf->spell3LvlUpTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->spell3LvlUpTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->spell4LvlUpTxt setStringValue:[NSString stringWithFormat:@"%@", spell4LvlUp?@"true":@"false"]];
+        if (spell4LvlUp) {
+            [GlobalSelf->spell4LvlUpTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->spell4LvlUpTxt setTextColor:[NSColor blackColor]];
+        }
             [GlobalSelf->spell1LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)spell1Lvl]];
             [GlobalSelf->spell2LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)spell2Lvl]];
             [GlobalSelf->spell3LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)spell3Lvl]];
             [GlobalSelf->spell4LvlTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)spell4Lvl]];
-            [GlobalSelf->shopAvailableTxt setStringValue:[NSString stringWithFormat:@"%@", shopAvailable?@"true":@"false"]];
-            [GlobalSelf->shopWindowOpenTxt setStringValue:[NSString stringWithFormat:@"%@", shopWindowOpen?@"true":@"false"]];
-            [GlobalSelf->buyableItemsTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)buyableItems]];
+        [GlobalSelf->shopAvailableTxt setStringValue:[NSString stringWithFormat:@"%@", shopAvailable?@"true":@"false"]];
+        if (shopAvailable) {
+            [GlobalSelf->shopAvailableTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->shopAvailableTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->shopWindowOpenTxt setStringValue:[NSString stringWithFormat:@"%@", shopWindowOpen?@"true":@"false"]];
+        if (shopWindowOpen) {
+            [GlobalSelf->shopWindowOpenTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->shopWindowOpenTxt setTextColor:[NSColor blackColor]];
+        }
+        [GlobalSelf->buyableItemsTxt setStringValue:[NSString stringWithFormat:@"%lu", (unsigned long)buyableItems]];
+        if (buyableItems > 0) {
+            [GlobalSelf->buyableItemsTxt setTextColor:[NSColor greenColor]];
+        } else {
+            [GlobalSelf->buyableItemsTxt setTextColor:[NSColor blackColor]];
+        }
             }
             //[[GlobalSelf.window contentView] setNeedsDisplay:true];
         //});

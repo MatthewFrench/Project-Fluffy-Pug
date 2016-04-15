@@ -954,8 +954,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
     //First we do an immediate map location search
     //If the map is found them we search for shop and self location
     
-    CGPoint searchStart = CGPointMake(image.imageWidth - 210, image.imageHeight - 210);
-    CGPoint searchEnd = CGPointMake(image.imageWidth - 200, image.imageHeight - 200);
+    CGPoint searchStart = CGPointMake(image.imageWidth - 200, image.imageHeight - 201);
+    CGPoint searchEnd = CGPointMake(image.imageWidth - 195, image.imageHeight - 197);
     
     int oldMapX = -1;
     int oldMapY = -1;
@@ -1016,8 +1016,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                 
                 startTime = mach_absolute_time();
                 //Search for shop at the bottom left
-                searchStart = CGPointMake(image.imageWidth - 200, image.imageHeight - 34);
-                searchEnd = CGPointMake(image.imageWidth - 196, image.imageHeight - 30);
+                searchStart = CGPointMake(image.imageWidth - 194, image.imageHeight - 34);
+                searchEnd = CGPointMake(image.imageWidth - 186, image.imageHeight - 25);
                 for (int x = searchStart.x; x < searchEnd.x; x++) {
                     for (int y = searchStart.y; y < searchEnd.y; y++) {
                         uint8* pixel = getPixel2(image, x, y);
@@ -1030,8 +1030,8 @@ void DetectionManager::processMap(ImageData image, dispatch_group_t dispatchGrou
                 }
                 if (foundShop == NULL) {
                     //Search for shop at top right
-                    searchStart = CGPointMake(image.imageWidth - 34, image.imageHeight - 200);
-                    searchEnd = CGPointMake(image.imageWidth - 30, image.imageHeight - 196);
+                    searchStart = CGPointMake(image.imageWidth - 32, image.imageHeight - 192);
+                    searchEnd = CGPointMake(image.imageWidth - 16, image.imageHeight - 181);
                     for (int x = searchStart.x; x < searchEnd.x; x++) {
                         for (int y = searchStart.y; y < searchEnd.y; y++) {
                             uint8* pixel = getPixel2(image, x, y);
@@ -1213,7 +1213,9 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                 //NSLog(@"Process shop Processing detection time(ms): %d", getTimeInMilliseconds(mach_absolute_time() - startTime));
             //}
             
-            //Sort buyable items based on Y value
+            //Sort buyable items based on Y value and X value
+            
+            //I think this sorting algorithm is very flawed
             
             for (int i = 0; i < itemsCanBuy.count; i++) {
                 GenericObject* item = [itemsCanBuy objectAtIndex:i];
@@ -1223,6 +1225,11 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
                     placeAtIndex = i2;
                     if (item2->topLeft.y > item->topLeft.y) {
                         break;
+                    }
+                    if (abs(item2->topLeft.y - item->topLeft.y) <= 5) {
+                        if (item2->topLeft.x > item->topLeft.x) {
+                            break;
+                        }
                     }
                     [itemsCanBuy removeObject:item];
                     [itemsCanBuy insertObject:item atIndex:placeAtIndex];
@@ -1266,8 +1273,8 @@ void DetectionManager::processShop(ImageData image, dispatch_group_t dispatchGro
     });
 }
 void DetectionManager::processShopAvailable(ImageData image, dispatch_group_t dispatchGroup) {
-    CGPoint searchStart = CGPointMake(760, 765);
-    CGPoint searchEnd = CGPointMake(770, 780);
+    CGPoint searchStart = CGPointMake(629, 739);
+    CGPoint searchEnd = CGPointMake(637, 745);
     dispatch_group_async(dispatchGroup, shopAvailableThread, ^{
         @autoreleasepool {
             uint64_t startTime = mach_absolute_time();
@@ -1344,12 +1351,12 @@ void DetectionManager::processUsedPotion(ImageData image, dispatch_group_t dispa
 
 void DetectionManager::processItemActives(ImageData image, dispatch_group_t dispatchGroup) {
     int searchWidth = 6; int searchHeight = 6;
-    CGPoint item1Pos = CGPointMake(764, 700);
-    CGPoint item2Pos = CGPointMake(800, 700);
-    CGPoint item3Pos = CGPointMake(836, 700);
-    CGPoint item4Pos = CGPointMake(764, 734);
-    CGPoint item5Pos = CGPointMake(800, 734);
-    CGPoint item6Pos = CGPointMake(836, 734);
+    CGPoint item1Pos = CGPointMake(632, 672);
+    CGPoint item2Pos = CGPointMake(666, 672);
+    CGPoint item3Pos = CGPointMake(700, 672);
+    CGPoint item4Pos = CGPointMake(632, 705);
+    CGPoint item5Pos = CGPointMake(667, 705);
+    CGPoint item6Pos = CGPointMake(701, 705);
     
     potionActiveAvailable = false;
     
@@ -1648,7 +1655,7 @@ void DetectionManager::processSurrender(ImageData image, dispatch_group_t dispat
 void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t dispatchGroup) {
     
     int searchWidth = 10; int searchHeight = 10;
-    CGPoint trinketPos = CGPointMake(870, 700);
+    CGPoint trinketPos = CGPointMake(738, 675);
     //Search for trinket to use
     dispatch_group_async(dispatchGroup, trinketActiveThread, ^{
         @autoreleasepool {
@@ -1684,10 +1691,10 @@ void DetectionManager::processTrinketActive(ImageData image, dispatch_group_t di
 }
 void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dispatchGroup) {
     int searchWidth = 6; int searchHeight = 6;
-    CGPoint level1Pos = CGPointMake(466, 700);
-    CGPoint level2Pos = CGPointMake(515, 700);
-    CGPoint level3Pos = CGPointMake(565, 700);
-    CGPoint level4Pos = CGPointMake(614, 700);
+    CGPoint level1Pos = CGPointMake(346, 672);
+    CGPoint level2Pos = CGPointMake(393, 672);
+    CGPoint level3Pos = CGPointMake(440, 672);
+    CGPoint level4Pos = CGPointMake(488, 672);
     
     //Search for first level up
     dispatch_group_async(dispatchGroup, spell1ActiveThread, ^{
@@ -1821,8 +1828,8 @@ void DetectionManager::processSpellActives(ImageData image, dispatch_group_t dis
 
 void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_group_t dispatchGroup) {
     int searchWidth = 6; int searchHeight = 6;
-    CGPoint spell1Pos = CGPointMake(670, 700);
-    CGPoint spell2Pos = CGPointMake(708, 700);
+    CGPoint spell1Pos = CGPointMake(541, 671);
+    CGPoint spell2Pos = CGPointMake(577, 671);
     
     //Search for first summoner spell
     dispatch_group_async(dispatchGroup, summonerSpell1ActiveThread, ^{
@@ -1888,10 +1895,10 @@ void DetectionManager::processSummonerSpellActives(ImageData image, dispatch_gro
 
 void DetectionManager::processSpellLevelDots(ImageData image, dispatch_group_t dispatchGroup) {
     int searchWidth = 40; int searchHeight = 5;
-    CGPoint levelDot1Pos = CGPointMake(470, 750);
-    CGPoint levelDot2Pos = CGPointMake(522, 750);
-    CGPoint levelDot3Pos = CGPointMake(572, 750);
-    CGPoint levelDot4Pos = CGPointMake(620, 750);
+    CGPoint levelDot1Pos = CGPointMake(351, 719);
+    CGPoint levelDot2Pos = CGPointMake(398, 719);
+    CGPoint levelDot3Pos = CGPointMake(446, 719);
+    CGPoint levelDot4Pos = CGPointMake(500, 719);
     
     //Search for level up dots
     dispatch_group_async(dispatchGroup, levelUpDotsThread, ^{
@@ -1994,10 +2001,10 @@ void DetectionManager::processSpellLevelUps(ImageData image, dispatch_group_t di
     //565, 660
     //615, 660
     int searchWidth = 10; int searchHeight = 5;
-    CGPoint levelUp1Pos = CGPointMake(465, 660);
-    CGPoint levelUp2Pos = CGPointMake(515, 660);
-    CGPoint levelUp3Pos = CGPointMake(565, 660);
-    CGPoint levelUp4Pos = CGPointMake(615, 660);
+    CGPoint levelUp1Pos = CGPointMake(349, 634);
+    CGPoint levelUp2Pos = CGPointMake(396, 634);
+    CGPoint levelUp3Pos = CGPointMake(444, 634);
+    CGPoint levelUp4Pos = CGPointMake(490, 634);
     
     //Search for first level up
     dispatch_group_async(dispatchGroup, spell1LevelUpThread, ^{
@@ -2970,8 +2977,8 @@ void DetectionManager::processSelfHealthBarDetection(ImageData image, dispatch_g
     //float leagueGameWidth = image.imageWidth;
     //float leagueGameHeight =image.imageHeight;
     //CGRect leagueWindowRect = CGRectMake(0, 0, leagueGameWidth, leagueGameHeight);
-    CGPoint searchStart = CGPointMake(410, 750);
-    CGPoint searchEnd = CGPointMake(430, 770);
+    CGPoint searchStart = CGPointMake(300, 728);
+    CGPoint searchEnd = CGPointMake(320, 748);
     
     //Increase the scan chunk by 1
     /*

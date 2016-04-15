@@ -17,11 +17,12 @@
 //
 ImageData MapManager::shopIconImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Map/Shop Icon" ofType:@"png"]);
 ImageData MapManager::mapTopLeftCornerImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Map/Map Top Left Corner" ofType:@"png"]);
+/*
 ImageData MapManager::locationTopLeftCornerImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Map/Location Top Left Corner" ofType:@"png"]);
 ImageData MapManager::locationBottomLeftCornerImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Map/Location Bottom Left Corner" ofType:@"png"]);
 ImageData MapManager::locationTopRightCornerImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Map/Location Top Right Corner" ofType:@"png"]);
 ImageData MapManager::locationBottomRightCornerImageData = makeImageDataFrom([[NSBundle mainBundle] pathForResource:@"Resources/Map/Location Bottom Right Corner" ofType:@"png"]);
-
+*/
 MapManager::MapManager() {}
 
 GenericObject* MapManager::detectMap(ImageData imageData, uint8_t *pixel, int x, int y) {

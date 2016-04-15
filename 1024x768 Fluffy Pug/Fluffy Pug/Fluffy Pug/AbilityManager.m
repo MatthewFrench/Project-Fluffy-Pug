@@ -60,10 +60,11 @@ GenericObject* AbilityManager::detectLevelUpAtPixel(ImageData imageData, uint8_t
     
     return object;
 }
+const float levelDotPrecision = 0.6;
 GenericObject* AbilityManager::detectLevelDotAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
     
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelDotImageData, 0.6) >=  0.8) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, levelDotImageData, levelDotPrecision) >=  levelDotPrecision) {
         object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
@@ -79,10 +80,11 @@ GenericObject* AbilityManager::detectLevelDotAtPixel(ImageData imageData, uint8_
     
     return object;
 }
+const float abilityEnabledPrecision = 0.7;
 GenericObject* AbilityManager::detectEnabledAbilityAtPixel(ImageData imageData, uint8_t *pixel, int x, int y) {
     GenericObject* object = nil;
     
-    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, abilityEnabledImageData, 0.9) >=  0.9) {
+    if (getImageAtPixelPercentageOptimizedExact(pixel, x, y, imageData.imageWidth, imageData.imageHeight, abilityEnabledImageData, abilityEnabledPrecision) >=  abilityEnabledPrecision) {
         object = [GenericObject new];
         object->topLeft.x = x;
         object->topLeft.y = y;
