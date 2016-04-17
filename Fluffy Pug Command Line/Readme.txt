@@ -1,8 +1,19 @@
-Install libpng
-Install imagemagick
-run make
-run ./artificialIntelligenceBenchmark
+• Install libpng
+• Install imagemagick
 
-Might need to re-make the make files in the build folder by using CMake.
+I used brew to install libpng and imagemagick on Mac.
 
-I used brew to install libpng and imagemagick.
+
+Creating make files
+• Use the CMake application to create the make files
+
+Creating Xcode files
+• Use CMake application to create Xcode files
+
+
+Running through make 
+• make
+• ./artificialIntelligenceBenchmark
+
+
+Every time a new source file is added, need to update CMakeList and update make and xcode files.
