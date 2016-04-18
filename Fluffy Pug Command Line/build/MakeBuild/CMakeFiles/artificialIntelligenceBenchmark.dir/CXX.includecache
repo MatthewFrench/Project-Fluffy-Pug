@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/CImg.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/CImg.h
 cstdio
 -
 cstdlib
@@ -72,61 +72,51 @@ omp.h
 cstddef
 -
 cv.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/cv.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/cv.h
 highgui.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/highgui.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/highgui.h
 png.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/png.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/png.h
 jpeglib.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/jpeglib.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/jpeglib.h
 setjmp.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/setjmp.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/setjmp.h
 tiffio.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/tiffio.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/tiffio.h
 minc_io_simple_volume.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/minc_io_simple_volume.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/minc_io_simple_volume.h
 minc_1_simple.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/minc_1_simple.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/minc_1_simple.h
 minc_1_simple_rw.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/minc_1_simple_rw.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/minc_1_simple_rw.h
 zlib.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/zlib.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/zlib.h
 curl/curl.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/curl/curl.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/curl/curl.h
 Magick++.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/Magick++.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/Magick++.h
 fftw3.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/fftw3.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/fftw3.h
 Board.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/Board.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/Board.h
 ImfRgbaFile.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/ImfRgbaFile.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/ImfRgbaFile.h
 ImfInputFile.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/ImfInputFile.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/ImfInputFile.h
 ImfChannelList.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/ImfChannelList.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/ImfChannelList.h
 ImfMatrixAttribute.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/ImfMatrixAttribute.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/ImfMatrixAttribute.h
 ImfArray.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/ImfArray.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/ImfArray.h
 CImg.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/CImg.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/CImg.h
 stdint.h
 -
 
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/hellofunc.cpp
-stdio.h
--
-hellomake.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/hellomake.h
-
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/hellomake.h
-
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/main.cpp
-hellomake.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/hellomake.h
-CImg.h
-/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/CImg.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/main.cpp
+lib/CImg.h
+/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/lib/CImg.h
 
 /usr/local/include/jconfig.h
 

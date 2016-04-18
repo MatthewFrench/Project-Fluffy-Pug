@@ -4,8 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/hellofunc.cpp" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o"
-  "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/main.cpp" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o"
+  "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/main.cpp" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild/CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
 

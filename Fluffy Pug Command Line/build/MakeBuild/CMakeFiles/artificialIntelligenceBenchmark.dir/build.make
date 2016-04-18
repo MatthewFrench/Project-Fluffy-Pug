@@ -46,7 +46,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild"
+CMAKE_BINARY_DIR = "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild"
 
 # Include any dependencies generated for this target.
 include CMakeFiles/artificialIntelligenceBenchmark.dir/depend.make
@@ -57,68 +57,42 @@ include CMakeFiles/artificialIntelligenceBenchmark.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/artificialIntelligenceBenchmark.dir/flags.make
 
-CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o: CMakeFiles/artificialIntelligenceBenchmark.dir/flags.make
-CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o: ../hellofunc.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o -c "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/hellofunc.cpp"
+CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o: CMakeFiles/artificialIntelligenceBenchmark.dir/flags.make
+CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o: ../../source/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o -c "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/main.cpp"
 
-CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/hellofunc.cpp" > CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.i
+CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/main.cpp" > CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.i
 
-CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/hellofunc.cpp" -o CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.s
+CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/source/main.cpp" -o CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.s
 
-CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o.requires:
+CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o.requires:
 
-.PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o.requires
+.PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o.requires
 
-CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o.provides: CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o.requires
-	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o.provides.build
-.PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o.provides
+CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o.provides: CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o.requires
+	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o.provides.build
+.PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o.provides
 
-CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o.provides.build: CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o
-
-
-CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o: CMakeFiles/artificialIntelligenceBenchmark.dir/flags.make
-CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir="/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o -c "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/main.cpp"
-
-CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/main.cpp" > CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.i
-
-CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/main.cpp" -o CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.s
-
-CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o.requires:
-
-.PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o.requires
-
-CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o.provides: CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o.requires
-	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o.provides.build
-.PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o.provides
-
-CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o.provides.build: CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o
+CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o.provides.build: CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o
 
 
 # Object files for target artificialIntelligenceBenchmark
 artificialIntelligenceBenchmark_OBJECTS = \
-"CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o" \
-"CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o"
+"CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o"
 
 # External object files for target artificialIntelligenceBenchmark
 artificialIntelligenceBenchmark_EXTERNAL_OBJECTS =
 
-artificialIntelligenceBenchmark: CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o
-artificialIntelligenceBenchmark: CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o
+artificialIntelligenceBenchmark: CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o
 artificialIntelligenceBenchmark: CMakeFiles/artificialIntelligenceBenchmark.dir/build.make
 artificialIntelligenceBenchmark: CMakeFiles/artificialIntelligenceBenchmark.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable artificialIntelligenceBenchmark"
-	/Applications/CMake.app/Contents/bin/cmake -E copy_directory /Users/Matt/Project-Fluffy-Pug/Fluffy\ Pug\ Command\ Line/AnalysisImages /Users/Matt/Project-Fluffy-Pug/Fluffy\ Pug\ Command\ Line/MakeBuild
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir="/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable artificialIntelligenceBenchmark"
+	/Applications/CMake.app/Contents/bin/cmake -E copy_directory /Users/Matt/Project-Fluffy-Pug/Fluffy\ Pug\ Command\ Line/AnalysisImages /Users/Matt/Project-Fluffy-Pug/Fluffy\ Pug\ Command\ Line/build/MakeBuild
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/artificialIntelligenceBenchmark.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -126,8 +100,7 @@ CMakeFiles/artificialIntelligenceBenchmark.dir/build: artificialIntelligenceBenc
 
 .PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/build
 
-CMakeFiles/artificialIntelligenceBenchmark.dir/requires: CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o.requires
-CMakeFiles/artificialIntelligenceBenchmark.dir/requires: CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o.requires
+CMakeFiles/artificialIntelligenceBenchmark.dir/requires: CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o.requires
 
 .PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/requires
 
@@ -136,6 +109,6 @@ CMakeFiles/artificialIntelligenceBenchmark.dir/clean:
 .PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/clean
 
 CMakeFiles/artificialIntelligenceBenchmark.dir/depend:
-	cd "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/CMakeFiles/artificialIntelligenceBenchmark.dir/DependInfo.cmake" --color=$(COLOR)
+	cd "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild" && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild/CMakeFiles/artificialIntelligenceBenchmark.dir/DependInfo.cmake" --color=$(COLOR)
 .PHONY : CMakeFiles/artificialIntelligenceBenchmark.dir/depend
 

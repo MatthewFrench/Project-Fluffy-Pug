@@ -51,7 +51,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild"
+CMAKE_BINARY_DIR = "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/CMakeFiles" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/CMakeFiles/progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild/CMakeFiles" "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild/CMakeFiles/progress.marks"
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild/CMakeFiles" 0
 .PHONY : all
 
 # The main clean target
@@ -123,59 +123,32 @@ artificialIntelligenceBenchmark/fast:
 	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/build
 .PHONY : artificialIntelligenceBenchmark/fast
 
-hellofunc.o: hellofunc.cpp.o
+source/main.o: source/main.cpp.o
 
-.PHONY : hellofunc.o
-
-# target to build an object file
-hellofunc.cpp.o:
-	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o
-.PHONY : hellofunc.cpp.o
-
-hellofunc.i: hellofunc.cpp.i
-
-.PHONY : hellofunc.i
-
-# target to preprocess a source file
-hellofunc.cpp.i:
-	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.i
-.PHONY : hellofunc.cpp.i
-
-hellofunc.s: hellofunc.cpp.s
-
-.PHONY : hellofunc.s
-
-# target to generate assembly for a file
-hellofunc.cpp.s:
-	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.s
-.PHONY : hellofunc.cpp.s
-
-main.o: main.cpp.o
-
-.PHONY : main.o
+.PHONY : source/main.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o
-.PHONY : main.cpp.o
+source/main.cpp.o:
+	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o
+.PHONY : source/main.cpp.o
 
-main.i: main.cpp.i
+source/main.i: source/main.cpp.i
 
-.PHONY : main.i
+.PHONY : source/main.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.i
-.PHONY : main.cpp.i
+source/main.cpp.i:
+	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.i
+.PHONY : source/main.cpp.i
 
-main.s: main.cpp.s
+source/main.s: source/main.cpp.s
 
-.PHONY : main.s
+.PHONY : source/main.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.s
-.PHONY : main.cpp.s
+source/main.cpp.s:
+	$(MAKE) -f CMakeFiles/artificialIntelligenceBenchmark.dir/build.make CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.s
+.PHONY : source/main.cpp.s
 
 # Help Target
 help:
@@ -186,12 +159,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... artificialIntelligenceBenchmark"
-	@echo "... hellofunc.o"
-	@echo "... hellofunc.i"
-	@echo "... hellofunc.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... source/main.o"
+	@echo "... source/main.i"
+	@echo "... source/main.s"
 .PHONY : help
 
 

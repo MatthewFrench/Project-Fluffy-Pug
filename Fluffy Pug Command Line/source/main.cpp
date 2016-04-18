@@ -2,7 +2,7 @@
 
 #define cimg_display 0
 #define cimg_use_png
-#include "CImg.h"
+#include "lib/CImg.h"
 
 using namespace cimg_library; 
 

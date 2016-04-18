@@ -35,5 +35,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -3,7 +3,7 @@
 
 # Relative path conversion top directories.
 set(CMAKE_RELATIVE_PATH_TOP_SOURCE "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line")
-set(CMAKE_RELATIVE_PATH_TOP_BINARY "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/MakeBuild")
+set(CMAKE_RELATIVE_PATH_TOP_BINARY "/Users/Matt/Project-Fluffy-Pug/Fluffy Pug Command Line/build/MakeBuild")
 
 # Force unix paths in dependencies.
 set(CMAKE_FORCE_UNIX_PATHS 1)

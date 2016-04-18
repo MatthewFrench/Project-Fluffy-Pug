@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/artificialIntelligenceBenchmark.dir/hellofunc.cpp.o"
-  "CMakeFiles/artificialIntelligenceBenchmark.dir/main.cpp.o"
+  "CMakeFiles/artificialIntelligenceBenchmark.dir/source/main.cpp.o"
   "artificialIntelligenceBenchmark.pdb"
   "artificialIntelligenceBenchmark"
 )
