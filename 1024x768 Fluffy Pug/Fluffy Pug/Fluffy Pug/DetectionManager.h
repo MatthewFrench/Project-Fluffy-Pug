@@ -105,6 +105,9 @@ class DetectionManager {
     uint64_t processSelfHealthBarLastTime;
     uint64_t processShopLastTime;
     
+    double average = 0;
+    double averageAmount = 0;
+    
 public:
     DetectionManager(dispatch_queue_t _aiThread, dispatch_queue_t _detectionThread);
     void processDetection(ImageData image);

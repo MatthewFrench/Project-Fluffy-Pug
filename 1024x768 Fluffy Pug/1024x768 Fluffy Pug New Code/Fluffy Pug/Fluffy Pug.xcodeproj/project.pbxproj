@@ -1,0 +1,630 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C9192B7A1B1A72A2002D1E08 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9192B791B1A72A2002D1E08 /* QuartzCore.framework */; };
+		C9192B7C1B1A72D1002D1E08 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9192B7B1B1A72D1002D1E08 /* CoreVideo.framework */; };
+		C9192B7E1B1A72D5002D1E08 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9192B7D1B1A72D5002D1E08 /* ImageIO.framework */; };
+		C9192B801B1A72EC002D1E08 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9192B7F1B1A72EC002D1E08 /* CoreMedia.framework */; };
+		C91DD90F1B6B6C1400B4BB07 /* LeagueDetector.m in Sources */ = {isa = PBXBuildFile; fileRef = C91DD90D1B6B6C1400B4BB07 /* LeagueDetector.m */; };
+		C91DD9111B6BB97000B4BB07 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C91DD9101B6BB97000B4BB07 /* CoreGraphics.framework */; };
+		C91DD9131B6BB97500B4BB07 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C91DD9121B6BB97500B4BB07 /* IOKit.framework */; };
+		C91DD9151B6BB97A00B4BB07 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C91DD9141B6BB97A00B4BB07 /* IOSurface.framework */; };
+		C91E65D01B1D309E00432FCA /* Resources in Resources */ = {isa = PBXBuildFile; fileRef = C91E65CF1B1D309E00432FCA /* Resources */; };
+		C939B4751B6A01C800B42054 /* TestController.m in Sources */ = {isa = PBXBuildFile; fileRef = C939B4731B6A01C800B42054 /* TestController.m */; };
+		C9416A931B2C560E007E0091 /* AutoQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C9416A921B2C560E007E0091 /* AutoQueueManager.m */; };
+		C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77AD1B14063B00052F3E /* AppDelegate.m */; };
+		C95A77B01B14063B00052F3E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77AF1B14063B00052F3E /* main.m */; };
+		C95A77B21B14063B00052F3E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C95A77B11B14063B00052F3E /* Images.xcassets */; };
+		C95A77B51B14063B00052F3E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = C95A77B31B14063B00052F3E /* MainMenu.xib */; };
+		C95A77CD1B142AB200052F3E /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77CC1B142AB200052F3E /* OpenGL.framework */; };
+		C95A77CF1B142AC500052F3E /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77CE1B142AC500052F3E /* CoreFoundation.framework */; };
+		C95A77D11B142ACA00052F3E /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C95A77D01B142ACA00052F3E /* ApplicationServices.framework */; };
+		C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */ = {isa = PBXBuildFile; fileRef = C95A77D41B1432A600052F3E /* LeagueGameState.m */; };
+		C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */ = {isa = PBXBuildFile; fileRef = C9928F4C1B28931700A965E6 /* BasicAI.m */; };
+		C9A658E41CD6E0AA00ED6B97 /* DetectionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658E21CD6E0AA00ED6B97 /* DetectionManager.cpp */; };
+		C9A658E71CD6E0BC00ED6B97 /* SurrenderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658E51CD6E0BC00ED6B97 /* SurrenderManager.cpp */; };
+		C9A658EA1CD6E10000ED6B97 /* ShopManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658E81CD6E10000ED6B97 /* ShopManager.cpp */; };
+		C9A658F61CD6E11A00ED6B97 /* Champion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658EB1CD6E11A00ED6B97 /* Champion.cpp */; };
+		C9A658F71CD6E11A00ED6B97 /* GenericObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658ED1CD6E11A00ED6B97 /* GenericObject.cpp */; };
+		C9A658F81CD6E11A00ED6B97 /* Minion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658EF1CD6E11A00ED6B97 /* Minion.cpp */; };
+		C9A658F91CD6E11A00ED6B97 /* SelfHealth.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658F21CD6E11A00ED6B97 /* SelfHealth.cpp */; };
+		C9A658FA1CD6E11A00ED6B97 /* Tower.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658F41CD6E11A00ED6B97 /* Tower.cpp */; };
+		C9A658FD1CD6E12400ED6B97 /* MapManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658FB1CD6E12400ED6B97 /* MapManager.cpp */; };
+		C9A659001CD6E13300ED6B97 /* ItemManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A658FE1CD6E13300ED6B97 /* ItemManager.cpp */; };
+		C9A659071CD6E14300ED6B97 /* EnemyChampionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A659011CD6E14300ED6B97 /* EnemyChampionManager.cpp */; };
+		C9A659081CD6E14300ED6B97 /* EnemyMinionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A659031CD6E14300ED6B97 /* EnemyMinionManager.cpp */; };
+		C9A659091CD6E14300ED6B97 /* EnemyTowerManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A659051CD6E14300ED6B97 /* EnemyTowerManager.cpp */; };
+		C9A659101CD6E15300ED6B97 /* AllyChampionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A6590A1CD6E15300ED6B97 /* AllyChampionManager.cpp */; };
+		C9A659111CD6E15300ED6B97 /* AllyMinionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A6590C1CD6E15300ED6B97 /* AllyMinionManager.cpp */; };
+		C9A659121CD6E15300ED6B97 /* SelfChampionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A6590E1CD6E15300ED6B97 /* SelfChampionManager.cpp */; };
+		C9A659151CD6E16000ED6B97 /* AbilityManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C9A659131CD6E16000ED6B97 /* AbilityManager.cpp */; };
+		C9A659171CD6E17A00ED6B97 /* lib in Resources */ = {isa = PBXBuildFile; fileRef = C9A659161CD6E17A00ED6B97 /* lib */; };
+		C9C7360F1B15E6300021F10F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C7360E1B15E6300021F10F /* AVFoundation.framework */; };
+		C9C736111B15E90C0021F10F /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9C736101B15E90C0021F10F /* AppKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C9192B741B1A6F96002D1E08 /* concurrentqueue.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = concurrentqueue.h; sourceTree = "<group>"; };
+		C9192B791B1A72A2002D1E08 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C9192B7B1B1A72D1002D1E08 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		C9192B7D1B1A72D5002D1E08 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		C9192B7F1B1A72EC002D1E08 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		C91DD90D1B6B6C1400B4BB07 /* LeagueDetector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeagueDetector.m; sourceTree = "<group>"; };
+		C91DD90E1B6B6C1400B4BB07 /* LeagueDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeagueDetector.h; sourceTree = "<group>"; };
+		C91DD9101B6BB97000B4BB07 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C91DD9121B6BB97500B4BB07 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		C91DD9141B6BB97A00B4BB07 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		C91E65CF1B1D309E00432FCA /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		C939B4731B6A01C800B42054 /* TestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestController.m; sourceTree = "<group>"; };
+		C939B4741B6A01C800B42054 /* TestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestController.h; sourceTree = "<group>"; };
+		C9416A911B2C560E007E0091 /* AutoQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoQueueManager.h; sourceTree = "<group>"; };
+		C9416A921B2C560E007E0091 /* AutoQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AutoQueueManager.m; sourceTree = "<group>"; };
+		C95A77A71B14063B00052F3E /* Fluffy Pug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fluffy Pug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C95A77AB1B14063B00052F3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C95A77AC1B14063B00052F3E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		C95A77AD1B14063B00052F3E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		C95A77AF1B14063B00052F3E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C95A77B11B14063B00052F3E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		C95A77B41B14063B00052F3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		C95A77BF1B14063C00052F3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C95A77C01B14063C00052F3E /* Fluffy_PugTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Fluffy_PugTests.m; sourceTree = "<group>"; };
+		C95A77CC1B142AB200052F3E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		C95A77CE1B142AC500052F3E /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		C95A77D01B142ACA00052F3E /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = System/Library/Frameworks/ApplicationServices.framework; sourceTree = SDKROOT; };
+		C95A77D31B1432A600052F3E /* LeagueGameState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeagueGameState.h; sourceTree = "<group>"; };
+		C95A77D41B1432A600052F3E /* LeagueGameState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeagueGameState.m; sourceTree = "<group>"; };
+		C9928F4B1B28931700A965E6 /* BasicAI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicAI.h; sourceTree = "<group>"; };
+		C9928F4C1B28931700A965E6 /* BasicAI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BasicAI.m; sourceTree = "<group>"; };
+		C9928F4E1B28952E00A965E6 /* InteractiveEvents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InteractiveEvents.h; sourceTree = "<group>"; };
+		C9A658E11CD6E03800ED6B97 /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
+		C9A658E21CD6E0AA00ED6B97 /* DetectionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DetectionManager.cpp; sourceTree = "<group>"; };
+		C9A658E31CD6E0AA00ED6B97 /* DetectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetectionManager.h; sourceTree = "<group>"; };
+		C9A658E51CD6E0BC00ED6B97 /* SurrenderManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SurrenderManager.cpp; sourceTree = "<group>"; };
+		C9A658E61CD6E0BC00ED6B97 /* SurrenderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SurrenderManager.h; sourceTree = "<group>"; };
+		C9A658E81CD6E10000ED6B97 /* ShopManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShopManager.cpp; sourceTree = "<group>"; };
+		C9A658E91CD6E10000ED6B97 /* ShopManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShopManager.h; sourceTree = "<group>"; };
+		C9A658EB1CD6E11A00ED6B97 /* Champion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Champion.cpp; sourceTree = "<group>"; };
+		C9A658EC1CD6E11A00ED6B97 /* Champion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Champion.h; sourceTree = "<group>"; };
+		C9A658ED1CD6E11A00ED6B97 /* GenericObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericObject.cpp; sourceTree = "<group>"; };
+		C9A658EE1CD6E11A00ED6B97 /* GenericObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericObject.h; sourceTree = "<group>"; };
+		C9A658EF1CD6E11A00ED6B97 /* Minion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Minion.cpp; sourceTree = "<group>"; };
+		C9A658F01CD6E11A00ED6B97 /* Minion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Minion.h; sourceTree = "<group>"; };
+		C9A658F11CD6E11A00ED6B97 /* Position.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Position.h; sourceTree = "<group>"; };
+		C9A658F21CD6E11A00ED6B97 /* SelfHealth.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SelfHealth.cpp; sourceTree = "<group>"; };
+		C9A658F31CD6E11A00ED6B97 /* SelfHealth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfHealth.h; sourceTree = "<group>"; };
+		C9A658F41CD6E11A00ED6B97 /* Tower.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tower.cpp; sourceTree = "<group>"; };
+		C9A658F51CD6E11A00ED6B97 /* Tower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tower.h; sourceTree = "<group>"; };
+		C9A658FB1CD6E12400ED6B97 /* MapManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapManager.cpp; sourceTree = "<group>"; };
+		C9A658FC1CD6E12400ED6B97 /* MapManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapManager.h; sourceTree = "<group>"; };
+		C9A658FE1CD6E13300ED6B97 /* ItemManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ItemManager.cpp; sourceTree = "<group>"; };
+		C9A658FF1CD6E13300ED6B97 /* ItemManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ItemManager.h; sourceTree = "<group>"; };
+		C9A659011CD6E14300ED6B97 /* EnemyChampionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EnemyChampionManager.cpp; sourceTree = "<group>"; };
+		C9A659021CD6E14300ED6B97 /* EnemyChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyChampionManager.h; sourceTree = "<group>"; };
+		C9A659031CD6E14300ED6B97 /* EnemyMinionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EnemyMinionManager.cpp; sourceTree = "<group>"; };
+		C9A659041CD6E14300ED6B97 /* EnemyMinionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyMinionManager.h; sourceTree = "<group>"; };
+		C9A659051CD6E14300ED6B97 /* EnemyTowerManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EnemyTowerManager.cpp; sourceTree = "<group>"; };
+		C9A659061CD6E14300ED6B97 /* EnemyTowerManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EnemyTowerManager.h; sourceTree = "<group>"; };
+		C9A6590A1CD6E15300ED6B97 /* AllyChampionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AllyChampionManager.cpp; sourceTree = "<group>"; };
+		C9A6590B1CD6E15300ED6B97 /* AllyChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllyChampionManager.h; sourceTree = "<group>"; };
+		C9A6590C1CD6E15300ED6B97 /* AllyMinionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AllyMinionManager.cpp; sourceTree = "<group>"; };
+		C9A6590D1CD6E15300ED6B97 /* AllyMinionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AllyMinionManager.h; sourceTree = "<group>"; };
+		C9A6590E1CD6E15300ED6B97 /* SelfChampionManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SelfChampionManager.cpp; sourceTree = "<group>"; };
+		C9A6590F1CD6E15300ED6B97 /* SelfChampionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelfChampionManager.h; sourceTree = "<group>"; };
+		C9A659131CD6E16000ED6B97 /* AbilityManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AbilityManager.cpp; sourceTree = "<group>"; };
+		C9A659141CD6E16000ED6B97 /* AbilityManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbilityManager.h; sourceTree = "<group>"; };
+		C9A659161CD6E17A00ED6B97 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; path = lib; sourceTree = "<group>"; };
+		C9C7360E1B15E6300021F10F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		C9C736101B15E90C0021F10F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C95A77A41B14063B00052F3E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C91DD9151B6BB97A00B4BB07 /* IOSurface.framework in Frameworks */,
+				C91DD9131B6BB97500B4BB07 /* IOKit.framework in Frameworks */,
+				C91DD9111B6BB97000B4BB07 /* CoreGraphics.framework in Frameworks */,
+				C95A77D11B142ACA00052F3E /* ApplicationServices.framework in Frameworks */,
+				C9192B801B1A72EC002D1E08 /* CoreMedia.framework in Frameworks */,
+				C9192B7E1B1A72D5002D1E08 /* ImageIO.framework in Frameworks */,
+				C9192B7C1B1A72D1002D1E08 /* CoreVideo.framework in Frameworks */,
+				C9192B7A1B1A72A2002D1E08 /* QuartzCore.framework in Frameworks */,
+				C9C736111B15E90C0021F10F /* AppKit.framework in Frameworks */,
+				C9C7360F1B15E6300021F10F /* AVFoundation.framework in Frameworks */,
+				C95A77CF1B142AC500052F3E /* CoreFoundation.framework in Frameworks */,
+				C95A77CD1B142AB200052F3E /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C92B824D1B30372200278ED5 /* Detection */ = {
+			isa = PBXGroup;
+			children = (
+				C987BBE21BA36B5900DA0110 /* Surrender Manager */,
+				C981DA9A1BA14B7800DB8A43 /* Objects */,
+				C91DD90E1B6B6C1400B4BB07 /* LeagueDetector.h */,
+				C9A658E21CD6E0AA00ED6B97 /* DetectionManager.cpp */,
+				C9A658E31CD6E0AA00ED6B97 /* DetectionManager.h */,
+				C91DD90D1B6B6C1400B4BB07 /* LeagueDetector.m */,
+				C981B2491B94962800C7F5AB /* Map Manager */,
+				C92B82521B3037AA00278ED5 /* Shop Manager */,
+				C92B82511B30379C00278ED5 /* Item Manager */,
+				C92B82501B30378E00278ED5 /* Ability Manager */,
+				C92B824F1B30377B00278ED5 /* Allies */,
+				C92B824E1B30375F00278ED5 /* Enemies */,
+				C9416A911B2C560E007E0091 /* AutoQueueManager.h */,
+				C9416A921B2C560E007E0091 /* AutoQueueManager.m */,
+			);
+			name = Detection;
+			sourceTree = "<group>";
+		};
+		C92B824E1B30375F00278ED5 /* Enemies */ = {
+			isa = PBXGroup;
+			children = (
+				C9A659011CD6E14300ED6B97 /* EnemyChampionManager.cpp */,
+				C9A659021CD6E14300ED6B97 /* EnemyChampionManager.h */,
+				C9A659031CD6E14300ED6B97 /* EnemyMinionManager.cpp */,
+				C9A659041CD6E14300ED6B97 /* EnemyMinionManager.h */,
+				C9A659051CD6E14300ED6B97 /* EnemyTowerManager.cpp */,
+				C9A659061CD6E14300ED6B97 /* EnemyTowerManager.h */,
+			);
+			name = Enemies;
+			sourceTree = "<group>";
+		};
+		C92B824F1B30377B00278ED5 /* Allies */ = {
+			isa = PBXGroup;
+			children = (
+				C9A6590A1CD6E15300ED6B97 /* AllyChampionManager.cpp */,
+				C9A6590B1CD6E15300ED6B97 /* AllyChampionManager.h */,
+				C9A6590C1CD6E15300ED6B97 /* AllyMinionManager.cpp */,
+				C9A6590D1CD6E15300ED6B97 /* AllyMinionManager.h */,
+				C9A6590E1CD6E15300ED6B97 /* SelfChampionManager.cpp */,
+				C9A6590F1CD6E15300ED6B97 /* SelfChampionManager.h */,
+			);
+			name = Allies;
+			sourceTree = "<group>";
+		};
+		C92B82501B30378E00278ED5 /* Ability Manager */ = {
+			isa = PBXGroup;
+			children = (
+				C9A659131CD6E16000ED6B97 /* AbilityManager.cpp */,
+				C9A659141CD6E16000ED6B97 /* AbilityManager.h */,
+			);
+			name = "Ability Manager";
+			sourceTree = "<group>";
+		};
+		C92B82511B30379C00278ED5 /* Item Manager */ = {
+			isa = PBXGroup;
+			children = (
+				C9A658FE1CD6E13300ED6B97 /* ItemManager.cpp */,
+				C9A658FF1CD6E13300ED6B97 /* ItemManager.h */,
+			);
+			name = "Item Manager";
+			sourceTree = "<group>";
+		};
+		C92B82521B3037AA00278ED5 /* Shop Manager */ = {
+			isa = PBXGroup;
+			children = (
+				C9A658E81CD6E10000ED6B97 /* ShopManager.cpp */,
+				C9A658E91CD6E10000ED6B97 /* ShopManager.h */,
+			);
+			name = "Shop Manager";
+			sourceTree = "<group>";
+		};
+		C92B82531B3037C100278ED5 /* Basic AI */ = {
+			isa = PBXGroup;
+			children = (
+				C9928F4B1B28931700A965E6 /* BasicAI.h */,
+				C9928F4C1B28931700A965E6 /* BasicAI.m */,
+			);
+			name = "Basic AI";
+			sourceTree = "<group>";
+		};
+		C939B4721B6A008A00B42054 /* Test Algorithms */ = {
+			isa = PBXGroup;
+			children = (
+				C939B4741B6A01C800B42054 /* TestController.h */,
+				C939B4731B6A01C800B42054 /* TestController.m */,
+			);
+			name = "Test Algorithms";
+			sourceTree = "<group>";
+		};
+		C95A779E1B14063B00052F3E = {
+			isa = PBXGroup;
+			children = (
+				C9DED8C51B8FC77B004DECCB /* Frameworks */,
+				C95A77A91B14063B00052F3E /* Fluffy Pug */,
+				C95A77BD1B14063C00052F3E /* Fluffy PugTests */,
+				C95A77A81B14063B00052F3E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C95A77A81B14063B00052F3E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C95A77A71B14063B00052F3E /* Fluffy Pug.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C95A77A91B14063B00052F3E /* Fluffy Pug */ = {
+			isa = PBXGroup;
+			children = (
+				C939B4721B6A008A00B42054 /* Test Algorithms */,
+				C92B82531B3037C100278ED5 /* Basic AI */,
+				C92B824D1B30372200278ED5 /* Detection */,
+				C95A77AC1B14063B00052F3E /* AppDelegate.h */,
+				C95A77AD1B14063B00052F3E /* AppDelegate.m */,
+				C9A659161CD6E17A00ED6B97 /* lib */,
+				C95A77D31B1432A600052F3E /* LeagueGameState.h */,
+				C95A77D41B1432A600052F3E /* LeagueGameState.m */,
+				C9192B741B1A6F96002D1E08 /* concurrentqueue.h */,
+				C9A658E11CD6E03800ED6B97 /* Utility.h */,
+				C9928F4E1B28952E00A965E6 /* InteractiveEvents.h */,
+				C95A77B31B14063B00052F3E /* MainMenu.xib */,
+				C95A77B11B14063B00052F3E /* Images.xcassets */,
+				C95A77AA1B14063B00052F3E /* Supporting Files */,
+				C91E65CF1B1D309E00432FCA /* Resources */,
+			);
+			path = "Fluffy Pug";
+			sourceTree = "<group>";
+		};
+		C95A77AA1B14063B00052F3E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C95A77AB1B14063B00052F3E /* Info.plist */,
+				C95A77AF1B14063B00052F3E /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C95A77BD1B14063C00052F3E /* Fluffy PugTests */ = {
+			isa = PBXGroup;
+			children = (
+				C95A77C01B14063C00052F3E /* Fluffy_PugTests.m */,
+				C95A77BE1B14063C00052F3E /* Supporting Files */,
+			);
+			path = "Fluffy PugTests";
+			sourceTree = "<group>";
+		};
+		C95A77BE1B14063C00052F3E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C95A77BF1B14063C00052F3E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C981B2491B94962800C7F5AB /* Map Manager */ = {
+			isa = PBXGroup;
+			children = (
+				C9A658FB1CD6E12400ED6B97 /* MapManager.cpp */,
+				C9A658FC1CD6E12400ED6B97 /* MapManager.h */,
+			);
+			name = "Map Manager";
+			sourceTree = "<group>";
+		};
+		C981DA9A1BA14B7800DB8A43 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				C9A658EB1CD6E11A00ED6B97 /* Champion.cpp */,
+				C9A658EC1CD6E11A00ED6B97 /* Champion.h */,
+				C9A658ED1CD6E11A00ED6B97 /* GenericObject.cpp */,
+				C9A658EE1CD6E11A00ED6B97 /* GenericObject.h */,
+				C9A658EF1CD6E11A00ED6B97 /* Minion.cpp */,
+				C9A658F01CD6E11A00ED6B97 /* Minion.h */,
+				C9A658F11CD6E11A00ED6B97 /* Position.h */,
+				C9A658F21CD6E11A00ED6B97 /* SelfHealth.cpp */,
+				C9A658F31CD6E11A00ED6B97 /* SelfHealth.h */,
+				C9A658F41CD6E11A00ED6B97 /* Tower.cpp */,
+				C9A658F51CD6E11A00ED6B97 /* Tower.h */,
+			);
+			name = Objects;
+			sourceTree = "<group>";
+		};
+		C987BBE21BA36B5900DA0110 /* Surrender Manager */ = {
+			isa = PBXGroup;
+			children = (
+				C9A658E51CD6E0BC00ED6B97 /* SurrenderManager.cpp */,
+				C9A658E61CD6E0BC00ED6B97 /* SurrenderManager.h */,
+			);
+			name = "Surrender Manager";
+			sourceTree = "<group>";
+		};
+		C9DED8C51B8FC77B004DECCB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C91DD9141B6BB97A00B4BB07 /* IOSurface.framework */,
+				C91DD9121B6BB97500B4BB07 /* IOKit.framework */,
+				C91DD9101B6BB97000B4BB07 /* CoreGraphics.framework */,
+				C9192B7F1B1A72EC002D1E08 /* CoreMedia.framework */,
+				C9192B7D1B1A72D5002D1E08 /* ImageIO.framework */,
+				C9192B7B1B1A72D1002D1E08 /* CoreVideo.framework */,
+				C9192B791B1A72A2002D1E08 /* QuartzCore.framework */,
+				C9C736101B15E90C0021F10F /* AppKit.framework */,
+				C9C7360E1B15E6300021F10F /* AVFoundation.framework */,
+				C95A77D01B142ACA00052F3E /* ApplicationServices.framework */,
+				C95A77CE1B142AC500052F3E /* CoreFoundation.framework */,
+				C95A77CC1B142AB200052F3E /* OpenGL.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C95A77A61B14063B00052F3E /* Fluffy Pug */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C95A77C41B14063C00052F3E /* Build configuration list for PBXNativeTarget "Fluffy Pug" */;
+			buildPhases = (
+				C95A77A31B14063B00052F3E /* Sources */,
+				C95A77A41B14063B00052F3E /* Frameworks */,
+				C95A77A51B14063B00052F3E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Fluffy Pug";
+			productName = "Fluffy Pug";
+			productReference = C95A77A71B14063B00052F3E /* Fluffy Pug.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C95A779F1B14063B00052F3E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = "Matthew French";
+				TargetAttributes = {
+					C95A77A61B14063B00052F3E = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
+				};
+			};
+			buildConfigurationList = C95A77A21B14063B00052F3E /* Build configuration list for PBXProject "Fluffy Pug" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C95A779E1B14063B00052F3E;
+			productRefGroup = C95A77A81B14063B00052F3E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C95A77A61B14063B00052F3E /* Fluffy Pug */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C95A77A51B14063B00052F3E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C95A77B21B14063B00052F3E /* Images.xcassets in Resources */,
+				C95A77B51B14063B00052F3E /* MainMenu.xib in Resources */,
+				C9A659171CD6E17A00ED6B97 /* lib in Resources */,
+				C91E65D01B1D309E00432FCA /* Resources in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C95A77A31B14063B00052F3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9928F4D1B28931700A965E6 /* BasicAI.m in Sources */,
+				C95A77B01B14063B00052F3E /* main.m in Sources */,
+				C9A659001CD6E13300ED6B97 /* ItemManager.cpp in Sources */,
+				C9A658EA1CD6E10000ED6B97 /* ShopManager.cpp in Sources */,
+				C9A659151CD6E16000ED6B97 /* AbilityManager.cpp in Sources */,
+				C9A658E71CD6E0BC00ED6B97 /* SurrenderManager.cpp in Sources */,
+				C9A658F81CD6E11A00ED6B97 /* Minion.cpp in Sources */,
+				C91DD90F1B6B6C1400B4BB07 /* LeagueDetector.m in Sources */,
+				C9A659111CD6E15300ED6B97 /* AllyMinionManager.cpp in Sources */,
+				C9A658F71CD6E11A00ED6B97 /* GenericObject.cpp in Sources */,
+				C9A658FD1CD6E12400ED6B97 /* MapManager.cpp in Sources */,
+				C9A659081CD6E14300ED6B97 /* EnemyMinionManager.cpp in Sources */,
+				C9A658F91CD6E11A00ED6B97 /* SelfHealth.cpp in Sources */,
+				C9A659121CD6E15300ED6B97 /* SelfChampionManager.cpp in Sources */,
+				C9A658FA1CD6E11A00ED6B97 /* Tower.cpp in Sources */,
+				C9A659071CD6E14300ED6B97 /* EnemyChampionManager.cpp in Sources */,
+				C9A658F61CD6E11A00ED6B97 /* Champion.cpp in Sources */,
+				C95A77AE1B14063B00052F3E /* AppDelegate.m in Sources */,
+				C9A659091CD6E14300ED6B97 /* EnemyTowerManager.cpp in Sources */,
+				C9416A931B2C560E007E0091 /* AutoQueueManager.m in Sources */,
+				C939B4751B6A01C800B42054 /* TestController.m in Sources */,
+				C9A659101CD6E15300ED6B97 /* AllyChampionManager.cpp in Sources */,
+				C95A77D51B1432A600052F3E /* LeagueGameState.m in Sources */,
+				C9A658E41CD6E0AA00ED6B97 /* DetectionManager.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C95A77B31B14063B00052F3E /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C95A77B41B14063B00052F3E /* Base */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C95A77C21B14063C00052F3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C95A77C31B14063C00052F3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		C95A77C51B14063C00052F3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_USE_OPTIMIZATION_PROFILE = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = /usr/local/include;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_OPTIMIZATION_LEVEL = fast;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				INFOPLIST_FILE = "Fluffy Pug/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LLVM_LTO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_CFLAGS = "-I/usr/local/lib";
+				OTHER_LDFLAGS = "-lpng16";
+				PRODUCT_BUNDLE_IDENTIFIER = "test.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		C95A77C61B14063C00052F3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_USE_OPTIMIZATION_PROFILE = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = /usr/local/include;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
+				GCC_OPTIMIZATION_LEVEL = fast;
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				INFOPLIST_FILE = "Fluffy Pug/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LLVM_LTO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_CFLAGS = "-I/usr/local/lib";
+				OTHER_LDFLAGS = "-lpng16";
+				PRODUCT_BUNDLE_IDENTIFIER = "test.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C95A77A21B14063B00052F3E /* Build configuration list for PBXProject "Fluffy Pug" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C95A77C21B14063C00052F3E /* Debug */,
+				C95A77C31B14063C00052F3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C95A77C41B14063C00052F3E /* Build configuration list for PBXNativeTarget "Fluffy Pug" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C95A77C51B14063C00052F3E /* Debug */,
+				C95A77C61B14063C00052F3E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C95A779F1B14063B00052F3E /* Project object */;
+}

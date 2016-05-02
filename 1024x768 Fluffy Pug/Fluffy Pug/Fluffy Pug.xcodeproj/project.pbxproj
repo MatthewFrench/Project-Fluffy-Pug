@@ -49,7 +49,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		C9192B741B1A6F96002D1E08 /* concurrentqueue.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = concurrentqueue.h; sourceTree = "<group>"; };
 		C9192B791B1A72A2002D1E08 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C9192B7B1B1A72D1002D1E08 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C9192B7D1B1A72D5002D1E08 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
@@ -264,7 +263,6 @@
 				C95A77AD1B14063B00052F3E /* AppDelegate.m */,
 				C95A77D31B1432A600052F3E /* LeagueGameState.h */,
 				C95A77D41B1432A600052F3E /* LeagueGameState.m */,
-				C9192B741B1A6F96002D1E08 /* concurrentqueue.h */,
 				C9C7360C1B15A2370021F10F /* Utility.h */,
 				C9928F4E1B28952E00A965E6 /* InteractiveEvents.h */,
 				C95A77B31B14063B00052F3E /* MainMenu.xib */,
@@ -552,7 +550,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -573,7 +571,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_USE_OPTIMIZATION_PROFILE = NO;
 				COMBINE_HIDPI_IMAGES = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

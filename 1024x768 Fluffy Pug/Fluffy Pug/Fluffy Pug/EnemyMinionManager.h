@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "Utility.h"
-#include "concurrentqueue.h"
 
 class EnemyMinionManager {
     
